@@ -11,4 +11,4 @@ class Teilnahme (bo.BusinessObject):
         return self._status
 
     def set_status(self, person):
-        self._status= status_neu: bool
+        self._status= status_neu(bool)

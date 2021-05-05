@@ -15,4 +15,4 @@ class Konversation (bo.BusinessObject):
         return self.
 
     def set_teilnehmer(self):
-        self._teilnehmer= teilnehmer_neu: list
+        self._teilnehmer= teilnehmer_neu(list)
