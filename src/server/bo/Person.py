@@ -71,7 +71,7 @@ class Person(NamedBusinessObject):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
         self._personenprofil = value
 
-    """def create_personenprofil(self):? oder gehört das in AppAdministration?"""
+    """def create_personenprofil(self):? oder gehört das in AppAdministration? da haben wir ja auch so ne methode"""
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
