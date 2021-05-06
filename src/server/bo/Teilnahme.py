@@ -22,4 +22,5 @@ class Teilnahme (bo.BusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
+        obj.set_status(dictionary['status'])
         return obj
