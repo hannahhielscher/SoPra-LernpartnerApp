@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
-import ProfileDropDown from '../dialogs/ProfileDropDown';
+//import { Link as RouterLink } from 'react-router-dom';
+//import ProfileDropDown from '../dialogs/ProfileDropDown';
 
 class Header extends Component {
 
-  constructor(props) {
+  /*constructor(props) {
     super(props);
 
     // Init an empty state
@@ -16,7 +16,7 @@ class Header extends Component {
   }
 
   /** Handles onChange events of the Tabs component */
-  handleTabChange = (e, newIndex) => {
+ /* handleTabChange = (e, newIndex) => {
     // console.log(newValue)
     this.setState({
       tabindex: newIndex
@@ -29,14 +29,14 @@ class Header extends Component {
 
     return (
       <Paper variant='outlined' >
-        <ProfileDropDown user={user} />
+        //<ProfileDropDown user={user} />
         <Typography variant='h3' component='h1' align='center'>
           Lernapp
         </Typography>
         <Typography variant='h4' component='h2' align='center'>
-          Hier könnte ihre Werbung stehen
+          Hier könnte Ihre Werbung stehen
         </Typography>
-        {
+        /*{
           user ?
             <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
               <Tab label='Profil' component={RouterLink} to={`/profil`} />
@@ -44,16 +44,16 @@ class Header extends Component {
               <Tab label='Chats' component={RouterLink} to={`/chats`} />
             </Tabs>
             : null
-        }
+        }*/
       </Paper>
     )
   }
 }
 
 /** PropTypes */
-Header.propTypes = {
+//Header.propTypes = {
   /** The logged in firesbase user */
-  user: PropTypes.object,
-}
+//  user: PropTypes.object,
+//}
 
 export default Header;
