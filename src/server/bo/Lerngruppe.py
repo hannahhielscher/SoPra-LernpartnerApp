@@ -4,8 +4,8 @@ class Lerngruppe(NamedBusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._teilnehmer = ""
-        self._gruppenprofil = ""
+        self._teilnehmer = []
+        self._gruppenprofil = None
 
     def set_teilnehmer(self, teilnehmer):
         """Setzen eines Teilnehmers"""
@@ -29,6 +29,5 @@ class Lerngruppe(NamedBusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_gruppenprofil(dictionary["gruppenprofil"])
-        obj.set_erstellungszeitpunkt(dictionary['erstellungszeitpunkt'])
         obj.set_teilnehmer(dictionary["teilnehmer"])
         return obj
