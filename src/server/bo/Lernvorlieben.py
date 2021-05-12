@@ -15,7 +15,6 @@ class Lernvorlieben(BusinessObject):
     def create_lernvorlieben(self):
         """Erstellen von Lernvorlieben"""
 
-
     def get_uhrzeit(self):
         """Auslesen der Uhrzeit"""
         return self._uhrzeit
