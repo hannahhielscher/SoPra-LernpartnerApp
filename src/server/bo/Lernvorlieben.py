@@ -15,11 +15,11 @@ class Lernvorlieben(BusinessObject):
 
 
     def get_tageszeiten(self):
-        """Auslesen der Uhrzeit"""
+        """Auslesen der Tageszeiten"""
         return self._tageszeiten
 
     def set_tageszeiten(self):
-        """Setzen der Uhrzeit"""
+        """Setzen der Tageszeiten"""
         self._tageszeiten = value
 
 
