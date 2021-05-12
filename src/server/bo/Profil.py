@@ -10,7 +10,7 @@ class Profil(NamedBusinessObject):
         self._semester = None
         self._lernfaecher = None
         self._kenntnisstand = None
-        self._selbsteinschätzung = None
+        self._selbsteinschaetzung = None
 
     def get_all_profil(self):
         """Auslesen des Vornamens"""
@@ -29,50 +29,51 @@ class Profil(NamedBusinessObject):
         self._semester = value
 
     def get_hochschule(self):
-        """Auslesen des Alters"""
-        return self._alter
+        """Auslesen der Hochschule"""
+        return self._hochschule
 
     def set_hochschule(self):
-        """Setzen des Alters"""
+        """Setzen der Hochschule"""
         self._alter = value
 
     def get_studiengang(self):
-        """Auslesen des Geschlechts"""
-        return self._geschlecht
+        """Auslesen des Studiengangs"""
+        return self._studiengang
 
     def set_studiengang(self):
-        """Setzen des Geschlechts"""
+        """Setzen des Studiengangs"""
         self._geschlecht = value
 
     def get_semester(self):
-        """Auslesen, ob Lerngruppe erwünscht ist"""
-        return self._lerngruppe
+        """Auslesen des Semesters"""
+        return self._semester
 
     def set_semester(self):
-        """Setzen, ob Lerngruppe erwünscht ist"""
+        """Setzen des Semesters"""
         self._lerngruppe = value
 
     def get_lernfaecher(self):
+        """Auslesen der Lernfächer"""
         return self._lernvorlieben
 
     def set_lernfaecher(self):
-        """Setzen von neuen Lernvorlieben"""
+        """Setzen der Lernfächer"""
         self._lernvorlieben = value
 
     def get_kenntnisstand(self):
-        """Auslesen aller Lerngruppen einer Person, gehört das überhaupt hier rein?"""
-        return self._lernvorlieben
+        """Auslesen des Kenntnisstandes"""
+        return self._kenntnisstand
 
     def set_kenntnisstand(self):
-        """Auslesen des Personenprofils"""
-        return self._personenprofil
+        """Setzen des Kenntnisstandes"""
+        return self._kenntnisstand
 
     def get_selbsteinschätzung(self):
-        """Setzen eines Lernprofils (geht das überhaupt?)"""
-        self._personenprofil = value
+        """Auslesen der Selbsteinschätzung"""
+        return self._selbsteinschsetzung
 
     def set_selbsteinschätzung(self):
-        """Setzen eines Lernprofils (geht das überhaupt?)"""
+        """Setzen der Selbsteinschätzung"""
         self._personenprofil = value
 
     """def create_personenprofil(self):? oder gehört das in AppAdministration? da haben wir ja auch so ne methode"""
