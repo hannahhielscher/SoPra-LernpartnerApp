@@ -1,32 +1,16 @@
 from server.bo.NamedBusinessObject import NamedBusinessObject
 
 
-class Profil(NamedBusinessObject):
+class Profil (NamedBusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._hochschule = None
-        self._studiengang = None
-        self._semester = None
-        self._lernfaecher = None
-        self._kenntnisstand = None
-        self._selbsteinschaetzung = None
-
-    def get_all_profil(self):
-        """Auslesen aller Profile"""
-        return self._vorname
-
-    def set_profil_by_id(self):
-        """Setzen des Vornamens"""
-        self._vorname = value
-
-    def save_profil(self):
-        """Auslesen des Semesters"""
-        return self._semester
-
-    def delete_profil(self):
-        """Setzen des Semesters"""
-        self._semester = value
+        self._hochschule = ""
+        self._studiengang = ""
+        self._semester = 0
+        self._lernfaecher = []
+        self._kenntnisstand = ""
+        self._selbsteinschaetzung = ""
 
     def get_hochschule(self):
         """Auslesen der Hochschule"""
@@ -68,15 +52,13 @@ class Profil(NamedBusinessObject):
         """Setzen des Kenntnisstandes"""
         return self._kenntnisstand = kenntnisstand_neu
 
-    def get_selbsteinschätzung(self):
+    def get_selbsteinschaetzung(self):
         """Auslesen der Selbsteinschätzung"""
         return self._selbsteinschsetzung
 
-    def set_selbsteinschätzung(self, selbsteinschätzung_neu):
+    def set_selbsteinschaetzung(self, selbsteinschaetzung_neu):
         """Setzen der Selbsteinschätzung"""
-        self._selbsteinschätzung = selbsteinschätzung_neu
-
-    """def create_personenprofil(self):? oder gehört das in AppAdministration? da haben wir ja auch so ne methode"""
+        self._selbsteinschaetzung = selbsteinschaetzung_neu
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""

@@ -22,6 +22,5 @@ class Nachricht(BusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
-        obj.set_erstellungszeitpunkt(dictionary['erstellungszeitpunkt'])
         obj.set_nachricht(dictionary["nachricht"])
         return obj
