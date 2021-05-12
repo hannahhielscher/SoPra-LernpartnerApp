@@ -13,7 +13,8 @@ class Profil(NamedBusinessObject):
         self._selbsteinschaetzung = None
 
     def get_all_profil(self):
-        """Auslesen des Vornamens"""
+        """Auslesen aller Profile"""
+
         return self._vorname
 
     def set_profil_by_id(self):
@@ -32,57 +33,56 @@ class Profil(NamedBusinessObject):
         """Auslesen der Hochschule"""
         return self._hochschule
 
-    def set_hochschule(self):
+    def set_hochschule(self, hochschule_neu):
         """Setzen der Hochschule"""
-        self._alter = value
+        self._hochschule = hochschule_neu
 
     def get_studiengang(self):
         """Auslesen des Studiengangs"""
         return self._studiengang
 
-    def set_studiengang(self):
+    def set_studiengang(self, studiengang_neu):
         """Setzen des Studiengangs"""
-        self._geschlecht = value
+        self._studiengang = studiengang_neu
 
     def get_semester(self):
         """Auslesen des Semesters"""
         return self._semester
 
-    def set_semester(self):
+    def set_semester(self, semester_neu):
         """Setzen des Semesters"""
-        self._lerngruppe = value
+        self._semester = semester_neu
 
     def get_lernfaecher(self):
         """Auslesen der Lernfächer"""
         return self._lernvorlieben
 
-    def set_lernfaecher(self):
+    def set_lernfaecher(self, lernfaecher_neu):
         """Setzen der Lernfächer"""
-        self._lernvorlieben = value
+        self._lernfaecher = lernfaecher_neu
 
     def get_kenntnisstand(self):
         """Auslesen des Kenntnisstandes"""
         return self._kenntnisstand
 
-    def set_kenntnisstand(self):
+    def set_kenntnisstand(self, kenntnisstand_neu):
         """Setzen des Kenntnisstandes"""
-        return self._kenntnisstand
+        return self._kenntnisstand = kenntnisstand_neu
 
     def get_selbsteinschätzung(self):
         """Auslesen der Selbsteinschätzung"""
         return self._selbsteinschsetzung
 
-    def set_selbsteinschätzung(self):
+    def set_selbsteinschätzung(self, selbsteinschätzung_neu):
         """Setzen der Selbsteinschätzung"""
-        self._personenprofil = value
+        self._selbsteinschätzung = selbsteinschätzung_neu
 
     """def create_personenprofil(self):? oder gehört das in AppAdministration? da haben wir ja auch so ne methode"""
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Person: {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._vorname, self._semester,
-                                                   self._alter, self._geschlecht, self._lerngruppe, self._lernvorlieben,
-                                                   self._personenprofil)
+        return "Person: {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._hochschule, self._studiengang,
+                                                   self._semester, self._lernfaecher, self._kenntnisstand, self._selbsteinschaetzung)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -90,11 +90,10 @@ class Profil(NamedBusinessObject):
         obj = Profil()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
-        obj.set_vorname(dictionary["vorname"])
+        obj.set_hochschule(dictionary["hochschule"])
+        obj.set_studiengang(dictionary["studiengang"])
         obj.set_semester(dictionary["semester"])
-        obj.set_alter(dictionary["alter"])
-        obj.set_geschlecht(dictionary["geschlecht"])
-        obj.set_lerngruppe(dictionary["lerngruppe"])
-        obj.set_lernvorlieben(dictionary["lernvorlieben"])
-        obj.set_personenprofil(dictionary["personenprofil"])
+        obj.set_lernfaecher(dictionary["lernfaecher"])
+        obj.set_selbsteinschätzung(dictionary["selbsteinschaetzung"])
+        obj.set_profil_by_id(dictionary["lernvorlieben"])
         return obj
