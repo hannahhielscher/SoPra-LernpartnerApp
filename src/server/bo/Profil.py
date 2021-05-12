@@ -14,7 +14,6 @@ class Profil(NamedBusinessObject):
 
     def get_all_profil(self):
         """Auslesen aller Profile"""
-
         return self._vorname
 
     def set_profil_by_id(self):
