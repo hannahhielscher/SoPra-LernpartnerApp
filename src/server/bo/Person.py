@@ -16,39 +16,39 @@ class Person(NamedBusinessObject):
         """Auslesen des Vornamens"""
         return self._vorname
 
-    def set_vorname(self):
+    def set_vorname(self, vorname):
         """Setzen des Vornamens"""
-        self._vorname = value
+        self._vorname = vorname
 
     def get_semester(self):
         """Auslesen des Semesters"""
         return self._semester
 
-    def set_semester(self):
+    def set_semester(self, semester):
         """Setzen des Semesters"""
-        self._semester = value
+        self._semester = semester
 
     def get_alter(self):
         """Auslesen des Alters"""
         return self._alter
 
-    def set_alter(self):
+    def set_alter(self, alter):
         """Setzen des Alters"""
-        self._alter = value
+        self._alter = alter
 
     def get_geschlecht(self):
         """Auslesen des Geschlechts"""
         return self._geschlecht
 
-    def set_geschlecht(self):
+    def set_geschlecht(self, geschlecht):
         """Setzen des Geschlechts"""
-        self._geschlecht = value
+        self._geschlecht = geschlecht
     
     def get_lerngruppe(self):
         """Auslesen, ob Lerngruppe erwünscht ist"""
         return self._lerngruppe 
 
-    def set_lerngruppe(self):
+    def set_lerngruppe(self, value):
         """Setzen, ob Lerngruppe erwünscht ist"""
         self._lerngruppe = value
 
