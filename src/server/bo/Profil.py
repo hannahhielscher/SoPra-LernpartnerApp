@@ -68,13 +68,13 @@ class Profil(NamedBusinessObject):
         """Setzen des Kenntnisstandes"""
         return self._kenntnisstand = kenntnisstand_neu
 
-    def get_selbsteinschätzung(self):
+    def get_selbsteinschaetzung(self):
         """Auslesen der Selbsteinschätzung"""
         return self._selbsteinschsetzung
 
-    def set_selbsteinschätzung(self, selbsteinschätzung_neu):
+    def set_selbsteinschaetzung(self, selbsteinschaetzung_neu):
         """Setzen der Selbsteinschätzung"""
-        self._selbsteinschätzung = selbsteinschätzung_neu
+        self._selbsteinschaetzung = selbsteinschätzung_neu
 
     """def create_personenprofil(self):? oder gehört das in AppAdministration? da haben wir ja auch so ne methode"""
 
