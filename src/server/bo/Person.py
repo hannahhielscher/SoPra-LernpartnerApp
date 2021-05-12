@@ -6,11 +6,11 @@ class Person(NamedBusinessObject):
         super().__init__()
         self._vorname = None
         self._semester = None
-        self._alter = None
+        self._alter = 0
         self._geschlecht = None
-        self._lerngruppe = None
-        self._lernvorlieben = bo.Lernvorlieben
-        self._personenprofil = bo.Profil
+        self._lerngruppe = False
+        self._lernvorlieben = Lernvorlieben
+        self._personenprofil = Profil
 
     def get_vorname(self):
         """Auslesen des Vornamens"""
@@ -59,10 +59,6 @@ class Person(NamedBusinessObject):
         """Setzen von neuen Lernvorlieben"""
         self._lernvorlieben = value
     
-    def get_all_lerngruppen_of_Person(self):
-        """Auslesen aller Lerngruppen einer Person, gehört das überhaupt hier rein?"""
-        return self._lernvorlieben
-
     def get_personenprofil(self):
         """Auslesen des Personenprofils"""
         return self._personenprofil
@@ -71,7 +67,6 @@ class Person(NamedBusinessObject):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
         self._personenprofil = value
 
-    """def create_personenprofil(self):? oder gehört das in AppAdministration? da haben wir ja auch so ne methode"""
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
