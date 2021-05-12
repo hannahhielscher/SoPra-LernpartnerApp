@@ -5,24 +5,29 @@ class Lernvorlieben(BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._uhrzeit = datetime
-        self._tage = str
-        self._frequenz = int
+        self._tageszeiten = {"Morgens:": false, "Mittags:": false, "Abends:": false}
+        self._tage = {"Montag:": false, "Dienstag:": false, "Mittwoch:": false, "Donnerstag:": false, "Freitag:": false, "Samstag:": false, "Sonntag:": false,}
+        self._frequenz = {"Wöchentlich:": false, "Mehrmals die Woche:": false,  "Alle zwei Wochen:": false}
         self._lernart = str
-        self._gruppengroesse = str
+        self._gruppengroesse = 0
         self._lernort = str
 
-    def create_lernvorlieben(self):
-        """Erstellen von Lernvorlieben"""
 
-
+<<<<<<< HEAD
     def get_uhrzeit(self):
         """Auslesen der Uhrzeit"""
         return self._uhrzeit
+=======
 
-    def set_uhrzeit(self):
-        """Setzen der Uhrzeit"""
-        self._uhrzeit = value
+    def get_tageszeiten(self):
+        """Auslesen der Tageszeiten"""
+        return self._tageszeiten
+
+    def set_tageszeiten(self):
+        """Setzen der Tageszeiten"""
+        self._tageszeiten = value
+>>>>>>> 6f6cfd355ff51f8011d91fd3fd1a493ee6d9759b
+
 
     def get_tage(self):
         """Auslesen der Tage"""
@@ -69,14 +74,14 @@ class Lernvorlieben(BusinessObject):
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Person: {}, {}, {}, {}, {}".format(self.get_id(), self._uhrzeit, self._tage, self._frequenz,self._lernart, self._gruppengroesse, self._lernort)
+        return "Lernvorlieben: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._uhrzeit, self._tage, self._frequenz,self._lernart, self._gruppengroesse, self._lernort)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """ Umwandeln eines Python dict() in ein Python Objekt Lernvorlieben() """
         obj = Lernvorlieben()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_uhrzeit(dictionary["uhrzeit"])
+        obj.set_tageszeiten(dictionary["tageszeiten"])
         obj.set_tage(dictionary["tage"])
         obj.set_frequenz(dictionary["frequenz"])
         obj.set_lernart(dictionary["lernart"])
