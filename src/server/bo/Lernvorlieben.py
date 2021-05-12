@@ -76,10 +76,10 @@ class Lernvorlieben(BusinessObject):
         """ Umwandeln eines Python dict() in ein Python Objekt Lernvorlieben() """
         obj = Lernvorlieben()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_name(dictionary["uhrzeit"])
-        obj.set_vorname(dictionary["tage"])
-        obj.set_semester(dictionary["frequenz"])
-        obj.set_alter(dictionary["lernart"])
-        obj.set_geschlecht(dictionary["gruppengroesse"])
-        obj.set_lerngruppe(dictionary["lernort"])
+        obj.set_uhrzeit(dictionary["uhrzeit"])
+        obj.set_tage(dictionary["tage"])
+        obj.set_frequenz(dictionary["frequenz"])
+        obj.set_lernart(dictionary["lernart"])
+        obj.set_gruppengroesse(dictionary["gruppengroesse"])
+        obj.set_lernort(dictionary["lernort"])
         return obj
