@@ -13,60 +13,52 @@ class Lernvorlieben(BusinessObject):
         self._lernort = str
 
 
-<<<<<<< HEAD
-    def get_uhrzeit(self):
-        """Auslesen der Uhrzeit"""
-        return self._uhrzeit
-=======
-
     def get_tageszeiten(self):
-        """Auslesen der Tageszeiten"""
+        """Auslesen der präferierten Uhrzeit"""
         return self._tageszeiten
-
+    
     def set_tageszeiten(self):
-        """Setzen der Tageszeiten"""
+        """Setzen der präferierten Tageszeit"""
         self._tageszeiten = value
->>>>>>> 6f6cfd355ff51f8011d91fd3fd1a493ee6d9759b
-
 
     def get_tage(self):
-        """Auslesen der Tage"""
+        """Auslesen der präferierten Tage"""
         return self._tage
 
     def set_tage(self):
-        """Setzen der Tage"""
+        """Setzen der präferierten Tage"""
         self._tage = value
 
     def get_frequenz(self):
-        """Auslesen der Frequenz"""
+        """Auslesen der Frequenz/Häufigkeit der Treffen"""
         return self._frequenz
 
     def set_frequenz(self):
-        """Setzen der Frequenz"""
+        """Setzen der Frequenz/Häufigkeit der Treffen"""
         self._frequenz = value
 
     def get_lernart(self):
-        """Auslesen der Lernart"""
+        """Auslesen der präferierten Lernart"""
         return self._lernart
 
     def set_lernart(self):
-        """Setzen der Lernart"""
+        """Setzen der präferierten Lernart"""
         self._lernart = value
 
     def get_gruppengroesse(self):
-        """Auslesen der Gruppengroesse"""
+        """Auslesen der präferierten Gruppengroesse"""
         return self._gruppengroesse
 
     def set_gruppengroesse(self):
-        """Setzen der Gruppengroesse"""
+        """Setzen der präferierten Gruppengroesse"""
         self._gruppengroesse = value
 
     def get_lernort(self):
-        """Auslesen des Lernorts"""
+        """Auslesen des präferierten Lernorts"""
         return self._lernort
 
     def set_lernort(self):
-        """Setzen des Lernorts"""
+        """Setzen des präferierten Lernorts"""
         self._lernort = value
 
 
