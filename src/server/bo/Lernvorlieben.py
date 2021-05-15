@@ -5,9 +5,9 @@ class Lernvorlieben(BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._tageszeiten = {"Morgens:": false, "Mittags:": false, "Abends:": false}
-        self._tage = {"Montag:": false, "Dienstag:": false, "Mittwoch:": false, "Donnerstag:": false, "Freitag:": false, "Samstag:": false, "Sonntag:": false,}
-        self._frequenz = {"Wöchentlich:": false, "Mehrmals die Woche:": false,  "Alle zwei Wochen:": false}
+        self._tageszeiten = {"Morgens:": False, "Mittags:": False, "Abends:": False}
+        self._tage = {"Montag:": False, "Dienstag:": False, "Mittwoch:": False, "Donnerstag:": False, "Freitag:": False, "Samstag:": False, "Sonntag:": False,}
+        self._frequenz = {"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
         self._lernart = str
         self._gruppengroesse = 0
         self._lernort = str
