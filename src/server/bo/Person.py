@@ -5,7 +5,6 @@ class Person(NamedBusinessObject):
     def __init__(self):
         super().__init__()
         self._vorname = None
-        self._semester = None
         self._alter = 0
         self._geschlecht = None
         self._lerngruppe = False
@@ -19,14 +18,6 @@ class Person(NamedBusinessObject):
     def set_vorname(self, vorname):
         """Setzen des Vornamens"""
         self._vorname = vorname
-
-    def get_semester(self):
-        """Auslesen des Semesters"""
-        return self._semester
-
-    def set_semester(self, semester):
-        """Setzen des Semesters"""
-        self._semester = semester
 
     def get_alter(self):
         """Auslesen des Alters"""
@@ -79,7 +70,6 @@ class Person(NamedBusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
-        obj.set_semester(dictionary["semester"])
         obj.set_alter(dictionary["alter"])
         obj.set_geschlecht(dictionary["geschlecht"])
         obj.set_lerngruppe(dictionary["lerngruppe"])
