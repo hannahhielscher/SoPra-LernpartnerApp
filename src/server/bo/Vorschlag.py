@@ -10,7 +10,4 @@ class Vorschlag():
             vorschlag = i
             return vorschlag
 
-    def set_matches(self):
-        return 
-
 
