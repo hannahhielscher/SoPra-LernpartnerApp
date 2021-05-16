@@ -5,7 +5,9 @@ class Lerngruppe(NamedBusinessObject):
     def __init__(self):
         super().__init__()
         self._teilnehmer = []
-        self._gruppenprofil = None
+        self._gruppenprofil = Profil
+        self._lernvorlieben = Lernvorlieben
+
 
     def set_teilnehmer(self, teilnehmer):
         """Setzen eines Teilnehmers"""
