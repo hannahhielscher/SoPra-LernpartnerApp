@@ -2,16 +2,15 @@ from server.bo import BusinessObject as bo
 
 class Vorschlag():
 
-    def __init__(self):
-        self.list= list
-
-    def get_vorschlag(self):
-        return
+    def __init__(self, matches):
+        self._matches = matches
 
     def get_matches(self):
-        return list
+        for i in self._matches:
+            vorschlag = i
+            return vorschlag
 
-    def set_vorschlag(self):
-        return list
+    def set_matches(self):
+        return 
 
 
