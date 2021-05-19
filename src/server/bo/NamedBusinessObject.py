@@ -1,12 +1,13 @@
-from server.bo import BusinessObject
+from server.bo.BusinessObject import BusinessObject
 
-class NamedBusinessObject:
+class NamedBusinessObject(BusinessObject):
 
     def __init__(self, name):
-        self.name = name
+        self._name = str
 
     def get_name(self):
-        return str
+        """Auslesen des Namens"""
 
     def set_name(self):
+        """Setzen des Namens"""
         return str
