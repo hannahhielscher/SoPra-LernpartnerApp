@@ -8,10 +8,9 @@ class Profil (NamedBusinessObject):
         self._hochschule = ""
         self._studiengang = ""
         self._semester = 0
-        self._lernfaecher = []
-        self._kenntnisstand = ""
-        self._selbsteinschaetzung = ""
+        self._lernfaecher = {}
 
+        
     def get_hochschule(self):
         """Auslesen der Hochschule"""
         return self._hochschule
@@ -43,22 +42,11 @@ class Profil (NamedBusinessObject):
     def set_lernfaecher(self, lernfaecher_neu):
         """Setzen der Lernfächer"""
         self._lernfaecher = lernfaecher_neu
+    
+        """Dictionary befüllen: Mit jeweils einem Lernfach und Kenntnisstand"""
+        
 
-    def get_kenntnisstand(self):
-        """Auslesen des Kenntnisstandes"""
-        return self._kenntnisstand
-
-    def set_kenntnisstand(self, kenntnisstand_neu):
-        """Setzen des Kenntnisstandes"""
-        return self._kenntnisstand = kenntnisstand_neu
-
-    def get_selbsteinschaetzung(self):
-        """Auslesen der Selbsteinschätzung"""
-        return self._selbsteinschsetzung
-
-    def set_selbsteinschaetzung(self, selbsteinschaetzung_neu):
-        """Setzen der Selbsteinschätzung"""
-        self._selbsteinschaetzung = selbsteinschaetzung_neu
+    
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
