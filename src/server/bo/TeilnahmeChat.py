@@ -1,7 +1,7 @@
 from server.bo import BusinessObject as bo
 
 
-class TeilnahmeChat (bo.BusinessObject):
+class TeilnahmeChat(bo.BusinessObject):
     
     def __init__(self):
         super().__init__()
