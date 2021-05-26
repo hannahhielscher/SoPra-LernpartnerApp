@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="">
+    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="Klasse Nachricht korrigiert">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/Lernvorlieben.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Lernvorlieben.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,6 +25,7 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="ProjectId" id="1s7LysVvjQYjkoXlN7mDi1SbWQu" />
   <component name="PropertiesComponent">
