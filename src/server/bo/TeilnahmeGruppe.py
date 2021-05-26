@@ -1,7 +1,7 @@
 from server.bo import BusinessObject as bo
 
 
-class Teilnahme (bo.BusinessObject):
+class TeilnahmeGruppe (bo.BusinessObject):
     
     def __init__(self):
         super().__init__()
@@ -38,7 +38,7 @@ class Teilnahme (bo.BusinessObject):
     @staticmethod
     def from_dict(dictionary=dict()):
          """Umwandeln eines Python dict() in einen User()."""
-        obj = Teilnahme()
+        obj = TeilnahmeGruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_status(dictionary['status'])
         obj.set_lerngruppe(dictionary['lerngruppe'])

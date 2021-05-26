@@ -1,46 +1,35 @@
 from server.bo import BusinessObject as bo
 
 
-class Teilnahme (bo.BusinessObject):
+class TeilnahmeChat (bo.BusinessObject):
     
     def __init__(self):
         super().__init__()
-        self._status = False
-        self._teilnehmer= None
-        self._lerngruppe= None
+        self._person = False
+        self._konversation = None
 
-    def get_teilnehmer(self):
+    def get_person(self):
         """Auslesen des Teilnehmers"""
-        return self._teilnehmer
+        return self._person
     
-    def set_teilnehmer(self, teilnehmer):
+    def set_person(self, person_id):
         """setzten des Teilnehmers"""
-        self._teilnehmer= teilnehmer
+        self._teilnehmer= person_id
 
-    def get_lerngruppe(self):
+    def get_konversation(self):
         """Auslesen der Lerngruppe"""
-        return self._lerngruppe
+        return self._konversation
     
-    def set_lerngruppe(self, lerngruppe):
+    def set_konversation(self, konversation_id):
         """setzten der neuen Lerngruppe"""
-        self._lerngruppe= lerngruppe
-
-
-    def get_status(self):
-        """Auslesen vom Status"""
-        return self._status
-
-    def set_status(self, value):
-        """aktuellen Status setzten"""
-        self._status= value
+        self._konversation = konversation_id
         
 
     @staticmethod
     def from_dict(dictionary=dict()):
          """Umwandeln eines Python dict() in einen User()."""
-        obj = Teilnahme()
+        obj = TeilnahmeChat()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_status(dictionary['status'])
-        obj.set_lerngruppe(dictionary['lerngruppe'])
-        obj.set_teilnehmer(dictionary['teilnehmer'])
+        obj.set_person(dictionary['person'])
+        obj.set_konversation(dictionary['konversation'])
         return obj
