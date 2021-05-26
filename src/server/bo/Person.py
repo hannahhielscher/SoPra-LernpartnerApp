@@ -89,10 +89,12 @@ class Person(NamedBusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
+        obj.set_semester(dictionary["semester"])
         obj.set_alter(dictionary["alter"])
         obj.set_geschlecht(dictionary["geschlecht"])
         obj.set_lerngruppe(dictionary["lerngruppe"])
-        obj.set_lernvorlieben(dictionary["lernvorlieben"])
+        obj.set_google_user_id(dictionary["google_user_id"])
+        obj.set_email(dictionary["email"])
         obj.set_personenprofil(dictionary["personenprofil"])
         return obj
 
