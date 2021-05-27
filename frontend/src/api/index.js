@@ -4,3 +4,4 @@
  */
 export {default as LernpartnerAPI} from './LernpartnerAPI';
 export {default as PersonBO} from './PersonBO';
+export {default as VorschlagBO} from './VorschlagBO';
