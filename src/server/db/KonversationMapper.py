@@ -3,7 +3,7 @@ from server.db.Mapper import Mapper
 
 
 class KonversationMapper (Mapper):
-    """Mapper-Klasse, die Account-Objekte auf eine relationale
+    """Mapper-Klasse, die Konversation-Objekte auf eine relationale
     Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
     gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
     gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
@@ -12,6 +12,7 @@ class KonversationMapper (Mapper):
 
     def __init__(self):
         super().__init__()
+
 
     def find_all(self):
         """Findet alle Konversationen """
@@ -32,8 +33,8 @@ class KonversationMapper (Mapper):
         return result
 
     def find_by_konversation_id(self, id):
-        """Auslesen aller Tuples mit einer gegebenen ID
-        """
+        """Auslesen aller Tuples mit einer gegebenen ID"""
+        
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id FROM konversationen WHERE id={} ORDER BY id".format(id)
@@ -50,7 +51,7 @@ class KonversationMapper (Mapper):
 
         return result
     
-    def insert(self, koversation):
+    def insert(self, konversation):
         """Einfügen eines Konversation-Objekts in die Datenbank.
 
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
@@ -67,20 +68,20 @@ class KonversationMapper (Mapper):
             if maxid[0] is not None:
                 """Wenn wir eine maximale ID festellen konnten, zählen wir diese
                 um 1 hoch und weisen diesen Wert als ID dem Konversations-Objekt zu."""
-                koversation.set_id(maxid[0] + 1)
+                konversation.set_id(maxid[0] + 1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                koversation.set_id(1)
+                konversation.set_id(1)
 
         command = "INSERT INTO konversationen (id) VALUES (%s,%s,%s,%s)"
-        data = (koversation.get_id())
+        data = (konversation.get_id())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-        return koversation
+        return konversation
 
     def update(self, konversation):
         """Aktualisierung eines Konversations-Objekts in der DB
