@@ -1,12 +1,17 @@
-from .bo.User import User
-from .bo.Customer import Customer
-from .bo.Account import Account
-from .bo.Transaction import Transaction
+from .bo.Konversation import Konversation
+from .bo.Lerngruppe import Lerngruppe
+from .bo.Nachricht import Nachricht
+from .bo.Person import Person
+from .bo.Profil import Profil
+from .bo.TeilnahmeChat import TeilnahmeChat
+from .bo.TeilnahmeGruppe import TeilnahmeGruppe
+from .bo.Vorschlag import Vorschlag
 
-from .db.UserMapper import UserMapper
-from .db.CustomerMapper import CustomerMapper
-from .db.AccountMapper import AccountMapper
-from .db.TransactionMapper import TransactionMapper
+from .db.KonversationMapper import KonversationMapper
+from .db.NachrichtMapper import NachrichtMapper
+from .db.PersonMapper import PersonMapper
+from .db.ProfilMapper import ProfilMapper
+from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
 
 
 class AppAdministration (object):
@@ -93,3 +98,6 @@ class AppAdministration (object):
     Transaction-spezifische Methoden
     """
 
+    """
+    Vorschlag-spezifische Methoden
+    """
