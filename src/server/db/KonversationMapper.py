@@ -34,7 +34,7 @@ class KonversationMapper (Mapper):
 
     def find_by_konversation_id(self, id):
         """Auslesen aller Tuples mit einer gegebenen ID"""
-        
+
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id FROM konversationen WHERE id={} ORDER BY id".format(id)
