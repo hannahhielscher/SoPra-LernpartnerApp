@@ -1,4 +1,4 @@
-from server.bo.Konversation import Konversation
+
 from server.bo.Nachricht import Nachricht
 from server.db.Mapper import Mapper
 
