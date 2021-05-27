@@ -11,14 +11,14 @@ class TeilnahmeGruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT * from teilnahme_gruppe")
+        cursor.execute("SELECT * from teilnahmen_gruppe")
         tuples = cursor.fetchall()
 
         for (id, teilnehmer, lerngruppe) in tuples:
             teilnahme = TeilnahmeGruppe()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(teilnehmer)
-            teilnahme.set_id_lerngruppe(lerngruppe)
+            teilnahme.set_lerngruppe(lerngruppe)
             result.append(teilnahme)
 
         self._connection.commit()
@@ -27,10 +27,10 @@ class TeilnahmeGruppeMapper(Mapper):
         return result
 
     def find_by_student_id(self, person_id):
-        """ Findet alle Teilnahmen für eine bestimmte user_id"""
+        """ Findet alle Gruppenteilnahmen einer bestimmten person mittels User Id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, teilnehmer, lerngruppe FROM teilnahmen_Gruppen WHERE teilnehmer={}".format(person_id)
+        command = "SELECT id, teilnehmer, lerngruppe FROM teilnahmen_gruppe WHERE teilnehmer={}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -47,10 +47,10 @@ class TeilnahmeGruppeMapper(Mapper):
         return result
 
     def find_by_lerngruppe_id(self, lerngruppe_id):
-        """ Findet alle Teilnahmen einer bestimmten Gruppen ID"""
+        """ Findet alle Teilnahmen/Teilnehmer einer bestimmten Gruppen ID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, teilnehmer, lerngruppe FROM teilnahmen_lerngruppe WHERE lerngruppe={}".format(
+        command = "SELECT id, teilnehmer, lerngruppe FROM teilnahmen_gruppe WHERE lerngruppe={}".format(
             lerngruppe_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -74,8 +74,6 @@ class TeilnahmeGruppeMapper(Mapper):
     def insert(self, teilnahme):
         '''
 		Einfugen eines Teilnahme BO's in die DB
-		:param teilnahme
-        :return das bereits übergebene Teilnahme-Objekt mit aktualisierten Daten
 		'''
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen_gruppe ")
@@ -84,8 +82,8 @@ class TeilnahmeGruppeMapper(Mapper):
         for (maxid) in tuples:
             teilnahme.set_id(maxid[0] + 1))
 
-            command = "INSERT INTO teilnahme_lerngruppe (teilnehmer, lerngruppe) VALUES (%s,%s,%s)"
-            data = (teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe())
+            command = "INSERT INTO teilnahmen_gruppe (id, teilnehmer, lerngruppe) VALUES (%s,%s,%s)"
+            data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe())
             cursor.execute(command, data)
 
             self._cnx.commit()
@@ -108,13 +106,13 @@ class TeilnahmeGruppeMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, lerngruppe_Id, teilnehmer_Id):
+    def delete(self, teilnahmen_gruppe):
         """Löschen der Daten eines teilnahme-Objekts der Lerngruppe aus der Datenbank.
         """
 
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM teilnahmen_gruppe WHERE id={}".format(teilnahme_gruppe.get_id_())
+        command = "DELETE FROM teilnahmen_gruppe WHERE id={}".format(teilnahmen_gruppe.get_id_())
         cursor.execute(command)
 
     self._connection.commit()
