@@ -5,15 +5,16 @@ class Nachricht(BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._nachricht = ""
+        self._inhalt = ""
 
-    def set_nachricht(self, nachricht):
+
+    def set_inhalt(self, inhalt):
         """Verfassen einer Nachricht"""
-        self._nachricht = nachricht
+        self._inhalt = inhalt
 
-    def get_nachricht(self):
+    def get_inhalt(self):
         """Auslesen einer Nachricht"""
-        return self._nachricht
+        return self._inhalt
 
 
     @staticmethod
@@ -22,5 +23,5 @@ class Nachricht(BusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
-        obj.set_nachricht(dictionary["nachricht"])
+        obj.set_inhalt(dictionary["inhalt"])
         return obj
