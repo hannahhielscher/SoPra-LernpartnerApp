@@ -60,9 +60,58 @@ class AppAdministration (object):
         pass
 
     """
-    User-spezifische Methoden
+    Person-spezifische Methoden
     """
+    def create_person(self, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id):
+        """Eine Person anlegen"""
 
+        person = Person()
+            
+        person.set_name(name)
+        person.set_vorname(vorname)
+        person.set_semester(semester)           
+        person.set_alter(alter)
+        person.set_geschlecht(geschlecht)
+        person.set_lerngruppe(lerngruppe)
+        person.set_google_user_id(google_user_id)
+        person.set_email(email)
+        person.set_personenprofil(profil_id)
+        person.set_id(1)
+
+        with PersonMapper() as mapper:
+            return mapper.insert(person)
+
+    def get_person_by_id(self, id):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_all_persons(self):
+        """Alle Personen auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_all()
+
+    def get_person_by_google_user_id(self, id):
+        """Eine Person mit einer bestimmten Google User ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_google_user_id(id)
+
+    def save_person(self, person):
+        """Eine Person speichern"""
+
+        with PersonMapper() as mapper:
+            mapper.update(person)
+
+    def update_person_by_id(self, person):
+        """Eine Person speichern"""
+
+        with PersonMapper() as mapper:
+            mapper.update_by_id(person)
+    
+    def delete_UserById(self, personId):
+        """Eine Person löschen"""
+        with PersonMapper() as mapper:
+            return mapper.deleteByID(personId)
 
     """
     Customer-spezifische Methoden

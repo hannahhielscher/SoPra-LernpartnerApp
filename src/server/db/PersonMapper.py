@@ -191,3 +191,15 @@ class PersonMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
+
+    def deleteByID(self, personID):
+        """Löschen der Daten einer Person aus der Datenbank
+        :param person -> Person-Objekt
+        """
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM personen WHERE id={}".format(personID)
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
