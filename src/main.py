@@ -71,9 +71,6 @@ class PersonByIDOperationen(Resource):
         person = adm.get_person_by_id(id)
         return person
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @lernApp.route('/personen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
@@ -125,3 +122,6 @@ class PersonByGoogleIDOperationen(Resource):
         adm = AppAdministration()
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
+
+if __name__ == '__main__':
+    app.run(debug=True)
