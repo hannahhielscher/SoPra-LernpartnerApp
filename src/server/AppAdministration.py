@@ -3,8 +3,8 @@ from .bo.Lerngruppe import Lerngruppe
 from .bo.Nachricht import Nachricht
 from .bo.Person import Person
 from .bo.Profil import Profil
-from .bo.TeilnahmeChat import TeilnahmeChat
-from .bo.TeilnahmeGruppe import TeilnahmeGruppe
+#from .bo.TeilnahmeChat import TeilnahmeChat
+#from .bo.TeilnahmeGruppe import TeilnahmeGruppe
 from .bo.Vorschlag import Vorschlag
 
 from .db.KonversationMapper import KonversationMapper
