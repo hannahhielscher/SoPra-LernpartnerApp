@@ -115,7 +115,7 @@ class PersonOperationen(Resource):
 @lernApp.route('/personbygoogle/<string:google_user_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByGoogleIDOperationen(Resource):
-    @electivApp.marshal_list_with(person)
+    @lernApp.marshal_list_with(person)
     
     @secured
     def get(self, google_user_id):
