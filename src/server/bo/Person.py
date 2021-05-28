@@ -5,10 +5,12 @@ class Person(NamedBusinessObject):
     def __init__(self):
         super().__init__()
         self._vorname = None
+        self._semester = 0
         self._alter = 0
         self._geschlecht = None
         self._lerngruppe = False
-        self._lernvorlieben = Lernvorlieben
+        self._google_user_id = None
+        self._email = None
         self._personenprofil = Profil
 
     def get_vorname(self):
@@ -18,6 +20,14 @@ class Person(NamedBusinessObject):
     def set_vorname(self, vorname):
         """Setzen des Vornamens"""
         self._vorname = vorname
+
+    def get_semester(self):
+        """Auslesen des Semesters"""
+        return self._semester
+    
+    def set_semester(self, value):
+        """Setzen des Semesters"""
+        self._semester = value
 
     def get_alter(self):
         """Auslesen des Alters"""
@@ -43,18 +53,27 @@ class Person(NamedBusinessObject):
         """Setzen, ob Lerngruppe erwünscht ist"""
         self._lerngruppe = value
 
-    def get_lernvorlieben(self):
-        return self._lernvorlieben
+    def get_google_user_id(self):
+        """ Auslesen der Google User ID"""
+        return self._google_user_id
 
-    def set_lernvorlieben(self):
-        """Setzen von neuen Lernvorlieben"""
-        self._lernvorlieben = value
+    def set_google_user_id(self, value):
+        """ Setzen der Google User ID"""
+        self._google_user_id = value
+        
+    def get_email(self):
+        """ Auslesen der Email-Adresse"""
+        return self._email
+
+    def set_email(self, value):
+        """ Setzen der Email """
+        self._email = value
     
     def get_personenprofil(self):
         """Auslesen des Personenprofils"""
         return self._personenprofil
 
-    def set_personenprofil(self):
+    def set_personenprofil(self, value):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
         self._personenprofil = value
 
@@ -70,10 +89,12 @@ class Person(NamedBusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
+        obj.set_semester(dictionary["semester"])
         obj.set_alter(dictionary["alter"])
         obj.set_geschlecht(dictionary["geschlecht"])
         obj.set_lerngruppe(dictionary["lerngruppe"])
-        obj.set_lernvorlieben(dictionary["lernvorlieben"])
+        obj.set_google_user_id(dictionary["google_user_id"])
+        obj.set_email(dictionary["email"])
         obj.set_personenprofil(dictionary["personenprofil"])
         return obj
 

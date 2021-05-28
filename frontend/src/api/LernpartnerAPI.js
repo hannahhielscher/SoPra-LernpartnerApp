@@ -1,4 +1,6 @@
 import ProfilBO from './ProfilBO';
+import PersonBO from './PersonBO';
+import VorschlagBO from './VorschlagBO';
 
 
 /**
@@ -10,6 +12,7 @@ export default class LernpartnerAPI {
   // Singelton instance
   static #api = null;
 
+  #lernAppServerBaseURL = '/lernApp'
   /** 
    * Get the Singelton instance 
    * 
@@ -31,7 +34,13 @@ export default class LernpartnerAPI {
       return res.json();
     }
     )
-  //Personbezogen
+  //Person related
+#getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
+#addPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
+#getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
+#updatePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
+#deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
+#searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
 
   //Gruppenbezogen
 
@@ -39,4 +48,37 @@ export default class LernpartnerAPI {
 
   //...
 
+
+
+/**
+   * Gibt alle Personen als BO zurück
+   * 
+   * @public
+   */
+  getPersonen() {
+    return this.#fetchAdvanced(this.#getPersonenURL()).then((responseJSON) => {
+      let personenBOs = PersonBO.fromJSON(responseJSON);
+      // console.info(customerBOs);
+      return new Promise(function (resolve) {
+        resolve(personenBOs);
+      })
+    })
+  }
+
+  /**
+   * Gibt eine Person mit einer bestimmten ID als BO zurück
+   * 
+   * @param {Number} customerID to be retrieved
+   * @public
+   */
+  getPerson(personID) {
+    return this.#fetchAdvanced(this.#getPersonURL(personID)).then((responseJSON) => {
+      // We always get an array of PersonBOs.fromJSON, but only need one object
+      let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+      // console.info(responsePersonBO);
+      return new Promise(function (resolve) {
+        resolve(responsePersonBO);
+      })
+    })
+  }
 }
