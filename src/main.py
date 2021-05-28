@@ -49,12 +49,12 @@ nbo = api.inherit('NamedBusinessObject', bo, {
 person = api.inherit('Person', nbo, {
     'vorname': fields.String(attribute='_vorname', description='Vorname der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
-    'alter': fields.String(attribute='_alter', description='Alter der Person'),
+    'alter': fields.Integer(attribute='_alter', description='Alter der Person'),
     'geschlecht': fields.String(attribute='_geschlecht', description='Geschlecht der Person'),
     'lerngruppe': fields.String(attribute='_lerngruppe', description='Lerngruppe der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
     'email': fields.String(attribute='_email', description='Email der Person'),
-    'personenprofil': fields.String(attribute='_personenprofil', description='Profil ID der Person'),
+    'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
 @lernApp.route('/person/<int:id>')
@@ -73,3 +73,55 @@ class PersonByIDOperationen(Resource):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+@lernApp.route('/personen')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonOperationen(Resource):
+    @lernApp.marshal_list_with(person)
+    
+    @secured
+    def get(self):
+        """Auslesen aller Personen-Objekte.
+        Sollten keine Personen-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben."""
+
+        adm = AppAdministration()
+        persons = adm.get_all_persons()
+        return persons
+
+    @secured
+    def put(self):
+        """Update des Personen-Objekts."""
+
+        personId = request.args.get("id")
+        name = request.args.get("name")
+        vorname = request.args.get("vorname")
+        semester = request.args.get("semester")
+        alter = request.args.get("alter")
+        geschlecht = request.args.get("geschlecht")
+        lerngruppe = request.args.get("lerngruppe")
+        email = request.args.get("email")
+        adm = AppAdministration()
+        user = adm.get_person_by_id(personId)
+        user.set_name(name)
+        user.set_vorname(vorname)
+        user.set_semester(semester)
+        user.set_alter(alter)
+        user.set_geschlecht(geschlecht)
+        user.set_lerngruppe(lerngruppe)
+        user.set_email(email)
+        adm.update_person_by_id(user)
+
+@lernApp.route('/personbygoogle/<string:google_user_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonByGoogleIDOperationen(Resource):
+    @electivApp.marshal_list_with(person)
+    
+    @secured
+    def get(self, google_user_id):
+        """Auslesen eines bestimmten User-Objekts.
+        Das auszulesende Objekt wird durch die google_user_id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        person = adm.get_person_by_google_user_id(google_user_id)
+        return person
