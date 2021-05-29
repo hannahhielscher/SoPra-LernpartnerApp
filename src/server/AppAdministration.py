@@ -158,6 +158,7 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             result_lernvorlieben = mapper.find_all()
 
+
         """Profil-Match ausrechnen"""
 
         """profil: Profil zu dem Matches errechnet werden sollen
