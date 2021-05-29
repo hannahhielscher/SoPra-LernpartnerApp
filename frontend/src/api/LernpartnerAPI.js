@@ -20,7 +20,7 @@ export default class LernpartnerAPI {
    */
   static getAPI() {
     if (this.#api == null) {
-      this.#api = new BankAPI();
+      this.#api = new LernpartnerAPI();
     }
     return this.#api;
   }
