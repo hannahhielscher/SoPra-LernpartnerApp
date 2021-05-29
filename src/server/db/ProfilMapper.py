@@ -21,17 +21,17 @@ class ProfilMapper(Mapper):
 
         cursor = self._connenction.cursor()
 
-        command = "SELECT id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben from profile"
+        command = "SELECT id, studiengang, abschluss, semester, lernvorlieben_id from profile"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben) in tuples:
+        for (id, studiengang, abschluss, semester, lernvorlieben_id) in tuples:
             profil = Profil()
             profil.set_id(id)
             profil.set_abschluss(abschluss)
             profil.set_semester(semester)
-            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id_lernvorlieben)
+            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
 
             result.append(profil)
 
@@ -56,12 +56,12 @@ class ProfilMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-            (id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben) = tuple[0]
+            (id, studiengang, abschluss, semester, lernvorlieben_id) = tuple[0]
             profil = Profil()
             profil.set_id(id)
             profil.set_abschluss(abschluss)
             profil.set_semester(semester)
-            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id_lernvorlieben)
+            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
 
             result = profil
 
@@ -99,8 +99,8 @@ class ProfilMapper(Mapper):
                 profil.set_id(1)
 
 
-        command = "INSERT INTO profile (id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben) VALUES (%s,%s,%s,%s,%s)"
-        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id_lernvorlieben())
+        command = "INSERT INTO profile (id, studiengang, abschluss, semester, lernvorlieben_id) VALUES (%s,%s,%s,%s,%s)"
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -114,8 +114,8 @@ class ProfilMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE profile " + "SET studiengang=%s, SET abschluss=%s, SET semester=%s, SET lernvorlieben_id_lernvorlieben=%s WHERE id=%s"
-        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id_lernvorlieben())
+        command = "UPDATE profile " + "SET studiengang=%s, SET abschluss=%s, SET semester=%s, SET lernvorlieben_id=%s WHERE id=%s"
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()

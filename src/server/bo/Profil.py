@@ -44,9 +44,10 @@ class Profil (NamedBusinessObject):
         self._lernfaecher = lernfaecher_neu
     
         """Dictionary befüllen: Mit jeweils einem Lernfach und Kenntnisstand"""
-        
 
-    
+    def get_all(self):
+        inhalt = [self.id, self.studiengang, self.abschluss, self.semester, self.lernvorlieben]
+        return inhalt
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""

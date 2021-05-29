@@ -150,3 +150,121 @@ class AppAdministration (object):
     """
     Vorschlag-spezifische Methoden
     """
+    def match_berechnen(self, profil_for_matches, lernvorlieben_for_matches):
+        """Alle Profile auslesen."""
+        with ProfilMapper() as mapper:
+            result_profile = mapper.find_all()
+
+        with LernvorliebenMapper() as mapper:
+            result_lernvorlieben = mapper.find_all()
+
+
+        """Profil-Match ausrechnen"""
+
+        """profil: Profil zu dem Matches errechnet werden sollen
+            prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
+        profil = profil_for_matches.print_all()
+        prozentzahl_profil_all = []
+
+        """For-Schleife mit allen Profilen die verglichen werden"""
+        for i in result_profile:
+            """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
+                profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
+            profil_to_match = i.print_all()
+
+            """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
+                prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
+                prozent_result: Prozentzahl des einzelnen Matches/Profil mit dem im Moment verglichen wird"""
+            buff = 1
+            prozentzahl_profil = []
+            prozent_result_profil = 0
+            anzahl_attribute = len(profil) - 2
+
+            """For-Schleife für einzelne Profil"""
+            for i in range(1, len(profil) - 1):
+                """Gefilterte Werte (dargestellt als 0) abfangen und aus profil löschen"""
+                if profil[i] == 0:
+                    profil.remove(profil[i])
+                    anzahl_attribute -= 1
+                for j in range(buff, len(profil_to_match) - 1):
+                    """Gefilterte Werte auch in profil_to_match löschen"""
+                    if len(profil) != len(profil_to_match):
+                        profil_to_match.remove(profil_to_match[j])
+                    """Gleiche Werte abfragen"""
+                    if profil[i] == profil_to_match[j]:
+                        """1 hinzufügen bei Match"""
+                        prozentzahl_profil.append(1)
+                    """break, um Schleife abzubrechen und buff hochzählen um im nächsten Durchlauf das nächste Element zu vergleichen"""
+                    buff += 1
+                    break
+
+            """Prozent berechnen"""
+            """Gezählte Matches in prozent_result speichern"""
+            for i in prozentzahl_profil:
+                prozent_result_profil += i
+            """Aus den Matches den Prozentsatz errechnen"""
+            prozent_result_profil = (prozent_result_profil / anzahl_attribute) * 100
+            """Ergebnis zu prozentzahl_profil_all hinzufügen"""
+            prozentzahl_profil_all.append(prozent_result_profil)
+
+
+        """Lernvorlieben-Match ausrechnen"""
+
+        """lernvorlieben: Lernvorlieben zu dem Matches errechnet werden sollen
+            prozentzahl_lernvorlieben_all: Liste aller Prozentsätze zu jedem Profil"""
+        lernvorlieben = lernvorlieben_for_matches.print_all()
+        prozentzahl_lernvorlieben_all = []
+
+        """For-Schleife mit allen Profilen die verglichen werden"""
+        for i in result_lernvorlieben:
+            """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
+                lernvorlieben_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
+            lernvorlieben_to_match = i.print_all()
+
+            """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
+                prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
+                prozent_result: Prozentzahl des einzelnen Matches/Profil mit dem im Moment verglichen wird"""
+            buff2 = 1
+            prozentzahl_lernvorlieben = []
+            prozent_result_lernvorlieben = 0
+            anzahl_attribute = len(lernvorlieben) - 1
+
+            """For-Schleife für einzelne Profil"""
+            for i in range(1, len(lernvorlieben)):
+                """Gefilterte Werte (dargestellt als 0) abfangen und aus profil löschen"""
+                if lernvorlieben[i] == 0:
+                    lernvorlieben.remove(lernvorlieben[i])
+                    anzahl_attribute -= 1
+                for j in range(buff2, len(lernvorlieben_to_match)):
+                    """Gefilterte Werte auch in profil_to_match löschen"""
+                    if len(lernvorlieben) != len(lernvorlieben_to_match):
+                        lernvorlieben_to_match.remove(lernvorlieben_to_match[j])
+                    """Gleiche Werte abfragen"""
+                    if lernvorlieben[i] == lernvorlieben_to_match[j]:
+                        """1 hinzufügen bei Match"""
+                        prozentzahl_lernvorlieben.append(1)
+                    """break, um Schleife abzubrechen und buff hochzählen um im nächsten Durchlauf das nächste Element zu vergleichen"""
+                    buff2 += 1
+                    break
+
+            """Prozent berechnen"""
+            """Gezählte Matches in prozent_result speichern"""
+            for i in prozentzahl_lernvorlieben:
+                prozent_result_lernvorlieben += i
+            """Aus den Matches den Prozentsatz errechnen"""
+            prozent_result_lernvorlieben = (prozent_result_lernvorlieben / anzahl_attribute) * 100
+            """Ergebnis zu prozentzahl_profil_all hinzufügen"""
+            prozentzahl_lernvorlieben_all.append(prozent_result_lernvorlieben)
+
+
+        """Insgesamtes Match ausrechnen"""
+        buff3 = 0
+        match_ges_all = []
+        for i in range(len(prozentzahl_profil_all)):
+            for j in range(buff3, len(prozentzahl_lernvorlieben_all)):
+                match_ges = (prozentzahl_profil_all[i] + prozentzahl_lernvorlieben_all[j]) / 2
+                buff3 += 1
+                match_ges_all.append(match_ges)
+                break
+
+        return match_ges_all
