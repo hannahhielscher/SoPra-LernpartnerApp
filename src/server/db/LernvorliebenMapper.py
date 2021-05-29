@@ -18,64 +18,53 @@ class LernvorliebenMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen"
+        command = "SELECT id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort FROM Lernvorlieben"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) in tuples:
-            person = Person()
-            person.set_id(id)
-            person.set_name(name)
-            person.set_vorname(vorname)
-            person.set_semester(semester)
-            person.set_alter(alter)
-            person.set_geschlecht(geschlecht)
-            person.set_lerngruppe(lerngruppe)
-            person.set_google_user_id(google_user_id)
-            person.set_email(email)
-            person.set_personenprofil(profil_id)
+        for (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) in tuples:
+            lernvorlieben = Lernvorlieben()
+            lernvorlieben.set_id(id)
+            lernvorlieben.set_tageszeiten(tageszeiten)
+            lernvorlieben.set_tage(tage)
+            lernvorlieben.set_frequenz(frequenz)
+            lernvorlieben.set_lernart(lernart)
+            lernvorlieben.set_gruppengroesse(gruppengroesse)
+            lernvorlieben.set_lernort(lernort)
             
-            result.append(person)
+            
+            result.append(lernvorlieben)
 
         self._connection.commit()
         cursor.close()
 
         return result
 
-    def find_by_name(self):
-        pass
-
-    def find_by_email(self):
-        pass
-
-    def find_by_id(self, id):
-        """Suchen einer Person nach der übergebenen ID. 
-        :param id Primärschlüsselattribut einer Person aus der Datenbank
-        :return Person-Objekt, welche mit der ID übereinstimmt,
+    def find_by_id(self, id): 
+        """Suchen der Lernvorlieben nach der übergebenen ID. 
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id='{}'".format(id)
+        command = "SELECT id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort FROM Lernvorlieben WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
-            person = Person()
-            person.set_id(id)
-            person.set_name(name)
-            person.set_vorname(vorname)
-            person.set_semester(semester)
-            person.set_alter(alter)
-            person.set_geschlecht(geschlecht)
-            person.set_lerngruppe(lerngruppe)
-            person.set_google_user_id(google_user_id)
-            person.set_email(email)
-            person.set_personenprofil(profil_id)
+            (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) = tuples[0]
+            lernvorlieben = Lernvorlieben()
+            lernvorlieben.set_id(id)
+            lernvorlieben.set_tageszeiten(tageszeiten)
+            lernvorlieben.set_tage(tage)
+            lernvorlieben.set_frequenz(frequenz)
+            lernvorlieben.set_lernart(lernart)
+            lernvorlieben.set_gruppengroesse(gruppengroesse)
+            lernvorlieben.set_lernort(lernort)
             
-            result = person
+            result = lernvorlieben
 
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -86,107 +75,57 @@ class LernvorliebenMapper(Mapper):
         cursor.close()
         return result
 
-    def find_by_google_user_id(self, google_user_id):
-        """Suchen einer Person nach der übergebenen Google User ID. 
-        :param google_user_id Google User ID einer Person aus der Datenbank
-        :return Person-Objekt, welche mit der Google User ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-
-        cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE google_user_id='{}'".format(
-                google_user_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        try:
-            (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
-            person = Person()
-            person.set_id(id)
-            person.set_name(name)
-            person.set_vorname(vorname)
-            person.set_semester(semester)
-            person.set_alter(alter)
-            person.set_geschlecht(geschlecht)
-            person.set_lerngruppe(lerngruppe)
-            person.set_google_user_id(google_user_id)
-            person.set_email(email)
-            person.set_personenprofil(profil_id)
-            
-            result = person
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-        return result
-
-    def insert(self, person):
-        """Einfügen eines Person Objekts in die DB
+    def insert(self, lernvorlieben):
+        """Einfügen eines Lernvorlieben Objekts in die DB
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft 
-        :param person das zu speichernde Person Objekt
-        :return das bereits übergebene Person Objekt mit aktualisierten Daten (id)
+        :param lernvorlieben das zu speichernde Lernvorlieben Objekt
+        :return das bereits übergebene Lernvorlieben Objekt mit aktualisierten Daten (id)
         """
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM personen ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM lernvorlieben ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is not None:
                 """Wenn wir eine maximale ID festellen konnten, zählen wir diese
                 um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
-                person.set_id(maxid[0] + 1)
+                lernvorlieben.set_id(maxid[0] + 1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                person.set_id(1)
+                lernvorlieben.set_id(1)
 
-        command = "INSERT INTO personen (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_profil_id())
+        command = "INSERT INTO lernvorlieben (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-        return person
+        return lernvorlieben
 
-    def update(self, person):
-        """Überschreiben / Aktualisieren eines Person-Objekts in der DB
-        :param person -> Person-Objekt
-        :return aktualisiertes Person-Objekt
+    def update(self, lernvorlieben):
+       """Überschreiben / Aktualisieren eines Lernvorlieben-Objekts in der DB
+        :param lernvorlieben -> Lernvorlieben-Objekt
+        :return aktualisiertes Lernvorlieben-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, alter=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE google_user_id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_google_user_id())
-
-        cursor.execute(command, data)
-
-        self._connection.commit()
-        cursor.close()
-
-    def update_by_id(self, person):
-        """Überschreiben / Aktualisieren eines Person-Objekts in der DB
-        :param person -> Person-Objekt
-        :return aktualisiertes Person-Objekt
-        """
-        cursor = self._connection.cursor()
-
-        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, alter=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_id())
+        command = "UPDATE lernvorlieben " + "SET tageszeiten=%s, tage=%s, frequenz=%s, lernart=%s, gruppengroesse=%s, lernort=%s WHERE id=%s"
+        data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
 
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-    def delete(self, person):
-        """Löschen der Daten einer Person aus der Datenbank
-        :param person -> Person-Objekt
+    def delete(self, lernvorlieben):
+        """Löschen der Daten eines Lernvorlieben-Objekts aus der Datenbank
+        :param lernvorlieben -> Lernvorlieben-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM personen WHERE id={}".format(person.get_id())
+        command = "DELETE FROM lernvorlieben WHERE id={}".format(lernvorlieben.get_id())
         cursor.execute(command)
 
         self._connection.commit()
