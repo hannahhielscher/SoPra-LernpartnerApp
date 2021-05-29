@@ -15,50 +15,32 @@ class ProfilMapper(Mapper):
 
     def find_all(self):
         """Auslesen aller Profile.
-
-        :return Eine Sammlung mit Profil-Objekten, die sämtliche Profile
-                repräsentieren.
+        :return Alle Profil-Objekten im System
         """
         result = []
-        cursor = self._cnx.cursor()
-        cursor.execute("SELECT id_profil from profil")
-        tuples = cursor.fetchall()
 
-        for (id, owner) in tuples:
-            profil = Profil()
-            profil.set_id_profil(id_profil)
-            result.append(profil)
+        cursor = self._connenction.cursor()
 
-        self._cnx.commit()
-        cursor.close()
+        command = "SELECT id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben from profile"
 
-        return result
-
-    def find_by_owner_id(self, owner_id):
-        """Auslesen aller Profile eines durch Fremdschlüssel (Kundennr.) gegebenen Kunden.
-
-        :param owner_id Schlüssel des zugehörigen Kunden.
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten des
-                betreffenden Kunden repräsentieren.
-        """
-        result = []
-        cursor = self._cnx.cursor()
-        command = "SELECT id_profil FROM profil WHERE owner={} ORDER BY id".format(owner_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, owner) in tuples:
-            account = Account()
-            account.set_id(id)
-            account.set_owner(owner)
-            result.append(account)
+        for (id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben) in tuples:
+            profil = Profil()
+            profil.set_id(id)
+            profil.set_abschluss(abschluss)
+            profil.set_semester(semester)
+            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id_lernvorlieben)
 
-        self._cnx.commit()
+            result.append(profil)
+
+        self._connection.commit()
         cursor.close()
 
         return result
 
-    def find_by_key(self, key):
+    def find_by_id(self, id):
         """Suchen eines Kontos mit vorgegebener Kontonummer. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
@@ -68,25 +50,32 @@ class ProfilMapper(Mapper):
         """
         result = None
 
-        cursor = self._cnx.cursor()
-        command = "SELECT id, owner FROM accounts WHERE id={}".format(key)
+        cursor = self._connection.cursor()
+        command = "SELECT id FROM profile WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        if tuples[0] is not None:
-            (id, owner) = tuples[0]
-            account = Account()
-            account.set_id(id)
-            account.set_owner(owner)
+        try:
+            (id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben) = tuple[0]
+            profil = Profil()
+            profil.set_id(id)
+            profil.set_abschluss(abschluss)
+            profil.set_semester(semester)
+            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id_lernvorlieben)
 
-        result = account
+            result = profil
+
+            except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-    def insert(self, account):
+    def insert(self, profil):
         """Einfügen eines Profil-Objekts in die Datenbank.
 
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
@@ -95,18 +84,26 @@ class ProfilMapper(Mapper):
         :param profil das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
-        cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id_profil) AS maxid FROM profil ")
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT MAX(id_) AS maxid FROM profile ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            account.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                profil.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                profil.set_id(1)
 
-        command = "INSERT INTO profil (id, owner) VALUES (%s,%s)"
-        data = (account.get_id(), account.get_owner())
+
+        command = "INSERT INTO profile (id, studiengang, abschluss, semester, lernvorlieben_id_lernvorlieben) VALUES (%s,%s,%s,%s,%s)"
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id_lernvorlieben())
         cursor.execute(command, data)
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
         return profil
 
@@ -115,26 +112,26 @@ class ProfilMapper(Mapper):
 
         :param profil das Objekt, das in die DB geschrieben werden soll
         """
-        cursor = self._cnx.cursor()
+        cursor = self._connection.cursor()
 
-        command = "UPDATE profil " + "SET owner=%s WHERE id=%s"
-        data = (profil.get_owner(), profil.get_id())
+        command = "UPDATE profile " + "SET studiengang=%s, SET abschluss=%s, SET semester=%s, SET lernvorlieben_id_lernvorlieben=%s WHERE id=%s"
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id_lernvorlieben())
         cursor.execute(command, data)
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
 
-    def delete(self, account):
+    def delete(self, profil):
         """Löschen der Daten eines Profil-Objekts aus der Datenbank.
 
         :param profil das aus der DB zu löschende "Objekt"
         """
-        cursor = self._cnx.cursor()
+        cursor = self.connection.cursor()
 
-        command = "DELETE FROM profil WHERE id={}".format(profil.get_id())
+        command = "DELETE FROM profile WHERE id={}".format(profil.get_id())
         cursor.execute(command)
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
 
 
