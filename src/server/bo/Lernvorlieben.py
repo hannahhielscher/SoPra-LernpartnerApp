@@ -6,7 +6,7 @@ class Lernvorlieben(BusinessObject):
     def __init__(self):
         super().__init__()
         self._tageszeiten = {"Morgens:": False, "Mittags:": False, "Abends:": False}
-        self._tage = {"Montag:": False, "Dienstag:": False, "Mittwoch:": False, "Donnerstag:": False, "Freitag:": False, "Samstag:": False, "Sonntag:": False,}
+        self._tage = {"Unter der Woche": False, "Am Wochenende": False}
         self._frequenz = {"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
         self._lernart = str
         self._gruppengroesse = 0
@@ -17,7 +17,7 @@ class Lernvorlieben(BusinessObject):
         """Auslesen der präferierten Uhrzeit"""
         return self._tageszeiten
     
-    def set_tageszeiten(self):
+    def set_tageszeiten(self, value):
         """Setzen der präferierten Tageszeit"""
         self._tageszeiten = value
 
@@ -25,7 +25,7 @@ class Lernvorlieben(BusinessObject):
         """Auslesen der präferierten Tage"""
         return self._tage
 
-    def set_tage(self):
+    def set_tage(self, value):
         """Setzen der präferierten Tage"""
         self._tage = value
 
@@ -33,7 +33,7 @@ class Lernvorlieben(BusinessObject):
         """Auslesen der Frequenz/Häufigkeit der Treffen"""
         return self._frequenz
 
-    def set_frequenz(self):
+    def set_frequenz(self, value):
         """Setzen der Frequenz/Häufigkeit der Treffen"""
         self._frequenz = value
 
@@ -41,7 +41,7 @@ class Lernvorlieben(BusinessObject):
         """Auslesen der präferierten Lernart"""
         return self._lernart
 
-    def set_lernart(self):
+    def set_lernart(self, value):
         """Setzen der präferierten Lernart"""
         self._lernart = value
 
@@ -49,7 +49,7 @@ class Lernvorlieben(BusinessObject):
         """Auslesen der präferierten Gruppengroesse"""
         return self._gruppengroesse
 
-    def set_gruppengroesse(self):
+    def set_gruppengroesse(self, value):
         """Setzen der präferierten Gruppengroesse"""
         self._gruppengroesse = value
 
@@ -57,7 +57,7 @@ class Lernvorlieben(BusinessObject):
         """Auslesen des präferierten Lernorts"""
         return self._lernort
 
-    def set_lernort(self):
+    def set_lernort(self, value):
         """Setzen des präferierten Lernorts"""
         self._lernort = value
 
