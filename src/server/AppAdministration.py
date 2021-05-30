@@ -113,10 +113,6 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             return mapper.deleteByID(personId)
 
-    """
-    Customer-spezifische Methoden
-    """
-
 
     """
     Profil-spezifische Methoden
@@ -139,14 +135,22 @@ class AppAdministration (object):
 
 
     """
-    Pflege der Konstante für das Bar-Konto der Bank
+    Lernvorlieben-spezifische Methoden
     """
 
 
     """
-    Transaction-spezifische Methoden
+    Lerngruppen-spezifische Methoden
     """
 
+    """
+    Nachricht-spezifische Methoden
+    """
+
+    """
+    TeilnahmeChats-spezifische Methoden
+    """
+    
     """
     Vorschlag-spezifische Methoden
     """
