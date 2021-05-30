@@ -235,14 +235,7 @@ class AppAdministration (object):
 
             """For-Schleife für einzelne Profil"""
             for i in range(1, len(lernvorlieben)):
-                """Gefilterte Werte (dargestellt als 0) abfangen und aus profil löschen"""
-                if lernvorlieben[i] == 0:
-                    lernvorlieben.remove(lernvorlieben[i])
-                    anzahl_attribute -= 1
                 for j in range(buff2, len(lernvorlieben_to_match)):
-                    """Gefilterte Werte auch in profil_to_match löschen"""
-                    if len(lernvorlieben) != len(lernvorlieben_to_match):
-                        lernvorlieben_to_match.remove(lernvorlieben_to_match[j])
                     """Gleiche Werte abfragen"""
                     if lernvorlieben[i] == lernvorlieben_to_match[j]:
                         """1 hinzufügen bei Match"""
