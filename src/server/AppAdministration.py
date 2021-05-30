@@ -1,17 +1,17 @@
-from .bo.Konversation import Konversation
-from .bo.Lerngruppe import Lerngruppe
-from .bo.Nachricht import Nachricht
-from .bo.Person import Person
-from .bo.Profil import Profil
-#from .bo.TeilnahmeChat import TeilnahmeChat
-#from .bo.TeilnahmeGruppe import TeilnahmeGruppe
-from .bo.Vorschlag import Vorschlag
+from.bo.Konversation import Konversation
+from.bo.Lerngruppe import Lerngruppe
+from.bo.Nachricht import Nachricht
+from.bo.Person import Person
+from.bo.Profil import Profil
+#from.bo.TeilnahmeChat import TeilnahmeChat
+#from.bo.TeilnahmeGruppe import TeilnahmeGruppe
+from.bo.Vorschlag import Vorschlag
 
-from .db.KonversationMapper import KonversationMapper
-from .db.NachrichtMapper import NachrichtMapper
-from .db.PersonMapper import PersonMapper
-from .db.ProfilMapper import ProfilMapper
-from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
+from.db.KonversationMapper import KonversationMapper
+from.db.NachrichtMapper import NachrichtMapper
+from.db.PersonMapper import PersonMapper
+from.db.ProfilMapper import ProfilMapper
+from.db.TeilnahmeChatMapper import TeilnahmeChatMapper
 
 
 class AppAdministration (object):
@@ -154,14 +154,18 @@ class AppAdministration (object):
     """
     Vorschlag-spezifische Methoden
     """
-    def match_berechnen(self, profil_for_matches, lernvorlieben_for_matches):
+    def match_berechnen(self, profil_for_matches):
         """Alle Profile auslesen."""
         with ProfilMapper() as mapper:
             result_profile = mapper.find_all()
 
-        with LernvorliebenMapper() as mapper:
-            result_lernvorlieben = mapper.find_all()
+        """Lernvorliebe zu Profil für das verglichen wird"""
+        lernvorlieben_id = 0
+        for i in range(len(profil_for_matches) - 1, len(profil_for_matches)):
+            lernvorlieben_id = profil_for_matches[i]
 
+        with LernvorliebenMapper() as mapper:
+            lernvorlieben_for_matches = mapper.find_by_id(lernvorlieben_id)
 
         """Profil-Match ausrechnen"""
 
@@ -169,12 +173,24 @@ class AppAdministration (object):
             prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
         profil = profil_for_matches.print_all()
         prozentzahl_profil_all = []
+        result_lernvorlieben = []
 
         """For-Schleife mit allen Profilen die verglichen werden"""
         for p in result_profile:
             """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
                 profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
             profil_to_match = p.print_all()
+
+            """Lernvorlieben-ID des einzelnen Profils"""
+            lernvorlieben_to_matches = 0
+
+            """Lernvorlieben-ID ausfiltern und in lernvorlieben_for_matches speichern"""
+            for m in range(len(profil_to_match) - 1, len(profil_to_match)):
+                lernvorlieben_to_matches = profil_to_match[m]
+
+            """Nacheinander Lernvorlieben anhand der ID holen und in result_lernvorlieben abspeichern"""
+            with LernvorliebenMapper() as mapper:
+                result_lernvorlieben.append(mapper.find_by_id(lernvorlieben_to_matches))
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
