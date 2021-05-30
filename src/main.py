@@ -123,5 +123,60 @@ class PersonByGoogleIDOperationen(Resource):
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
 
+
+@lernApp.route('/vorschlag/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class VorschlagByIDOperationen(Resource):
+    @lernApp.marshal_list_with(vorschlag)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Vorschlag-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        vorschlag = adm.get_vorschlag_by_id(id)
+        return vorschlag
+
+@banking.route('/vorschlaege')
+@banking.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class CustomerListOperations(Resource):
+    @banking.marshal_list_with(vorschlaege)
+    @secured
+    def get(self):
+        """Auslesen aller Vorschlag-Objekte.
+
+        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = BankAdministration()
+        vorschlaege = adm.get_all_vorschlaege()
+        return vorschlaege
+
+    @banking.marshal_with(customer, code=200)
+    @banking.expect(customer)  # Wir erwarten ein Customer-Objekt von Client-Seite.
+    @secured
+    def post(self):
+        """Anlegen eines neuen Vorschlag-Objekts.
+
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der BankAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
+        adm = BankAdministration()
+
+        proposal = Vorschlag.from_dict(api.payload)
+
+        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        if proposal is not None:
+            """ Wir verwenden lediglich Vor- und Nachnamen des Proposals für die Erzeugung
+            eines Customer-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            wird auch dem Client zurückgegeben. 
+            """
+            c = adm.match_berechnen(proposal.get_first_name(), proposal.get_last_name())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+
 if __name__ == '__main__':
     app.run(debug=True)
