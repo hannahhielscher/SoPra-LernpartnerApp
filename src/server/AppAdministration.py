@@ -161,7 +161,8 @@ class AppAdministration (object):
 
         """profil: Profil zu dem Matches errechnet werden sollen"""
         profil = profil_for_matches.print_all()
-        """Lernvorliebe zu Profil für das verglichen wird"""
+
+        """lernvorlieben_id: Lernvorliebe zu Profil für das verglichen wird"""
         lernvorlieben_id = 0
         for i in range(len(profil) - 1, len(profil)):
             lernvorlieben_id = profil[i]
