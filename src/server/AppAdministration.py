@@ -183,15 +183,15 @@ class AppAdministration (object):
             profil_to_match = p.print_all()
 
             """Lernvorlieben-ID des einzelnen Profils"""
-            lernvorlieben_to_matches = 0
+            lernvorlieben_id_to_matches = 0
 
             """Lernvorlieben-ID ausfiltern und in lernvorlieben_for_matches speichern"""
             for m in range(len(profil_to_match) - 1, len(profil_to_match)):
-                lernvorlieben_to_matches = profil_to_match[m]
+                lernvorlieben_id_to_matches = profil_to_match[m]
 
             """Nacheinander Lernvorlieben anhand der ID holen und in result_lernvorlieben abspeichern"""
             with LernvorliebenMapper() as mapper:
-                result_lernvorlieben.append(mapper.find_by_id(lernvorlieben_to_matches))
+                result_lernvorlieben.append(mapper.find_by_id(lernvorlieben_id_to_matches))
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
