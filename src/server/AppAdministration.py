@@ -159,19 +159,20 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             result_profile = mapper.find_all()
 
+        """profil: Profil zu dem Matches errechnet werden sollen"""
+        profil = profil_for_matches.print_all()
         """Lernvorliebe zu Profil für das verglichen wird"""
         lernvorlieben_id = 0
-        for i in range(len(profil_for_matches) - 1, len(profil_for_matches)):
-            lernvorlieben_id = profil_for_matches[i]
+        for i in range(len(profil) - 1, len(profil)):
+            lernvorlieben_id = profil[i]
 
         with LernvorliebenMapper() as mapper:
             lernvorlieben_for_matches = mapper.find_by_id(lernvorlieben_id)
 
+
         """Profil-Match ausrechnen"""
 
-        """profil: Profil zu dem Matches errechnet werden sollen
-            prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
-        profil = profil_for_matches.print_all()
+        """prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
         prozentzahl_profil_all = []
         result_lernvorlieben = []
 
