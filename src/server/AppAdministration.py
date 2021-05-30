@@ -3,6 +3,7 @@ from.bo.Lerngruppe import Lerngruppe
 from.bo.Nachricht import Nachricht
 from.bo.Person import Person
 from.bo.Profil import Profil
+from.bo.Lernvorlieben import Lernvorlieben
 #from.bo.TeilnahmeChat import TeilnahmeChat
 #from.bo.TeilnahmeGruppe import TeilnahmeGruppe
 from.bo.Vorschlag import Vorschlag
@@ -11,7 +12,9 @@ from.db.KonversationMapper import KonversationMapper
 from.db.NachrichtMapper import NachrichtMapper
 from.db.PersonMapper import PersonMapper
 from.db.ProfilMapper import ProfilMapper
+from.db.LernvorliebenMapper import LernvorliebenMapper
 from.db.TeilnahmeChatMapper import TeilnahmeChatMapper
+
 
 
 class AppAdministration (object):
@@ -137,6 +140,43 @@ class AppAdministration (object):
     """
     Lernvorlieben-spezifische Methoden
     """
+    def create_lernvorlieben(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
+        """Lernvorlieben anlegen"""
+
+        lernvorlieben = Lernvorlieben()
+            
+        lernvorlieben.set_tageszeiten(tageszeiten)
+        lernvorlieben.set_tage(tage)
+        lernvorlieben.set_frequenz(frequenz)           
+        lernvorlieben.set_lernart(lernart)
+        lernvorlieben.set_gruppengroesse(gruppengroesse)
+        lernvorlieben.set_lernort(lernort)
+        lernvorlieben.set_id(1)
+
+        with LernvorliebenMapper() as mapper:
+            return mapper.insert(lernvorlieben)
+
+    def get_lernvorlieben_by_id(self, id):
+        """Lernvorlieben mit einer bestimmten ID auslesen"""
+        with LernvorliebenMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def save_lernvorlieben(self, lernvorlieben):
+        """Lernvorlieben speichern"""
+
+        with LernvorliebenMapper() as mapper:
+            mapper.update(lernvorlieben)
+
+    def update_lernvorlieben_by_id(self, lernvorlieben):
+        """Lernvorlieben speichern"""
+
+        with LernvorliebenMapper() as mapper:
+            mapper.update_by_id(lernvorlieben)
+    
+    def delete_UserById(self, lernvorliebenId):
+        """Eine Person löschen"""
+        with LernvorliebenMapper() as mapper:
+            return mapper.deleteByID(lernvorliebenId)
 
 
     """
