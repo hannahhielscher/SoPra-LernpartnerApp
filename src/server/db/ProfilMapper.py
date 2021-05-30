@@ -1,5 +1,5 @@
-from server.bo.Profil import Profil
 from server.db.Mapper import Mapper
+from server.bo.Profil import Profil
 
 
 class ProfilMapper(Mapper):
