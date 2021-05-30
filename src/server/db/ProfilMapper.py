@@ -65,7 +65,7 @@ class ProfilMapper(Mapper):
 
             result = profil
 
-            except IndexError:
+        except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             result = None
@@ -100,7 +100,7 @@ class ProfilMapper(Mapper):
 
 
         command = "INSERT INTO profile (id, studiengang, abschluss, semester, lernvorlieben_id) VALUES (%s,%s,%s,%s,%s)"
-        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id())
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss(), profil.get_semester(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -115,7 +115,7 @@ class ProfilMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE profile " + "SET studiengang=%s, SET abschluss=%s, SET semester=%s, SET lernvorlieben_id=%s WHERE id=%s"
-        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss() profil.get_semester() profil.get_lernvorlieben_id())
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss(), profil.get_semester(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()
