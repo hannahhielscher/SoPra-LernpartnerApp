@@ -171,10 +171,10 @@ class AppAdministration (object):
         prozentzahl_profil_all = []
 
         """For-Schleife mit allen Profilen die verglichen werden"""
-        for i in result_profile:
+        for p in result_profile:
             """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
                 profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-            profil_to_match = i.print_all()
+            profil_to_match = p.print_all()
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
@@ -204,8 +204,8 @@ class AppAdministration (object):
 
             """Prozent berechnen"""
             """Gezählte Matches in prozent_result speichern"""
-            for i in prozentzahl_profil:
-                prozent_result_profil += i
+            for k in prozentzahl_profil:
+                prozent_result_profil += k
             """Aus den Matches den Prozentsatz errechnen"""
             prozent_result_profil = (prozent_result_profil / anzahl_attribute) * 100
             """Ergebnis zu prozentzahl_profil_all hinzufügen"""
@@ -220,10 +220,10 @@ class AppAdministration (object):
         prozentzahl_lernvorlieben_all = []
 
         """For-Schleife mit allen Profilen die verglichen werden"""
-        for i in result_lernvorlieben:
+        for l in result_lernvorlieben:
             """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
                 lernvorlieben_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-            lernvorlieben_to_match = i.print_all()
+            lernvorlieben_to_match = l.print_all()
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
@@ -246,8 +246,8 @@ class AppAdministration (object):
 
             """Prozent berechnen"""
             """Gezählte Matches in prozent_result speichern"""
-            for i in prozentzahl_lernvorlieben:
-                prozent_result_lernvorlieben += i
+            for k in prozentzahl_lernvorlieben:
+                prozent_result_lernvorlieben += k
             """Aus den Matches den Prozentsatz errechnen"""
             prozent_result_lernvorlieben = (prozent_result_lernvorlieben / anzahl_attribute) * 100
             """Ergebnis zu prozentzahl_profil_all hinzufügen"""
