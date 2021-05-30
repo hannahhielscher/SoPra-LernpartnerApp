@@ -8,4 +8,113 @@ import LoadingProgress from './dialogs/LoadingProgress';
 
 class NachrichtenListe extends Component {
 
+  constructor(props) {
+    super(props);
+
+   // console.log(props);
+   let expandedID = null;
+
+   if (this.props.location.expandCustomer) {
+     expandedID = this.props.location.expandCustomer.getID();
+   }
+
+   // Init an empty state
+   this.state = {
+     nachrichten: [],
+     filteredNachrichten: [],
+     nachrichtFilter: '',
+     error: null,
+     loadingInProgress: false,
+     expandedNachrichtID: expandedID,
+     showNachrichtForm: false,
+     showDeleteForm: false
+   };
+ }
+
+ //Öffnet das Dialog-Fenster Nachrichtfrom, wenn der Button geklickt wurde
+ addButtonClicked = event => {
+    event.stopPropagation();
+    this.setState({
+      showModulForm: true
+    });
+  }
+ 
+ // API Anbindung um alle Module vom Backend zu bekommen 
+ getNachrichten = () => {
+    LernappAPI.getAPI().getNachrichten()
+      .then(nachrichtenBOs =>
+        this.setState({               // Set new state when CustomerBOs have been fetched
+          nachrichten: nachrichtenBOs,
+          filteredNachrichten: [...nachrichtenBOs], // store a copy
+          loadingInProgress: false,   // disable loading indicator 
+          error: null
+        })).catch(e =>
+          this.setState({             // Reset state with error from catch 
+            nachrichten: [],
+            loadingInProgress: false, // disable loading indicator 
+            error: e
+          })
+        );
+
+this.setState({
+    loadingInProgress: true,
+    error: null
+  });
 }
+
+// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+componentDidMount() {
+  this.getNachrichten();
+}
+
+//Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird
+nachrichtFormClosed = modul => {
+    this.getNachrichten();
+    if (nachricht) {
+      const newNachrichtList = [...this.state.nachrichten, nachricht];
+      this.setState({
+        nachrichten: newNachrichtList,
+        filteredNachrichten: [...newNachrichtList],
+        showNachrichtForm: false
+      });
+    } else {
+      this.setState({
+        showNachrichtForm: false
+      });
+    }
+  }
+
+  nachrichtDeleted = nachricht => {
+    const newNachrichtList = this.state.nachrichten.filter(nachrichtFromState => nachrichtFromState.getID() !== nachricht.getID());
+    this.setState({
+      nachrichten: newNachrichtList,
+      filteredNachrichten: [...newNachrichtList],
+      showNachrichtenForm: false
+    });
+  }
+
+ // Rendert die Componente 
+ render() {
+    const { classes } = this.props;
+    const {  loadingInProgress, error, nachrichtFilter, filteredNachrichten, showNachrichtForm} = this.state;
+
+    return (
+     
+    );
+
+}
+
+// Component specific styles 
+const styles = theme => ({
+
+});
+
+/** PropTypes */
+NachrichtenListe.propTypes = {
+    /** @ignore */
+    classes: PropTypes.object.isRequired,
+    /** @ignore */
+    location: PropTypes.object.isRequired,
+  }
+  
+  export default withRouter(withStyles(styles)(NachrichtListe));
