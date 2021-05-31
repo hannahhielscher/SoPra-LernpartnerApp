@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/AppAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/AppAdministration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/bo/Profil.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Profil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/db/ProfilMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/ProfilMapper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/NachrichtMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/NachrichtMapper.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

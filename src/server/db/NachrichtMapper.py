@@ -1,4 +1,3 @@
-
 from server.bo.Nachricht import Nachricht
 from server.db.Mapper import Mapper
 
@@ -22,7 +21,7 @@ class NachrichtMapper (Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT id, inhalt, person_id, profil_id, konversation_id from nachrichten")
+        cursor.execute("SELECT id, inhalt, person_id, profil_id, konversation_id from nachricht")
         tuples = cursor.fetchall()
 
         for (id, inhalt, person_id, profil_id, konversation_id) in tuples:
@@ -46,33 +45,88 @@ class NachrichtMapper (Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id FROM nachrichten WHERE id={} ORDER BY id".format(id)
+        command = "SELECT id, inhalt, person_id, profil_id, konversation_id FROM nachricht WHERE id={} ORDER BY id".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id) in tuples:
             nachricht = Nachricht()
             nachricht.set_id(id)
-            result.append(nachricht)
+            nachricht.set_inhalt(inhalt)
+            nachricht.set_person_id(person_id)
+            nachricht.set_profil_id(profil_id)
+            nachricht.set_konversation_id(konversation_id)
 
         self._connection.commit()
         cursor.close()
 
         return result
 
-    def find_by_konversation_id(self, konversation_id):
-        
+    def find_by_inhalt(self, inhalt):
+
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, konversation_id FROM nachrichten WHERE konversation={}".format(konversation_id)
+        command = "SELECT id, inhalt, person_id, profil_id, konversation_id FROM nachrichten WHERE inhalt={}".format(inhalt)
         cursor.execute(command)
         tuples = cursor.fetchall()
-
 
         for (id, konversation_id) in tuples:
             nachrichten = Nachricht()
             nachrichten.set_id(id)
+            nachrichten.set_inhalt(inhalt)
+            nachrichten.set_person_id(person_id)
+            nachrichten.set_profil_id(profil_id)
             nachrichten.set_konversation_id(konversation_id)
+
+            result.append(nachrichten)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_person_id(self, person_id):
+        
+        result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, inhalt, person_id, profil_id, konversation_id FROM nachrichten WHERE person_id={}".format(person_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+
+        for (id, inhalt, person_id, profil_id, konversation_id) in tuples:
+            nachrichten = Nachricht()
+            nachrichten.set_id(id)
+            nachrichten.set_inhalt(inhalt)
+            nachrichten.set_person_id(person_id)
+            nachrichten.set_profil_id(profil_id)
+            nachrichten.set_konversation_id(konversation_id)
+
+            result.append(nachrichten)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_profil_id(self, profil_id):
+
+        result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, inhalt, person_id, profil_id, konversation_id FROM nachrichten WHERE person_id={}".format(
+            profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, inhalt, person_id, profil_id, konversation_id) in tuples:
+            nachrichten = Nachricht()
+            nachrichten.set_id(id)
+            nachrichten.set_inhalt(inhalt)
+            nachrichten.set_person_id()
+            nachrichten.set_person_id(person_id)
+            nachrichten.set_profil_id(profil_id)
+            nachrichten.set_konversation_id(konversation_id)
+
             result.append(nachrichten)
 
         self._connection.commit()
@@ -103,7 +157,7 @@ class NachrichtMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 nachricht.set_id(1)
 
-        command = "INSERT INTO nachrichten (id, inhalt, person_id, profil_id, konversation_id) VALUES (%s,%s,%s,%s)"
+        command = "INSERT INTO nachrichten (id, inhalt, person_id, profil_id, konversation_id) VALUES (%s,%s,%s,%s,%s)"
         data = (nachricht.get_id(), nachricht.get_inhalt(), nachricht.get_person_id(), nachricht.get_profil_id(), nachricht.get_konversation_id())
         cursor.execute(command, data)
 
@@ -119,8 +173,8 @@ class NachrichtMapper (Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE nachrichten " + "SET inhalt=%s, person_id=%s, profil_id=%s, konversation_id=%s WHERE google_user_id=%s"
-        data = (nachricht.get_inhalt(), nachricht.get_person_id(), nachricht.get_profil_id(), nachricht.get_konversation_id)
+        command = "UPDATE nachrichten " + "SET inhalt=%s, person_id=%s, profil_id=%s, konversation_id=%s WHERE id=%s"
+        data = (nachricht.get_inhalt(), nachricht.get_person_id(), nachricht.get_profil_id(), nachricht.get_konversation_id())
         cursor.execute(command, data)
 
         self._connection.commit()

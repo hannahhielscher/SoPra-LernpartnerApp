@@ -187,10 +187,63 @@ class AppAdministration (object):
     Nachricht-spezifische Methoden
     """
 
+    def get_all_nachrichten(self):
+        """Gibt alle Nachrichten zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_all()
+
+    def get_nachricht_by_id(self, id):
+        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def insert_nachricht(self, b):
+        """Speichert die Nachricht."""
+        with NachrichtMapper() as mapper:
+            return mapper.insert(b)
+
+    def update_nachricht(self, b):
+        """Speichert die Nachricht."""
+        with NachrichtMapper() as mapper:
+            return mapper.update(b)
+
+    def delete_nachricht(self, b):
+        """Löscht die Nachricht."""
+        with NachrichtMapper() as mapper:
+            mapper.delete(b)
+
+
     """
     TeilnahmeChats-spezifische Methoden
     """
-    
+
+    def get_all_teilnahmenChat(self):
+        """Gibt alle Teilnahmen an einem Chat zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_all()
+
+    def get_teilnahme_by_student_id(self, student_id):
+        """Gibt die Teilnahme einer gegebenen Id zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_student_id(student_id)
+
+    def get_teilnahme_by_konversations_id(self, konversations_id):
+        """Gibt die Teilnahme einer gegebenen Id zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_konversations_id(konversations_id)
+"""
+    def get_nachricht_of_teilnahmechat(self, teil):
+        'Gibt die Nachricht der Teilnahmer zurück.'
+        with NachrichtMapper() as mapper:
+            result = []
+
+            if not (teil is None):
+                bewertung = mapper.find_by_source_teilnahme_id(teil.get_id())
+                if not (teil is None):
+                    result.extend(bewertung)
+
+            return result
+"""
     """
     Vorschlag-spezifische Methoden
     """
