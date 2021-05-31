@@ -137,6 +137,43 @@ class AppAdministration (object):
     """
     Lernvorlieben-spezifische Methoden
     """
+    def create_lernvorlieben(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
+        """Lernvorlieben anlegen"""
+
+        lernvorlieben = Lernvorlieben()
+            
+        lernvorlieben.set_tageszeiten(tageszeiten)
+        lernvorlieben.set_tage(tage)
+        lernvorlieben.set_frequenz(frequenz)           
+        lernvorlieben.set_lernart(lernart)
+        lernvorlieben.set_gruppengroesse(gruppengroesse)
+        lernvorlieben.set_lernort(lernort)
+        lernvorlieben.set_id(1)
+
+        with LernvorliebenMapper() as mapper:
+            return mapper.insert(lernvorlieben)
+
+    def get_lernvorlieben_by_id(self, id):
+        """Lernvorlieben mit einer bestimmten ID auslesen"""
+        with LernvorliebenMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def save_lernvorlieben(self, lernvorlieben):
+        """Lernvorlieben speichern"""
+
+        with LernvorliebenMapper() as mapper:
+            mapper.update(lernvorlieben)
+
+    def update_lernvorlieben_by_id(self, lernvorlieben):
+        """Lernvorlieben speichern"""
+
+        with LernvorliebenMapper() as mapper:
+            mapper.update_by_id(lernvorlieben)
+    
+    def delete_UserById(self, lernvorliebenId):
+        """Eine Person löschen"""
+        with LernvorliebenMapper() as mapper:
+            return mapper.deleteByID(lernvorliebenId)
 
 
     """
@@ -154,27 +191,45 @@ class AppAdministration (object):
     """
     Vorschlag-spezifische Methoden
     """
-    def match_berechnen(self, profil_for_matches, lernvorlieben_for_matches):
+    def match_berechnen(self, profil_for_matches):
         """Alle Profile auslesen."""
         with ProfilMapper() as mapper:
             result_profile = mapper.find_all()
 
+        """profil: Profil zu dem Matches errechnet werden sollen"""
+        profil = profil_for_matches.print_all()
+
+        """lernvorlieben_id: Lernvorliebe zu Profil für das verglichen wird"""
+        lernvorlieben_id = 0
+        for i in range(len(profil) - 1, len(profil)):
+            lernvorlieben_id = profil[i]
+
         with LernvorliebenMapper() as mapper:
-            result_lernvorlieben = mapper.find_all()
+            lernvorlieben_for_matches = mapper.find_by_id(lernvorlieben_id)
 
 
         """Profil-Match ausrechnen"""
 
-        """profil: Profil zu dem Matches errechnet werden sollen
-            prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
-        profil = profil_for_matches.print_all()
+        """prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
         prozentzahl_profil_all = []
+        result_lernvorlieben = []
 
         """For-Schleife mit allen Profilen die verglichen werden"""
         for p in result_profile:
             """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
                 profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
             profil_to_match = p.print_all()
+
+            """Lernvorlieben-ID des einzelnen Profils"""
+            lernvorlieben_id_to_matches = 0
+
+            """Lernvorlieben-ID ausfiltern und in lernvorlieben_for_matches speichern"""
+            for m in range(len(profil_to_match) - 1, len(profil_to_match)):
+                lernvorlieben_id_to_matches = profil_to_match[m]
+
+            """Nacheinander Lernvorlieben anhand der ID holen und in result_lernvorlieben abspeichern"""
+            with LernvorliebenMapper() as mapper:
+                result_lernvorlieben.append(mapper.find_by_id(lernvorlieben_id_to_matches))
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
