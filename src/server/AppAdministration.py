@@ -194,10 +194,19 @@ class AppAdministration (object):
     """
     Vorschlag-spezifische Methoden
     """
-    def match_berechnen(self, profil_for_matches):
-        """Alle Profile auslesen."""
+    def match_berechnen(self, person_id_for_matches):
+        """person_id_for_matches auslesen."""
+        with PersonMapper() as mapper:
+            person = mapper.find_by_id(person_id_for_matches)
+        """person_for_matches: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
+        person_for_matches = person.print_all()
+
+        profil_id = 0
+        for i in range(len(person_for_matches) - 1, len(person_for_matches)):
+            profil_id = person_for_matches[i]
+
         with ProfilMapper() as mapper:
-            result_profile = mapper.find_all()
+            profil_for_matches = mapper.find_by_id(profil_id)
 
         """profil: Profil zu dem Matches errechnet werden sollen"""
         profil = profil_for_matches.print_all()
@@ -209,6 +218,13 @@ class AppAdministration (object):
 
         with LernvorliebenMapper() as mapper:
             lernvorlieben_for_matches = mapper.find_by_id(lernvorlieben_id)
+
+        """lernvorlieben: Lernvorlieben zu dem Matches errechnet werden sollen"""
+        lernvorlieben = lernvorlieben_for_matches.print_all()
+
+        """Alle Profile auslesen."""
+        with ProfilMapper() as mapper:
+            result_profile = mapper.find_all()
 
 
         """Profil-Match ausrechnen"""
@@ -272,14 +288,12 @@ class AppAdministration (object):
 
         """Lernvorlieben-Match ausrechnen"""
 
-        """lernvorlieben: Lernvorlieben zu dem Matches errechnet werden sollen
-            prozentzahl_lernvorlieben_all: Liste aller Prozentsätze zu jedem Profil"""
-        lernvorlieben = lernvorlieben_for_matches.print_all()
+        """prozentzahl_lernvorlieben_all: Liste aller Prozentsätze zu jedem Profil"""
         prozentzahl_lernvorlieben_all = []
 
         """For-Schleife mit allen Profilen die verglichen werden"""
         for l in result_lernvorlieben:
-            """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
+            """Inhalt Lernvorlieben die verglichen werden über eine Methode holen und in einer Liste speichern
                 lernvorlieben_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
             lernvorlieben_to_match = l.print_all()
 
@@ -321,5 +335,11 @@ class AppAdministration (object):
                 buff3 += 1
                 match_ges_all.append(match_ges)
                 break
+
+        for i in match_ges_all:
+            vorschlag = Vorschlag(i)
+
+            with VorschlagMapper() as mapper:
+                mapper.insert(vorschlag)
 
         return match_ges_all
