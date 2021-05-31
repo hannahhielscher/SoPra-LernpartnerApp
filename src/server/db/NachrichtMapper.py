@@ -28,7 +28,7 @@ class NachrichtMapper (Mapper):
         for (id, inhalt, person_id, profil_id, konversation_id) in tuples:
             nachricht = Nachricht()
             nachricht.set_id(id)
-            nachricht.nachricht_inhalt(inhalt)
+            nachricht.set_inhalt(inhalt)
             nachricht.set_person_id(person_id)
             nachricht.set_profil_id(profil_id)
             nachricht.set_konversation_id(konversation_id)

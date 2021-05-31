@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="" />
+    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt">
+      <change beforePath="$PROJECT_DIR$/src/server/AppAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/AppAdministration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/bo/Profil.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/bo/Profil.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/db/ProfilMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/ProfilMapper.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +55,34 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="AppAdministration" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="SoPra-LernpartnerApp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/server" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/server/AppAdministration.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.AppAdministration" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -97,15 +129,11 @@
       <option name="project" value="LOCAL" />
       <updated>1622138860837</updated>
     </task>
-    <task id="LOCAL-00006" summary="Update TeilnahmeGruppeMapper">
-      <created>1622140166557</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1622140166557</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="6" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -180,7 +208,6 @@
     <MESSAGE value="Erste Version der Klasse Lernvorlieben." />
     <MESSAGE value="workspace" />
     <MESSAGE value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
-    <MESSAGE value="Update TeilnahmeGruppeMapper" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update TeilnahmeGruppeMapper" />
+    <option name="LAST_COMMIT_MESSAGE" value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
   </component>
 </project>
