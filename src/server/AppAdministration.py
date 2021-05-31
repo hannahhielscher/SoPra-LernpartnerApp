@@ -1,20 +1,17 @@
-from.bo.Konversation import Konversation
-from.bo.Lerngruppe import Lerngruppe
-from.bo.Nachricht import Nachricht
-from.bo.Person import Person
-from.bo.Profil import Profil
-from.bo.Lernvorlieben import Lernvorlieben
-#from.bo.TeilnahmeChat import TeilnahmeChat
-#from.bo.TeilnahmeGruppe import TeilnahmeGruppe
-from.bo.Vorschlag import Vorschlag
+from .bo.Konversation import Konversation
+from .bo.Lerngruppe import Lerngruppe
+from .bo.Nachricht import Nachricht
+from .bo.Person import Person
+from .bo.Profil import Profil
+from .bo.TeilnahmeChat import TeilnahmeChat
+from .bo.TeilnahmeGruppe import TeilnahmeGruppe
+from .bo.Vorschlag import Vorschlag
 
-from.db.KonversationMapper import KonversationMapper
-from.db.NachrichtMapper import NachrichtMapper
-from.db.PersonMapper import PersonMapper
-from.db.ProfilMapper import ProfilMapper
-from.db.LernvorliebenMapper import LernvorliebenMapper
-from.db.TeilnahmeChatMapper import TeilnahmeChatMapper
-
+from .db.KonversationMapper import KonversationMapper
+from .db.NachrichtMapper import NachrichtMapper
+from .db.PersonMapper import PersonMapper
+from .db.ProfilMapper import ProfilMapper
+from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
 
 
 class AppAdministration (object):

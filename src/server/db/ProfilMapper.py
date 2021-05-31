@@ -40,7 +40,7 @@ class ProfilMapper(Mapper):
 
         return result
 
-    def find_by_id(self, id):
+    #def find_by_id(self, id):
         """Suchen eines Kontos mit vorgegebener Kontonummer. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
@@ -48,32 +48,32 @@ class ProfilMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        result = None
+        #result = None
 
-        cursor = self._connection.cursor()
-        command = "SELECT id FROM profile WHERE id={}".format(id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
+        #cursor = self._connection.cursor()
+        #command = "SELECT id FROM profile WHERE id={}".format(id)
+        #cursor.execute(command)
+        #tuples = cursor.fetchall()
 
-        try:
-            (id, studiengang, abschluss, semester, lernvorlieben_id) = tuple[0]
-            profil = Profil()
-            profil.set_id(id)
-            profil.set_abschluss(abschluss)
-            profil.set_semester(semester)
-            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
+        #try:
+            #(id, studiengang, abschluss, semester, lernvorlieben_id) = tuple[0]
+            #profil = Profil()
+            #profil.set_id(id)
+            #profil.set_abschluss(abschluss)
+            #profil.set_semester(semester)
+            #profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
 
-            result = profil
+            #result = profil
 
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+            #except IndexError:
+            #"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            #keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            #result = None
 
-        self._cnx.commit()
-        cursor.close()
+        #self._cnx.commit()
+        #cursor.close()
 
-        return result
+        #return result
 
     def insert(self, profil):
         """Einfügen eines Profil-Objekts in die Datenbank.
@@ -115,7 +115,7 @@ class ProfilMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE profile " + "SET studiengang=%s, SET abschluss=%s, SET semester=%s, SET lernvorlieben_id=%s WHERE id=%s"
-        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss(), profil.get_semester(), profil.get_lernvorlieben_id())
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss(), profil.get_semester() ,profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()
