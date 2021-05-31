@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/server/db/TeilnahmeGruppeMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/db/TeilnahmeGruppeMapper.py" afterDir="false" />
-    </list>
+    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622138860837</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Update TeilnahmeGruppeMapper">
+      <created>1622140166557</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1622140166557</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -175,6 +180,7 @@
     <MESSAGE value="Erste Version der Klasse Lernvorlieben." />
     <MESSAGE value="workspace" />
     <MESSAGE value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
-    <option name="LAST_COMMIT_MESSAGE" value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
+    <MESSAGE value="Update TeilnahmeGruppeMapper" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update TeilnahmeGruppeMapper" />
   </component>
 </project>
