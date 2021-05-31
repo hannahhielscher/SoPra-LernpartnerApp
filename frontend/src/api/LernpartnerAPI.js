@@ -55,6 +55,16 @@ export default class LernpartnerAPI {
         #getVorschlaegeURL = (personID) => `${this.#lernappServerBaseURL}/vorschlaege/${personID}`;
 
 
+        //Nachrichten anzeigen für Student
+        #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
+        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konverastion/${id}`;
+        #setKonversationAtNachrichten = (nachrichtenId, konversationId) => `${this.#lernappServerBaseURL}/nachrichten/konversation?nachrichtenId=${nachrichtenId}&konversationId=${konversationId}`;
+        #addNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
+        #getNachrichtenByIDURL = (id) => `${this.#lernapptivServerBaseURL}/nachrichten/${id}`;
+        //Nachricht löschen
+	      #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
+
+
 
         /**
            * Gibt alle Personen als BO zurück
@@ -97,6 +107,17 @@ export default class LernpartnerAPI {
             //console.info(vorschlaegeBOs)
             return new Promise(function (resolve) {
               resolve(vorschlaegeBOs);
+            })
+          })
+        }
+
+        // Gibt alle Nachrichten zurück
+         getNachrichten(personID) {
+          return this.#fetchAdvanced(this.#getNachrichtenURL(personID,{method: 'GET'}).then((responseJSON) => {
+            let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+            //console.info(nachrichtenBOs)
+            return new Promise(function (resolve) {
+              resolve(nachrichtenBOs);
             })
           })
         }
