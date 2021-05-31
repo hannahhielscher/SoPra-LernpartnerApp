@@ -105,7 +105,7 @@ class VorschlagMapper(Mapper):
 
         command = "UPDATE vorschlaege " + "SET match_quote=%s, profil_id=%s WHERE WHERE id=%s"
         data = (
-        vorschlag.get_match_quote(), vorschlag.get_profil_id))
+        vorschlag.get_match_quote(), vorschlag.get_profil_id())
 
         cursor.execute(command, data)
 

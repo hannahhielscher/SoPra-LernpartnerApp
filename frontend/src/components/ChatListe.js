@@ -6,6 +6,6 @@ import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
-class KonversationListe extends Component {
+class ChatListe extends Component {
 
 }
