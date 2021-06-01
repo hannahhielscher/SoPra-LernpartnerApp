@@ -25,7 +25,7 @@ import firebaseConfig from './firebaseconfig';
 }
 */
 
-export default App;
+//export default App;
 
 class App extends React.Component {
 
