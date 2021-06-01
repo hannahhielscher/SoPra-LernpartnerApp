@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-//import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
 //import { Link as RouterLink } from 'react-router-dom';
-//import ProfileDropDown from '../dialogs/ProfileDropDown';
+import ProfileDropDown from '../dialogs/ProfileDropDown';
 
 class Header extends Component {
 
-  /*constructor(props) {
+  constructor(props) {
     super(props);
 
     // Init an empty state
@@ -16,7 +16,7 @@ class Header extends Component {
   }
 
   /** Handles onChange events of the Tabs component */
- /* handleTabChange = (e, newIndex) => {
+ handleTabChange = (e, newIndex) => {
     // console.log(newValue)
     this.setState({
       tabindex: newIndex
@@ -51,9 +51,9 @@ class Header extends Component {
 }
 
 /** PropTypes */
-//Header.propTypes = {
+Header.propTypes = {
   /** The logged in firesbase user */
-//  user: PropTypes.object,
-//}
+  user: PropTypes.object,
+}
 
 export default Header;
