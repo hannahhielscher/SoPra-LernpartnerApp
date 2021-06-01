@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt">
       <change afterPath="$PROJECT_DIR$/src/server/bo/Lernfach.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/server/db/LernfachMapper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+    <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+>>>>>>> f19d43854e68c3e7603e370d4ebbfee27e739a2a
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -217,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622138860837</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Update NachrichtenMapper &amp; AppAdministration: Nachricht &amp; Teilnahmechatspezifische methoden">
+      <created>1622501418819</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1622501418819</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,6 +309,7 @@
     <MESSAGE value="Erste Version der Klasse Lernvorlieben." />
     <MESSAGE value="workspace" />
     <MESSAGE value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
-    <option name="LAST_COMMIT_MESSAGE" value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
+    <MESSAGE value="Update NachrichtenMapper &amp; AppAdministration: Nachricht &amp; Teilnahmechatspezifische methoden" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update NachrichtenMapper &amp; AppAdministration: Nachricht &amp; Teilnahmechatspezifische methoden" />
   </component>
 </project>
