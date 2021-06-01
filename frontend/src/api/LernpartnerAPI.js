@@ -84,7 +84,7 @@ export default class LernpartnerAPI {
         /**
          * Gibt eine Person mit einer bestimmten ID als BO zurück
          * 
-         * @param {Number} customerID to be retrieved
+         * @param {Number} personID to be retrieved
          * @public
          */
         getPerson(personID) {
@@ -100,9 +100,11 @@ export default class LernpartnerAPI {
 
         /**
          * Gibt alle Vorschlaege zurück
-        */
+         * @param {Number} personID to be retrieved
+         * @public
+          */
         getVorschlaege(personID) {
-          return this.#fetchAdvanced(this.#getVorschlaegeURL(personID,{method: 'GET'}).then((responseJSON) => {
+          return this.#fetchAdvanced(this.#getVorschlaegeURL(personID,{method: 'GET'})).then((responseJSON) => {
             let vorschlaegeBOs = VorschlagBO.fromJSON(responseJSON);
             //console.info(vorschlaegeBOs)
             return new Promise(function (resolve) {
@@ -112,8 +114,8 @@ export default class LernpartnerAPI {
         }
 
         // Gibt alle Nachrichten zurück
-         getNachrichten(personID) {
-          return this.#fetchAdvanced(this.#getNachrichtenURL(personID,{method: 'GET'}).then((responseJSON) => {
+        getNachrichten(personID) {
+          return this.#fetchAdvanced(this.#getNachrichtenURL(personID,{method: 'GET'})).then((responseJSON) => {
             let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
             //console.info(nachrichtenBOs)
             return new Promise(function (resolve) {

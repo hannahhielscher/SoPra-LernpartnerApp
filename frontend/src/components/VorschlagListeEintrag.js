@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles } from '@material-ui/core';
+//import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
+import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
+import { Button, ButtonGroup } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+//import TableCell from '@material-ui/core/TableCell';
+//import TableRow from '@material-ui/core/TableRow';
 
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import LoadingProgress from './dialogs/LoadingProgress';
+//import InputLabel from '@material-ui/core/InputLabel';
+//import MenuItem from '@material-ui/core/MenuItem';
+//import FormControl from '@material-ui/core/FormControl';
+//import Select from '@material-ui/core/Select';
+//import ContextErrorMessage from './dialogs/ContextErrorMessage';
+//import LoadingProgress from './dialogs/LoadingProgress';
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -22,7 +24,7 @@ import LoadingProgress from './dialogs/LoadingProgress';
  */
 
 //Css Style Klassen für die Tabellen Zellen
-const StyledTableCell = withStyles((theme) => ({
+/**const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
@@ -40,6 +42,7 @@ const StyledTableRow = withStyles((theme) => ({
     },
   },
 }))(TableRow);
+*/
 
 class VorschlagListeEintrag extends Component {
     constructor(props){
@@ -59,6 +62,19 @@ class VorschlagListeEintrag extends Component {
             loadingInProgress: false,
             error: null
         };
+    }
+
+    /** Handles onChange events of the underlying ExpansionPanel */
+    expansionPanelStateChanged = () => {
+    this.props.onExpandedStateChange(this.props.customer);
+    }
+    
+    //Handles the onClick event of the show profil button
+    showProfilButtonClicked = (event) => {
+      event.stopPropagation();
+      this.setState({
+        showCustomerForm: true
+      });
     }
 
     // API Anbindung um Vorschlag vom Backend zu bekommen 
