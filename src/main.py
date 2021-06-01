@@ -178,5 +178,99 @@ class CustomerListOperations(Resource):
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
 
+@learnApp.route('/nachricht')
+@learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtListOperation(Resource):
+
+    @learnApp.marshal_list_with(nachricht)
+    def get(self):
+        """Auslesen aller Nachrichten-Objekte.
+
+        Sollten keine Nachrichten-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = AppAdministration()
+        nachricht = adm.get_all_nachrichten()
+        return nachricht
+
+    @learnApp.marshal_list_with(nachricht, envelope='response')
+    def post(self):
+        """Anlegen eines neuen Nachrichtenobjekts."""
+        adm = AppAdministration()
+        n = nachricht.from_dict(api.payload) #api.payload?
+
+        if n is not None:
+            insert_n = adm.create_nachricht(n)
+            nachricht = adm.get_nachricht_by_id(insert_n.get_id())
+            return nachricht, 200
+        else:
+            return '', 500
+
+
+@learnApp.route('/nachricht/<int:id>')
+@learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtOperation(Resource):
+
+    @learnApp.marshal_with(nachricht)
+    def get (self, id)
+    """Auslesen einer bestimmten Nachricht."""
+    adm = AppAdministration()
+    nachricht = adm.get_nachricht_by_id(id)
+
+        if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+
+    @learnApp.marshal_with(nachricht)
+    def put(self, id):
+        """Update eines bestimmten Nachrichtenenobjekts."""
+        adm = AppAdministration()
+        nachr = nachricht.from_dict(api.payload) #was anderes statt payload
+
+        if nachr is not None:
+            nachr.set_id(id)
+            adm.save_nachricht(nachr)
+            nachricht = adm.get_nachricht_by_id(id)
+            return nachricht, 200
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+    @learnApp.marshal_with(nachricht)
+    def delete(self, id):
+        """Löschen eines bestimmten Nachrichtenobjekts."""
+        adm = AppAdministration()
+        na = adm.get_nachricht_by_id(id)
+        adm.delete_nachricht(na)
+        return '', 200
+
+    @learnApp.marshal_with(nachricht)
+    def post(self, id):
+        """Anlegen/schreiben einer Nachricht."""
+        adm = AppAdministration()
+        n = pra.get_person_by_id(id)
+
+        if n is not None:
+            result = adm.create_nachricht(n)
+            return result
+        else:
+            return "", 500
+
+@learnApp.route('/nachricht-by-inhalt/<string:inhalt>')
+@learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByInhaltOperation(Resource):
+
+    @learnApp.marshal_with(nachricht)
+    def get (self, inhalt)
+    """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
+    adm = AppAdministration()
+    nachricht = adm.get_nachricht_by_inhalt(inhalt)
+
+     if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+# noch nachricht-by-profil-id und nachricht-by-person-id?
+
 if __name__ == '__main__':
     app.run(debug=True)
