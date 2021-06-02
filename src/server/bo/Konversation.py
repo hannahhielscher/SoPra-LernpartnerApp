@@ -1,14 +1,12 @@
 from server.bo import BusinessObject as bo
 from server.bo import Nachricht 
 
-
-
 class Konversation (bo.BusinessObject, Nachricht):
     
     def __init__(self):
         super().__init__()
         self._nachrichten = []
-        self._teilnehmer = []
+        self._teilnehmer = TeilnahmeChat
 
     def neue_nachricht(self):
         """Neue Nachricht erstellen und zu Liste hinzufügen"""

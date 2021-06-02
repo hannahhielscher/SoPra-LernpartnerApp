@@ -1,4 +1,6 @@
-class Lernfach:
+from server.bo import BusinessObject as bo
+
+class Lernfach(bo.BusinessObject):
 
     def __init__(self):
         super().__init__()

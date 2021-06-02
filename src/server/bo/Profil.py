@@ -8,8 +8,7 @@ class Profil (NamedBusinessObject):
         self._hochschule = ""
         self._studiengang = ""
         self._semester = 0
-        self._lernfaecher = {}
-
+        self._lernfaecher = []
         
     def get_hochschule(self):
         """Auslesen der Hochschule"""

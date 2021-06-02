@@ -114,25 +114,48 @@ class AppAdministration (object):
             return mapper.deleteByID(personId)
 
 
-
     """
     Profil-spezifische Methoden
     """
+
+    def create_profil(self, hochschule, studiengang, semester, lernfaecher):
+        """Eine Person anlegen"""
+
+        profil = Profil()
+
+        profil.set_hochschule(hochschule)
+        profil.set_studiengang(studiengang)
+        profil.set_semester(semester)
+        profil.set_lernfaecher(lernfaecher)
+        person.set_id(1)
+
+        with ProfilMapper() as mapper:
+            return mapper.insert(profil)
+
     def get_all_profil(self):
         """Auslesen aller Profile"""
-        return self._vorname
+        with ProfilMapper() as mapper:
+            return mapper.find_all()
 
-    def set_profil_by_id(self):
-        """Setzen des Vornamens"""
-        self._vorname = value
+    def get_profil_by_id(self):
+        """Profil mit einer bestimmten ID auslesen"""
+        with ProfilMapper() as mapper:
+            return mapper.find_by_id(id)
 
-    def save_profil(self):
-        """Auslesen des Semesters"""
-        return self._semester
+    def save_profil(self, profil):
+        """Profil speichern"""
+        with ProfilMapper() as mapper:
+            mapper.update(profil)
 
-    def delete_profil(self):
-        """Setzen des Semesters"""
-        self._semester = value
+    def update_profil_by_id(self, profil):
+        """Ein Profil speichern"""
+        with ProfilMapper() as mapper:
+            mapper.update(profil)
+
+    def delete(self, profil):
+        """Profil löschen"""
+        with ProfilMapper() as mapper:
+            return mapper.deleteByID(profil)
 
 
     """
@@ -180,6 +203,57 @@ class AppAdministration (object):
     """
     Lerngruppen-spezifische Methoden
     """
+
+    def create_person(self, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id):
+        """Eine Person anlegen"""
+
+        person = Person()
+
+        person.set_name(name)
+        person.set_vorname(vorname)
+        person.set_semester(semester)
+        person.set_alter(alter)
+        person.set_geschlecht(geschlecht)
+        person.set_lerngruppe(lerngruppe)
+        person.set_google_user_id(google_user_id)
+        person.set_email(email)
+        person.set_personenprofil(profil_id)
+        person.set_id(1)
+
+        with PersonMapper() as mapper:
+            return mapper.insert(person)
+
+    def get_person_by_id(self, id):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_all_persons(self):
+        """Alle Personen auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_all()
+
+    def get_person_by_google_user_id(self, id):
+        """Eine Person mit einer bestimmten Google User ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_google_user_id(id)
+
+    def save_person(self, person):
+        """Eine Person speichern"""
+
+        with PersonMapper() as mapper:
+            mapper.update(person)
+
+    def update_person_by_id(self, person):
+        """Eine Person speichern"""
+
+        with PersonMapper() as mapper:
+            mapper.update_by_id(person)
+
+    def delete_UserById(self, personId):
+        """Eine Person löschen"""
+        with PersonMapper() as mapper:
+            return mapper.deleteByID(personId)
 
     """
     Nachricht-spezifische Methoden
@@ -242,9 +316,26 @@ class AppAdministration (object):
 
             return result
     """
+
     """
     Vorschlag-spezifische Methoden
     """
+
+    def get_all_vorschlaege(self):
+        """Gibt alle Nachrichten zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_all()
+
+    def get_vorschlaege_by_id(self, id):
+        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_vorschlag_by_person_id(self, id):
+        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_by_person_id(id)
+
     def match_berechnen(self, person_id_for_matches):
         """person_id_for_matches auslesen."""
         with PersonMapper() as mapper:

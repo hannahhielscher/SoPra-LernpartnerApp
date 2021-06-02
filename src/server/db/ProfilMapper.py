@@ -40,7 +40,7 @@ class ProfilMapper(Mapper):
 
         return result
 
-    #def find_by_id(self, id):
+    def find_by_id(self, id):
         """Suchen eines Kontos mit vorgegebener Kontonummer. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
@@ -48,14 +48,14 @@ class ProfilMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        #result = None
+        result = None
 
-        #cursor = self._connection.cursor()
-        #command = "SELECT id FROM profile WHERE id={}".format(id)
-        #cursor.execute(command)
-        #tuples = cursor.fetchall()
+        cursor = self._connection.cursor()
+        command = "SELECT id FROM profile WHERE id={}".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
-        #try:
+        try:
             #(id, studiengang, abschluss, semester, lernvorlieben_id) = tuple[0]
             #profil = Profil()
             #profil.set_id(id)
@@ -70,10 +70,10 @@ class ProfilMapper(Mapper):
             #keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             #result = None
 
-        #self._cnx.commit()
-        #cursor.close()
+        self._cnx.commit()
+        cursor.close()
 
-        #return result
+        return result
 
     def insert(self, profil):
         """Einfügen eines Profil-Objekts in die Datenbank.
