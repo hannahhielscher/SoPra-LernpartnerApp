@@ -9,12 +9,12 @@ import json
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.AppAdministration import AppAdministration
-#from server.bo.TeilnahmeGruppe import TeilnahmeGruppe
-#from server.bo.TeilnahmeChat import TeilnahmeChat
-#from server.bo.Vorschlag import Vorschlag
-#from server.bo.Nachricht import Nachricht
-#from server.bo.Lernvorlieben import Lernvorlieben
-#from server.bo.Konversation import Konversation
+from server.bo.TeilnahmeGruppe import TeilnahmeGruppe
+from server.bo.TeilnahmeChat import TeilnahmeChat
+from server.bo.Vorschlag import Vorschlag
+from server.bo.Nachricht import Nachricht
+from server.bo.Lernvorlieben import Lernvorlieben
+from server.bo.Konversation import Konversation
 
 #SecurityDecorator
 from SecurityDecorator import secured
