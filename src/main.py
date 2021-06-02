@@ -220,10 +220,10 @@ class NachrichtListOperation(Resource):
 class NachrichtOperation(Resource):
 
     @learnApp.marshal_with(nachricht)
-    def get (self, id)
-    """Auslesen einer bestimmten Nachricht."""
-    adm = AppAdministration()
-    nachricht = adm.get_nachricht_by_id(id)
+    def get (self, id):
+        """Auslesen einer bestimmten Nachricht."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_id(id)
 
         if nachricht is not None:
             return nachricht
@@ -270,12 +270,12 @@ class NachrichtOperation(Resource):
 class NachrichtByInhaltOperation(Resource):
 
     @learnApp.marshal_with(nachricht)
-    def get (self, inhalt)
-    """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
-    adm = AppAdministration()
-    nachricht = adm.get_nachricht_by_inhalt(inhalt)
+    def get (self, inhalt):
+        """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_inhalt(inhalt)
 
-     if nachricht is not None:
+        if nachricht is not None:
             return nachricht
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
