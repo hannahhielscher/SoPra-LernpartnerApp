@@ -67,6 +67,38 @@ class VorschlagMapper(Mapper):
         cursor.close()
         return result
 
+    def find_by_person_id(self, id):
+        """Suchen eines Vorschlages nach der übergebenen ID.
+        :param id Primärschlüsselattribut eines Vorschlages aus der Datenbank
+        :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, match_quote, person_id FROM vorschlaege WHERE person_id='{}'".format(
+            id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            (id, match_quote, person_id) = tuples[0]
+            vorschlag = Vorschlaege()
+            person.set_id(id)
+            person.set_match_quote(match_quote)
+            person.set_person_id(person_id)
+
+            result = vorschlag
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+    		keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+        return result
+
+
     def insert(self, vorschlag):
         """Einfügen eines Vorschlag Objekts in die DB
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft
