@@ -1,7 +1,7 @@
-from server.bo import BusinessObject as bo
-from server.bo import Nachricht 
+from server.bo.NamedBusinessObject import NamedBusinessObject
 
-class Konversation (bo.BusinessObject, Nachricht):
+
+class Konversation (NamedBusinessObject):
     
     def __init__(self):
         super().__init__()
