@@ -27,7 +27,7 @@ class TeilnahmeChat(bo.BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-         """Umwandeln eines Python dict() in einen User()."""
+        """Umwandeln eines Python dict() in einen User()."""
         obj = TeilnahmeChat()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_person(dictionary['person'])
