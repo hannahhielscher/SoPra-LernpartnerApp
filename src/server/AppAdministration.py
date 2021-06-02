@@ -137,10 +137,15 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.find_all()
 
-    def get_profil_by_id(self):
+    def get_profil_by_id(self, id):
         """Profil mit einer bestimmten ID auslesen"""
         with ProfilMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_profil_by_lernfach_id(self, lernfach_id):
+        """Profil mit einer bestimmten Lernfach ID auslesen"""
+        with ProfilMapper() as mapper:
+            return mapper.find_by_lernfach_id(lernfach_id)
 
     def save_profil(self, profil):
         """Profil speichern"""
@@ -321,25 +326,49 @@ class AppAdministration (object):
     Vorschlag-spezifische Methoden
     """
 
+    def create_vorschlag(self, main_person_id, match_quote, lernfach, person_id):
+        """Eine Person anlegen"""
+
+        vorschlag = Vorschlag()
+
+        vorschlag.set_main_person_id(main_person_id)
+        vorschlag.set_match_quote(match_quote)
+        vorschlag.set_lernfach(lernfach)
+        vorschlag.set_person_id(person_id)
+        vorschlag.set_id(1)
+
+        with VorschlagMapper() as mapper:
+            return mapper.insert(vorschlag)
+
     def get_all_vorschlaege(self):
-        """Gibt alle Nachrichten zurück."""
+        """Gibt alle Vorschläge zurück."""
         with VorschlagMapper() as mapper:
             return mapper.find_all()
 
     def get_vorschlaege_by_id(self, id):
-        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        """Gibt den Vorschlag mit der gegebenen Id zurück."""
         with VorschlagMapper() as mapper:
             return mapper.find_by_key(id)
 
+    def get_vorschlag_by_main_person_id(self, id):
+        """Gibt den Vorschlag mit der gegebenen Id zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_by_main_person_id(id)
+
     def get_vorschlag_by_person_id(self, id):
-        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        """Gibt den Vorschlag mit der gegebenen Id zurück."""
         with VorschlagMapper() as mapper:
             return mapper.find_by_person_id(id)
 
+    def update_vorschlag_by_id(self, id):
+        """Update den Vorschlag mit der gegebenen Id."""
+        with VorschlagMapper() as mapper:
+            return mapper.update_by_id(id)
+
     def match_berechnen(self, person_id_for_matches):
         """person_id_for_matches auslesen."""
-        with PersonMapper() as mapper:
-            person = mapper.find_by_id(person_id_for_matches)
+        person = get_person_by_id(person_id_for_matches)
+
         """person_for_matches: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
         person_for_matches = person.print_all()
 
@@ -347,8 +376,7 @@ class AppAdministration (object):
         for i in range(len(person_for_matches) - 1, len(person_for_matches)):
             profil_id = person_for_matches[i]
 
-        with ProfilMapper() as mapper:
-            profil_for_matches = mapper.find_by_id(profil_id)
+        profil_for_matches = get_profil_by_id(profil_id)
 
         """profil: Profil zu dem Matches errechnet werden sollen"""
         profil = profil_for_matches.print_all()
@@ -358,28 +386,31 @@ class AppAdministration (object):
         for i in range(len(profil) - 1, len(profil)):
             lernvorlieben_id = profil[i]
 
-        with LernvorliebenMapper() as mapper:
-            lernvorlieben_for_matches = mapper.find_by_id(lernvorlieben_id)
+        lernvorlieben_for_matches = get_lernvorlieben_by_id(lernvorlieben_id)
 
         """lernvorlieben: Lernvorlieben zu dem Matches errechnet werden sollen"""
         lernvorlieben = lernvorlieben_for_matches.print_all()
 
         """Alle Profile auslesen."""
-        with ProfilMapper() as mapper:
-            result_profile = mapper.find_all()
+        result_profile = get_all_profil()
 
 
         """Profil-Match ausrechnen"""
 
-        """prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil"""
+        """prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil
+        all_person_id: Aller IDs der Personen mit denen verglichen wird"""
         prozentzahl_profil_all = []
         result_lernvorlieben = []
+        all_person_id = []
 
         """For-Schleife mit allen Profilen die verglichen werden"""
         for p in result_profile:
             """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
                 profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
             profil_to_match = p.print_all()
+
+            for i in range(0,1):
+                all_person_id.append(profil_to_match[i])
 
             """Lernvorlieben-ID des einzelnen Profils"""
             lernvorlieben_id_to_matches = 0
@@ -389,8 +420,7 @@ class AppAdministration (object):
                 lernvorlieben_id_to_matches = profil_to_match[m]
 
             """Nacheinander Lernvorlieben anhand der ID holen und in result_lernvorlieben abspeichern"""
-            with LernvorliebenMapper() as mapper:
-                result_lernvorlieben.append(mapper.find_by_id(lernvorlieben_id_to_matches))
+            result_lernvorlieben.append(get_lernvorlieben_by_id(lernvorlieben_id_to_matches))
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
@@ -478,10 +508,13 @@ class AppAdministration (object):
                 match_ges_all.append(match_ges)
                 break
 
-        for i in match_ges_all:
-            vorschlag = Vorschlag(i)
-
-            with VorschlagMapper() as mapper:
-                mapper.insert(vorschlag)
+        buff4 = 0
+        for i in range(len(match_ges_all)):
+            quote = i
+            for j in range(buff4, len(all_person_id)):
+                person_id = j
+                create_vorschlag(person_id_for_matches, quote, lernfach, person_id)
+                buff4 += 1
+                break
 
         return match_ges_all
