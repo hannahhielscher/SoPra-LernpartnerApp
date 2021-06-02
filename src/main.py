@@ -156,7 +156,7 @@ class ProfilByIDOperationen(Resource):
 
 @lernApp.route('/profile')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class Profil>Operationen(Resource):
+class ProfilOperationen(Resource):
     @lernApp.marshal_list_with(profile)
     @secured
     def get(self):
