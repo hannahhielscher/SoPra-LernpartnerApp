@@ -1,9 +1,6 @@
 from server.db.Mapper import Mapper
 from server.bo.Lerngruppe import Lerngruppe
 
-
-
-
 class LerngruppeMapper(Mapper):
     """Mapper-Klasse, die Profil-Objekte auf eine relationale
         Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
