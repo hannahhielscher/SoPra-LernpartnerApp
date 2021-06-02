@@ -111,7 +111,7 @@ class VorschlagMapper(Mapper):
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-        result = None
+        result = []
         cursor = self._connection.cursor()
         command = "SELECT id, main_person_id, match_quote, lernfach, person_id FROM vorschlaege WHERE main_person_id='{}'".format(
             id)
@@ -127,7 +127,7 @@ class VorschlagMapper(Mapper):
             person.set_lernfach(lernfach)
             person.set_person_id(person_id)
 
-            result = vorschlag
+            result.append(vorschlag)
 
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf

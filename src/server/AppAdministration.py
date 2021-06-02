@@ -508,6 +508,7 @@ class AppAdministration (object):
                 match_ges_all.append(match_ges)
                 break
 
+        """Vorschlag in DB speichern"""
         buff4 = 0
         for i in range(len(match_ges_all)):
             quote = i
@@ -517,4 +518,4 @@ class AppAdministration (object):
                 buff4 += 1
                 break
 
-        return match_ges_all
+        return get_vorschlag_by_main_person_id(person_id_for_matches)
