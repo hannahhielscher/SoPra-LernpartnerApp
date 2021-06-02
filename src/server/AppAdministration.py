@@ -229,7 +229,7 @@ class AppAdministration (object):
         """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversations_id(konversations_id)
-"""
+    """
     def get_nachricht_of_teilnahmechat(self, teil):
         'Gibt die Nachricht der Teilnahmer zurück.'
         with NachrichtMapper() as mapper:
@@ -241,7 +241,7 @@ class AppAdministration (object):
                     result.extend(bewertung)
 
             return result
-"""
+    """
     """
     Vorschlag-spezifische Methoden
     """

@@ -37,7 +37,7 @@ class TeilnahmeGruppe (bo.BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-         """Umwandeln eines Python dict() in einen User()."""
+        """Umwandeln eines Python dict() in einen User()."""
         obj = TeilnahmeGruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_status(dictionary['status'])
