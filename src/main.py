@@ -153,7 +153,6 @@ class ProfilByIDOperationen(Resource):
         profil = adm.get_profil_by_id(id)
         return profil
 
-
 @lernApp.route('/profile')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilOperationen(Resource):
@@ -200,10 +199,37 @@ class VorschlagByIDOperationen(Resource):
         vorschlag = adm.get_vorschlag_by_id(id)
         return vorschlag
 
+    @secured
+    def put(self):
+        """Update des Vorschlag-Objekts."""
+        vorschlagId = request.args.get("id")
+        main_person_id = request.args.get("main_person_id")
+        match_quote = request.args.get("match_quote")
+        lernfach = request.args.get("lernfach")
+        person_id = request.args.get("person_id")
+
+        adm = AppAdministration()
+        vorschlag = adm.get_profil_by_id(vorschlagId)
+        vorschlag.set_hochschule(main_person_id)
+        vorschlag.set_semester(match_quote)
+        vorschlag.set_studiengang(lernfach)
+        vorschlag.set_lernfaecher(person_id)
+
+        adm.update_vorschlag_by_id(vorschlag)
+
+    @secured
+    @learnApp.marshal_with(vorschlag)
+    def delete(self, id):
+        """Löschen eines bestimmten Nachrichtenobjekts."""
+        adm = AppAdministration()
+        vorschlag = adm.get_vorschlag_by_id(id)
+        adm.delete_nachricht(vorschlag)
+        return '', 200
+
 @lernApp.route('/vorschlaege')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeListOperations(Resource):
-    @banking.marshal_list_with(vorschlaege)
+    @learnApp.marshal_list_with(vorschlaege)
     @secured
     def get(self):
         """Auslesen aller Vorschlag-Objekte.
@@ -212,52 +238,6 @@ class VorschlaegeListOperations(Resource):
         adm = AppAdministration()
         vorschlaege = adm.get_all_vorschlaege()
         return vorschlaege
-
-    @secured
-    def put(self):
-        """Update des Vorschlag-Objekts."""
-
-        personId = request.args.get("id")
-        name = request.args.get("name")
-        vorname = request.args.get("vorname")
-
-        adm = AppAdministration()
-        user = adm.get_person_by_id(personId)
-        user.set_name(name)
-        user.set_vorname(vorname)
-        user.set_semester(semester)
-        user.set_alter(alter)
-        user.set_geschlecht(geschlecht)
-        user.set_lerngruppe(lerngruppe)
-        user.set_email(email)
-        adm.update_person_by_id(user)
-
-    @lernApp.marshal_with(vorschlag, code=200)
-    @secured
-    def post(self):
-        """Anlegen eines neuen Vorschlag-Objekts.
-
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der BankAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
-        adm = AppAdministration()
-
-        proposal = Vorschlag.from_dict(api.payload)
-
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
-        if proposal is not None:
-            """ Wir verwenden lediglich Vor- und Nachnamen des Proposals für die Erzeugung
-            eines Customer-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.match_berechnen(proposal.get_match_quote(), proposal.get_person_id())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
 
 @learnApp.route('/nachricht')
 @learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
