@@ -48,7 +48,7 @@ class Profil (NamedBusinessObject):
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Profil: {}, {}, {}, {}, {}".format(self._studiengang, self._semester, self._lernfaecher, self._lernvorlieben)
+        return "Profil: {}, {}, {}, {}".format(self._studiengang, self._semester, self._lernfaecher, self._lernvorlieben)
 
     @staticmethod
     def from_dict(dictionary=dict()):

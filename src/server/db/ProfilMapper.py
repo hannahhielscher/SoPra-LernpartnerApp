@@ -65,7 +65,7 @@ class ProfilMapper(Mapper):
 
             result = profil
 
-            except IndexError:
+        except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             result = None
