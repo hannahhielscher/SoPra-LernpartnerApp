@@ -245,6 +245,22 @@ class AppAdministration (object):
     """
     Vorschlag-spezifische Methoden
     """
+
+    def get_vorschlaege(self):
+        """Gibt alle Nachrichten zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_all()
+
+    def get_vorschlaege_by_id(self, id):
+        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_vorschlag_by_person_id(self, id):
+        """Gibt die Nachricht mit der gegebenen Id zurück."""
+        with VorschlagMapper() as mapper:
+            return mapper.find_by_person_id(id)
+
     def match_berechnen(self, person_id_for_matches):
         """person_id_for_matches auslesen."""
         with PersonMapper() as mapper:
