@@ -21,15 +21,15 @@ class ProfilMapper(Mapper):
 
         cursor = self._connenction.cursor()
 
-        command = "SELECT id, studiengang, abschluss, semester, lernvorlieben_id from profile"
+        command = "SELECT id, studiengang, semester,  lernvorlieben_id from profile"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, studiengang, abschluss, semester, lernvorlieben_id) in tuples:
+        for (id, studiengang, semester, lernvorlieben_id) in tuples:
             profil = Profil()
             profil.set_id(id)
-            profil.set_abschluss(abschluss)
+            profil.set_semester(studiengang)
             profil.set_semester(semester)
             profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
 
@@ -56,21 +56,48 @@ class ProfilMapper(Mapper):
         tuples = cursor.fetchall()
 
         try:
-            #(id, studiengang, abschluss, semester, lernvorlieben_id) = tuple[0]
-            #profil = Profil()
-            #profil.set_id(id)
-            #profil.set_abschluss(abschluss)
-            #profil.set_semester(semester)
-            #profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
+            (id, studiengang, semester, lernvorlieben_id) = tuple[0]
+            profil = Profil()
+            profil.set_id(id)
+            profil.set_semester(studiengang)
+            profil.set_semester(semester)
+            profil.set_lernvorlieben_id(lernvorlieben_id)
 
-            #result = profil
+            result = profil
 
-            #except IndexError:
-            #"""Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            #keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            #result = None
+            except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
         self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_lernfach_id(self, lernfach_id):
+        """Suchen eines Lernfaches nach dessen ID
+        :param lernfach_id
+        :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
+        """
+
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.profile_id, profile.studiengang, profile.semester, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher = lernfaecher.id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(
+            projekt_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (profile_id, studiengang, semester, lernvorlieben_id) in tuples:
+            profil = Profil()
+            profil.set_id(profile_id)
+            profil.set_studiengang(studiengang)
+            profil.set_semester(semester)
+            profil.set_lernvorlieben_id(lernvorlieben_id)
+            result.append(profil)
+
+        self._connection.commit()
         cursor.close()
 
         return result
