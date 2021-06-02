@@ -114,6 +114,7 @@ class AppAdministration (object):
             return mapper.deleteByID(personId)
 
 
+
     """
     Profil-spezifische Methoden
     """
