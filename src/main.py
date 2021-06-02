@@ -9,12 +9,12 @@ import json
 
 # Zugriff auf Applikationslogik inklusive BusinessObject-Klassen
 from server.AppAdministration import AppAdministration
-#from server.bo.TeilnahmeGruppe import TeilnahmeGruppe
-#from server.bo.TeilnahmeChat import TeilnahmeChat
-#from server.bo.Vorschlag import Vorschlag
-#from server.bo.Nachricht import Nachricht
-#from server.bo.Lernvorlieben import Lernvorlieben
-#from server.bo.Konversation import Konversation
+from server.bo.TeilnahmeGruppe import TeilnahmeGruppe
+from server.bo.TeilnahmeChat import TeilnahmeChat
+from server.bo.Vorschlag import Vorschlag
+from server.bo.Nachricht import Nachricht
+from server.bo.Lernvorlieben import Lernvorlieben
+from server.bo.Konversation import Konversation
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -57,6 +57,7 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
+<<<<<<< HEAD
 vorschlag = api.inherit('Vorschlag', nbo, {
     'match_quote': fields.String(attribute='_match_quote', description='Prozentzahl des Matches'),
     'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der Person'),
@@ -65,6 +66,17 @@ vorschlag = api.inherit('Vorschlag', nbo, {
 nachricht = api.inherit('Nachricht', nbo, {
     'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
 })
+=======
+lernvorlieben = api.inherit('Lernvorlieben', bo, {
+    'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
+    'tage': fields.String(attribute='_tage', description='Semester der Person'),
+    'frequenz': fields.Integer(attribute='_frequenz', description='Alter der Person'),
+    'lernart': fields.String(attribute='_lernart', description='Geschlecht der Person'),
+    'gruppengroesse': fields.String(attribute='_gruppengroesse', description='Lerngruppe der Person'),
+    'lernort': fields.String(attribute='_lernort', description='Google user ID der Person'),
+})
+
+>>>>>>> 2b48b6e57581fa2407347368e083fa44f0135791
 
 @lernApp.route('/person/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -218,10 +230,10 @@ class NachrichtListOperation(Resource):
 class NachrichtOperation(Resource):
 
     @learnApp.marshal_with(nachricht)
-    def get (self, id)
-    """Auslesen einer bestimmten Nachricht."""
-    adm = AppAdministration()
-    nachricht = adm.get_nachricht_by_id(id)
+    def get (self, id):
+        """Auslesen einer bestimmten Nachricht."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_id(id)
 
         if nachricht is not None:
             return nachricht
@@ -268,12 +280,12 @@ class NachrichtOperation(Resource):
 class NachrichtByInhaltOperation(Resource):
 
     @learnApp.marshal_with(nachricht)
-    def get (self, inhalt)
-    """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
-    adm = AppAdministration()
-    nachricht = adm.get_nachricht_by_inhalt(inhalt)
+    def get (self, inhalt):
+        """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_inhalt(inhalt)
 
-     if nachricht is not None:
+        if nachricht is not None:
             return nachricht
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
