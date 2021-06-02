@@ -57,6 +57,15 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
+vorschlag = api.inherit('Vorschlag', nbo, {
+    'match_quote': fields.String(attribute='_match_quote', description='Prozentzahl des Matches'),
+    'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der Person'),
+})
+
+nachricht = api.inherit('Nachricht', nbo, {
+    'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
+})
+
 @lernApp.route('/person/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByIDOperationen(Resource):
@@ -137,8 +146,8 @@ class VorschlagByIDOperationen(Resource):
         vorschlag = adm.get_vorschlag_by_id(id)
         return vorschlag
 
-@banking.route('/vorschlaege')
-@banking.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@lernApp.route('/vorschlaege')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class CustomerListOperations(Resource):
     @banking.marshal_list_with(vorschlaege)
     @secured
@@ -150,8 +159,7 @@ class CustomerListOperations(Resource):
         vorschlaege = adm.get_all_vorschlaege()
         return vorschlaege
 
-    @banking.marshal_with(customer, code=200)
-    @banking.expect(customer)  # Wir erwarten ein Customer-Objekt von Client-Seite.
+    @lernApp.marshal_with(vorschlag, code=200)
     @secured
     def post(self):
         """Anlegen eines neuen Vorschlag-Objekts.
@@ -172,7 +180,7 @@ class CustomerListOperations(Resource):
             eines Customer-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
             wird auch dem Client zurückgegeben. 
             """
-            c = adm.match_berechnen(proposal.get_first_name(), proposal.get_last_name())
+            c = adm.match_berechnen(proposal.get_match_quote(), proposal.get_person_id())
             return c, 200
         else:
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
