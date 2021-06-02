@@ -57,6 +57,16 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
+lernvorlieben = api.inherit('Lernvorlieben', bo, {
+    'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
+    'tage': fields.String(attribute='_tage', description='Semester der Person'),
+    'frequenz': fields.Integer(attribute='_frequenz', description='Alter der Person'),
+    'lernart': fields.String(attribute='_lernart', description='Geschlecht der Person'),
+    'gruppengroesse': fields.String(attribute='_gruppengroesse', description='Lerngruppe der Person'),
+    'lernort': fields.String(attribute='_lernort', description='Google user ID der Person'),
+})
+
+
 @lernApp.route('/person/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByIDOperationen(Resource):
