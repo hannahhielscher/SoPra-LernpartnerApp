@@ -110,7 +110,7 @@ class LerngruppeMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            lerngruppe.set_id_lerngruppe(maxid[0]+1))
+            lerngruppe.set_id_lerngruppe(maxid[0]+1)
 
             command = "INSERT INTO lerngruppen (id, name, teilnehmer, profil_id) VALUES (%s,%s,%s)"
             data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
