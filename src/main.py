@@ -57,6 +57,13 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
+profil = api.inherit('Profil', nbo, {
+    'studiengang': fields.String(attribute='_studiengang', description='Studiengang der Person'),
+    'semester': fields.String(attribute='_semester', description='Semester der Person'),
+    'lernfaecher': fields.Integer(attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
+})
+
 vorschlag = api.inherit('Vorschlag', nbo, {
     'match_quote': fields.String(attribute='_match_quote', description='Prozentzahl des Matches'),
     'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der Person'),
@@ -65,6 +72,7 @@ vorschlag = api.inherit('Vorschlag', nbo, {
 nachricht = api.inherit('Nachricht', nbo, {
     'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
 })
+
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
     'tage': fields.String(attribute='_tage', description='Semester der Person'),
@@ -156,7 +164,7 @@ class ProfilByIDOperationen(Resource):
 @lernApp.route('/profile')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilOperationen(Resource):
-    @lernApp.marshal_list_with(profile)
+    @lernApp.marshal_list_with(profil)
     @secured
     def get(self):
         """Auslesen aller Profil-Objekte.
@@ -217,8 +225,6 @@ class VorschlagByIDOperationen(Resource):
 
         adm.update_vorschlag_by_id(vorschlag)
 
-    @secured
-    @learnApp.marshal_with(vorschlag)
     def delete(self, id):
         """Löschen eines bestimmten Nachrichtenobjekts."""
         adm = AppAdministration()
@@ -229,7 +235,7 @@ class VorschlagByIDOperationen(Resource):
 @lernApp.route('/vorschlaege')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeListOperations(Resource):
-    @learnApp.marshal_list_with(vorschlaege)
+    @lernApp.marshal_list_with(vorschlag)
     @secured
     def get(self):
         """Auslesen aller Vorschlag-Objekte.
@@ -239,11 +245,11 @@ class VorschlaegeListOperations(Resource):
         vorschlaege = adm.get_all_vorschlaege()
         return vorschlaege
 
-@learnApp.route('/nachricht')
-@learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@lernApp.route('/nachricht')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class NachrichtListOperation(Resource):
 
-    @learnApp.marshal_list_with(nachricht)
+    @lernApp.marshal_list_with(nachricht)
     def get(self):
         """Auslesen aller Nachrichten-Objekte.
 
@@ -252,7 +258,7 @@ class NachrichtListOperation(Resource):
         nachricht = adm.get_all_nachrichten()
         return nachricht
 
-    @learnApp.marshal_list_with(nachricht, envelope='response')
+    @lernApp.marshal_list_with(nachricht, envelope='response')
     def post(self):
         """Anlegen eines neuen Nachrichtenobjekts."""
         adm = AppAdministration()
@@ -266,11 +272,11 @@ class NachrichtListOperation(Resource):
             return '', 500
 
 
-@learnApp.route('/nachricht/<int:id>')
-@learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@lernApp.route('/nachricht/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class NachrichtOperation(Resource):
 
-    @learnApp.marshal_with(nachricht)
+    @lernApp.marshal_with(nachricht)
     def get (self, id):
         """Auslesen einer bestimmten Nachricht."""
         adm = AppAdministration()
@@ -282,7 +288,7 @@ class NachrichtOperation(Resource):
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
 
-    @learnApp.marshal_with(nachricht)
+    @lernApp.marshal_with(nachricht)
     def put(self, id):
         """Update eines bestimmten Nachrichtenenobjekts."""
         adm = AppAdministration()
@@ -296,7 +302,7 @@ class NachrichtOperation(Resource):
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
-    @learnApp.marshal_with(nachricht)
+    @lernApp.marshal_with(nachricht)
     def delete(self, id):
         """Löschen eines bestimmten Nachrichtenobjekts."""
         adm = AppAdministration()
@@ -304,7 +310,7 @@ class NachrichtOperation(Resource):
         adm.delete_nachricht(na)
         return '', 200
 
-    @learnApp.marshal_with(nachricht)
+    @lernApp.marshal_with(nachricht)
     def post(self, id):
         """Anlegen/schreiben einer Nachricht."""
         adm = AppAdministration()
@@ -316,11 +322,11 @@ class NachrichtOperation(Resource):
         else:
             return "", 500
 
-@learnApp.route('/nachricht-by-inhalt/<string:inhalt>')
-@learnApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@lernApp.route('/nachricht-by-inhalt/<string:inhalt>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class NachrichtByInhaltOperation(Resource):
 
-    @learnApp.marshal_with(nachricht)
+    @lernApp.marshal_with(nachricht)
     def get (self, inhalt):
         """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
         adm = AppAdministration()
