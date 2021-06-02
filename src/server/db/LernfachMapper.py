@@ -86,7 +86,7 @@ class LernfachMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            lernfach.set_id(maxid[0]+1))
+            lernfach.set_id(maxid[0]+1)
 
             command = "INSERT INTO lernfaacher (id, bezeichnung) VALUES (%s,%s)"
             data = (lernfach.get_id(), lernfach.get_bezeichnung())
