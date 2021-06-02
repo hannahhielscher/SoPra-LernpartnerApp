@@ -57,7 +57,6 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
-<<<<<<< HEAD
 vorschlag = api.inherit('Vorschlag', nbo, {
     'match_quote': fields.String(attribute='_match_quote', description='Prozentzahl des Matches'),
     'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der Person'),
@@ -66,7 +65,6 @@ vorschlag = api.inherit('Vorschlag', nbo, {
 nachricht = api.inherit('Nachricht', nbo, {
     'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
 })
-=======
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
     'tage': fields.String(attribute='_tage', description='Semester der Person'),
@@ -76,7 +74,6 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'lernort': fields.String(attribute='_lernort', description='Google user ID der Person'),
 })
 
->>>>>>> 2b48b6e57581fa2407347368e083fa44f0135791
 
 @lernApp.route('/person/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
