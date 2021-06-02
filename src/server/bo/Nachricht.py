@@ -7,14 +7,13 @@ class Nachricht(BusinessObject):
         super().__init__()
         self._inhalt = ""
 
+    def get_inhalt(self):
+        """Auslesen einer Nachricht"""
+        return self._inhalt
 
     def set_inhalt(self, inhalt):
         """Verfassen einer Nachricht"""
         self._inhalt = inhalt
-
-    def get_inhalt(self):
-        """Auslesen einer Nachricht"""
-        return self._inhalt
 
 
     @staticmethod
