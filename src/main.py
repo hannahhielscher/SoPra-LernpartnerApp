@@ -57,7 +57,13 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
-<<<<<<< HEAD
+profil = api.inherit('Profil', nbo, {
+    'hochschule': fields.String(attribute='_hochschule', description='Hochschule der Person'),
+    'studiengang': fields.String(attribute='_studiengang', description='Studiengang der Person'),
+    'semester': fields.Integer(attribute='_semester', description='Semester der Person'),
+    'lernfaecher': fields.String(attribute='_lernfaecher', description='Lernfächer der Person'),
+})
+
 vorschlag = api.inherit('Vorschlag', nbo, {
     'match_quote': fields.String(attribute='_match_quote', description='Prozentzahl des Matches'),
     'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der Person'),
@@ -66,7 +72,7 @@ vorschlag = api.inherit('Vorschlag', nbo, {
 nachricht = api.inherit('Nachricht', nbo, {
     'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
 })
-=======
+
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
     'tage': fields.String(attribute='_tage', description='Semester der Person'),
@@ -75,8 +81,6 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'gruppengroesse': fields.String(attribute='_gruppengroesse', description='Lerngruppe der Person'),
     'lernort': fields.String(attribute='_lernort', description='Google user ID der Person'),
 })
-
->>>>>>> 2b48b6e57581fa2407347368e083fa44f0135791
 
 @lernApp.route('/person/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -144,6 +148,52 @@ class PersonByGoogleIDOperationen(Resource):
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
 
+@lernApp.route('/profil/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Profil-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        profil = adm.get_profil_by_id(id)
+        return profil
+
+
+@lernApp.route('/profile')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class Profil>Operationen(Resource):
+    @lernApp.marshal_list_with(profile)
+    @secured
+    def get(self):
+        """Auslesen aller Profil-Objekte.
+        Sollte kein Profil-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben."""
+
+        adm = AppAdministration()
+        profile = adm.get_all_profil()
+        return profile
+
+    @secured
+    def put(self):
+        """Update des Profil-Objekts."""
+
+        profilId = request.args.get("id")
+        hochschule = request.args.get("hochschule")
+        semester = request.args.get("semester")
+        studiengang = request.args.get("studiengang")
+        lernfaecher = request.args.get("lernfaecher")
+
+        adm = AppAdministration()
+        profil = adm.get_profil_by_id(profilId)
+        profil.set_hochschule(hochschule)
+        profil.set_semester(semester)
+        profil.set_studiengang(studiengang)
+        profil.set_lernfaecher(lernfaecher)
+
+        adm.update_profil_by_id(profil)
 
 @lernApp.route('/vorschlag/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -160,16 +210,35 @@ class VorschlagByIDOperationen(Resource):
 
 @lernApp.route('/vorschlaege')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class CustomerListOperations(Resource):
+class VorschlaegeListOperations(Resource):
     @banking.marshal_list_with(vorschlaege)
     @secured
     def get(self):
         """Auslesen aller Vorschlag-Objekte.
 
         Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = BankAdministration()
+        adm = AppAdministration()
         vorschlaege = adm.get_all_vorschlaege()
         return vorschlaege
+
+    @secured
+    def put(self):
+        """Update des Vorschlag-Objekts."""
+
+        personId = request.args.get("id")
+        name = request.args.get("name")
+        vorname = request.args.get("vorname")
+
+        adm = AppAdministration()
+        user = adm.get_person_by_id(personId)
+        user.set_name(name)
+        user.set_vorname(vorname)
+        user.set_semester(semester)
+        user.set_alter(alter)
+        user.set_geschlecht(geschlecht)
+        user.set_lerngruppe(lerngruppe)
+        user.set_email(email)
+        adm.update_person_by_id(user)
 
     @lernApp.marshal_with(vorschlag, code=200)
     @secured
@@ -182,7 +251,7 @@ class CustomerListOperations(Resource):
         liegt es an der BankAdministration (Businesslogik), eine korrekte ID
         zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
         """
-        adm = BankAdministration()
+        adm = AppAdministration()
 
         proposal = Vorschlag.from_dict(api.payload)
 
