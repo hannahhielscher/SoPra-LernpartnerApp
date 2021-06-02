@@ -5,7 +5,7 @@ class Lerngruppe(NamedBusinessObject):
     def __init__(self):
         super().__init__()
         self._teilnehmer = []
-        self._gruppenprofil = Profil
+        self._gruppenprofil = None
 
     def get_teilnehmer(self):
         """Auslesen eines Teilnehmers"""
@@ -28,6 +28,6 @@ class Lerngruppe(NamedBusinessObject):
         obj = Lerngruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
-        obj.set_gruppenprofil(dictionary["gruppenprofil"])
         obj.set_teilnehmer(dictionary["teilnehmer"])
+        obj.set_gruppenprofil(dictionary["gruppenprofil"])
         return obj
