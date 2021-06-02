@@ -339,5 +339,19 @@ class NachrichtByInhaltOperation(Resource):
 
 # noch nachricht-by-profil-id und nachricht-by-person-id?
 
+@lernApp.route('/lernvorlieben/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernvorliebenByIDOperationen(Resource):
+    @lernApp.marshal_list_with(lernvorlieben)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernvorlieben = adm.get_lernvorlieben_by_id(id)
+        return lernvorlieben
+
+
 if __name__ == '__main__':
     app.run(debug=True)
