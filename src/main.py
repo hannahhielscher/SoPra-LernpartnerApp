@@ -293,6 +293,7 @@ class VorschlaegeListOperations(Resource):
         vorschlaege = adm.get_all_vorschlaege()
         return vorschlaege
 
+
 @lernApp.route('/nachricht')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class NachrichtListOperation(Resource):
@@ -310,7 +311,7 @@ class NachrichtListOperation(Resource):
     def post(self):
         """Anlegen eines neuen Nachrichtenobjekts."""
         adm = AppAdministration()
-        n = nachricht.from_dict(api.payload) #api.payload?
+        n = nachricht.from_dict(api.payload)
 
         if n is not None:
             insert_n = adm.create_nachricht(n)
@@ -340,7 +341,7 @@ class NachrichtOperation(Resource):
     def put(self, id):
         """Update eines bestimmten Nachrichtenenobjekts."""
         adm = AppAdministration()
-        nachr = nachricht.from_dict(api.payload) #was anderes statt payload
+        nachr = nachricht.from_dict(api.payload)
 
         if nachr is not None:
             nachr.set_id(id)
@@ -385,7 +386,36 @@ class NachrichtByInhaltOperation(Resource):
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
-# noch nachricht-by-profil-id und nachricht-by-person-id?
+@lernApp.route('/nachricht-by-person-id/<string:person_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByPersonIdOperation(Resource):
+
+    @lernApp.marshal_with(nachricht)
+    def get (self, person_id):
+        """Auslesen einer bestimmten Nachricht anhand der Id der Person."""
+        adm = AppAdministration()
+        message = adm.get_nachricht_by_person_id(person_id)
+
+        if message is not None:
+            return message
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+@lernApp.route('/nachricht-by-profil-id/<string:profil_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByProfilIdOperation(Resource):
+
+    @lernApp.marshal_with(nachricht)
+    def get (self, profil_id):
+        """Auslesen einer bestimmten Nachricht anhand der Id des Profils."""
+        adm = AppAdministration()
+        mes = adm.get_nachricht_by_profil_id(profil_id)
+
+        if mes is not None:
+            return mes
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
 
 @lernApp.route('/lernvorlieben/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

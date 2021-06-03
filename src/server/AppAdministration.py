@@ -290,57 +290,120 @@ class AppAdministration (object):
         with NachrichtMapper() as mapper:
             return mapper.find_by_key(id)
 
-    def insert_nachricht(self, b):
+    def get_nachricht_by_inhalt(self, inhalt):
+        """Gibt die Nachricht mit dem gegebenen Inhalt zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(inhalt)
+
+    def get_nachricht_by_person_id(self, person_id):
+        """Gibt die Nachricht mit der gegebenen Id der Person zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(person_id)
+
+    def get_nachricht_by_profil_id(self, profil_id):
+        """Gibt die Nachricht mit der gegebenen Id des Profils zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(profil_id)
+
+    def save_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
-            return mapper.insert(b)
+            return mapper.insert(nachricht)
 
-    def update_nachricht(self, b):
+    def update_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
-            return mapper.update(b)
+            return mapper.update(nachricht)
 
-    def delete_nachricht(self, b):
+    def delete_nachricht(self, nachricht):
         """Löscht die Nachricht."""
         with NachrichtMapper() as mapper:
-            mapper.delete(b)
+            mapper.delete(nachricht)
 
     """
     Konversation-spezifische Methoden
     """
 
+    def get_all_konversationen(self):
+        """Gibt alle Konversationen zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_all()
+
+    def get_konversation_by_id(self, id):
+        """Gibt die Konversation mit der gegebenen Id zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_nachrichten_by_id(self, id):
+        """Gibt die Nachrichten mit der gegebenen Id zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_teilnehmer_by_id(self, id):
+        """Gibt die teilnehmer mit der gegebenen Id zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def save_konversation(self, konversation):
+        """Speichert die Konversation."""
+        with KonversationMapper() as mapper:
+            return mapper.insert(konversation)
+
+    def update_konversation(self, konversation):
+        """Speichert die Konversation."""
+        with KonversationMapper() as mapper:
+            return mapper.update(konversation)
+
+    def delete_konversation(self, konversation):
+        """Löscht die Konversation."""
+        with KonversationMapper() as mapper:
+            mapper.delete(konversation)
 
     """
     TeilnahmeChats-spezifische Methoden
     """
+
+    def create_teilnahmeChat(self, teilnehmer, konversation):
+        """Eine Teilnahme an einem Chat anlegen"""
+
+        teilnahme = TeilnahmeChat()
+
+        teilnahme.set_teilnehmer(teilnehmer)
+        teilnahme.set_konversation(konversation)
+        teilnahme.set_id(1)
+
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.insert(teilnahme)
 
     def get_all_teilnahmenChat(self):
         """Gibt alle Teilnahmen an einem Chat zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_all()
 
-    def get_teilnahme_by_student_id(self, student_id):
-        """Gibt die Teilnahme einer gegebenen Id zurück."""
+    def get_teilnahmeChat_by_student_id(self, student_id):
+        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_student_id(student_id)
 
-    def get_teilnahme_by_konversations_id(self, konversations_id):
-        """Gibt die Teilnahme einer gegebenen Id zurück."""
+    def get_teilnahmeChat_by_konversations_id(self, konversations_id):
+        """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversations_id(konversations_id)
-    """
-    def get_nachricht_of_teilnahmechat(self, teil):
-        'Gibt die Nachricht der Teilnahmer zurück.'
-        with NachrichtMapper() as mapper:
-            result = []
 
-            if not (teil is None):
-                bewertung = mapper.find_by_source_teilnahme_id(teil.get_id())
-                if not (teil is None):
-                    result.extend(bewertung)
+    def save_teilnahmeChat(self, teilnahme):
+        """Speichert die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.insert(teilnahme)
 
-            return result
-    """
+    def update_teilnahmeChat(self, teilnahme):
+        """Speichert die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.update(teilnahme)
+
+    def delete_teilnahmeChat(self, teilnahme):
+        """Löscht die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            mapper.delete(teilnahme)
 
     """
     Vorschlag-spezifische Methoden
