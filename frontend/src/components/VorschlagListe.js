@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, Grid } from '@material-ui/core';
+import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
 import VorschlagListeEintrag from './VorschlagListeEintrag';
+//import SaveIcon from '@material-ui/icons/Save';
+//import Table from '@material-ui/core/Table';
+//import TableBody from '@material-ui/core/TableBody';
+//import TableCell from '@material-ui/core/TableCell';
+//import TableContainer from '@material-ui/core/TableContainer';
+//import TableHead from '@material-ui/core/TableHead';
+//import TableRow from '@material-ui/core/TableRow';
+//import Paper from '@material-ui/core/Paper';
+
+
 
 /**
  * Es werden alle Vorschläge des aktuell eingeloggten Studenten angezeigt
@@ -26,39 +27,25 @@ import VorschlagListeEintrag from './VorschlagListeEintrag';
  */
 
 
-//Css Style für Tabellen Zellen
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
-
-
-//Css Style für Tabllen Zeilen
-const StyledTableRow = withStyles((theme) => ({
-    root: {
-      '&:nth-of-type(4n+1)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  }))(TableRow);
-
-
 class VorschlagListe extends Component {
 
     constructor(props){
         super(props);
 
+        // console.log(props);
+        let expandedID = null;
+
+        if (this.props.location.expandVorschlag) {
+        expandedID = this.props.location.expandVorschlag.getID();
+        }
+
         // initiiere einen leeren state
         this.state = {
             vorschlaege : [],
-            currentPersonName: null,
+            //currentPersonName: null,
             error: null,
             loadingInProgress: false, 
+            expandedVorschlagID: expandedID,
         };
     }
 
@@ -92,82 +79,59 @@ class VorschlagListe extends Component {
         })
     }
     
-    render(){
+    /** 
+     * Handles onExpandedStateChange events from the VorschlagListeEintrag component. Toggels the expanded state of 
+     * the VorschlagListeEintrag of the given VorschlagBO.
+     * 
+     * @param {vorschlag} VorschlagBO of the VorschlagListeEintrag to be toggeled
+     */
+    onExpandedStateChange = vorschlag => {
+        // console.log(vorschlagID);
+        // Set expandend Vorschlag Eintrag to null by default
+        let newID = null;
 
-        const { classes } = this.props;
-        const { vorschlaege, currentPersonName, error, loadingInProgress} = this.state;
-        
-        return(
-            <div className={classes.root}>
-                 <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
-                    <Grid item xs/>
-                    <Grid item>
-                    <Button variant="outlined" color="primary" disableRipple 
-                    style={{ backgroundColor: 'transparent', textTransform: 'None'}}
-                    >Name: {currentPersonName}<br/></Button>
-                    </Grid>
-                </Grid>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="customized table">
-                        <TableHead>
-                            <StyledTableRow>
-                                <StyledTableCell>Vorschlag</StyledTableCell>
-                                <StyledTableCell align="center">Name</StyledTableCell>
-                                <StyledTableCell align="center">Alter</StyledTableCell>
-                                <StyledTableCell align="center">Geschlecht</StyledTableCell>
-                                <StyledTableCell align="center">Semester</StyledTableCell>
-                                <StyledTableCell align="center">Lernfach</StyledTableCell>
-                                <StyledTableCell align="center">Match</StyledTableCell>
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                vorschlaege ?
-                                <>
-                                {
-                                    vorschlaege.map(vorschlag => 
-                                        <VorschlagListeEintrag key={vorschlag.getID()} vorschlag = {vorschlag} 
-                                        getVorschlaege = {this.getVorschlaege}
-                                        show={this.props.show}
-                                    />) 
-                                }
-                                </>
-                                :
-                                <></>
-                            }
-                        </TableBody>
-                    </Table>
-                    <LoadingProgress show={loadingInProgress} />
-                    <ContextErrorMessage error={error} contextErrorMsg = {'Deine Vorschläge konnten nicht geladen werden'} onReload={this.getVorschlaege} /> 
-                </TableContainer>            
-            </div>
-        )
+        // If same vorschlag entry is clicked, collapse it else expand a new one
+        if (vorschlag.getID() !== this.state.expandedVorschlagID) {
+        // Expand the customer entry with customerID
+        newID = vorschlag.getID();
+        }
+        // console.log(newID);
+        this.setState({
+        expandedVorschlagID: newID,
+        });
     }
-}
+
+    render() {
+        const { classes } = this.props;
+        const { vorschlaege, expandedVorschlagID, error, loadingInProgress}  = this.state;
+    
+        return (
+          <div className={classes.root}>
+            { 
+              // Show the list of VorschlagListeEintrag components
+              // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
+              vorschlaege.map(vorschlag =>
+                <VorschlagListeEintrag key={vorschlag.getID()} vorschlag={vorschlag} expandedState={expandedVorschlagID === vorschlag.getID()}
+                  onExpandedStateChange={this.onExpandedStateChange}
+                />)
+            }
+            <LoadingProgress show={loadingInProgress} />
+            <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Vorschläge konnten nicht geladen werden!`} onReload={this.getVorschlaege} />
+          </div>
+        );
+      }
+    }
+
 
 /** Component specific styles */
 const styles = theme => ({
     root: {
-        width: '100%',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-      },
-      content: {
-        margin: theme.spacing(1),
-      },
-      table: {
-        minWidth: 700,
-      },
-      header:{
-        marginBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-      },
-      button:{
-          marginTop: theme.spacing(2),
-          marginBottom: theme.spacing(3),
-          float: 'right'
-      }
+      width: '100%',
+    },
+    customerFilter: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(1),
+    }
   });
 
 /** PropTypes */
@@ -176,7 +140,6 @@ VorschlagListe.propTypes = {
     classes: PropTypes.object.isRequired,
     /** @ignore */
     location: PropTypes.object.isRequired,
-    show: PropTypes.bool.isRequired
 }
 
 

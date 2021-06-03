@@ -1,9 +1,6 @@
 from server.db.Mapper import Mapper
 from server.bo.Lerngruppe import Lerngruppe
 
-
-
-
 class LerngruppeMapper(Mapper):
     """Mapper-Klasse, die Profil-Objekte auf eine relationale
         Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
@@ -22,37 +19,36 @@ class LerngruppeMapper(Mapper):
                 repräsentieren.
         """
         result = []
-        cursor = self._cnx.cursor()
-        cursor.execute("SELECT * FROM lerngruppe")
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT * FROM lerngruppen")
         tuples = cursor.fetchall()
 
-        for (id_lerngruppe, teilnehmer, profil_id) in tuples:
+        for (id, name, profil_id) in tuples:
             lerngruppe = Lerngruppe()
-            lerngruppe.set_id_lerngruppe(id_lerngruppe)
-            lerngruppe.set_teilnehmer(teilnehmer)
-            lerngruppe.set_profil_id(profil_id)
+            lerngruppe.set_id(id)
+            lerngruppe.set_name(name)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
 
         return result
 
-    def find_by_id_lerngruppe(self, id_lerngruppe):
+    def find_by_id(self, id):
         """Auslesen der Lerngruppen anhand der ID
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id_lerngruppe, name, teilnehmer, profil_id FROM lerngruppe WHERE id_lerngruppe={}".format(id_lerngruppe)
+        command = "SELECT id, name, profil_id FROM lerngruppen WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id_lerngruppe) in tuples:
+        for (id) in tuples:
             lerngruppe = Lerngruppe()
-            lerngruppe.set_id_lerngruppe(id_lerngruppe)
+            lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_teilnehmer(teilnehmer)
-            lerngruppe.set_profil_id(profil_id)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -65,13 +61,13 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT name, id_lerngruppe FROM lerngruppe WHERE name={} ORDER BY name".format(name)
+        command = "SELECT name, id FROM lerngruppen WHERE name={} ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (name, id_lerngruppe) in tuples:
+        for (name, id) in tuples:
             lerngruppe = Lerngruppe()
-            lerngruppe.set_id_lerngruppe(id_lerngruppe)
+            lerngruppe.set_id(id)
             lerngruppe.set_name(name)
             result.append(lerngruppe)
 
@@ -85,16 +81,15 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id_lerngruppe, name, teilnehmer, profil_id FROM lerngruppe WHERE profil_id={}".format(profil_id)
+        command = "SELECT id, name, profil_id FROM lerngruppen WHERE profil_id={}".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id_lerngruppe,) in tuples:
+        for (id,) in tuples:
             lerngruppe = Lerngruppe()
-            lerngruppe.set_id_lerngruppe(id_lerngruppe)
+            lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_teilnehmer(teilnehmer)
-            lerngruppe.set_profil_id(profil_id)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -108,18 +103,18 @@ class LerngruppeMapper(Mapper):
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
         berichtigt.
         """
-        cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM lerngruppe ")
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM lerngruppen ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            lerngruppe.set_id_lerngruppe(maxid[0]+1))
+            lerngruppe.set_id_lerngruppe(maxid[0]+1)
 
-            command = "INSERT INTO lerngruppe (id_lerngruppe, name, teilnehmer, profil_id) VALUES (%s,%s,%s)"
-            data = (lerngruppe.get_id_lerngruppe(), lerngruppe.get_name(), lerngruppe.get_profil_id())
+            command = "INSERT INTO lerngruppen (id, name, profil_id) VALUES (%s,%s,%s)"
+            data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
             cursor.execute(command, data)
 
-            self._cnx.commit()
+            self._connection.commit()
             cursor.close()
 
             return lerngruppe
@@ -127,24 +122,24 @@ class LerngruppeMapper(Mapper):
     def update(self, lerngruppe):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.
         """
-        cursor = self._cnx.cursor()
+        cursor = self._connection.cursor()
 
-        command = "UPDATE lerngruppe " + "SET id_lerngruppe=%s, name=%s, teilnehmer=%s, profil_id=%s  WHERE id=%s"
-        data = (lerngruppe.get_id_lerngruppe(), lerngruppe.get_name(), lerngruppe.get_teilnehmer(), lerngruppe.get_profil_id())
+        command = "UPDATE lerngruppen " + "SET id=%s, name=%s, profil_id=%s  WHERE id=%s"
+        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
         cursor.execute(command, data)
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
 
     def delete(self,lerngruppe):
         """Löschen der Daten eines lerngruppen-Objekts aus der Datenbank.
         """
-        cursor = self._cnx.cursor()
+        cursor = self._connection.cursor()
 
-        command = "DELETE FROM lernrguppe WHERE id_lerngruppe={}".format(lerngruppe.get_id_lerngruppe())
+        command = "DELETE FROM lernguppen WHERE id={}".format(lerngruppe.get_id())
         cursor.execute(command)
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
 
 
