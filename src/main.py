@@ -352,6 +352,31 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         return lernvorlieben
 
+@lernApp.route('/lernvorlieben')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernvorliebenOperationen(Resource):
+    @lernApp.marshal_list_with(lernvorlieben)
+
+    @secured
+    def put(self):
+        """Update des Lernvorlieben-Objekts."""
+
+        lernvorliebenId = request.args.get("id")
+        tageszeiten = request.args.get("tageszeiten")
+        tage = request.args.get("tage")
+        frequenz = request.args.get("frequenz")
+        lernart = request.args.get("lernart")
+        gruppengroesse = request.args.get("gruppengroesse")
+        lernort = request.args.get("lernort")
+        adm = AppAdministration()
+        lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
+        lernvorlieben.set_tageszeiten(tageszeiten)
+        lernvorlieben.set_tage(tage)
+        lernvorlieben.set_frequenz(frequenz)
+        lernvorlieben.set_lernart(lernart)
+        lernvorlieben.set_gruppengroesse(gruppengroesse)
+        lernvorlieben.set_lernort(lernort)
+        adm.update_lernvorlieben_by_id(lernvorlieben)
 
 if __name__ == '__main__':
     app.run(debug=True)
