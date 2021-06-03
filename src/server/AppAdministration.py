@@ -260,6 +260,34 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             return mapper.deleteByID(personId)
 
+    
+    """
+    TeilnahmeGruppe-spezifische Methoden
+    """
+    def create_teilnahmegruppe(self, status, teilnehmer, lerngruppe):
+        """Eine Teilnahme an einer Gruppe anlegen"""
+
+        teilnahme = TeilnahmeGruppe()
+            
+        teilnahme.set_status(status)
+        teilnahme.set_teilnehmer(teilnehmer)
+        teilnahme.set_lerngruppe(lerngruppe)           
+        teilnahme.set_id(1)
+
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.insert(teilnahme)
+
+    def get_teilnahme_by_student_id(self, student_id):
+        """Gibt die Teilnahme einer gegebenen Id zurück."""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_student_id(student_id)
+
+    def get_teilnahme_by_lerngruppen_id(self, lerngruppe_id):
+        """Gibt die Teilnahme einer gegebenen Lerngruppen Id zurück."""
+        with TeilnahmeGruppenMapper() as mapper:
+            return mapper.find_by_lerngruppe_id(lerngruppe_id)
+    
+    
     """
     Nachricht-spezifische Methoden
     """
@@ -288,6 +316,10 @@ class AppAdministration (object):
         """Löscht die Nachricht."""
         with NachrichtMapper() as mapper:
             mapper.delete(b)
+
+    """
+    Konversation-spezifische Methoden
+    """
 
 
     """
@@ -519,3 +551,5 @@ class AppAdministration (object):
                 break
 
         return get_vorschlag_by_main_person_id(person_id_for_matches)
+
+
