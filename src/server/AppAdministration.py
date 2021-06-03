@@ -199,7 +199,7 @@ class AppAdministration (object):
         with NachrichtMapper() as mapper:
             return mapper.insert(b)
 
-    def update_nachricht(self, b):
+    def update_nachricht(self, b):              # braucht man das ?
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.update(b)
@@ -228,19 +228,7 @@ class AppAdministration (object):
         """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversations_id(konversations_id)
-"""
-    def get_nachricht_of_teilnahmechat(self, teil):
-        'Gibt die Nachricht der Teilnahmer zurück.'
-        with NachrichtMapper() as mapper:
-            result = []
 
-            if not (teil is None):
-                bewertung = mapper.find_by_source_teilnahme_id(teil.get_id())
-                if not (teil is None):
-                    result.extend(bewertung)
-
-            return result
-"""
     """
     Vorschlag-spezifische Methoden
     """

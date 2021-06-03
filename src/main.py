@@ -210,7 +210,7 @@ class NachrichtListOperation(Resource):
 class NachrichtOperation(Resource):
 
     @learnApp.marshal_with(nachricht)
-    def get (self, id)
+    def get(self, id)
     """Auslesen einer bestimmten Nachricht."""
     adm = AppAdministration()
     nachricht = adm.get_nachricht_by_id(id)

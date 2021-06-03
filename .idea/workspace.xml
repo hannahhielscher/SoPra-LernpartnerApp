@@ -4,6 +4,7 @@
     <list default="true" id="791b553c-784c-4bc4-88ec-c2125fdfcbb5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/AppAdministration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/AppAdministration.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -135,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622501418819</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Update Main.py Nachricht">
+      <created>1622506149936</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1622506149936</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,6 +223,7 @@
     <MESSAGE value="workspace" />
     <MESSAGE value="TeilnahmeGruppeMapper und LerngruppeMapper hinzugefügt" />
     <MESSAGE value="Update NachrichtenMapper &amp; AppAdministration: Nachricht &amp; Teilnahmechatspezifische methoden" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update NachrichtenMapper &amp; AppAdministration: Nachricht &amp; Teilnahmechatspezifische methoden" />
+    <MESSAGE value="Update Main.py Nachricht" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update Main.py Nachricht" />
   </component>
 </project>
