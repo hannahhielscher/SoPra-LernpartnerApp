@@ -64,12 +64,12 @@ profil = api.inherit('Profil', nbo, {
     'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
 })
 
-vorschlag = api.inherit('Vorschlag', nbo, {
+vorschlag = api.inherit('Vorschlag', bo, {
     'match_quote': fields.String(attribute='_match_quote', description='Prozentzahl des Matches'),
     'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der Person'),
 })
 
-nachricht = api.inherit('Nachricht', nbo, {
+nachricht = api.inherit('Nachricht', bo, {
     'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
 })
 
