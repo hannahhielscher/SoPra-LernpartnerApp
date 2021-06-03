@@ -21,27 +21,28 @@ class ProfilMapper(Mapper):
 
         cursor = self._connenction.cursor()
 
-        command = "SELECT id, studiengang, semester,  lernvorlieben_id from profile"
+        command = "SELECT profile.id, profile.studiengang, profile.semester, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, studiengang, semester, lernvorlieben_id) in tuples:
+        for (id, studiengang, semester, lernfaecher, lernvorlieben_id) in tuples:
             profil = Profil()
             profil.set_id(id)
-            profil.set_semester(studiengang)
+            profil.set_studiengang(studiengang)
             profil.set_semester(semester)
-            profil.set_lernvorlieben_id_lernvorlieben(lernvorlieben_id)
+            profil.set_lernfaecher(lernfaecher)
+            profil.set_lernvorlieben_id(lernvorlieben_id)
 
             result.append(profil)
 
-        self._connection.commit()
-        cursor.close()
+            self._connection.commit()
+            cursor.close()
 
-        return result
+            return result
 
     def find_by_id(self, id):
-        """Suchen eines Kontos mit vorgegebener Kontonummer. Da diese eindeutig ist,
+        """Suchen eines Profils nach ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
         :param id Primärschlüsselattribut (->DB)
@@ -51,16 +52,17 @@ class ProfilMapper(Mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT id FROM profile WHERE id={}".format(id)
+        command = "SELECT profile.id, profile.studiengang, profile.semester, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, studiengang, semester, lernvorlieben_id) = tuple[0]
+            (id, studiengang, semester, lernfaecher, lernvorlieben_id) = tuple[0]
             profil = Profil()
             profil.set_id(id)
             profil.set_semester(studiengang)
             profil.set_semester(semester)
+            profil.set_lernfaecher(lernfaecher)
             profil.set_lernvorlieben_id(lernvorlieben_id)
 
             result = profil
@@ -71,6 +73,23 @@ class ProfilMapper(Mapper):
             result = None
 
         self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_lernfaecher_by_profil_id(self, profil_id):
+        
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (lernfaecher_id) in tuples:
+            result.append(lernfaecher_id)
+
+        self._connection.commit()
         cursor.close()
 
         return result
@@ -89,11 +108,12 @@ class ProfilMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (profile_id, studiengang, semester, lernvorlieben_id) in tuples:
+        for (profil_id, studiengang, semester, lernvorlieben_id) in tuples:
             profil = Profil()
-            profil.set_id(profile_id)
+            profil.set_id(profil_id)
             profil.set_studiengang(studiengang)
             profil.set_semester(semester)
+            profil.set_lernfaecher(find_lernfaecher_by_person_id(profil_id))
             profil.set_lernvorlieben_id(lernvorlieben_id)
             result.append(profil)
 
@@ -126,8 +146,9 @@ class ProfilMapper(Mapper):
                 profil.set_id(1)
 
 
-        command = "INSERT INTO profile (id, studiengang, abschluss, semester, lernvorlieben_id) VALUES (%s,%s,%s,%s,%s)"
-        data = (profil.get_id(), profil.get_studiengang(), profil.get_abschluss(), profil.get_semester(), profil.get_lernvorlieben_id())
+        command = "INSERT INTO profile (id, studiengang, semester, lernfaecher, lernvorlieben_id) VALUES (%s,%s,%s,%s,%s)"
+        """Join/ Zweiter Insert command für Profil has lernfaecher"""
+        data = (profil.get_id(), profil.get_studiengang(), profil.get_semester(), profil.get_lernfaecher(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()

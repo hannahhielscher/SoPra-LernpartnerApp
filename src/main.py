@@ -57,11 +57,15 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
-profil = api.inherit('Profil', nbo, {
+profil = api.inherit('Profil', bo, {
     'studiengang': fields.String(attribute='_studiengang', description='Studiengang der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
     'lernfaecher': fields.Integer(attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
+})
+
+lerngruppe = api.inherit('Lerngruppe', nbo, {
+    'gruppenprofil': fields.Integer(attribute='_gruppenprofil', description='Profil ID der Lerngruppe'),
 })
 
 vorschlag = api.inherit('Vorschlag', bo, {
@@ -193,6 +197,50 @@ class ProfilOperationen(Resource):
         profil.set_lernfaecher(lernfaecher)
 
         adm.update_profil_by_id(profil)
+
+
+@lernApp.route('/lerngruppe/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LerngruppeByIDOperationen(Resource):
+    @lernApp.marshal_list_with(lerngruppe)
+   
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Lerngruppen-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lerngruppe = adm.get_lerngruppe_by_id(id)
+        return lerngruppe
+
+@lernApp.route('/lerngruppen')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LerngruppeOperationen(Resource):
+    @lernApp.marshal_list_with(lerngruppen)
+    
+    @secured
+    def get(self):
+        """Auslesen aller Lerngruppen-Objekte.
+        Sollten keine Lerngruppen-Objekte verfügbar sein,
+        so wird eine leere Sequenz zurückgegeben."""
+
+        adm = AppAdministration()
+        lerngruppen = adm.get_all_lerngruppen()
+        return lerngruppen
+
+    @secured
+    def put(self):
+        """Update des Lerngruppen-Objekts."""
+
+        lerngruppeId = request.args.get("id")
+        name = request.args.get("name")
+    
+        adm = AppAdministration()
+        gruppe = adm.get_lerngruppe_by_id(lerngruppenId)
+        gruppe.set_name(name)
+        adm.update_lerngruppe_by_id(gruppe)
+
+
 
 @lernApp.route('/vorschlag/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -352,6 +400,31 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         return lernvorlieben
 
+@lernApp.route('/lernvorlieben')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernvorliebenOperationen(Resource):
+    @lernApp.marshal_list_with(lernvorlieben)
+
+    @secured
+    def put(self):
+        """Update des Lernvorlieben-Objekts."""
+
+        lernvorliebenId = request.args.get("id")
+        tageszeiten = request.args.get("tageszeiten")
+        tage = request.args.get("tage")
+        frequenz = request.args.get("frequenz")
+        lernart = request.args.get("lernart")
+        gruppengroesse = request.args.get("gruppengroesse")
+        lernort = request.args.get("lernort")
+        adm = AppAdministration()
+        lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
+        lernvorlieben.set_tageszeiten(tageszeiten)
+        lernvorlieben.set_tage(tage)
+        lernvorlieben.set_frequenz(frequenz)
+        lernvorlieben.set_lernart(lernart)
+        lernvorlieben.set_gruppengroesse(gruppengroesse)
+        lernvorlieben.set_lernort(lernort)
+        adm.update_lernvorlieben_by_id(lernvorlieben)
 
 if __name__ == '__main__':
     app.run(debug=True)
