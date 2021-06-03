@@ -118,16 +118,16 @@ class AppAdministration (object):
     Profil-spezifische Methoden
     """
 
-    def create_profil(self, hochschule, studiengang, semester, lernfaecher):
+    def create_profil(self, studiengang, semester, lernvorlieben_id):
         """Eine Person anlegen"""
 
         profil = Profil()
 
-        profil.set_hochschule(hochschule)
         profil.set_studiengang(studiengang)
         profil.set_semester(semester)
-        profil.set_lernfaecher(lernfaecher)
-        person.set_id(1)
+        #profil.set_lernfaecher(lernfaecher)
+        profil.set_lernvorlieben_id(lernvorlieben_id)
+        profil.set_id(1)
 
         with ProfilMapper() as mapper:
             return mapper.insert(profil)

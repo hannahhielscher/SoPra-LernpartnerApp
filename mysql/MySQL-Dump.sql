@@ -43,7 +43,6 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`profile` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile` (
   `id` INT NOT NULL,
   `studiengang` VARCHAR(45) NULL,
-  `abschluss` VARCHAR(45) NULL,
   `semester` INT NULL,
   `lernvorlieben_id` INT NOT NULL,
   PRIMARY KEY (`id`, `lernvorlieben_id`),
@@ -55,6 +54,14 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `module`
+--
+
+LOCK TABLES `profile` WRITE;
+/*!40000 ALTER TABLE `module` DISABLE KEYS */;
+INSERT INTO `profile` VALUES (1, 'Wirtschaftsinformatik und digitale Medien', 3, 1), (2, 'CR/PR', 2, 2)/*!40000 ALTER TABLE `module` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`personen`
