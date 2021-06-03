@@ -8,9 +8,9 @@ class Lernvorlieben(BusinessObject):
         self._tageszeiten = {"Morgens:": False, "Mittags:": False, "Abends:": False}
         self._tage = {"Unter der Woche": False, "Am Wochenende": False}
         self._frequenz = {"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
-        self._lernart = str
+        self._lernart = {"Visuell:": False, "Auditiv:": False, "Motorisch:": False, "Kommunikativ:": False}
         self._gruppengroesse = 0
-        self._lernort = str
+        self._lernort = {"Remote:": False, "Hochschule:": False, "Bibliothek:": False, "Cafe:": False}
 
 
     def get_tageszeiten(self):
