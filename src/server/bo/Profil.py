@@ -1,13 +1,13 @@
-from server.bo.NamedBusinessObject import NamedBusinessObject
+from server.bo.BusinessObject import BusinessObject
 
 
-class Profil (NamedBusinessObject):
+class Profil (BusinessObject):
 
     def __init__(self):
         super().__init__()
         self._studiengang = None
         self._semester = 0
-        self._lernfaecher = None
+        self._lernfaecher = []
         self._lernvorlieben = None
 
     def get_studiengang(self):
@@ -28,22 +28,22 @@ class Profil (NamedBusinessObject):
 
     def get_lernfaecher(self):
         """Auslesen der Lernfächer"""
-        return self._llernfaecher
+        return self._lernfaecher
 
     def set_lernfaecher(self, lernfaecher_neu):
         """Setzen der Lernfächer"""
         self._lernfaecher = lernfaecher_neu
 
-    def get_lernvorlieben(self):
+    def get_lernvorlieben_id(self):
         """Auslesen der Lernfächer"""
-        return self._lernvorlieben
+        return self._lernvorlieben_id
 
-    def set_lernvorlieben(self, _lernvorlieben):
+    def set_lernvorlieben_id(self, lernvorlieben_id):
         """Setzen der Lernfächer"""
-        self._lernvorlieben = self._lernvorlieben
+        self._lernvorlieben_id = lernvorlieben_id
 
     def get_all(self):
-        inhalt = [self.id, self.studiengang, self.semester, self._lernfaecher, self.lernvorlieben]
+        inhalt = [self.id, self.studiengang, self.semester, self._lernfaecher, self._lernvorlieben_id]
         return inhalt
 
     def __str__(self):
