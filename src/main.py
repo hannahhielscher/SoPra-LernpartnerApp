@@ -363,7 +363,7 @@ class NachrichtOperation(Resource):
     def post(self, id):
         """Anlegen/schreiben einer Nachricht."""
         adm = AppAdministration()
-        n = pra.get_person_by_id(id)
+        n = adm.get_nachricht_by_id(id)
 
         if n is not None:
             result = adm.create_nachricht(n)
@@ -415,6 +415,102 @@ class NachrichtByProfilIdOperation(Resource):
             return mes
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+@lernApp.route('/konversation')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class KonversationListOperation(Resource):
+
+    @lernApp.marshal_list_with(konversation)
+    def get(self):
+        """Auslesen aller Konversations-Objekte.
+
+        Sollten keine Konversations-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = AppAdministration()
+        konversation = adm.get_all_konversationen()
+        return konversation
+
+
+@lernApp.route('/konversation/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class KonversationOperation(Resource):
+
+    @lernApp.marshal_with(konversation)
+    def get (self, id):
+        """Auslesen einer bestimmten Konversation."""
+        adm = AppAdministration()
+        konversation = adm.get_konversation_by_id(id)
+
+        if konversation is not None:
+            return konversation
+        else:
+            return '', 500 #Wenn es keine Konversation mit der id gibt.
+
+
+
+    @lernApp.marshal_with(konversation)
+    def put(self, id):
+        """Update eines bestimmten Konversationobjekts."""
+        adm = AppAdministration()
+        konv = konversation.from_dict(api.payload)
+
+        if konv is not None:
+            konv.set_id(id)
+            adm.save_konversation(konv)
+            konversation = adm.get_konversation_by_id(id)
+            return konversation, 200
+        else:
+            return '', 500  # Wenn es keine Konversation mit der id gibt.
+
+    @lernApp.marshal_with(konversation)
+    def delete(self, id):
+        """Löschen eines bestimmten Konversationobjekts."""
+        adm = AppAdministration()
+        k = adm.get_konversation_by_id(id)
+        adm.delete_konversation(k)
+        return '', 200
+
+    @lernApp.marshal_with(konversation)
+    def post(self, id):
+        """Anlegen einer Konversation."""
+        adm = AppAdministration()
+        ko = adm.get_konversation_by_id(id)
+
+        if ko is not None:
+            result = adm.create_konversation(ko)
+            return result
+        else:
+            return "", 500
+
+
+@lernApp.route('/nachrichten-by-id/<string:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByIdOperation(Resource):
+
+    @lernApp.marshal_with(konversation)
+    def get(self, id):
+        """Auslesen einer bestimmten Nachricht anhand der Id."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_id(id)
+
+        if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500  # Wenn es keine Nachricht mit der id gibt.
+
+@lernApp.route('/teilnehmer-by-id/<string:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnehmerByIdOperation(Resource):
+
+    @lernApp.marshal_with(konversation)
+    def get(self, id):
+        """Auslesen einer bestimmten Teilnahme anhand der Id."""
+        adm = AppAdministration()
+        teilnahme = adm.get_teilnahme_by_id(id)
+
+        if teilnahme is not None:
+            return teilnahme
+        else:
+            return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
 
 @lernApp.route('/lernvorlieben/<int:id>')
