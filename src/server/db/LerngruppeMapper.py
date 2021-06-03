@@ -23,11 +23,11 @@ class LerngruppeMapper(Mapper):
         cursor.execute("SELECT * FROM lerngruppen")
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, profil_id) in tuples:
+        for (id, name, profil_id) in tuples:
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
-            lerngruppe.set_teilnehmer(teilnehmer)
-            lerngruppe.set_profil_id(profil_id)
+            lerngruppe.set_name(name)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -40,7 +40,7 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name, teilnehmer, profil_id FROM lerngruppen WHERE id={}".format(id)
+        command = "SELECT id, name, profil_id FROM lerngruppen WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -48,8 +48,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_teilnehmer(teilnehmer)
-            lerngruppe.set_profil_id(profil_id)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -82,7 +81,7 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name, teilnehmer, profil_id FROM lerngruppen WHERE profil_id={}".format(profil_id)
+        command = "SELECT id, name, profil_id FROM lerngruppen WHERE profil_id={}".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -90,8 +89,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_teilnehmer(teilnehmer)
-            lerngruppe.set_profil_id(profil_id)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -112,7 +110,7 @@ class LerngruppeMapper(Mapper):
         for (maxid) in tuples:
             lerngruppe.set_id_lerngruppe(maxid[0]+1)
 
-            command = "INSERT INTO lerngruppen (id, name, teilnehmer, profil_id) VALUES (%s,%s,%s)"
+            command = "INSERT INTO lerngruppen (id, name, profil_id) VALUES (%s,%s,%s)"
             data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
             cursor.execute(command, data)
 
@@ -126,8 +124,8 @@ class LerngruppeMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE lerngruppen " + "SET id=%s, name=%s, teilnehmer=%s, profil_id=%s  WHERE id=%s"
-        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_teilnehmer(), lerngruppe.get_profil_id())
+        command = "UPDATE lerngruppen " + "SET id=%s, name=%s, profil_id=%s  WHERE id=%s"
+        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -138,7 +136,7 @@ class LerngruppeMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM lernrguppen WHERE id={}".format(lerngruppe.get_id())
+        command = "DELETE FROM lernguppen WHERE id={}".format(lerngruppe.get_id())
         cursor.execute(command)
 
         self._connection.commit()
