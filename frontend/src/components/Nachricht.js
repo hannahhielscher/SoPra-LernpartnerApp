@@ -21,7 +21,7 @@ import NachrichtenListeEintrag from './NachrichtenListeEintrag';
  * 
  * @see See [NachrichtenListeEintrag]](#nachrichtenlisteeintrag)
  * 
- * Hierfür werden alle Nachrichten des aktuell eingeloggten Student geladen und in die Componente NachrichtenListe gemappt
+ * Hierfür werden alle Nachrichten des aktuell eingeloggten Student geladen und in die Componente NachrichtenListeEintrag gemappt
  * 
  */
 
@@ -63,13 +63,10 @@ class Nachricht extends Component {
    // Init an empty state
    this.state = {
      nachrichten: [],
-     filteredNachrichten: [],
-     nachrichtFilter: '',
      error: null,
      loadingInProgress: false,
      expandedNachrichtID: expandedID,
-     showNachrichtForm: false,
-     showDeleteForm: false
+     showNachrichtForm: false, 
    };
  }
 
@@ -81,13 +78,12 @@ class Nachricht extends Component {
     });
   }
  
- // API Anbindung um alle Module vom Backend zu bekommen 
+ // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten = () => {
     LernappAPI.getAPI().getNachrichten()
       .then(nachrichtenBOs =>
         this.setState({               // Set new state when CustomerBOs have been fetched
           nachrichten: nachrichtenBOs,
-          filteredNachrichten: [...nachrichtenBOs], // store a copy
           loadingInProgress: false,   // disable loading indicator 
           error: null
         })).catch(e =>
@@ -138,7 +134,7 @@ nachrichtFormClosed = modul => {
  // Rendert die Componente 
  render() {
     const { classes } = this.props;
-    const {  loadingInProgress, error, nachrichtFilter, filteredNachrichten, showNachrichtForm} = this.state;
+    const { nachrichten, loadingInProgress, error, showNachrichtForm, expandedNachrichtID} = this.state;
 
     return (
       <div className={classes.root}>
@@ -148,7 +144,7 @@ nachrichtFormClosed = modul => {
 
         <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Nachrichten konnten nicht geladen werden!`} onReload={this.getNachrichten} />
-        
+
       </div>
      
     );

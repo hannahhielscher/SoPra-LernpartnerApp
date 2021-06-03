@@ -103,7 +103,8 @@ class ProfilMapper(Mapper):
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.profile_id, profile.studiengang, profile.semester, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher = lernfaecher.id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(projekt_id)
+        command = "SELECT profile_has_lernfaecher.profile_id, profile.studiengang, profile.semester, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher = lernfaecher.id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(
+            lernfach_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
