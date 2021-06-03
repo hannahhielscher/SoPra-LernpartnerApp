@@ -105,7 +105,7 @@ class LernvorliebenMapper(Mapper):
         return lernvorlieben
 
     def update(self, lernvorlieben):
-       """Überschreiben / Aktualisieren eines Lernvorlieben-Objekts in der DB
+        """Überschreiben / Aktualisieren eines Lernvorlieben-Objekts in der DB
         :param lernvorlieben -> Lernvorlieben-Objekt
         :return aktualisiertes Lernvorlieben-Objekt
         """

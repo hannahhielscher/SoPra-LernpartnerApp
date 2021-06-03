@@ -11,7 +11,7 @@ class Person(NamedBusinessObject):
         self._lerngruppe = False
         self._google_user_id = None
         self._email = None
-        self._personenprofil = Profil
+        self._personenprofil = None
 
     def get_vorname(self):
         """Auslesen des Vornamens"""

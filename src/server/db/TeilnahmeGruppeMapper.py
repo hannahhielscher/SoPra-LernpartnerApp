@@ -80,7 +80,7 @@ class TeilnahmeGruppeMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            teilnahme.set_id(maxid[0] + 1))
+            teilnahme.set_id(maxid[0] + 1)
 
             command = "INSERT INTO teilnahmen_gruppe (id, teilnehmer, lerngruppe) VALUES (%s,%s,%s)"
             data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe())
@@ -115,5 +115,5 @@ class TeilnahmeGruppeMapper(Mapper):
         command = "DELETE FROM teilnahmen_gruppe WHERE id={}".format(teilnahmen_gruppe.get_id_())
         cursor.execute(command)
 
-    self._connection.commit()
+        self._connection.commit()
         cursor.close()
