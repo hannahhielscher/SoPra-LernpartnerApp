@@ -1,10 +1,52 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
+import LernpartnerAPI from '../api/LernpartnerAPI'
+import { withStyles, Button, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
+import SaveIcon from '@material-ui/icons/Save';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+import NachrichtenListeEintrag from './NachrichtenListeEintrag';
+
+/**
+ * Es werden alle Nachrichten des aktuell eingeloggten Studenten angezeigt
+ * 
+ * @see See [NachrichtenListeEintrag]](#nachrichtenlisteeintrag)
+ * 
+ * Hierfür werden alle Nachrichten des aktuell eingeloggten Student geladen und in die Componente NachrichtenListe gemappt
+ * 
+ */
+
+
+//Css Style für Tabellen Zellen
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+  }))(TableCell);
+
+
+//Css Style für Tabllen Zeilen
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+      '&:nth-of-type(4n+1)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  }))(TableRow);
+
 
 class Nachricht extends Component {
 
@@ -99,6 +141,15 @@ nachrichtFormClosed = modul => {
     const {  loadingInProgress, error, nachrichtFilter, filteredNachrichten, showNachrichtForm} = this.state;
 
     return (
+      <div className={classes.root}>
+        {
+          
+        }
+
+        <LoadingProgress show={loadingInProgress} />
+        <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Nachrichten konnten nicht geladen werden!`} onReload={this.getNachrichten} />
+        
+      </div>
      
     );
 
