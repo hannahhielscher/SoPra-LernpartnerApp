@@ -77,6 +77,12 @@ nachricht = api.inherit('Nachricht', bo, {
     'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
 })
 
+konversation = api.inherit('Konversation', bo, {
+    'nachrichten': fields.String(attribute='_nachrichten', description='Enthaltene Nachrichten der Konversation'),
+    'teilnehmer': fields.String(attribute='_teilnehmer', description='Enthaltene Teilnehmer der Konversation'),
+})
+                           
+
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
     'tage': fields.String(attribute='_tage', description='Semester der Person'),
