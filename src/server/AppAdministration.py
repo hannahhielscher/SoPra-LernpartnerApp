@@ -269,16 +269,35 @@ class AppAdministration (object):
 
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.insert(teilnahme)
+    
+    def get_all_teilnahmengruppe(self):
+        """Alle Teilnahmen an Gruppen auslesen"""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_all()
 
-    def get_teilnahme_by_student_id(self, student_id):
+    def get_teilnahmegruppe_by_student_id(self, student_id):
         """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_student_id(student_id)
 
-    def get_teilnahme_by_lerngruppen_id(self, lerngruppe_id):
+    def get_teilnahmegruppe_by_lerngruppen_id(self, lerngruppe_id):
         """Gibt die Teilnahme einer gegebenen Lerngruppen Id zurück."""
         with TeilnahmeGruppenMapper() as mapper:
             return mapper.find_by_lerngruppe_id(lerngruppe_id)
+    
+    def get_teilnahmegruppe_by_id(self, id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def update_teilnahmegruppe(self,teilnahme):
+        """Speichert die Nachricht."""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.update(teilnahme)
+
+    def delete_teilnahmegruppe(self, teilnahme):
+        """Löscht die Nachricht."""
+        with TeilnahmeGruppeMapper() as mapper:
+            mapper.delete(teilnahme)
     
     
     """

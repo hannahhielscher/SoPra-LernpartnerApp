@@ -83,8 +83,13 @@ konversation = api.inherit('Konversation', bo, {
 })
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
-    'teilnehmer': fields.String(attribute='_teilnehmer', description='Enthaltene Teilnehmer des (Gruppen-)Chats'),
-    'konversation': fields.String(attribute='_konversation', description='Konversation des (Gruppen-)Chats'),
+    'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
+    'konversation': fields.Integer(attribute='_konversation', description='ID der Konversation'),
+})
+
+teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
+    'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
+    'lerngruppe': fields.Integer(attribute='_teilnehmer', description='ID der Lerngruppe')
 })
 
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
@@ -658,7 +663,48 @@ class TeilnehmeChatByKonversationIdOperation(Resource):
         else:
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
+@lernApp.route('/teilnahmenGruppe')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeGruppeListOperation(Resource):
 
+    @lernApp.marshal_list_with(teilnahmegruppe)
+    def get(self):
+        """Auslesen aller TeilnahmeGruppe-Objekte.
+
+        Sollten keine TeilnahmeGruppe-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = AppAdministration()
+        teilnahme = adm.get_all_teilnahmen()
+        return teilnahme
+
+    @lernApp.marshal_list_with(teilnahmegruppe, envelope='response')
+    def post(self):
+        """Anlegen eines neuen Teilnahmeobjekts."""
+        adm = AppAdministration()
+        t = teilnahme.from_dict(api.payload)
+
+        if t is not None:
+            insert_t = adm.create_teilnahmegruppe(n)
+            teilnahme = adm.get_teilnahmegruppe_by_id(insert_t.get_id())
+            return nachricht, 200
+        else:
+            return '', 500
+
+@lernApp.route('/teilnahmenGruppe/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeGruppeOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmgruppe)
+    def get (self, id):
+        """Auslesen einer bestimmten Teilnahme."""
+        adm = AppAdministration()
+        teilnahme = adm.get_teilnahmegruppe_by_id(id)
+
+        if teilnahme is not None:
+            return teilnahme
+        else:
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
+
+    
 
 @lernApp.route('/lernvorlieben/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
