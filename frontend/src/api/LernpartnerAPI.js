@@ -36,8 +36,8 @@ export default class LernpartnerAPI {
           )
         //Person related
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
-        #addPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
-        #getPersonURL = (id) => `${this.#lernappServerBaseURL}/person/${id}`;
+        #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
+        #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #updatePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
@@ -46,13 +46,15 @@ export default class LernpartnerAPI {
 
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #addProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profil/${id}`;
+        #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
+        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
         #updateProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
+        //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
         //Vorschlaege anzeigen für Student
         #getVorschlaegeURL = (personID) => `${this.#lernappServerBaseURL}/vorschlaege/${personID}`;
+        
 
 
         //Nachrichten anzeigen für Student
@@ -64,8 +66,7 @@ export default class LernpartnerAPI {
         //Nachricht löschen
 	      #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
 
-
-
+        //Personenbezogene
         /**
            * Gibt alle Personen als BO zurück
            * 
@@ -78,6 +79,29 @@ export default class LernpartnerAPI {
             return new Promise(function (resolve) {
               resolve(personenBOs);
             })           
+          })
+        }
+        /**
+         * Adds a person and returns a Promise, which resolves to a new PersonBO object
+         *  
+         * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
+         * @public
+         */
+        addPerson(personBO) {
+          return this.#fetchAdvanced(this.#addPersonURL(), {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(personBO)
+          }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+              resolve(responsePersonBO);
+            })
           })
         }
 
@@ -99,6 +123,178 @@ export default class LernpartnerAPI {
         }
 
         /**
+         * Updated eine Person und gibt Promise zurück, resolves as PersonBO.
+         * 
+         * @param {PersonBO} personBO to be updated
+         * @public
+         */
+        updatePerson(personBO) {
+          return this.#fetchAdvanced(this.#updatePersonURL(personBO.getID()), {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(personBO)
+          }).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON
+            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+            // console.info(PersonBOs);
+            return new Promise(function (resolve) {
+              resolve(responsePersonBO);
+            })
+          })
+        }
+
+        /**
+         * Gibt eine Person mit einer bestimmten ID als BO zurück
+         * 
+         * @param {Number} google_user_id to be retrieved
+         * @public
+         */
+        getPersonByGoogleID(google_user_id) {
+          return this.#fetchAdvanced(this.#getPersonByGoogleIDURL(google_user_id)).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON, but only need one object
+            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+            // console.info(responsePersonBO);
+            return new Promise(function (resolve) {
+              resolve(responsePersonBO);
+            })
+          })
+        }
+ 
+        /**
+         * Gibt Promise zurück
+         * 
+         * @param {Number} personID to be deleted
+         * @public
+         */
+        deletePerson(personID) {
+          return this.#fetchAdvanced(this.#deletePersonURL(personID), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON
+            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+            // console.info(personBOs);
+            return new Promise(function (resolve) {
+              resolve(responsePersonBO);
+            })
+          })
+        }
+
+        /**
+         * Gibt Promise zurück
+         * 
+         * @param {Number} personID to be deleted
+         * @public
+         */
+        searchPerson(personName) {
+          return this.#fetchAdvanced(this.#searchPersonURL(personName)).then((responseJSON) => {
+            let personBOs = PersonBO.fromJSON(responseJSON);
+            // console.info(personBOs);
+            return new Promise(function (resolve) {
+              resolve(personBOs);
+            })
+          })
+        }
+
+        //Profilbezogene
+        /**
+           * Gibt alle Profile als BO zurück
+           * 
+           * @public
+           */
+          getProfile() {
+            return this.#fetchAdvanced(this.#getProfileURL()).then((responseJSON) => {
+              let profileBOs = ProfilBO.fromJSON(responseJSON);
+              // console.info(profilBOs);
+              return new Promise(function (resolve) {
+                resolve(profileBOs);
+              })           
+            })
+          }
+        /**
+         * Adds a person and returns a Promise, which resolves to a new PersonBO object
+         *  
+         * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
+         * @public
+         */
+        addProfil(profilBO) {
+          return this.#fetchAdvanced(this.#addProfilURL(), {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(profilBO)
+          }).then((responseJSON) => {
+            // We always get an array of ProfilBOs.fromJSON, but only need one object
+            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+              resolve(responseProfilBO);
+            })
+          })
+        }
+        /**
+         * Gibt ein Profil-Objekt zurück
+         * @param {Number} profilID to be retrieved
+         * @public
+          */
+         getProfil(profilID) {
+          return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
+            let profilBOs = ProfilBO.fromJSON(responseJSON);
+            //console.info(ProfilBOs)
+            return new Promise(function (resolve) {
+              resolve(profilBOs);
+            })
+          })
+        }
+
+        /**
+         * Updated ein Profil und gibt Promise zurück, resolves as ProfilBO.
+         * 
+         * @param {ProfilBO} profilBO to be updated
+         * @public
+         */
+        updateProfil(profilBO) {
+          return this.#fetchAdvanced(this.#updateProfilURL(profilBO.getID()), {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(profilBO)
+          }).then((responseJSON) => {
+            // We always get an array of ProfilBOs.fromJSON
+            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
+            // console.info(ProfilBOs);
+            return new Promise(function (resolve) {
+              resolve(responseProfilBO);
+            })
+          })
+        }
+        /**
+         * Gibt Promise zurück
+         * 
+         * @param {Number} profilID to be deleted
+         * @public
+         */
+        deleteProfil(profilID) {
+          return this.#fetchAdvanced(this.#deleteProfilURL(profilID), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of ProfilBOs.fromJSON
+            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
+            // console.info(profilBOs);
+            return new Promise(function (resolve) {
+              resolve(responseProfilBO);
+            })
+          })
+        }
+
+        //Vorschlagbezogene
+        /**
          * Gibt alle Vorschlaege zurück
          * @param {Number} personID to be retrieved
          * @public
@@ -113,6 +309,8 @@ export default class LernpartnerAPI {
           })
         }
 
+
+        //Nachrichtbezogene
         // Gibt alle Nachrichten zurück
         getNachrichten(personID) {
           return this.#fetchAdvanced(this.#getNachrichtenURL(personID,{method: 'GET'})).then((responseJSON) => {

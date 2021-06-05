@@ -108,10 +108,10 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             mapper.update_by_id(person)
     
-    def delete_UserById(self, personId):
+    def delete_person(self, person):
         """Eine Person löschen"""
         with PersonMapper() as mapper:
-            return mapper.deleteByID(personId)
+            return mapper.delete(person)
 
 
     """
@@ -125,7 +125,7 @@ class AppAdministration (object):
 
         profil.set_studiengang(studiengang)
         profil.set_semester(semester)
-        #profil.set_lernfaecher(lernfaecher)
+        profil.set_lernfaecher(lernfaecher)
         profil.set_lernvorlieben_id(lernvorlieben_id)
         profil.set_id(1)
 
@@ -146,6 +146,11 @@ class AppAdministration (object):
         """Profil mit einer bestimmten Lernfach ID auslesen"""
         with ProfilMapper() as mapper:
             return mapper.find_by_lernfach_id(lernfach_id)
+
+    """def get_lernfaecher_by_profil_id(self, profil_id):
+        #Lernfaecher zu bestimmtem Profil auslesen
+        with ProfilMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profil_id)"""
 
     def save_profil(self, profil):
         """Profil speichern"""
@@ -264,16 +269,35 @@ class AppAdministration (object):
 
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.insert(teilnahme)
+    
+    def get_all_teilnahmengruppe(self):
+        """Alle Teilnahmen an Gruppen auslesen"""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_all()
 
-    def get_teilnahme_by_student_id(self, student_id):
+    def get_teilnahmegruppe_by_student_id(self, student_id):
         """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_student_id(student_id)
 
-    def get_teilnahme_by_lerngruppen_id(self, lerngruppe_id):
+    def get_teilnahmegruppe_by_lerngruppen_id(self, lerngruppe_id):
         """Gibt die Teilnahme einer gegebenen Lerngruppen Id zurück."""
         with TeilnahmeGruppenMapper() as mapper:
             return mapper.find_by_lerngruppe_id(lerngruppe_id)
+    
+    def get_teilnahmegruppe_by_id(self, id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def update_teilnahmegruppe(self,teilnahme):
+        """Speichert die Nachricht."""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.update(teilnahme)
+
+    def delete_teilnahmegruppe(self, teilnahme):
+        """Löscht die Nachricht."""
+        with TeilnahmeGruppeMapper() as mapper:
+            mapper.delete(teilnahme)
     
     
     """
