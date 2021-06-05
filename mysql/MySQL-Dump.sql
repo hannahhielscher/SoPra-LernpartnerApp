@@ -16,9 +16,8 @@ USE `lernapp_SWPra`;
 -- Table `lernapp_SWPra`.`profile`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `lernapp_SWPra`.`profile` ;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lernapp_SWPra`.`profile` (
+
+CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile` (
   `id` INT NOT NULL,
   `studiengang` VARCHAR(45) NULL,
   `semester` INT NULL,
@@ -30,8 +29,7 @@ CREATE TABLE `lernapp_SWPra`.`profile` (
     REFERENCES `lernapp_SWPra`.`lernvorlieben` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+ENGINE = InnoDB;
 
 --
 -- Dumping data for table `profile`
@@ -49,7 +47,7 @@ UNLOCK TABLES;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `lernapp_SWPra`.`personen` ;
 
-CREATE TABLE `lernapp_SWPra`.`personen` (
+CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`personen` (
   `id` INT NOT NULL,
   `name` VARCHAR(200) NULL,
   `vorname` VARCHAR(45) NULL,
@@ -74,8 +72,8 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`personen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 20, 'männlich', true, '1', 'timmueller@gmail.com', 1), (2, 'Maier', 'Lisa', 19, 'weiblich', true, '2', 'lischen2002@gmx.de', 2),
-(3, 'Baum', 'Manuela', 22, 'weiblich', false,  '3', 'manni99@gmail.com', 3), (4, 'Possible', 'Kim', 20, 'weiblich', true, '4', 'kimpossible@hotmail.de', 4), (5, 'Smith', 'John', 24, 'männlich', true, '5', 'jonny@hotmail.com', 5), 
+INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 20, 'männlich', false, '1', 'timmueller@gmail.com', 1), (2, 'Maier', 'Lisa', 19, 'weiblich', true, '2', 'lischen2002@gmx.de', 2),
+(3, 'Baum', 'Manuela', 22, 'weiblich', true,  '3', 'manni99@gmail.com', 3), (4, 'Possible', 'Kim', 20, 'weiblich', true, '4', 'kimpossible@hotmail.de', 4), (5, 'Smith', 'John', 24, 'männlich', true, '5', 'jonny@hotmail.com', 5), 
 (6, 'Jones', 'Alex', 23, 'männlich', false, '6', 'alexjones@gmail.com', 6),  (7, 'Becker', 'Klaus', 19, 'männlich', true, '7', 'becker77@gmx.de', 7);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -97,8 +95,8 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`lernfaecher` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernfaecher` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`lernfaecher` VALUES (1, 'Software Entwicklung'), (2, 'Data Science'), (3, 'Rechnungswesen'), (4, 'Medienrecht'),
-(5, 'Crossmedia-Konzeption'), (6, 'Web-Technologie und Datenkompetenz'), (7, 'Datenbanken'), (8, 'IT-Security');
+INSERT INTO `lernapp_SWPra`.`lernfaecher` VALUES (1, 'Software Entwicklung'), (2, 'Data Science'), (3, 'Führungsorientiertes Rechnungswesen'), (4, 'Medienrecht'),
+(5, 'Crossmedia-Konzeption'), (6, 'Web-Technologie'), (7, 'Datenbanken'), (8, 'IT-Security');
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernfaecher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,10 +107,9 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`lerngruppen` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lerngruppen` (
   `id` INT NOT NULL,
-  `profil_id` INT NOT NULL,
   `name` VARCHAR(45) NULL,
   `profile_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `profil_id`, `profile_id`),
+  PRIMARY KEY (`id`, `profile_id`),
   INDEX `fk_lerngruppen_profile1_idx` (`profile_id` ASC) VISIBLE,
   CONSTRAINT `fk_lerngruppen_profile1`
     FOREIGN KEY (`profile_id`)
@@ -121,6 +118,15 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lerngruppen` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `lerngruppen`
+--
+
+LOCK TABLES `lernapp_SWPra`.`lerngruppen` WRITE;
+/*!40000 ALTER TABLE `lernapp_SWPra`.`lerngruppen` DISABLE KEYS */;
+INSERT INTO `lernapp_SWPra`.`lerngruppen` VALUES (1, 'Lern Buddys', 8), (2, 'Girl Power', 9), (3, 'Programmier-Pros', 10);
+/*!40000 ALTER TABLE `lernapp_SWPra`.`lerngruppen` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`profile_has_lernfaecher`
@@ -130,7 +136,6 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`profile_has_lernfaecher` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile_has_lernfaecher` (
   `profil_id` INT NOT NULL,
   `lernfaecher_id` INT NOT NULL,
-  `kenntnisstand` VARCHAR(45) NULL,
   PRIMARY KEY (`profil_id`, `lernfaecher_id`),
   INDEX `fk_profil_has_lernfaecher_lernfaecher1_idx` (`lernfaecher_id` ASC) VISIBLE,
   INDEX `fk_profil_has_lernfaecher_profil1_idx` (`profil_id` ASC) VISIBLE,
@@ -146,6 +151,16 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile_has_lernfaecher` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `profile_has_lernfaecher`
+--
+
+LOCK TABLES `lernapp_SWPra`.`profile_has_lernfaecher` WRITE;
+/*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` DISABLE KEYS */;
+INSERT INTO `lernapp_SWPra`.`profile_has_lernfaecher` VALUES (1, 1), (1, 2), (2, 4), (2, 5), (3, 1), (3, 2), (4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (7, 7), (7, 8);
+/*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` ENABLE KEYS */;
+UNLOCK TABLES;
+
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`teilnahmen_gruppe`
 -- -----------------------------------------------------
@@ -154,7 +169,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`teilnahmen_gruppe` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_gruppe` (
   `person_id` INT NOT NULL,
   `person_profil_id` INT NOT NULL,
-  `id` VARCHAR(45) NOT NULL,
+  `id` INT NOT NULL,
   `lerngruppen_id` INT NOT NULL,
   `lerngruppen_profil_id` INT NOT NULL,
   PRIMARY KEY (`person_id`, `person_profil_id`, `id`, `lerngruppen_id`, `lerngruppen_profil_id`),
@@ -166,12 +181,21 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_gruppe` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_teilnahmen_gruppe_lerngruppen1`
-    FOREIGN KEY (`lerngruppen_id` , `lerngruppen_profil_id`)
-    REFERENCES `lernapp_SWPra`.`lerngruppen` (`id` , `profil_id`)
+    FOREIGN KEY (`lerngruppen_id`)
+    REFERENCES `lernapp_SWPra`.`lerngruppen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `teilnahmen_gruppe`
+--
+
+LOCK TABLES `lernapp_SWPra`.`teilnahmen_gruppe` WRITE;
+/*!40000 ALTER TABLE `lernapp_SWPra`.`teilnahmen_gruppe` DISABLE KEYS */;
+INSERT INTO `lernapp_SWPra`.`teilnahmen_gruppe` VALUES (2, 2, 1, 1, 1), (3, 3, 2, 1, 1), (4, 4, 3, 1, 1), (2, 2, 4, 2, 2), (3, 3, 5, 2, 2), (4, 4, 6, 2, 2), (4, 4, 7, 3, 3), (3, 3, 8, 3, 3), (4, 4, 9, 3, 3), (4, 4, 10, 3, 3), (7, 7, 11, 3, 3);
+/*!40000 ALTER TABLE `lernapp_SWPra`.`teilnahmen_gruppe` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`konversation`
