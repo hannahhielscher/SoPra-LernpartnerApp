@@ -67,7 +67,6 @@ export default class LernpartnerAPI {
 	      #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
 
 
-
         /**
            * Gibt alle Personen als BO zurück
            * 
@@ -84,9 +83,8 @@ export default class LernpartnerAPI {
         }
 
         /**
-         * Adds a customer and returns a Promise, which resolves to a new CustomerBO object with the 
-         * firstName and lastName of the parameter customerBO object.
-         * 
+         * Adds a person and returns a Promise, which resolves to a new PersonBO object
+         *  
          * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
          * @public
          */
@@ -107,7 +105,7 @@ export default class LernpartnerAPI {
             })
           })
         }
-        
+
         /**
          * Gibt eine Person mit einer bestimmten ID als BO zurück
          * 
@@ -119,6 +117,31 @@ export default class LernpartnerAPI {
             // We always get an array of PersonBOs.fromJSON, but only need one object
             let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
             // console.info(responsePersonBO);
+            return new Promise(function (resolve) {
+              resolve(responsePersonBO);
+            })
+          })
+        }
+
+
+        /**
+         * Updated eine Person und gibt Promise zurück, resolves as PersonBO.
+         * 
+         * @param {PersonBO} personBO to be updated
+         * @public
+         */
+        updatePerson(personBO) {
+          return this.#fetchAdvanced(this.#updatePersonURL(personBO.getID()), {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(personBO)
+          }).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON
+            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+            // console.info(PersonBOs);
             return new Promise(function (resolve) {
               resolve(responsePersonBO);
             })

@@ -113,34 +113,34 @@ class PersonenListOperationen(Resource):
     
 
     @lernApp.marshal_with(person, code=200)
-    @lernApp.expect(person)  # Wir erwarten ein Customer-Objekt von Client-Seite.
+    @lernApp.expect(person)  # Wir erwarten ein Person-Objekt von Client-Seite.
     @secured
     def post(self):
-        """Anlegen eines neuen Customer-Objekts.
+        """Anlegen eines neuen Person-Objekts.
 
         **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
         So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
         Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der BankAdministration (Businesslogik), eine korrekte ID
+        liegt es an der AppAdministration (Businesslogik), eine korrekte ID
         zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
         """
-        adm = BankAdministration()
+        adm = AppAdministration()
 
         proposal = Person.from_dict(api.payload)
 
         """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
         if proposal is not None:
-            """ Wir verwenden lediglich Vor- und Nachnamen des Proposals für die Erzeugung
-            eines Customer-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
             wird auch dem Client zurückgegeben. 
             """
-            c = adm.create_person(proposal.get_first_name(), proposal.get_last_name())
+            c = adm.create_person(proposal.get_name(), proposal.get_vorname(), proposal.get_semester(), proposal.get_alter(), proposal.get_geschlecht(), proposal.get_lerngruppe(),
+                                proposal.get_google_user_id(), proposal.get_email(), proposal.get_personenprofil())
             return c, 200
         else:
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
 
-@lernApp.route('/person/<int:id>')
+@lernApp.route('/personen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
     @lernApp.marshal_list_with(person)
@@ -158,28 +158,28 @@ class PersonOperationen(Resource):
     @banking.expect(person, validate=True)
     @secured
     def put(self, id):
-        """Update eines bestimmten Customer-Objekts.
+        """Update eines bestimmten Person-Objekts.
 
         **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
         verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Customer-Objekts.
+        Person-Objekts.
         """
         adm = AppAdministration()
-        c = Customer.from_dict(api.payload)
+        c = Person.from_dict(api.payload)
 
         if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Person-Objekts gesetzt.
             Siehe Hinweise oben.
             """
             c.set_id(id)
-            adm.save_customer(c)
+            adm.save_person(c)
             return '', 200
         else:
             return '', 500
 
     @secured
     def delete(self, id):
-        """Löschen eines bestimmten Customer-Objekts.
+        """Löschen eines bestimmten Personen-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
