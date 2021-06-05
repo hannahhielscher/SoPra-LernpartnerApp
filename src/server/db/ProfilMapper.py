@@ -79,15 +79,22 @@ class ProfilMapper(Mapper):
 
     def find_lernfaecher_by_profil_id(self, profil_id):
         
-        result = []
+        result_key = []
+        result_value = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (lernfaecher_id) in tuples:
-            result.append(lernfaecher_id)
+            result_key.append(lernfaecher_id)
+
+        for (bezeichnung) in tuples:
+            result_value.append(bezeichnung)
+
+        for i in result_value:
+            result = dict.fromkeys(result_key, i)
 
         self._connection.commit()
         cursor.close()
