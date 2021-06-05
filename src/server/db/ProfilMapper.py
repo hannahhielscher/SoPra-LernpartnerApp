@@ -81,6 +81,7 @@ class ProfilMapper(Mapper):
         
         result_key = []
         result_value = []
+        result = []
 
         cursor = self._connection.cursor()
         command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
