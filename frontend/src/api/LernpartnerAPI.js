@@ -46,10 +46,10 @@ export default class LernpartnerAPI {
 
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #addProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profil/${id}`;
+        #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
+        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
         #updateProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
-        #getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
+        //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
         //Vorschlaege anzeigen für Student
@@ -66,7 +66,7 @@ export default class LernpartnerAPI {
         //Nachricht löschen
 	      #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
 
-
+        //Personenbezogene
         /**
            * Gibt alle Personen als BO zurück
            * 
@@ -81,8 +81,6 @@ export default class LernpartnerAPI {
             })           
           })
         }
-
-        //Personenbezogene
         /**
          * Adds a person and returns a Promise, which resolves to a new PersonBO object
          *  
@@ -171,7 +169,7 @@ export default class LernpartnerAPI {
          * @param {Number} personID to be deleted
          * @public
          */
-        deleteCustomer(personID) {
+        deletePerson(personID) {
           return this.#fetchAdvanced(this.#deletePersonURL(personID), {
             method: 'DELETE'
           }).then((responseJSON) => {
@@ -200,6 +198,100 @@ export default class LernpartnerAPI {
           })
         }
 
+        //Profilbezogene
+        /**
+           * Gibt alle Profile als BO zurück
+           * 
+           * @public
+           */
+          getProfile() {
+            return this.#fetchAdvanced(this.#getProfileURL()).then((responseJSON) => {
+              let profileBOs = ProfilBO.fromJSON(responseJSON);
+              // console.info(profilBOs);
+              return new Promise(function (resolve) {
+                resolve(profileBOs);
+              })           
+            })
+          }
+        /**
+         * Adds a person and returns a Promise, which resolves to a new PersonBO object
+         *  
+         * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
+         * @public
+         */
+        addProfil(profilBO) {
+          return this.#fetchAdvanced(this.#addProfilURL(), {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(profilBO)
+          }).then((responseJSON) => {
+            // We always get an array of ProfilBOs.fromJSON, but only need one object
+            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+              resolve(responseProfilBO);
+            })
+          })
+        }
+        /**
+         * Gibt ein Profil-Objekt zurück
+         * @param {Number} profilID to be retrieved
+         * @public
+          */
+         getProfil(profilID) {
+          return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
+            let profilBOs = ProfilBO.fromJSON(responseJSON);
+            //console.info(ProfilBOs)
+            return new Promise(function (resolve) {
+              resolve(profilBOs);
+            })
+          })
+        }
+
+        /**
+         * Updated ein Profil und gibt Promise zurück, resolves as ProfilBO.
+         * 
+         * @param {ProfilBO} profilBO to be updated
+         * @public
+         */
+        updateProfil(profilBO) {
+          return this.#fetchAdvanced(this.#updateProfilURL(profilBO.getID()), {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(profilBO)
+          }).then((responseJSON) => {
+            // We always get an array of ProfilBOs.fromJSON
+            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
+            // console.info(ProfilBOs);
+            return new Promise(function (resolve) {
+              resolve(responseProfilBO);
+            })
+          })
+        }
+        /**
+         * Gibt Promise zurück
+         * 
+         * @param {Number} profilID to be deleted
+         * @public
+         */
+        deleteProfil(profilID) {
+          return this.#fetchAdvanced(this.#deleteProfilURL(profilID), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of ProfilBOs.fromJSON
+            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
+            // console.info(profilBOs);
+            return new Promise(function (resolve) {
+              resolve(responseProfilBO);
+            })
+          })
+        }
 
         //Vorschlagbezogene
         /**

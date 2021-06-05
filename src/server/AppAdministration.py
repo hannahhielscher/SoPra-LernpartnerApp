@@ -125,7 +125,7 @@ class AppAdministration (object):
 
         profil.set_studiengang(studiengang)
         profil.set_semester(semester)
-        #profil.set_lernfaecher(lernfaecher)
+        profil.set_lernfaecher(lernfaecher)
         profil.set_lernvorlieben_id(lernvorlieben_id)
         profil.set_id(1)
 
@@ -146,6 +146,11 @@ class AppAdministration (object):
         """Profil mit einer bestimmten Lernfach ID auslesen"""
         with ProfilMapper() as mapper:
             return mapper.find_by_lernfach_id(lernfach_id)
+
+    """def get_lernfaecher_by_profil_id(self, profil_id):
+        #Lernfaecher zu bestimmtem Profil auslesen
+        with ProfilMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profil_id)"""
 
     def save_profil(self, profil):
         """Profil speichern"""
