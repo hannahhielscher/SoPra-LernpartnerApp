@@ -94,8 +94,13 @@ class ProfilMapper(Mapper):
         for (bezeichnung) in tuples:
             result_value.append(bezeichnung)
 
-        for i in result_value:
-            result = dict.fromkeys(result_key, i)
+        result = dict.fromkeys(result_key, 0)
+        buff = 0
+        for i in result:
+            for j in range(buff, len(result_value))
+                result[i] = result_value[j]
+                buff += 1
+                break
 
         self._connection.commit()
         cursor.close()
