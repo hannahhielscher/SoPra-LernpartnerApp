@@ -147,10 +147,10 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.find_by_lernfach_id(lernfach_id)
 
-    """def get_lernfaecher_by_profil_id(self, profil_id):
+    def get_lernfaecher_by_profil_id(self, profil_id):
         #Lernfaecher zu bestimmtem Profil auslesen
         with ProfilMapper() as mapper:
-            return mapper.find_lernfaecher_by_profil_id(profil_id)"""
+            return mapper.find_lernfaecher_by_profil_id(profil_id)
 
     def save_profil(self, profil):
         """Profil speichern"""

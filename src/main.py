@@ -207,7 +207,7 @@ class PersonByGoogleIDOperationen(Resource):
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
 
-@lernApp.route('/profile/<int:id>')
+@lernApp.route('/profil/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
@@ -219,7 +219,6 @@ class ProfilByIDOperationen(Resource):
         adm = AppAdministration()
         profil = adm.get_profil_by_id(id)
         return profil
-
 
 @lernApp.route('/profile')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
