@@ -36,7 +36,7 @@ export default class LernpartnerAPI {
           )
         //Person related
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
-        #addPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
+        #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/person/${id}`;
         #updatePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
@@ -49,10 +49,12 @@ export default class LernpartnerAPI {
         #addProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
         #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profil/${id}`;
         #updateProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
+        #getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
         //Vorschlaege anzeigen für Student
         #getVorschlaegeURL = (personID) => `${this.#lernappServerBaseURL}/vorschlaege/${personID}`;
+        
 
 
         //Nachrichten anzeigen für Student
@@ -81,6 +83,31 @@ export default class LernpartnerAPI {
           })
         }
 
+        /**
+         * Adds a customer and returns a Promise, which resolves to a new CustomerBO object with the 
+         * firstName and lastName of the parameter customerBO object.
+         * 
+         * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
+         * @public
+         */
+        addPerson(personBO) {
+          return this.#fetchAdvanced(this.#addPersonURL(), {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(personBO)
+          }).then((responseJSON) => {
+            // We always get an array of CustomerBOs.fromJSON, but only need one object
+            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
+            // console.info(accountBOs);
+            return new Promise(function (resolve) {
+              resolve(responsePersonBO);
+            })
+          })
+        }
+        
         /**
          * Gibt eine Person mit einer bestimmten ID als BO zurück
          * 

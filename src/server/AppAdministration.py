@@ -108,10 +108,10 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             mapper.update_by_id(person)
     
-    def delete_UserById(self, personId):
+    def delete_person(self, person):
         """Eine Person löschen"""
         with PersonMapper() as mapper:
-            return mapper.deleteByID(personId)
+            return mapper.delete(person)
 
 
     """

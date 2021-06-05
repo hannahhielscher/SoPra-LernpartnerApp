@@ -96,25 +96,10 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'lernort': fields.String(attribute='_lernort', description='Google user ID der Person'),
 })
 
-@lernApp.route('/person/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class PersonByIDOperationen(Resource):
-    @lernApp.marshal_list_with(person)
-   
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten Person-Objekts.
-        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
-        """
-        adm = AppAdministration()
-        person = adm.get_person_by_id(id)
-        return person
-
 @lernApp.route('/personen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class PersonOperationen(Resource):
+class PersonenListOperationen(Resource):
     @lernApp.marshal_list_with(person)
-    
     @secured
     def get(self):
         """Auslesen aller Personen-Objekte.
@@ -125,28 +110,83 @@ class PersonOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    @secured
-    def put(self):
-        """Update des Personen-Objekts."""
+    
 
-        personId = request.args.get("id")
-        name = request.args.get("name")
-        vorname = request.args.get("vorname")
-        semester = request.args.get("semester")
-        alter = request.args.get("alter")
-        geschlecht = request.args.get("geschlecht")
-        lerngruppe = request.args.get("lerngruppe")
-        email = request.args.get("email")
+    @lernApp.marshal_with(person, code=200)
+    @lernApp.expect(person)  # Wir erwarten ein Customer-Objekt von Client-Seite.
+    @secured
+    def post(self):
+        """Anlegen eines neuen Customer-Objekts.
+
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der BankAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
+        adm = BankAdministration()
+
+        proposal = Person.from_dict(api.payload)
+
+        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        if proposal is not None:
+            """ Wir verwenden lediglich Vor- und Nachnamen des Proposals für die Erzeugung
+            eines Customer-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            wird auch dem Client zurückgegeben. 
+            """
+            c = adm.create_person(proposal.get_first_name(), proposal.get_last_name())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+
+@lernApp.route('/person/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonOperationen(Resource):
+    @lernApp.marshal_list_with(person)
+   
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Person-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
         adm = AppAdministration()
-        user = adm.get_person_by_id(personId)
-        user.set_name(name)
-        user.set_vorname(vorname)
-        user.set_semester(semester)
-        user.set_alter(alter)
-        user.set_geschlecht(geschlecht)
-        user.set_lerngruppe(lerngruppe)
-        user.set_email(email)
-        adm.update_person_by_id(user)
+        person = adm.get_person_by_id(id)
+        return person
+    
+    @banking.marshal_with(person)
+    @banking.expect(person, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten Customer-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Customer-Objekts.
+        """
+        adm = AppAdministration()
+        c = Customer.from_dict(api.payload)
+
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Customer-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_customer(c)
+            return '', 200
+        else:
+            return '', 500
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten Customer-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        pers = adm.get_person_by_id(id)
+        adm.delete_person(pers)
+        return '', 200
 
 @lernApp.route('/personbygoogle/<string:google_user_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
