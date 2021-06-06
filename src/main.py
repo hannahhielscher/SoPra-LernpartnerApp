@@ -159,8 +159,8 @@ class PersonOperationen(Resource):
         person = adm.get_person_by_id(id)
         return person
     
-    @banking.marshal_with(person)
-    @banking.expect(person, validate=True)
+    @lernApp.marshal_with(person)
+    @lernApp.expect(person, validate=True)
     @secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
@@ -253,24 +253,9 @@ class ProfilListOperationen(Resource):
 
         adm.update_profil_by_id(profil)
 
-
-@lernApp.route('/lerngruppe/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class LerngruppeByIDOperationen(Resource):
-    @lernApp.marshal_list_with(lerngruppe)
-   
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten Lerngruppen-Objekts.
-        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
-        """
-        adm = AppAdministration()
-        lerngruppe = adm.get_lerngruppe_by_id(id)
-        return lerngruppe
-
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class LerngruppeOperationen(Resource):
+class LerngruppeListOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppen)
     
     @secured
@@ -283,19 +268,79 @@ class LerngruppeOperationen(Resource):
         lerngruppen = adm.get_all_lerngruppen()
         return lerngruppen
 
+    @lernApp.marshal_with(lerngruppe, code=200)
+    @lernApp.expect(lerngruppe)  # Wir erwarten ein Person-Objekt von Client-Seite.
     @secured
-    def put(self):
-        """Update des Lerngruppen-Objekts."""
+    def post(self):
+        """Anlegen eines neuen Lerngruppen-Objekts.
 
-        lerngruppeId = request.args.get("id")
-        name = request.args.get("name")
-    
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der AppAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
         adm = AppAdministration()
-        gruppe = adm.get_lerngruppe_by_id(lerngruppenId)
-        gruppe.set_name(name)
-        adm.update_lerngruppe_by_id(gruppe)
 
+        proposal = Lerngruppe.from_dict(api.payload)
 
+        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        if proposal is not None:
+            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            wird auch dem Client zurückgegeben. 
+            """
+            c = adm.create_lerngruppe(proposal.get_name(), proposal.get_gruppenprofil())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+    
+@lernApp.route('/lerngruppen/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LerngruppeOperationen(Resource):
+    @lernApp.marshal_list_with(lerngruppe)
+   
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Lerngruppen-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lerngruppe = adm.get_lerngruppe_by_id(id)
+        return lerngruppe
+        
+    @lernApp.marshal_with(lerngruppe)
+    @lernApp.expect(lerngruppe, validate=True)
+    @secured
+    def put(self, id):
+        """Update eines bestimmten Lerngruppen-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Person-Objekts.
+        """
+        adm = AppAdministration()
+        c = Lerngruppe.from_dict(api.payload)
+
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Lerngruppe-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.save_lerngruppe(c)
+            return '', 200
+        else:
+            return '', 500
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten Lerngruppen-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        adm.delete_ById(id)
+        return '', 200
 
 @lernApp.route('/vorschlag/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

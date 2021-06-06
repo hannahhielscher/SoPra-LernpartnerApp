@@ -232,25 +232,25 @@ class AppAdministration (object):
             return mapper.find_by_id(id)
 
     def get_all_lerngruppen(self):
-        """Alle Personen auslesen"""
+        """Alle Lerngruppe auslesen"""
         with LerngruppeMapper() as mapper:
             return mapper.find_all()
 
     def save_lerngruppe(self, lerngruppe):
-        """Eine Person speichern"""
+        """Eine Lerngruppe speichern"""
 
         with LerngruppeMapper() as mapper:
-            mapper.update(person)
+            mapper.update(lerngruppe)
 
     def update_lerngruppe_by_id(self, lerngruppe):
-        """Eine Person speichern"""
+        """Eine Lerngruppe speichern"""
 
         with LerngruppeMapper() as mapper:
-            mapper.update_by_id(person)
+            mapper.update_by_id(lerngruppe)
 
     def delete_ById(self, gruppenId):
-        """Eine Person löschen"""
-        with PersonMapper() as mapper:
+        """Eine Lerngruppe löschen"""
+        with LerngruppeMapper() as mapper:
             return mapper.delete(gruppenId)
 
     
