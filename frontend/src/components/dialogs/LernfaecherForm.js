@@ -97,4 +97,4 @@ class LernfaecherForm extends component{
   } 
 }
 
-export default withSytles(useStyles)(LernfaecherForm);
+export default withStyles(useStyles)(LernfaecherForm);
