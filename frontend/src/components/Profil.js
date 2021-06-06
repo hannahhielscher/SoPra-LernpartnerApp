@@ -5,4 +5,23 @@ import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
+import ProfilBO from '../api/ProfilBO';
 
+class Profil extends Component {
+
+    constructor(props){
+        super(props);
+
+        // initiiere einen leeren state
+        this.state = {
+            studiengang : null,
+            semester: null,
+            lernfaecher: [],
+            lernvorlieben: [],
+        };
+    }
+
+     // API Anbindung um Lernfaecher des Students vom Backend zu bekommen 
+     getLernfaecher = () => {
+        
+}
