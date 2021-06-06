@@ -1,7 +1,8 @@
 import ProfilBO from './ProfilBO';
 import PersonBO from './PersonBO';
 import VorschlagBO from './VorschlagBO';
-
+import LerngruppeBO from './LerngruppeBO';
+import NachrichtBO from ':/NachrichtBO';
 
 /**
  * Abstracts the REST interface of the Python backend with convenient access methods.
@@ -42,8 +43,14 @@ export default class LernpartnerAPI {
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
         #getPersonByGoogleIDURL = (google_user_id) => `${this.#ElectivServerBaseURL}/personbygoogle/${google_user_id}`;
+        
         //Gruppenbezogen
-
+        #getLerngruppenURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
+        #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
+        #getLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #updateLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #deleteLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
         #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
@@ -197,6 +204,105 @@ export default class LernpartnerAPI {
             })
           })
         }
+        //Lerngruppenbezogene
+        /**
+           * Gibt alle Lerngruppen als BO zurück
+           * 
+           * @public
+           */
+          getLerngruppen() {
+            return this.#fetchAdvanced(this.#getLerngruppenURL()).then((responseJSON) => {
+              let lerngruppenBOs = LerngruppeBO.fromJSON(responseJSON);
+              // console.info(customerBOs);
+              return new Promise(function (resolve) {
+                resolve(lerngruppeBOs);
+              })           
+            })
+          }
+          /**
+           * Adds a lerngruppe and returns a Promise, which resolves to a new LerngruppeBO object
+           *  
+           * @param {LerngruppeBO} lerngruppeBO to be added. The ID of the new lerngruppe is set by the backend
+           * @public
+           */
+          addLerngruppe(lerngruppeBO) {
+            return this.#fetchAdvanced(this.#addLerngruppeURL(), {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+              },
+              body: JSON.stringify(lerngruppeBO)
+            }).then((responseJSON) => {
+              // We always get an array of LerngruppeBOs.fromJSON, but only need one object
+              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
+              // console.info(LerngruppeBOs);
+              return new Promise(function (resolve) {
+                resolve(responseLerngruppeBO);
+              })
+            })
+          }
+  
+          /**
+           * Gibt eine Lerngruppe mit einer bestimmten ID als BO zurück
+           * 
+           * @param {Number} lerngruppeID to be retrieved
+           * @public
+           */
+          getLerngruppe(lerngruppeID) {
+            return this.#fetchAdvanced(this.#getLerngruppeURL(lerngruppeID)).then((responseJSON) => {
+              // We always get an array of LerngruppeBOs.fromJSON, but only need one object
+              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
+              // console.info(responseLerngruppeBO);
+              return new Promise(function (resolve) {
+                resolve(responseLerngruppeBO);
+              })
+            })
+          }
+  
+          /**
+           * Updated eine Lerngruppe und gibt Promise zurück, resolves as LerngruppeBO.
+           * 
+           * @param {LerngruppeBO} lerngruppeBO to be updated
+           * @public
+           */
+          updateLerngruppe(lerngruppeBO) {
+            return this.#fetchAdvanced(this.#updateLerngruppeURL(lerngruppeBO.getID()), {
+              method: 'PUT',
+              headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+              },
+              body: JSON.stringify(lerngruppeBO)
+            }).then((responseJSON) => {
+              // We always get an array of LerngruppeBOs.fromJSON
+              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
+              // console.info(LerngruppeBOs);
+              return new Promise(function (resolve) {
+                resolve(responseLerngruppeBO);
+              })
+            })
+          }
+   
+          /**
+           * Gibt Promise zurück
+           * 
+           * @param {Number} lerngruppeID to be deleted
+           * @public
+           */
+          deleteLerngruppe(lerngruppeID) {
+            return this.#fetchAdvanced(this.#deleteLerngruppeURL(lerngruppeID), {
+              method: 'DELETE'
+            }).then((responseJSON) => {
+              // We always get an array of LerngruppeBOs.fromJSON
+              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
+              // console.info(LerngruppeBOs);
+              return new Promise(function (resolve) {
+                resolve(responseLerngruppeBO);
+              })
+            })
+          }
+
 
         //Profilbezogene
         /**
