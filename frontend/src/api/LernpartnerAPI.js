@@ -2,7 +2,10 @@ import ProfilBO from './ProfilBO';
 import PersonBO from './PersonBO';
 import VorschlagBO from './VorschlagBO';
 import LerngruppeBO from './LerngruppeBO';
-import NachrichtBO from ':/NachrichtBO';
+import LernvorliebenBO from './LernvorliebenBO';
+import NachrichtBO from './NachrichtBO';
+import TeilnahmeChatBO from './TeilnahmeChatBO';
+import TeilnahmeGruppeBO from './TeilnahmeGruppeBO';
 
 /**
  * Abstracts the REST interface of the Python backend with convenient access methods.
@@ -59,19 +62,32 @@ export default class LernpartnerAPI {
         //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
-        //Vorschlaege anzeigen für Student
+        //Lernvorliebenbezogen
+        #getLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+        //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
+        #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
+        #updateLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+        #deleteLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+
+        //Vorschlagbezogen
         #getVorschlaegeURL = (personID) => `${this.#lernappServerBaseURL}/vorschlaege/${personID}`;
         
 
-
-        //Nachrichten anzeigen für Student
+        //Nachrichtenbezogen
         #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konverastion/${id}`;
         #setKonversationAtNachrichten = (nachrichtenId, konversationId) => `${this.#lernappServerBaseURL}/nachrichten/konversation?nachrichtenId=${nachrichtenId}&konversationId=${konversationId}`;
         #addNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByIDURL = (id) => `${this.#lernapptivServerBaseURL}/nachrichten/${id}`;
-        //Nachricht löschen
-	      #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
+        #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
+        
+        //Konversationbezogen
+
+        //TeilnahmeChatbezogen
+
+        //TeilnahmeGruppebezogen
+
+
 
         //Personenbezogene
         /**
@@ -395,6 +411,66 @@ export default class LernpartnerAPI {
             // console.info(profilBOs);
             return new Promise(function (resolve) {
               resolve(responseProfilBO);
+            })
+          })
+        }
+
+        //Lernvorliebenbezogene
+
+        /**
+         * Gibt eine Lernvorliebe mit einer bestimmten ID als BO zurück
+         * 
+         * @param {Number} lernvorliebenID to be retrieved
+         * @public
+         */
+        getLernvorlieben(lernvorliebenID) {
+          return this.#fetchAdvanced(this.#getLernvorliebenURL(lernvorliebenID)).then((responseJSON) => {
+            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
+            let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
+            // console.info(responseLernvorliebenBO);
+            return new Promise(function (resolve) {
+              resolve(responseLernvorliebenBO);
+            })
+          })
+        }
+        /**
+         * Adds a lernvorlieben and returns a Promise, which resolves to a new LernvorliebenBO object
+         *  
+         * @param {LernvorliebenBO} lernvorliebenBO to be added. The ID of the new lernvorliebe is set by the backend
+         * @public
+         */
+        addLernvorlieben(lernvorliebenBO) {
+          return this.#fetchAdvanced(this.#addLernvorliebenURL(), {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(lernvorliebenBO)
+          }).then((responseJSON) => {
+            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
+            let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
+            // console.info(LernvorliebenBOs);
+            return new Promise(function (resolve) {
+              resolve(responseLernvorliebenBO);
+            })
+          })
+        }
+        /**
+         * Gibt Promise zurück
+         * 
+         * @param {Number} lernvorliebenID to be deleted
+         * @public
+         */
+        deleteLernvorlieben(lernvorliebenID) {
+          return this.#fetchAdvanced(this.#deleteLernvorliebenURL(lernvorliebenID), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of LernvorliebenBOs.fromJSON
+            let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
+            // console.info(LernvorliebenBOs);
+            return new Promise(function (resolve) {
+              resolve(responseLernvorliebenBO);
             })
           })
         }
