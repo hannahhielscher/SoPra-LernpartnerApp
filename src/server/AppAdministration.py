@@ -108,10 +108,10 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             mapper.update_by_id(person)
     
-    def delete_UserById(self, personId):
+    def delete_person(self, person):
         """Eine Person löschen"""
         with PersonMapper() as mapper:
-            return mapper.deleteByID(personId)
+            return mapper.delete(person)
 
 
     """
@@ -125,7 +125,7 @@ class AppAdministration (object):
 
         profil.set_studiengang(studiengang)
         profil.set_semester(semester)
-        #profil.set_lernfaecher(lernfaecher)
+        profil.set_lernfaecher(lernfaecher)
         profil.set_lernvorlieben_id(lernvorlieben_id)
         profil.set_id(1)
 
@@ -146,6 +146,11 @@ class AppAdministration (object):
         """Profil mit einer bestimmten Lernfach ID auslesen"""
         with ProfilMapper() as mapper:
             return mapper.find_by_lernfach_id(lernfach_id)
+
+    def get_lernfaecher_by_profil_id(self, profil_id):
+        #Lernfaecher zu bestimmtem Profil auslesen
+        with ProfilMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profil_id)
 
     def save_profil(self, profil):
         """Profil speichern"""
@@ -199,10 +204,10 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             mapper.update_by_id(lernvorlieben)
     
-    def delete_UserById(self, lernvorliebenId):
+    def delete_lernvorlieben(self, lernvorlieben):
         """Eine Person löschen"""
         with LernvorliebenMapper() as mapper:
-            return mapper.deleteByID(lernvorliebenId)
+            return mapper.delete(lernvorlieben)
 
 
     """
@@ -227,25 +232,25 @@ class AppAdministration (object):
             return mapper.find_by_id(id)
 
     def get_all_lerngruppen(self):
-        """Alle Personen auslesen"""
+        """Alle Lerngruppe auslesen"""
         with LerngruppeMapper() as mapper:
             return mapper.find_all()
 
     def save_lerngruppe(self, lerngruppe):
-        """Eine Person speichern"""
+        """Eine Lerngruppe speichern"""
 
         with LerngruppeMapper() as mapper:
-            mapper.update(person)
+            mapper.update(lerngruppe)
 
     def update_lerngruppe_by_id(self, lerngruppe):
-        """Eine Person speichern"""
+        """Eine Lerngruppe speichern"""
 
         with LerngruppeMapper() as mapper:
-            mapper.update_by_id(person)
+            mapper.update_by_id(lerngruppe)
 
     def delete_ById(self, gruppenId):
-        """Eine Person löschen"""
-        with PersonMapper() as mapper:
+        """Eine Lerngruppe löschen"""
+        with LerngruppeMapper() as mapper:
             return mapper.delete(gruppenId)
 
     
@@ -264,16 +269,35 @@ class AppAdministration (object):
 
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.insert(teilnahme)
+    
+    def get_all_teilnahmengruppe(self):
+        """Alle Teilnahmen an Gruppen auslesen"""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_all()
 
-    def get_teilnahme_by_student_id(self, student_id):
+    def get_teilnahmegruppe_by_student_id(self, student_id):
         """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_student_id(student_id)
 
-    def get_teilnahme_by_lerngruppen_id(self, lerngruppe_id):
+    def get_teilnahmegruppe_by_lerngruppen_id(self, lerngruppe_id):
         """Gibt die Teilnahme einer gegebenen Lerngruppen Id zurück."""
         with TeilnahmeGruppenMapper() as mapper:
             return mapper.find_by_lerngruppe_id(lerngruppe_id)
+    
+    def get_teilnahmegruppe_by_id(self, id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def update_teilnahmegruppe(self,teilnahme):
+        """Speichert die Nachricht."""
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.update(teilnahme)
+
+    def delete_teilnahmegruppe(self, teilnahme):
+        """Löscht die Nachricht."""
+        with TeilnahmeGruppeMapper() as mapper:
+            mapper.delete(teilnahme)
     
     
     """
@@ -290,57 +314,120 @@ class AppAdministration (object):
         with NachrichtMapper() as mapper:
             return mapper.find_by_key(id)
 
-    def insert_nachricht(self, b):
+    def get_nachricht_by_inhalt(self, inhalt):
+        """Gibt die Nachricht mit dem gegebenen Inhalt zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(inhalt)
+
+    def get_nachricht_by_person_id(self, person_id):
+        """Gibt die Nachricht mit der gegebenen Id der Person zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(person_id)
+
+    def get_nachricht_by_profil_id(self, profil_id):
+        """Gibt die Nachricht mit der gegebenen Id des Profils zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_key(profil_id)
+
+    def save_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
-            return mapper.insert(b)
+            return mapper.insert(nachricht)
 
-    def update_nachricht(self, b):
+    def update_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
-            return mapper.update(b)
+            return mapper.update(nachricht)
 
-    def delete_nachricht(self, b):
+    def delete_nachricht(self, nachricht):
         """Löscht die Nachricht."""
         with NachrichtMapper() as mapper:
-            mapper.delete(b)
+            mapper.delete(nachricht)
 
     """
     Konversation-spezifische Methoden
     """
 
+    def get_all_konversationen(self):
+        """Gibt alle Konversationen zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_all()
+
+    def get_konversation_by_id(self, id):
+        """Gibt die Konversation mit der gegebenen Id zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_nachrichten_by_id(self, id):
+        """Gibt die Nachrichten mit der gegebenen Id zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def get_teilnehmer_by_id(self, id):
+        """Gibt die teilnehmer mit der gegebenen Id zurück."""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def save_konversation(self, konversation):
+        """Speichert die Konversation."""
+        with KonversationMapper() as mapper:
+            return mapper.insert(konversation)
+
+    def update_konversation(self, konversation):
+        """Speichert die Konversation."""
+        with KonversationMapper() as mapper:
+            return mapper.update(konversation)
+
+    def delete_konversation(self, konversation):
+        """Löscht die Konversation."""
+        with KonversationMapper() as mapper:
+            mapper.delete(konversation)
 
     """
     TeilnahmeChats-spezifische Methoden
     """
+
+    def create_teilnahmeChat(self, teilnehmer, konversation):
+        """Eine Teilnahme an einem Chat anlegen"""
+
+        teilnahme = TeilnahmeChat()
+
+        teilnahme.set_teilnehmer(teilnehmer)
+        teilnahme.set_konversation(konversation)
+        teilnahme.set_id(1)
+
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.insert(teilnahme)
 
     def get_all_teilnahmenChat(self):
         """Gibt alle Teilnahmen an einem Chat zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_all()
 
-    def get_teilnahme_by_student_id(self, student_id):
-        """Gibt die Teilnahme einer gegebenen Id zurück."""
+    def get_teilnahmeChat_by_student_id(self, student_id):
+        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_student_id(student_id)
 
-    def get_teilnahme_by_konversations_id(self, konversations_id):
-        """Gibt die Teilnahme einer gegebenen Id zurück."""
+    def get_teilnahmeChat_by_konversations_id(self, konversations_id):
+        """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversations_id(konversations_id)
-    """
-    def get_nachricht_of_teilnahmechat(self, teil):
-        'Gibt die Nachricht der Teilnahmer zurück.'
-        with NachrichtMapper() as mapper:
-            result = []
 
-            if not (teil is None):
-                bewertung = mapper.find_by_source_teilnahme_id(teil.get_id())
-                if not (teil is None):
-                    result.extend(bewertung)
+    def save_teilnahmeChat(self, teilnahme):
+        """Speichert die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.insert(teilnahme)
 
-            return result
-    """
+    def update_teilnahmeChat(self, teilnahme):
+        """Speichert die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.update(teilnahme)
+
+    def delete_teilnahmeChat(self, teilnahme):
+        """Löscht die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            mapper.delete(teilnahme)
 
     """
     Vorschlag-spezifische Methoden

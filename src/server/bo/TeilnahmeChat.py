@@ -5,7 +5,7 @@ class TeilnahmeChat(bo.BusinessObject):
     
     def __init__(self):
         super().__init__()
-        self._teilnehmer = False
+        self._teilnehmer = None
         self._konversation = None
 
     def get_teilnehmer(self):
@@ -30,6 +30,6 @@ class TeilnahmeChat(bo.BusinessObject):
         """Umwandeln eines Python dict() in einen User()."""
         obj = TeilnahmeChat()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_person(dictionary['person'])
+        obj.set_teilnehmer(dictionary['teilnehmer'])
         obj.set_konversation(dictionary['konversation'])
         return obj

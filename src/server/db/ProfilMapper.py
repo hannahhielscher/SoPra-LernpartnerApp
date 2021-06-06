@@ -79,15 +79,28 @@ class ProfilMapper(Mapper):
 
     def find_lernfaecher_by_profil_id(self, profil_id):
         
+        result_key = []
+        result_value = []
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (lernfaecher_id) in tuples:
-            result.append(lernfaecher_id)
+            result_key.append(lernfaecher_id)
+
+        for (bezeichnung) in tuples:
+            result_value.append(bezeichnung)
+
+        result = dict.fromkeys(result_key, 0)
+        buff = 0
+        for i in result:
+            for j in range(buff, len(result_value))
+                result[i] = result_value[j]
+                buff += 1
+                break
 
         self._connection.commit()
         cursor.close()
@@ -103,7 +116,8 @@ class ProfilMapper(Mapper):
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.profile_id, profile.studiengang, profile.semester, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher = lernfaecher.id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(projekt_id)
+        command = "SELECT profile_has_lernfaecher.profile_id, profile.studiengang, profile.semester, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher = lernfaecher.id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(
+            lernfach_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -173,7 +187,7 @@ class ProfilMapper(Mapper):
 
         :param profil das aus der DB zu löschende "Objekt"
         """
-        cursor = self.connection.cursor()
+        cursor = self._connection.cursor()
 
         command = "DELETE FROM profile WHERE id={}".format(profil.get_id())
         cursor.execute(command)

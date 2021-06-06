@@ -50,6 +50,56 @@ class KonversationMapper (Mapper):
         cursor.close()
 
         return result
+
+    def find_nachrichten_by_id(self, id):
+        """Suchen eines Lernfaches nach dessen ID
+        :param lernfach_id
+        :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
+        """
+
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT nachrichten.nachricht_inhalt, nachrichten.person_id, konversation.name FROM nachrichten INNER JOIN konversation ON nachrichten.konversation_id = konversation.id WHERE konversation.id ='{}'".format(
+            id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (nachricht_inhalt, person_id, name) in tuples:
+            nachricht = Nachricht()
+            nachricht.set_nachricht_inhalt(nachricht_inhalt)
+            nachricht.set_person_id(person_id)
+            nachricht.set_name(name)
+            result.append(nachricht)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_teilnehmer_by_id(self, id):
+        """Suchen eines Lernfaches nach dessen ID
+        :param lernfach_id
+        :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
+        """
+
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT teilnahmenchat.person_id FROM teilnahmenchat INNER JOIN konversation ON teilnahmenchat.konversation_id = konversation.id WHERE konversation.id ='{}'".format(
+            id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (person_id) in tuples:
+            teilnehmer = TeilnahmeChat()
+            teilnehmer.set_teilnehmer(person_id)
+            result.append(teilnehmer)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
     
     def insert(self, konversation):
         """Einfügen eines Konversation-Objekts in die Datenbank.

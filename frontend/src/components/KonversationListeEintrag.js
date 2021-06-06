@@ -17,9 +17,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import LoadingProgress from './dialogs/LoadingProgress';
 
 /**
- * Es wird ein einzelne Nachricht aus einer KOnversation dargestellt
+ * Es wird ein einzelne Konversationen von einer Person/Gruppe dargestellt
  * 
- * Hierfür werden Profilname, die Nachricht und die Konversation angezeigt
+ * Hierfür werden Profilname, die Nachricht, der Inhalt, die Teilnehmer und die Konversation angezeigt
  * 
  */
 
@@ -44,6 +44,36 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 */
 
-class ChatListeEintrag extends Component {
+class KonversationListeEintrag extends Component {
+
+    constructor(props){
+        super(props);
+
+        // initiiere einen leeren state
+        this.state = {
+            konversation: null,
+            profil: null,
+            profilID: null,
+            personName: null,
+            teilnehmer: null, 
+            nachricht: null, 
+            inhalt: null,
+            loadingInProgress: false,
+            error: null
+        };
+    }
+    
+    /** Handles onChange events of the underlying ExpansionPanel */
+    expansionPanelStateChanged = () => {
+      this.props.onExpandedStateChange(this.props.customer);
+      }
+      
+      //Handles the onClick event of the show profil button
+      showProfilButtonClicked = (event) => {
+        event.stopPropagation();
+        this.setState({
+          showCustomerForm: true
+        });
+      }
 
 }

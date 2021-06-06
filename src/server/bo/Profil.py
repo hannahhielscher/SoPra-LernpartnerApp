@@ -1,14 +1,14 @@
-from server.bo.NamedBusinessObject import NamedBusinessObject
+from server.bo.BusinessObject import BusinessObject
 
 
-class Profil (NamedBusinessObject):
+class Profil (BusinessObject):
 
     def __init__(self):
         super().__init__()
         self._studiengang = None
         self._semester = 0
-        #self._lernfaecher = None
-        self._lernvorlieben_id = None
+        self._lernfaecher = []
+        self._lernvorlieben = None
 
     def get_studiengang(self):
         """Auslesen des Studiengangs"""

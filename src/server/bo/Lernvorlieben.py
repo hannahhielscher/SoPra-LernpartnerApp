@@ -9,7 +9,7 @@ class Lernvorlieben(BusinessObject):
         self._tage = {"Unter der Woche": False, "Am Wochenende": False}
         self._frequenz = {"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
         self._lernart = {"Visuell:": False, "Auditiv:": False, "Motorisch:": False, "Kommunikativ:": False}
-        self._gruppengroesse = 0
+        self._gruppengroesse = {"Bis zu 3 Personen:": False, "3-5 Personen:": False, "Über 5 Personen:": False}
         self._lernort = {"Remote:": False, "Hochschule:": False, "Bibliothek:": False, "Cafe:": False}
 
 
