@@ -74,12 +74,12 @@ nachricht = api.inherit('Nachricht', bo, {
 })
 
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
-    'tageszeiten': fields.String(attribute='_tageszeiten', description='Vorname der Person'),
-    'tage': fields.String(attribute='_tage', description='Semester der Person'),
-    'frequenz': fields.Integer(attribute='_frequenz', description='Alter der Person'),
-    'lernart': fields.String(attribute='_lernart', description='Geschlecht der Person'),
-    'gruppengroesse': fields.String(attribute='_gruppengroesse', description='Lerngruppe der Person'),
-    'lernort': fields.String(attribute='_lernort', description='Google user ID der Person'),
+    'tageszeiten': fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
+    'tage': fields.String(attribute='_tage', description='Bevorzugte Tage'),
+    'frequenz': fields.String(attribute='_frequenz', description='Bevorzugte Frequenz'),
+    'lernart': fields.String(attribute='_lernart', description='Bevorzugte Lernart'),
+    'gruppengroesse': fields.Integer(attribute='_gruppengroesse', description='Bevorzugte Gruppengroesse'),
+    'lernort': fields.String(attribute='_lernort', description='Bevorzugter Lernort'),
 })
 
 @lernApp.route('/person/<int:id>')
