@@ -204,10 +204,10 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             mapper.update_by_id(lernvorlieben)
     
-    def delete_UserById(self, lernvorliebenId):
+    def delete_lernvorlieben(self, lernvorlieben):
         """Eine Person löschen"""
         with LernvorliebenMapper() as mapper:
-            return mapper.deleteByID(lernvorliebenId)
+            return mapper.delete(lernvorlieben)
 
 
     """

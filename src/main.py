@@ -763,11 +763,6 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         return lernvorlieben
 
-@lernApp.route('/lernvorlieben')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class LernvorliebenOperationen(Resource):
-    @lernApp.marshal_list_with(lernvorlieben)
-
     @secured
     def put(self):
         """Update des Lernvorlieben-Objekts."""
@@ -788,6 +783,50 @@ class LernvorliebenOperationen(Resource):
         lernvorlieben.set_gruppengroesse(gruppengroesse)
         lernvorlieben.set_lernort(lernort)
         adm.update_lernvorlieben_by_id(lernvorlieben)
+
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten Lernvorlieben-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernvorlieben = adm.get_lernvorliebe_by_id(id)
+        adm.delete_lernvorlieben(lernvorlieben)
+        return '', 200
+
+@lernApp.route('/lernvorlieben')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernvorliebenListOperationen(Resource):
+    @lernApp.marshal_list_with(lernvorlieben)
+
+    @lernApp.marshal_with(lernvorlieben, code=200)
+    @lernApp.expect(lernvorlieben)  # Wir erwarten ein Person-Objekt von Client-Seite.
+    @secured
+    def post(self):
+        """Anlegen eines neuen Lernvorlieben-Objekts.
+
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der AppAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
+        adm = AppAdministration()
+
+        proposal = Lernvorlieben.from_dict(api.payload)
+
+        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        if proposal is not None:
+            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            wird auch dem Client zurückgegeben. 
+            """
+            c = adm.create_lernvorlieben(proposal.get_tageszeiten(), proposal.get_tage(), proposal.get_frequenz(), proposal.get_lernart(), proposal.get_gruppengroesse(), proposal.get_lernort())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
