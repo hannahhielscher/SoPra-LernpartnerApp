@@ -58,6 +58,8 @@ person = api.inherit('Person', nbo, {
 })
 
 profil = api.inherit('Profil', bo, {
+    #hier String oder Boolean?
+    'gruppe': fields.String(attribute='_gruppe', description='Teilnahme an einer Gruppe'),    
     'studiengang': fields.String(attribute='_studiengang', description='Studiengang der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
     'lernfaecher': fields.Integer(attribute='_lernfaecher', description='Lernfaecher der Person'),
@@ -92,7 +94,7 @@ teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
     'lerngruppe': fields.Integer(attribute='_teilnehmer', description='ID der Lerngruppe')
 })
 
-lernvorlieben = api.inherit('Lernvorlieben', bo, {
+lernvorlieben = api.inherit('Lernvorlieben', bo, { #String oder Boolean?
     'tageszeiten': fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
     'tage': fields.String(attribute='_tage', description='Bevorzugte Tage'),
     'frequenz': fields.String(attribute='_frequenz', description='Bevorzugte Frequenz'),
@@ -239,6 +241,7 @@ class ProfilListOperationen(Resource):
         """Update des Profil-Objekts."""
 
         profilId = request.args.get("id")
+        gruppe = request.args.get("gruppe")
         hochschule = request.args.get("hochschule")
         semester = request.args.get("semester")
         studiengang = request.args.get("studiengang")
@@ -246,6 +249,7 @@ class ProfilListOperationen(Resource):
 
         adm = AppAdministration()
         profil = adm.get_profil_by_id(profilId)
+        profil.set_gruppe(gruppe)
         profil.set_hochschule(hochschule)
         profil.set_semester(semester)
         profil.set_studiengang(studiengang)
@@ -774,6 +778,7 @@ class LernvorliebenByIDOperationen(Resource):
         lernart = request.args.get("lernart")
         gruppengroesse = request.args.get("gruppengroesse")
         lernort = request.args.get("lernort")
+        
         adm = AppAdministration()
         lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
         lernvorlieben.set_tageszeiten(tageszeiten)

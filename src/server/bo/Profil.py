@@ -5,10 +5,17 @@ class Profil (BusinessObject):
 
     def __init__(self):
         super().__init__()
+        self._gruppe = False
         self._studiengang = None
         self._semester = 0
         self._lernfaecher = []
         self._lernvorlieben = None
+
+    def get_gruppe(self):
+        return self._gruppe
+    
+    def set_gruppe(self, gruppe_neu):
+        self._gruppe = gruppe_neu
 
     def get_studiengang(self):
         """Auslesen des Studiengangs"""

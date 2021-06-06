@@ -118,11 +118,11 @@ class AppAdministration (object):
     Profil-spezifische Methoden
     """
 
-    def create_profil(self, studiengang, semester, lernvorlieben_id):
+    def create_profil(self, gruppe, studiengang, semester, lernvorlieben_id):
         """Eine Person anlegen"""
 
         profil = Profil()
-
+        profil.set_gruppe(gruppe)
         profil.set_studiengang(studiengang)
         profil.set_semester(semester)
         profil.set_lernfaecher(lernfaecher)
@@ -175,7 +175,7 @@ class AppAdministration (object):
         """Lernvorlieben anlegen"""
 
         lernvorlieben = Lernvorlieben()
-            
+
         lernvorlieben.set_tageszeiten(tageszeiten)
         lernvorlieben.set_tage(tage)
         lernvorlieben.set_frequenz(frequenz)           
