@@ -23,6 +23,13 @@ def secured(function):
     def wrapper(*args, **kwargs):
         # Verify Firebase auth.
         id_token = request.cookies.get("token")
+        name = request.cookies.get("name")
+        vorname = request.cookies.get("vorname")
+        semester = request.cookies.get("semester")
+        alter = request.cookies.get("alter")
+        geschlecht = request.cookies.get("geschlecht")
+        lerngruppe = request.cookies.get("lerngruppe")
+
         error_message = None
         claims = None
         objects = None
@@ -42,24 +49,28 @@ def secured(function):
 
                     google_user_id = claims.get("user_id")
                     email = claims.get("email")
-                    name = claims.get("name")
 
-                    user = adm.get_user_by_google_user_id(google_user_id)
-                    if user is not None:
+                    person = adm.get_person_by_google_user_id(google_user_id)
+                    if person is not None:
                         """Fall: Der Benutzer ist unserem System bereits bekannt.
                         Wir gehen davon aus, dass die google_user_id sich nicht ändert.
                         Wohl aber können sich der zugehörige Klarname (name) und die
                         E-Mail-Adresse ändern. Daher werden diese beiden Daten sicherheitshalber
                         in unserem System geupdated."""
-                        user.set_name(name)
-                        user.set_email(email)
-                        adm.save_user(user)
+                        person.set_name(name)
+                        person.set_vorname(vorname)
+                        person.set_semester(semester)
+                        person.set_alter(alter)
+                        person.set_geschlecht(geschlecht)
+                        person.set_lerngruppe(lerngruppe)
+                        person.set_email(email)
+                        adm.save_person(person)
                     else:
                         """Fall: Der Benutzer war bislang noch nicht eingelogged. 
                         Wir legen daher ein neues User-Objekt an, um dieses ggf. später
                         nutzen zu können.
                         """
-                        user = adm.create_user(name, email, google_user_id)
+                        person = adm.create_person(name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 
