@@ -741,7 +741,7 @@ class TeilnahmeGruppeListOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeOperation(Resource):
 
-    @lernApp.marshal_with(teilnahmgruppe)
+    @lernApp.marshal_with(teilnahmegruppe)
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
