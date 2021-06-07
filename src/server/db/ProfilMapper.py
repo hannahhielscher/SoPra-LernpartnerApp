@@ -99,7 +99,7 @@ class ProfilMapper(Mapper):
         result = dict.fromkeys(result_key, 0)
         buff = 0
         for i in result:
-            for j in range(buff, len(result_value))
+            for j in range(buff, len(result_value)):
                 result[i] = result_value[j]
                 buff += 1
                 break
