@@ -260,7 +260,7 @@ class ProfilListOperationen(Resource):
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeListOperationen(Resource):
-    @lernApp.marshal_list_with(lerngruppen)
+    @lernApp.marshal_list_with(lerngruppe)
     
     @secured
     def get(self):
@@ -269,8 +269,8 @@ class LerngruppeListOperationen(Resource):
         so wird eine leere Sequenz zurückgegeben."""
 
         adm = AppAdministration()
-        lerngruppen = adm.get_all_lerngruppen()
-        return lerngruppen
+        lerngruppe = adm.get_all_lerngruppen()
+        return lerngruppe
 
     @lernApp.marshal_with(lerngruppe, code=200)
     @lernApp.expect(lerngruppe)  # Wir erwarten ein Person-Objekt von Client-Seite.
@@ -741,7 +741,7 @@ class TeilnahmeGruppeListOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeOperation(Resource):
 
-    @lernApp.marshal_with(teilnahmgruppe)
+    @lernApp.marshal_with(teilnahmegruppe)
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
