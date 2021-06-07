@@ -53,9 +53,9 @@ class VorschlagListe extends Component {
     // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getVorschlaege = () => {
             LernpartnerAPI.getAPI().getVorschlaege(this.props.currentPerson.id)
-            .then(vorschlaegeBOs =>
+            .then(vorschlagBOs =>
                 this.setState({
-                    vorschlaege: vorschlaegeBOs,
+                    vorschlaege: vorschlagBOs,
                     error: null,
                     loadingInProgress: false,
                 })).catch(e =>

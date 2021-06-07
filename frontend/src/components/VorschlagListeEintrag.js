@@ -6,9 +6,6 @@ import LernpartnerAPI from '../api/LernpartnerAPI'
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-//import TableCell from '@material-ui/core/TableCell';
-//import TableRow from '@material-ui/core/TableRow';
-
 //import InputLabel from '@material-ui/core/InputLabel';
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
@@ -23,42 +20,21 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
  * 
  */
 
-//Css Style Klassen für die Tabellen Zellen
-/**const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
-
-//Css Style Klassen für die Tabellen Zeilen
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(4n+1)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
-*/
-
 class VorschlagListeEintrag extends Component {
     constructor(props){
         super(props);
 
         // initiiere einen leeren state
         this.state = {
-            vorschlag: null,
+            vorschlag: props.vorschlag,
+            //match: null,
             profil: null,
+            person: null,
             profilID: null,
             personName: null,
-            personAlter: null,
-            personGeschlecht: null,
-            personSemester: null,
-            personLernfach: null,
-            match: null,
+            personVorname: null,
+            showProfil: false,
+            showAnfrageForm: false,
             loadingInProgress: false,
             error: null
         };
@@ -66,67 +42,41 @@ class VorschlagListeEintrag extends Component {
 
     /** Handles onChange events of the underlying ExpansionPanel */
     expansionPanelStateChanged = () => {
-    this.props.onExpandedStateChange(this.props.customer);
+    this.props.onExpandedStateChange(this.props.vorschlag);
     }
     
     //Handles the onClick event of the show profil button
     showProfilButtonClicked = (event) => {
       event.stopPropagation();
       this.setState({
-        showCustomerForm: true
+        showProfil: true
       });
     }
 
-    // API Anbindung um Vorschlag vom Backend zu bekommen 
-    getVorschlag = () => {
-      LernpartnerAPI.getAPI().getVorschlag(this.props.vorschlag)
-      .then(vorschlagBO =>
-          this.setState({
-            vorschlag: vorschlagBO,
-            profilID: vorschlagBO.person,
-            match: vorschlagBO.match,
-            loadingInProgress: false,
-            error: null,
-          })).then(()=>{
-            this.getPerson()
-            this.getProfil()
-          })
-          .catch(e =>
-              this.setState({
-                vorschlag: null,
-                profilID: null,
-                match: null,
-                loadingInProgress: false,
-                error: e,
-              }));
+    /** Handles the onClick event of the send Anfrage button */
+    sendAnfrageButtonClicked = (event) => {
+      event.stopPropagation();
       this.setState({
-        loadingInProgress: true,
-        error: null
+        showAnfrageForm: true
       });
     }
 
-    // API Anbindung um Person vom Backend zu bekommen 
+    // API Anbindung um Profil vom Backend zu bekommen 
     getPerson = () => {
-      LernpartnerAPI.getAPI().getVorschlag(this.props.vorschlag)
+      LernpartnerAPI.getAPI().getPerson(this.props.vorschlag.getmain_person_id())
       .then(personBO =>
           this.setState({
             person: personBO,
-            profilID: vorschlagBO.person,
             personName: personBO.name,
-            personAlter: personBO.alter,
-            personGeschlecht: personBO.geschlecht,
-            personSemester: personBO.semester,
+            personVorname: personBO.vorname,
             loadingInProgress: false,
             error: null,
           }))
           .catch(e =>
               this.setState({
                 person: null,
-                profilID: null,
                 personName: null,
-                personAlter: null,
-                personGeschlecht: null,
-                personSemester: null,
+                personVorname: null,
                 loadingInProgress: false,
                 error: e,
               }));
@@ -136,89 +86,46 @@ class VorschlagListeEintrag extends Component {
       });
     }
 
-    // API Anbindung um Profil vom Backend zu bekommen 
-    getProfil = () => {
-      LernpartnerAPI.getAPI().getProfil(this.props.profil)
-      .then(profilBO =>
-          this.setState({
-            profil: profilBO,
-            personLernfach: profilBO.lernfach,
-            loadingInProgress: false,
-            error: null,
-          }))
-          .catch(e =>
-              this.setState({
-                profil: null,
-                personLernfach: null,
-                loadingInProgress: false,
-                error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
-    }
-
-
-    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-    componentDidMount() {
-      this.getVorschlag();
-    }
-
-    // Wenn die Componente geupdatet wird
-    componentDidUpdate(prevProps){
-      if((this.props.show) && (this.props.show !== prevProps.show)) {
-        this.getVorschlag();
-      }
-    }
 
     render(){
 
-          const {vorschlag, profil, profilID, personName, personAlter, personGeschlecht,personSemester, personLernfach, match, loadingInProgress, error } = this.state;
+          const { classes, expandedState } = this.props;
+          const {vorschlag, profil, profilID, personName, personVorname, showProfil, showAnfrageForm, loadingInProgress, error } = this.state;
 
-          return(
-            <>
-              <StyledTableRow key={profilID}>
-                  <StyledTableCell align="left">{personName}</StyledTableCell>
-                  <StyledTableCell align="center">{personAlter}</StyledTableCell>
-                  <StyledTableCell align="center">{personSemester}</StyledTableCell>
-                  <StyledTableCell align="center">{personGeschlecht}</StyledTableCell> 
-                  <StyledTableCell align="center">{personLernfach}</StyledTableCell>
-                  <StyledTableCell align="center"></StyledTableCell> 
-                  <StyledTableCell align="right" className={classes.breite}>               
-                                  { module ?
-                                    <FormControl className={classes.formControl}>
-                                      <InputLabel>Modul</InputLabel> 
-                                        <Select value = {teilnahme.anrechnung} onChange={this.handleChange}>
-                                          {
-                                          module.map(modul =>
-                                          <MenuItem value={modul.getID()}><em>{modul.getname()}</em></MenuItem>
-                                          )
-                                          }
-                                        </Select>                                                                
-                                    </FormControl>                                  
-                                    :
-                                    <FormControl className={classes.formControl}>
-                                      <InputLabel>Modul</InputLabel>
-                                        <Select value="">
-                                          <MenuItem value=""><em></em></MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                  }
-                  </StyledTableCell>
-                  </StyledTableRow>
-                  <StyledTableRow> 
-                    <StyledTableCell colspan="10" className={classes.laden}>
-                      <LoadingProgress show={loadingInProgress}></LoadingProgress>
-                      <ContextErrorMessage error={error} contextErrorMsg = {'Dieser Vorschlag konnte nicht geladen werden'} onReload={this.getVorschlag} />
-                    </StyledTableCell>
-                  </StyledTableRow>
-
-
-
-            </>
+          return (
+            <div>
+              <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id={`vorschlag${vorschlag.getId()}accountpanel-header`}
+                >
+                  <Grid container spacing={1} justify='flex-start' alignItems='center'>
+                    <Grid item>
+          <Typography variant='body1' className={classes.heading}>{personName}, {personVorname}, {vorschlag.getmatch()}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <ButtonGroup variant='text' size='small'>
+                        <Button color='primary' onClick={this.showProfilButtonClicked}>
+                          Profil ansehen
+                        </Button>
+                        <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
+                          Kontaktanfrage
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                    <Grid item xs />
+                    <Grid item>
+                      <Typography variant='body2' color={'textSecondary'}>Profil und Kontaktanfrage</Typography>
+                    </Grid>
+                  </Grid>
+                </AccordionSummary>
+                <Profil show={showProfil} profil={profil}/>
+                <AnfrageForm show={showAnfrageForm} profil={profil}/>
+              </Accordion>
+            </div>
           );
-    }
+        }
 }
 
 

@@ -70,7 +70,7 @@ export default class LernpartnerAPI {
         #deleteLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
 
         //Vorschlagbezogen
-        #getVorschlaegeURL = (personID) => `${this.#lernappServerBaseURL}/vorschlaege/${personID}`;
+        #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
         
 
         //Nachrichtenbezogen
