@@ -138,16 +138,20 @@ nachrichtFormClosed = modul => {
 
     return (
       <div className={classes.root}>
-        {
-          
-        }
-
-        <LoadingProgress show={loadingInProgress} />
+      { 
+        // Show the list of VorschlagListeEintrag components
+        // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
+        nachrichten.map(nachricht =>
+          <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachricht} expandedState={expandedNachrichtID === nachricht.getID()}
+            onExpandedStateChange={this.onExpandedStateChange}
+          />)
+      }
+      <LoadingProgress show={loadingInProgress} />
         <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Nachrichten konnten nicht geladen werden!`} onReload={this.getNachrichten} />
-
-      </div>
      
-    );
+    </div>
+        
+    )
 
 }
 
@@ -164,4 +168,4 @@ Nachricht.propTypes = {
     location: PropTypes.object.isRequired,
   }
   
-  export default withRouter(withStyles(styles)(Nachricht));
+  export default withStyles(styles)(Nachricht);
