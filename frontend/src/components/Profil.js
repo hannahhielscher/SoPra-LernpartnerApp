@@ -14,14 +14,52 @@ class Profil extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            studiengang : null,
-            semester: null,
-            lernfaecher: [],
-            lernvorlieben: [],
+            profil: null,
+            loadingInProgress: false,
+            loadingError: null,
         };
     }
 
-     // API Anbindung um Lernfaecher des Students vom Backend zu bekommen 
-     getLernfaecher = () => {
-        
+  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
+        this.getProfil();
+  }
+
+     getProfil = () => {
+    LernpartnerAPI.getAPI().getProfil(this.props).then(profilBOs =>
+      this.setState({
+        profil: profilBOs,
+        loadingInProgress: false,
+        loadingError: null
+      })).catch(e =>
+        this.setState({ // Reset state with error from catch
+          profil: null,
+          loadingInProgress: false,
+          loadingError: e
+        })
+      );
+
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+
+   /** Renders the component */
+  render() {
+    const { classes, profil } = this.props;
+    // Use the states customer
+    const { profil, loadingInProgress, loadingError} = this.state;
+
+    // console.log(this.props);
+    return (
+      <div className={classes.root}>
+
+      </div>
+    );
+  }
+
+
+
 }
