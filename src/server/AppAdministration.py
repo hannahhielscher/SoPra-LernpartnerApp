@@ -477,7 +477,7 @@ class AppAdministration (object):
         person = get_person_by_id(person_id_for_matches)
 
         """person_for_matches: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-        person_for_matches = person.print_all()
+        person_for_matches = person.get_all()
 
         profil_id = 0
         for i in range(len(person_for_matches) - 1, len(person_for_matches)):
@@ -514,7 +514,7 @@ class AppAdministration (object):
         for p in result_profile:
             """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
                 profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-            profil_to_match = p.print_all()
+            profil_to_match = p.get_all()
 
             for i in range(0,1):
                 all_person_id.append(profil_to_match[i])
@@ -574,7 +574,7 @@ class AppAdministration (object):
         for l in result_lernvorlieben:
             """Inhalt Lernvorlieben die verglichen werden über eine Methode holen und in einer Liste speichern
                 lernvorlieben_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-            lernvorlieben_to_match = l.print_all()
+            lernvorlieben_to_match = l.get_all()
 
             """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
                 prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen

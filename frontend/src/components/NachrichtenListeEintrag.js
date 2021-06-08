@@ -31,8 +31,6 @@ class NachrichtenListeEintrag extends Component {
         this.state = {
             nachricht: null, 
             personName: null, 
-            konversation: null,
-            teilnehmer: null
             inhalt: null, 
             loadingInProgress: false,
             error: null
@@ -105,28 +103,7 @@ class NachrichtenListeEintrag extends Component {
       }
 
       
-    // API Anbindung um Konversation vom Backend zu bekommen 
-    getKonversation = () => {
-        LernpartnerAPI.getAPI().getNachricht(this.props.nachricht)
-        .then(konversationBO =>
-            this.setState({
-              konversation: konversationBO,
-              teilnehmer: konversationBO.teilnehmer, 
-              loadingInProgress: false,
-              error: null,
-            }))
-            .catch(e =>
-                this.setState({
-                  konversation: null,
-                  konversation: null,
-                  loadingInProgress: false,
-                  error: e,
-                }));
-        this.setState({
-          loadingInProgress: true,
-          error: null
-        });
-      }
+    
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
@@ -141,11 +118,50 @@ class NachrichtenListeEintrag extends Component {
       }
 
       render() {
-          const {nachricht, inhalt, konversation, personName, loadingInProgress, error}
+        const { classes } = this.props;
+        const {nachricht, inhalt, personName, loadingInProgress, error}
 
-
+        return(
+          <div>
+          <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
+          <Grid item>
+              <Button color='primary' onClick={this.showNachrichtenButtonClicked}>
+                Alle Nachrichten anzeigen 
+              </Button>
+          </Grid>
+          </Grid>
+          
+          <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="customized table">
+              <TableHead>
+                  <StyledTableRow>
+                      <StyledTableCell>Nachrichten</StyledTableCell>
+                      <StyledTableCell align="center">inhalt</StyledTableCell>
+                      <StyledTableCell align="center">personName</StyledTableCell>
+                  </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                  {
+                      nachrichten ?
+                      <>
+                      {
+                          nachrichten.map(nachricht =>
+                            <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachricht} expandedState={expandedNachrichtID === nachricht.getID()}
+                              onExpandedStateChange={this.onExpandedStateChange}
+                            />)
+                      }
+                      </>
+                      :
+                      <></>
+                  }
+              </TableBody>
+          </Table>
+          <LoadingProgress show={loadingInProgress} />
+          <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachrichten konnten nicht geladen werden'} onReload={this.getNachrichten} /> 
+          </TableContainer>
+        </div>
+        )
       }
-
 }
 
 const styles = theme => ({
