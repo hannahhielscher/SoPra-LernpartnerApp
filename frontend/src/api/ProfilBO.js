@@ -52,4 +52,24 @@ export default class ProfilBO extends BusinessObject {
     set_lernvorlieben(lernvorlieben_neu){
         this.lernvorlieben = lernvorlieben_neu;
     }
+
+    	/**
+   * Returns an Array of ProfilBO from a given JSON structure
+   */
+    static fromJSON(profile) {
+		let results = null;
+		if (Array.isArray(profile)) {
+			results = [];
+			profile.forEach((c) => {
+				Object.setPrototypeOf(c, ProfilBO.prototype);
+				results.push(c);
+			})
+		} else {
+			// Es gibt wohl nur ein Objekt
+			let c = profile;
+			Object.setPrototypeOf(c, ProfilBO.prototype);
+			results = c;
+		}
+		return results;
+	}
 }
