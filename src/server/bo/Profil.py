@@ -50,7 +50,7 @@ class Profil (BusinessObject):
         self._lernvorlieben_id = lernvorlieben_id
 
     def get_all(self):
-        inhalt = [self.id, self.studiengang, self.semester, self._lernfaecher, self._lernvorlieben_id]
+        inhalt = [self.id, self.gruppe, self.studiengang, self.semester, self._lernfaecher, self._lernvorlieben_id]
         return inhalt
 
     def __str__(self):

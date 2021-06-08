@@ -61,8 +61,9 @@ class Lernvorlieben(BusinessObject):
         """Setzen des präferierten Lernorts"""
         self._lernort = value
 
-
-
+    def get_all(self):
+        inhalt = [self.id, self._tageszeiten, self._tage, self._frequenz, self._lernart, self._gruppengroesse, self._lernort]
+        return inhalt
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""

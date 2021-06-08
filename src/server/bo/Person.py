@@ -77,6 +77,10 @@ class Person(NamedBusinessObject):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
         self._personenprofil = value
 
+    def get_all(self):
+        inhalt = [self.id, self.name, self._vorname, self._alter, self._geschlecht, self._lerngruppe, self._email, self._personenprofil]
+        return inhalt
+
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
