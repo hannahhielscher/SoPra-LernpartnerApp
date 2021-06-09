@@ -1,4 +1,5 @@
 from server.bo.NamedBusinessObject import NamedBusinessObject
+from datetime import date, datetime
 
 class Person(NamedBusinessObject):
     
@@ -8,6 +9,7 @@ class Person(NamedBusinessObject):
         self._semester = 0
         self._studiengang = None 
         self._alter = 0
+        #self._geburtsdatum = ""
         self._geschlecht = None
         self._lerngruppe = False
         self._google_user_id = None
@@ -85,6 +87,11 @@ class Person(NamedBusinessObject):
     def set_personenprofil(self, value):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
         self._personenprofil = value
+
+    #def calculate_alter(self):
+        #heute = date.today()
+        #geb = self.get_geburtsdatum()
+        #return today.year - geb.year - ((today.month, today.day) < (geb.month, geb.day))
 
     def get_all(self):
         inhalt = [self.id, self.name, self._vorname, self._alter, self._semester, self._studiengang, self._geschlecht, self._lerngruppe, self._email, self._personenprofil]
