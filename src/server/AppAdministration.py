@@ -62,14 +62,15 @@ class AppAdministration (object):
     """
     Person-spezifische Methoden
     """
-    def create_person(self, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id):
+    def create_person(self, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id):
         """Eine Person anlegen"""
 
         person = Person()
             
         person.set_name(name)
         person.set_vorname(vorname)
-        person.set_semester(semester)           
+        person.set_semester(semester) 
+        person.set_studiengang(studiengang)          
         person.set_alter(alter)
         person.set_geschlecht(geschlecht)
         person.set_lerngruppe(lerngruppe)
@@ -118,13 +119,11 @@ class AppAdministration (object):
     Profil-spezifische Methoden
     """
 
-    def create_profil(self, gruppe, studiengang, semester, lernvorlieben_id):
+    def create_profil(self, gruppe, lernfaecher, lernvorlieben_id):
         """Eine Person anlegen"""
 
         profil = Profil()
         profil.set_gruppe(gruppe)
-        profil.set_studiengang(studiengang)
-        profil.set_semester(semester)
         profil.set_lernfaecher(lernfaecher)
         profil.set_lernvorlieben_id(lernvorlieben_id)
         profil.set_id(1)
