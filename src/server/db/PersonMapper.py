@@ -18,17 +18,18 @@ class PersonMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen"
+        command = "SELECT id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) in tuples:
+        for (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) in tuples:
             person = Person()
             person.set_id(id)
             person.set_name(name)
             person.set_vorname(vorname)
             person.set_semester(semester)
+            person.set_studiengang(studiengang)
             person.set_alter(alter)
             person.set_geschlecht(geschlecht)
             person.set_lerngruppe(lerngruppe)
@@ -57,17 +58,18 @@ class PersonMapper(Mapper):
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id='{}'".format(id)
+        command = "SELECT id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
+            (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
             person = Person()
             person.set_id(id)
             person.set_name(name)
             person.set_vorname(vorname)
             person.set_semester(semester)
+            person.set_studiengang(studiengang)
             person.set_alter(alter)
             person.set_geschlecht(geschlecht)
             person.set_lerngruppe(lerngruppe)
@@ -95,18 +97,19 @@ class PersonMapper(Mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE google_user_id='{}'".format(
+        command = "SELECT id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE google_user_id='{}'".format(
                 google_user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
+            (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
             person = Person()
             person.set_id(id)
             person.set_name(name)
             person.set_vorname(vorname)
             person.set_semester(semester)
+            person.set_studiengang(studiengang)
             person.set_alter(alter)
             person.set_geschlecht(geschlecht)
             person.set_lerngruppe(lerngruppe)
@@ -141,8 +144,8 @@ class PersonMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 person.set_id(1)
 
-        command = "INSERT INTO personen (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_profil_id())
+        command = "INSERT INTO personen (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_profil_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -157,8 +160,8 @@ class PersonMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, alter=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE google_user_id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_google_user_id())
+        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, alter=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE google_user_id=%s"
+        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_google_user_id())
 
         cursor.execute(command, data)
 
@@ -172,8 +175,8 @@ class PersonMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, alter=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_id())
+        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, alter=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE id=%s"
+        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_id())
 
         cursor.execute(command, data)
 

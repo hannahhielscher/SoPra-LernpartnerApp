@@ -1,4 +1,5 @@
 from server.bo.NamedBusinessObject import NamedBusinessObject
+from datetime import date, datetime
 
 class Person(NamedBusinessObject):
     
@@ -6,7 +7,9 @@ class Person(NamedBusinessObject):
         super().__init__()
         self._vorname = None
         self._semester = 0
+        self._studiengang = None 
         self._alter = 0
+        #self._geburtsdatum = ""
         self._geschlecht = None
         self._lerngruppe = False
         self._google_user_id = None
@@ -28,6 +31,14 @@ class Person(NamedBusinessObject):
     def set_semester(self, value):
         """Setzen des Semesters"""
         self._semester = value
+
+    def get_studiengang(self):
+        """Auslesen des studiengangs"""
+        return self._studiengang
+    
+    def set_studiengang(self, value):
+        """Setzen des studiengangs"""
+        self._studiengang = value
 
     def get_alter(self):
         """Auslesen des Alters"""
@@ -77,14 +88,19 @@ class Person(NamedBusinessObject):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
         self._personenprofil = value
 
+    #def calculate_alter(self):
+        #heute = date.today()
+        #geb = self.get_geburtsdatum()
+        #return today.year - geb.year - ((today.month, today.day) < (geb.month, geb.day))
+
     def get_all(self):
-        inhalt = [self.id, self.name, self._vorname, self._alter, self._geschlecht, self._lerngruppe, self._email, self._personenprofil]
+        inhalt = [self.id, self.name, self._vorname, self._alter, self._semester, self._studiengang, self._geschlecht, self._lerngruppe, self._email, self._personenprofil]
         return inhalt
 
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Person: {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._vorname, self._semester, self._alter, self._geschlecht, self._lerngruppe, self._lernvorlieben, self._personenprofil)
+        return "Person: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._vorname, self._semester, self._studiengang, self._alter, self._geschlecht, self._personenprofil)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -94,6 +110,7 @@ class Person(NamedBusinessObject):
         obj.set_name(dictionary["name"])
         obj.set_vorname(dictionary["vorname"])
         obj.set_semester(dictionary["semester"])
+        obj.set_studiengang(dictionary["studiengang"])
         obj.set_alter(dictionary["alter"])
         obj.set_geschlecht(dictionary["geschlecht"])
         obj.set_lerngruppe(dictionary["lerngruppe"])

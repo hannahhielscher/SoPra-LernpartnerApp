@@ -52,7 +52,7 @@ class VorschlagListe extends Component {
 
     // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getVorschlaege = () => {
-            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentPerson.id)
+            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentUser.id)
             .then(vorschlagBOs =>
                 this.setState({
                     vorschlaege: vorschlagBOs,
@@ -75,7 +75,7 @@ class VorschlagListe extends Component {
     componentDidMount() {
         this.getVorschlaege();
         this.setState({
-            currentStudentName: this.props.currentPerson.getname(),
+            currentStudentName: this.props.currentUser.getname(),
         })
     }
     

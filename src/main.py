@@ -49,6 +49,7 @@ nbo = api.inherit('NamedBusinessObject', bo, {
 person = api.inherit('Person', nbo, {
     'vorname': fields.String(attribute='_vorname', description='Vorname der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
+    'studiengang': fields.String(attribute='_studiengang', description='Studiengang der Person'),
     'alter': fields.Integer(attribute='_alter', description='Alter der Person'),
     'geschlecht': fields.String(attribute='_geschlecht', description='Geschlecht der Person'),
     'lerngruppe': fields.String(attribute='_lerngruppe', description='Lerngruppe der Person'),
@@ -60,8 +61,6 @@ person = api.inherit('Person', nbo, {
 profil = api.inherit('Profil', bo, {
     #hier String oder Boolean?
     'gruppe': fields.String(attribute='_gruppe', description='Teilnahme an einer Gruppe'),    
-    'studiengang': fields.String(attribute='_studiengang', description='Studiengang der Person'),
-    'semester': fields.String(attribute='_semester', description='Semester der Person'),
     'lernfaecher': fields.Integer(attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
 })
@@ -140,7 +139,7 @@ class PersonenListOperationen(Resource):
             """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
             wird auch dem Client zurückgegeben. 
             """
-            c = adm.create_person(proposal.get_name(), proposal.get_vorname(), proposal.get_semester(), proposal.get_alter(), proposal.get_geschlecht(), proposal.get_lerngruppe(),
+            c = adm.create_person(proposal.get_name(), proposal.get_vorname(), proposal.get_semester(), proposal.get_studiengang(), proposal.get_alter(), proposal.get_geschlecht(), proposal.get_lerngruppe(),
                                 proposal.get_google_user_id(), proposal.get_email(), proposal.get_personenprofil())
             return c, 200
         else:
@@ -243,16 +242,12 @@ class ProfilListOperationen(Resource):
         profilId = request.args.get("id")
         gruppe = request.args.get("gruppe")
         hochschule = request.args.get("hochschule")
-        semester = request.args.get("semester")
-        studiengang = request.args.get("studiengang")
         lernfaecher = request.args.get("lernfaecher")
 
         adm = AppAdministration()
         profil = adm.get_profil_by_id(profilId)
         profil.set_gruppe(gruppe)
         profil.set_hochschule(hochschule)
-        profil.set_semester(semester)
-        profil.set_studiengang(studiengang)
         profil.set_lernfaecher(lernfaecher)
 
         adm.update_profil_by_id(profil)

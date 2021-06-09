@@ -40,7 +40,7 @@ class LernfaecherForm extends component{
     // initiiere einen leeren state
     this.state = {
         profil: null,
-        lernfaecher: null,
+        lernfaecher: [],
         loadingInProgress: false,
         error: null
     };
