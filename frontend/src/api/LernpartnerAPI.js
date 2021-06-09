@@ -71,6 +71,7 @@ export default class LernpartnerAPI {
 
         //Vorschlagbezogen
         #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
+        //#getSelectedLernfach = () => `${this.#lernappServerBaseURL}`
         
 
         //Nachrichtenbezogen
