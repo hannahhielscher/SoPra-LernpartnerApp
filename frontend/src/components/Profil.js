@@ -25,6 +25,27 @@ class Profil extends Component {
         this.getProfil();
   }
 
+     getPerson = () => {
+    LernpartnerAPI.getAPI().getProfil(this.props.).then(profilBOs =>
+      this.setState({
+        profil: profilBOs,
+        loadingInProgress: false,
+        loadingError: null
+      })).catch(e =>
+        this.setState({ // Reset state with error from catch
+          profil: null,
+          loadingInProgress: false,
+          loadingError: e
+        })
+      );
+
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+
      getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props).then(profilBOs =>
       this.setState({
