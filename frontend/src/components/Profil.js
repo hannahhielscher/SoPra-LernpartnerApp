@@ -15,6 +15,16 @@ class Profil extends Component {
         // initiiere einen leeren state
         this.state = {
             profil: null,
+            gruppe: false,
+            vorname = null,
+            name = null,
+            semester = 0,
+            studiengang = None,
+            """lerngruppe = False --> reinnehmen oder nicht?"""
+            main_person_id = None,
+            personenprofil_id = None,
+            lernfaecher = [],
+            lernvorlieben = null """oder doch []?"""
             loadingInProgress: false,
             loadingError: null,
         };
@@ -25,26 +35,30 @@ class Profil extends Component {
         this.getProfil();
   }
 
-     getPerson = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.).then(profilBOs =>
+    // API Anbindung um Profil vom Backend zu bekommen
+    getPerson = () => {
+      LernpartnerAPI.getAPI().getPerson(this.props.person.getID())
+      .then(personBO =>
+          this.setState({
+            person: personBO,
+            personName: personBO.name,
+            personVorname: personBO.vorname,
+            loadingInProgress: false,
+            error: null,
+          }))
+          .catch(e =>
+              this.setState({
+                person: null,
+                personName: null,
+                personVorname: null,
+                loadingInProgress: false,
+                error: e,
+              }));
       this.setState({
-        profil: profilBOs,
-        loadingInProgress: false,
-        loadingError: null
-      })).catch(e =>
-        this.setState({ // Reset state with error from catch
-          profil: null,
-          loadingInProgress: false,
-          loadingError: e
-        })
-      );
-
-    // set loading to true
-    this.setState({
-      loadingInProgress: true,
-      loadingError: null
-    });
-  }
+        loadingInProgress: true,
+        error: null
+      });
+    }
 
      getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props).then(profilBOs =>
