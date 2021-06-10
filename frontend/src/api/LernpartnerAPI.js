@@ -77,19 +77,32 @@ export default class LernpartnerAPI {
 
         //Nachrichtenbezogen
         #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
-        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konverastion/${id}`;
+        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
         #setKonversationAtNachrichten = (nachrichtenId, konversationId) => `${this.#lernappServerBaseURL}/nachrichten/konversation?nachrichtenId=${nachrichtenId}&konversationId=${konversationId}`;
         #addNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByIDURL = (id) => `${this.#lernapptivServerBaseURL}/nachrichten/${id}`;
         #deleteNachrichtURL = (id) => `${this.#lernappivServerBaseURL}/nachrichten/${id}`;
         
-        //Konversationbezogen
+        //Konversationbezogen#
+        #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
+        #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
+        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
+        #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
+        #deleteKonversationURL = (id) => `${this.#lernappivServerBaseURL}/konversation/${id}`;
 
         //TeilnahmeChatbezogen
+        #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
+        #getTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #addTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #deleteTeilnahmeChatURL = (id) => `${this.#lernappivServerBaseURL}/teilnahmeChat/${id}`;
+        #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
+        #getTeilnahmeChatByKonversationsIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
 
         //TeilnahmeGruppebezogen
-
-
+        #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
+        #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
+        #getTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
         //Personenbezogene
         /**
