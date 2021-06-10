@@ -38,6 +38,7 @@ export default class LernpartnerAPI {
             return res.json();
           }
           )
+
         //Person related
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
         #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
