@@ -14,14 +14,87 @@ class Profil extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            studiengang : null,
-            semester: null,
-            lernfaecher: [],
-            lernvorlieben: [],
+            profil: null,
+            gruppe: false,
+            vorname = null,
+            name = null,
+            semester = 0,
+            studiengang = None,
+            """lerngruppe = False --> reinnehmen oder nicht?"""
+            main_person_id = None,
+            personenprofil_id = None,
+            lernfaecher = [],
+            lernvorlieben = null """oder doch []?"""
+            loadingInProgress: false,
+            loadingError: null,
         };
     }
 
-     // API Anbindung um Lernfaecher des Students vom Backend zu bekommen 
-     getLernfaecher = () => {
-        
+  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
+        this.getProfil();
+  }
+
+    // API Anbindung um Profil vom Backend zu bekommen
+    getPerson = () => {
+      LernpartnerAPI.getAPI().getPerson(this.props.person.getID())
+      .then(personBO =>
+          this.setState({
+            person: personBO,
+            personName: personBO.name,
+            personVorname: personBO.vorname,
+            loadingInProgress: false,
+            error: null,
+          }))
+          .catch(e =>
+              this.setState({
+                person: null,
+                personName: null,
+                personVorname: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
+     getProfil = () => {
+    LernpartnerAPI.getAPI().getProfil(this.props).then(profilBOs =>
+      this.setState({
+        profil: profilBOs,
+        loadingInProgress: false,
+        loadingError: null
+      })).catch(e =>
+        this.setState({ // Reset state with error from catch
+          profil: null,
+          loadingInProgress: false,
+          loadingError: e
+        })
+      );
+
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+
+   /** Renders the component */
+  render() {
+    const { classes, profil } = this.props;
+    // Use the states customer
+    const { profil, loadingInProgress, loadingError} = this.state;
+
+    // console.log(this.props);
+    return (
+      <div className={classes.root}>
+
+      </div>
+    );
+  }
+
+
+
 }

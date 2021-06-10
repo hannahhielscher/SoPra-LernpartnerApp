@@ -21,17 +21,15 @@ class ProfilMapper(Mapper):
 
         cursor = self._connenction.cursor()
 
-        command = "SELECT profile.id, profile.gruppe, profile.studiengang, profile.semester, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
+        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, gruppe, studiengang, semester, lernfaecher, lernvorlieben_id) in tuples:
+        for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
             profil = Profil()
-            profil.set_gruppe(gruppe)
             profil.set_id(id)
-            profil.set_studiengang(studiengang)
-            profil.set_semester(semester)
+            profil.set_gruppe(gruppe)
             profil.set_lernfaecher(lernfaecher)
             profil.set_lernvorlieben_id(lernvorlieben_id)
 
@@ -53,17 +51,16 @@ class ProfilMapper(Mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT profile.id, profile.gruppe, profile.studiengang, profile.semester, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
+        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, gruppe, studiengang, semester, lernfaecher, lernvorlieben_id) = tuple[0]
+            (id, gruppe, lernfaecher, lernvorlieben_id) = tuple[0]
             profil = Profil()
-            profil.set_gruppe(gruppe)
+            
             profil.set_id(id)
-            profil.set_semester(studiengang)
-            profil.set_semester(semester)
+            profil.set_gruppe(gruppe)
             profil.set_lernfaecher(lernfaecher)
             profil.set_lernvorlieben_id(lernvorlieben_id)
 
@@ -123,11 +120,10 @@ class ProfilMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (profil_id, studiengang, semester, lernvorlieben_id) in tuples:
+        for (profil_id, lernvorlieben_id) in tuples:
             profil = Profil()
             profil.set_id(profil_id)
-            profil.set_studiengang(studiengang)
-            profil.set_semester(semester)
+    
             profil.set_lernfaecher(find_lernfaecher_by_person_id(profil_id))
             profil.set_lernvorlieben_id(lernvorlieben_id)
             result.append(profil)
@@ -161,9 +157,9 @@ class ProfilMapper(Mapper):
                 profil.set_id(1)
 
 
-        command = "INSERT INTO profile (id, gruppe, studiengang, semester, lernfaecher, lernvorlieben_id) VALUES (%s,%s,%s,%s,%s,%s)"
+        command = "INSERT INTO profile (id, gruppe, lernfaecher, lernvorlieben_id) VALUES (%s,%s,%s,%s)"
         """Join/ Zweiter Insert command für Profil has lernfaecher"""
-        data = (profil.get_id(), profil.get_gruppe(), profil.get_studiengang(), profil.get_semester(), profil.get_lernfaecher(), profil.get_lernvorlieben_id())
+        data = (profil.get_id(), profil.get_gruppe(), profil.get_lernfaecher(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -177,8 +173,8 @@ class ProfilMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE profile " + "SET gruppe=%s, SET studiengang=%s, SET abschluss=%s, SET semester=%s, SET lernvorlieben_id=%s WHERE id=%s"
-        data = (profil.get_id(), profil.get_gruppe(), profil.get_studiengang(), profil.get_abschluss(), profil.get_semester() ,profil.get_lernvorlieben_id())
+        command = "UPDATE profile " + "SET gruppe=%s, lernvorlieben_id=%s WHERE id=%s"
+        data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         self._connection.commit()

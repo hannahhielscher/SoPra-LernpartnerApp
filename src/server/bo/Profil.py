@@ -15,7 +15,6 @@ class Profil (BusinessObject):
     def set_gruppe(self, gruppe_neu):
         self._gruppe = gruppe_neu
 
-
     def get_lernfaecher(self):
         """Auslesen der Lernfächer"""
         return self._lernfaecher
@@ -33,20 +32,19 @@ class Profil (BusinessObject):
         self._lernvorlieben_id = lernvorlieben_id
 
     def get_all(self):
-        inhalt = [self.id, self.gruppe, self.studiengang, self.semester, self._lernfaecher, self._lernvorlieben_id]
+        inhalt = [self.id, self.gruppe, self._lernfaecher, self._lernvorlieben_id]
         return inhalt
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Profil: {}, {}, {}, {}".format(self._studiengang, self._semester, self._lernfaecher, self._lernvorlieben)
+        return "Profil: {}, {}, {}".format(self._gruppe, self._lernfaecher, self._lernvorlieben)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """ Umwandeln eines Python dict() in ein Python Objekt Profil() """
         obj = Profil()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_studiengang(dictionary["studiengang"])
-        obj.set_semester(dictionary["semester"])
+        obj.set_gruppe(dictionary["gruppe"])
         obj.set_lernfaecher(dictionary["lernfaecher"])
         obj.set_lernvorlieben(dictionary["lernvorlieben"])
         return obj
