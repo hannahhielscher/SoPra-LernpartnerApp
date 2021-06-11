@@ -2,7 +2,7 @@ from flask import request
 from google.auth.transport import requests
 import google.oauth2.id_token
 
-from server.AppAdministration import AppAdministration
+from server.BankAdministration import BankAdministration
 
 
 def secured(function):
@@ -23,13 +23,6 @@ def secured(function):
     def wrapper(*args, **kwargs):
         # Verify Firebase auth.
         id_token = request.cookies.get("token")
-        name = request.cookies.get("name")
-        vorname = request.cookies.get("vorname")
-        semester = request.cookies.get("semester")
-        alter = request.cookies.get("alter")
-        geschlecht = request.cookies.get("geschlecht")
-        lerngruppe = request.cookies.get("lerngruppe")
-
         error_message = None
         claims = None
         objects = None
@@ -45,32 +38,28 @@ def secured(function):
                     id_token, firebase_request_adapter)
 
                 if claims is not None:
-                    adm = AppAdministration()
+                    adm = BankAdministration()
 
                     google_user_id = claims.get("user_id")
                     email = claims.get("email")
+                    name = claims.get("name")
 
-                    person = adm.get_person_by_google_user_id(google_user_id)
-                    if person is not None:
+                    user = adm.get_user_by_google_user_id(google_user_id)
+                    if user is not None:
                         """Fall: Der Benutzer ist unserem System bereits bekannt.
                         Wir gehen davon aus, dass die google_user_id sich nicht ändert.
                         Wohl aber können sich der zugehörige Klarname (name) und die
                         E-Mail-Adresse ändern. Daher werden diese beiden Daten sicherheitshalber
                         in unserem System geupdated."""
-                        person.set_name(name)
-                        person.set_vorname(vorname)
-                        person.set_semester(semester)
-                        person.set_alter(alter)
-                        person.set_geschlecht(geschlecht)
-                        person.set_lerngruppe(lerngruppe)
-                        person.set_email(email)
-                        adm.save_person(person)
+                        user.set_name(name)
+                        user.set_email(email)
+                        adm.save_user(user)
                     else:
                         """Fall: Der Benutzer war bislang noch nicht eingelogged. 
                         Wir legen daher ein neues User-Objekt an, um dieses ggf. später
                         nutzen zu können.
                         """
-                        person = adm.create_person(name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email)
+                        user = adm.create_user(name, email, google_user_id)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 
