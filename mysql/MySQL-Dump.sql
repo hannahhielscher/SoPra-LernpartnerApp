@@ -19,8 +19,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`profile` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile` (
   `id` INT NOT NULL,
-  `studiengang` VARCHAR(45) NULL,
-  `semester` INT NULL,
+  `gruppe` TINYINT NULL,
   `lernvorlieben_id` INT NOT NULL,
   PRIMARY KEY (`id`, `lernvorlieben_id`),
   INDEX `fk_profil_lernvorlieben1_idx` (`lernvorlieben_id` ASC) VISIBLE,
@@ -37,8 +36,8 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`profile` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`profile` VALUES (1, 'Wirtschaftsinformatik und digitale Medien', 3, 1), (2, 'CR/PR', 2, 2), (3, 'Wirtschaftsinformatik und digitale Medien', 2, 3),
-(4, 'Wirtschaftsinformatik und digitale Medien', 3, 4), (5, 'CR/PR', 2, 5), (6, 'Medieninformatik', 5, 6), (7, 'Medieninformatik', 3, 7);
+INSERT INTO `lernapp_SWPra`.`profile` VALUES (1, false, 1), (2, false, 2), (3, false, 3),
+(4, false, 4), (5, false, 5), (6, false, 6), (7, false, 7), (8, true, 8), (9, true, 9), (10, true, 10);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -49,13 +48,15 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`personen` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`personen` (
   `id` INT NOT NULL,
-  `name` VARCHAR(200) NULL,
+  `name` VARCHAR(45) NULL,
   `vorname` VARCHAR(45) NULL,
+  `semester` INT NULL,
   `alter` INT NULL,
   `geschlecht` VARCHAR(45) NULL,
-  `lerngruppe` TINYINT,
+  `lerngruppe` VARCHAR(45) NULL,
   `google_user_id` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
+  `studiengang` VARCHAR(45) NULL,
   `profil_id` INT NOT NULL,
   PRIMARY KEY (`id`, `profil_id`),
   INDEX `fk_person_profil1_idx` (`profil_id` ASC) VISIBLE,
@@ -72,9 +73,10 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`personen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 20, 'männlich', false, '1', 'timmueller@gmail.com', 1), (2, 'Maier', 'Lisa', 19, 'weiblich', true, '2', 'lischen2002@gmx.de', 2),
-(3, 'Baum', 'Manuela', 22, 'weiblich', true,  '3', 'manni99@gmail.com', 3), (4, 'Possible', 'Kim', 20, 'weiblich', true, '4', 'kimpossible@hotmail.de', 4), (5, 'Smith', 'John', 24, 'männlich', true, '5', 'jonny@hotmail.com', 5), 
-(6, 'Jones', 'Alex', 23, 'männlich', false, '6', 'alexjones@gmail.com', 6),  (7, 'Becker', 'Klaus', 19, 'männlich', true, '7', 'becker77@gmx.de', 7);
+INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 3, 20, 'männlich', false, '1', 'timmueller@gmail.com', 'Wirtschaftsinformatik und digitale Medien', 1), (2, 'Maier', 'Lisa', 2, 19, 'weiblich', true, '2', 'lischen2002@gmx.de', 'CR/PR', 2),
+(3, 'Baum', 'Manuela', 2, 22, 'weiblich', true,  '3', 'manni99@gmail.com', 'Wirtschaftsinformatik und digitale Medien', 3), (4, 'Possible', 'Kim', 3, 20, 'weiblich', true, '4', 'kimpossible@hotmail.de', 'Wirtschaftsinformatik und digitale Medien', 4), 
+(5, 'Smith', 'John', 4, 24, 'männlich', true, '5', 'jonny@hotmail.com', 'CR/PR', 5), (6, 'Jones', 'Alex', 5, 23, 'männlich', false, '6', 'alexjones@gmail.com', 'Medieninformatik', 6),  
+(7, 'Becker', 'Klaus', 3, 19, 'männlich', true, '7', 'becker77@gmx.de', 'Medieninformatik', 7);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -428,7 +430,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8;
 LOCK TABLES `lernapp_SWPra`.`lernvorlieben` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernvorlieben` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`lernvorlieben` VALUES (1, 2, 1, 3, 2, 1, 1), (2, 2, 2, 2, 1, 1, 3), (3, 1, 1, 2, 3, 3, 4), 
-(4, 3, 1, 3, 4, 3, 4), (5, 1, 2, 1, 1, 3, 3), (6, 2, 2, 2, 2, 1, 4), (7, 3, 2, 2, 1, 2, 2);
+(4, 3, 1, 3, 4, 3, 4), (5, 1, 2, 1, 1, 3, 3), (6, 2, 2, 2, 2, 1, 4), (7, 3, 2, 2, 1, 2, 2), (8, 1, 2, 3, 2, 1, 1),
+(9, 3, 1, 3, 3, 2, 1), (10, 2, 3, 3, 4, 1, 2);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernvorlieben` ENABLE KEYS */;
 UNLOCK TABLES;
 
