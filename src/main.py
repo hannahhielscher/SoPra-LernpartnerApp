@@ -255,7 +255,7 @@ class ProfilListOperationen(Resource):
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeListOperationen(Resource):
-    @lernApp.marshal_list_with(lerngruppen)
+    @lernApp.marshal_list_with(lerngruppe)
     
     @secured
     def get(self):
@@ -534,7 +534,7 @@ class NachrichtByIdOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationListOperation(Resource):
 
-    @lernApp.marshal_list_with(konversationen)
+    @lernApp.marshal_list_with(konversation)
     def get(self):
         """Auslesen aller Konversations-Objekte.
 
