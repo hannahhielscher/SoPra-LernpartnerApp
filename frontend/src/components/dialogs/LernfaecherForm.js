@@ -16,24 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/** 
-export default function NativeSelects() {
-  const classes = useStyles();
-  const [state, setState] = React.useState({
-    age: '',
-    
-  });
+ 
   
-  const handleChange = (event) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-  };
-  */
+  ;
+
 
 class LernfaecherForm extends component{
+  
   constructor(props){
     super(props);
 
@@ -45,7 +34,15 @@ class LernfaecherForm extends component{
         error: null
     };
   }
-  
+
+  handleChange = (event) => {
+    const name = event.target.name;
+    setState({
+      ...state,
+      [name]: event.target.value,
+    });
+  }
+
   getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.profilid)
     .then(profilBO =>
@@ -77,7 +74,7 @@ class LernfaecherForm extends component{
           <Select
             native
             value={state.age}
-            //onChange={handleChange}
+            onChange={handleChange}
             inputProps={{
               name: 'age',
               id: 'age-native-simple',
