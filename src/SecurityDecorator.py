@@ -2,7 +2,7 @@ from flask import request
 from google.auth.transport import requests
 import google.oauth2.id_token
 
-from server.BankAdministration import BankAdministration
+from server.AppAdministration import AppAdministration
 
 
 def secured(function):
@@ -38,11 +38,10 @@ def secured(function):
                     id_token, firebase_request_adapter)
 
                 if claims is not None:
-                    adm = BankAdministration()
+                    adm = AppAdministration()
 
                     google_user_id = claims.get("user_id")
                     email = claims.get("email")
-                    name = claims.get("name")
 
                     user = adm.get_user_by_google_user_id(google_user_id)
                     if user is not None:
@@ -51,7 +50,6 @@ def secured(function):
                         Wohl aber können sich der zugehörige Klarname (name) und die
                         E-Mail-Adresse ändern. Daher werden diese beiden Daten sicherheitshalber
                         in unserem System geupdated."""
-                        user.set_name(name)
                         user.set_email(email)
                         adm.save_user(user)
                     else:
@@ -59,7 +57,7 @@ def secured(function):
                         Wir legen daher ein neues User-Objekt an, um dieses ggf. später
                         nutzen zu können.
                         """
-                        user = adm.create_user(name, email, google_user_id)
+                        user = adm.create_person(email, google_user_id)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 
