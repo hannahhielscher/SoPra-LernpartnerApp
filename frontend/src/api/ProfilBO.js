@@ -4,11 +4,9 @@ import BusinessObject from './BusinessObject';
  * Repräsentiert ein Profil Objekt einer Person .
  */
 export default class ProfilBO extends BusinessObject {
-    constructor(gruppe_neu, studiengang_neu, semester_neu, lernfaecher_neu, lernvorlieben_neu){
+    constructor(gruppe_neu, lernfaecher_neu, lernvorlieben_neu){
         super();
         this.gruppe = gruppe_neu
-        this.studiengang = studiengang_neu
-        this.semester = semester_neu
         this.lernfaecher = lernfaecher_neu
         this.lernvorlieben = lernvorlieben_neu;
     }
@@ -19,22 +17,6 @@ export default class ProfilBO extends BusinessObject {
 
     set_gruppe(gruppe_neu){
         this.gruppe = gruppe_neu;
-    }
-
-    get_studiengang(){
-        return this.studiengang;
-    }
-
-    set_studiengang(studiengang_neu){
-        this.studiengang = studiengang_neu;
-    }
-
-    get_semester(){
-        return this.semester;
-    }
-
-    set_semester(semester_neu){
-        this.semester = semester_neu;
     }
 
     get_lernfaecher(){
