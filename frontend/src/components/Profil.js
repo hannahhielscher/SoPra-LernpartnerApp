@@ -33,7 +33,7 @@ class Profil extends Component {
 
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
     componentDidMount() {
-        this.getProfil();
+        this.getPerson();
   }
 
 /**   showVorschlagButtonClick = (event) => {
@@ -77,7 +77,7 @@ class Profil extends Component {
     }
 
      getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.profil.getID()).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(personProfilID).then(profilBO =>
       this.setState({
             profil: profilBOs,
             profilLernfaecher: profilBO.lernfaecher,
@@ -105,7 +105,7 @@ class Profil extends Component {
   render() {
     const { classes } = this.props;
     // Use the states customer
-    const { profil, name, vorname, semester, studiengang, lernfaecher, lernvorlieben, loadingInProgress, error} = this.state;
+    const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
 
     // console.log(this.props);
     return (
