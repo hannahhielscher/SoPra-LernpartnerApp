@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ProfilBO from '../api/ProfilBO';
-import PersonBO from '..api/PersonBO';
 
 class Profil extends Component {
 
@@ -21,9 +20,9 @@ class Profil extends Component {
             personVorname = null,
             personName = null,
             personSemester = 0,
-            personStudiengang = null,
+            personStudiengang = None,
             lerngruppe = false
-            personProfilID = None,
+            personProfilID = null,
             personLernfaecher = null,
             personLernvorliebenID = null
             loadingInProgress: false,
@@ -48,7 +47,7 @@ class Profil extends Component {
 
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPerson(this.props.person.getID())
+      LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.person.getgoogle_user_id)
       .then(personBO =>
           this.setState({
             person: personBO,
@@ -137,7 +136,7 @@ class Profil extends Component {
     // console.log(this.props);
     return (
       <div className={classes.root}>
-    """  <Button color="primary" onClick= {this.showVorschlagButtonClick}>Zurueck zu den Vorschlaegen</Button>"""
+    """  <Button color="primary" onClick= {this.showVorschlagButtonClick}>Mein Profil bearbeiten</Button>"""
       <Typography variant='body1' color={'textSecondary'}>
 
                             <b>Semester: </b> {personSemester} <br />
