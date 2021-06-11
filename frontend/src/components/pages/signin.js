@@ -21,7 +21,7 @@ class SignIn extends Component {
 		this.props.onSignIn();
 	}
 
-	/** Renders the sign in page, if user objext is null */
+	/** Renders the sign in page, if user object is null */
 	render() {
 		const { classes } = this.props;
 

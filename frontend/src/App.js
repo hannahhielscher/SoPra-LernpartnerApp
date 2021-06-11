@@ -4,9 +4,9 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/header';
-import Profil from './components/Profil';
-import ChatListe from './components/ChatListe';
-import VorschlagListe from './components/VorschlagListe';
+//import Profil from './components/Profil';
+//import ChatListe from './components/ChatListe';
+//import VorschlagListe from './components/VorschlagListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
@@ -131,16 +131,7 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from='/' to='profil' />
-									<Route exact path='/profil'>
-										<Profil />
-									</Route>
-									<Route path='/matches'>
-										<VorschlagListe />
-									</Route>
-									<Route path='/chats'>
-										<ChatListe />
-									</Route>
+									
 									<Route path='/about' component={About} />
 								</>
 								:

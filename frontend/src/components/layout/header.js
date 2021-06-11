@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
-//import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import ProfileDropDown from '../dialogs/ProfileDropDown';
 
 class Header extends Component {
@@ -39,9 +39,10 @@ class Header extends Component {
         /*{
           user ?
             <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
-              <Tab label='Profil' component={RouterLink} to={`/profil`} />
-              <Tab label='Vorschläge' component={RouterLink} to={`/vorschlag`} />
-              <Tab label='Chats' component={RouterLink} to={`/chats`} />
+              <Tab label='Profil' />
+              <Tab label='Vorschläge' />
+              <Tab label='Chats' />
+              <Tab label='About' component={RouterLink} to={`/about`} />
             </Tabs>
             : null
         }*/
