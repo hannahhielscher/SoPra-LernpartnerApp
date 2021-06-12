@@ -120,7 +120,7 @@ class PersonenListOperationen(Resource):
 
     @lernApp.marshal_with(person, code=200)
     @lernApp.expect(person)  # Wir erwarten ein Person-Objekt von Client-Seite.
-    @secured
+    #@secured
     def post(self):
         """Anlegen eines neuen Person-Objekts.
 
