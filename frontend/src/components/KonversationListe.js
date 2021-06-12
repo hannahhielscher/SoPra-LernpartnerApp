@@ -123,6 +123,10 @@ componentDidMount() {
 render() {
   const { classes } = this.props;
         const { konversationen, expandedVorschlagID, error, loadingInProgress}  = this.state; 
+
+        return(
+
+        );
   }
 
 }
