@@ -19,7 +19,7 @@ class ProfilMapper(Mapper):
         """
         result = []
 
-        cursor = self._connenction.cursor()
+        cursor = self._connection.cursor()
 
         command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profil.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
 
@@ -71,7 +71,7 @@ class ProfilMapper(Mapper):
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             result = None
 
-        self._cnx.commit()
+        self._connection.commit()
         cursor.close()
 
         return result

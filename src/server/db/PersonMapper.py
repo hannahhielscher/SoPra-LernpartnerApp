@@ -58,7 +58,7 @@ class PersonMapper(Mapper):
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id='{}'".format(id)
+        command = "SELECT id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id=' {} '".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

@@ -31,7 +31,7 @@ class Mapper (AbstractContextManager, ABC):
 
             self._connection = connector.connect(user='demo', password='demo',
                                   host='127.0.0.1',
-                                  database='lernapp')
+                                  database='lernapp_SWPra')
 
         return self
 
