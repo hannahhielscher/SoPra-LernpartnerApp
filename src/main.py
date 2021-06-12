@@ -61,7 +61,7 @@ person = api.inherit('Person', nbo, {
 profil = api.inherit('Profil', bo, {
     #hier String oder Boolean?
     'gruppe': fields.String(attribute='_gruppe', description='Teilnahme an einer Gruppe'),    
-    'lernfaecher': fields.Integer(attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernfaecher': fields.String( attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
 })
 
@@ -120,7 +120,7 @@ class PersonenListOperationen(Resource):
 
     @lernApp.marshal_with(person, code=200)
     @lernApp.expect(person)  # Wir erwarten ein Person-Objekt von Client-Seite.
-    #@secured
+    @secured
     def post(self):
         """Anlegen eines neuen Person-Objekts.
 
@@ -225,7 +225,7 @@ class ProfilByIDOperationen(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilListOperationen(Resource):
     @lernApp.marshal_list_with(profil)
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Profil-Objekte.
         Sollte kein Profil-Objekte verfügbar sein,

@@ -12,6 +12,36 @@ class ProfilMapper(Mapper):
 
     def __init__(self):
         super().__init__()
+        
+    def find_lernfaecher_by_profil_id(self, profil_id):
+        
+        result_key = []
+        result_value = []
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (lernfaecher_id) in tuples:
+            result_key.append(lernfaecher_id)
+
+        for (bezeichnung) in tuples:
+            result_value.append(bezeichnung)
+
+        result = dict.fromkeys(result_key, 0)
+        buff = 0
+        for i in result:
+            for j in range(buff, len(result_value)):
+                result[i] = result_value[j]
+                buff += 1
+                break
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def find_all(self):
         """Auslesen aller Profile.
@@ -49,14 +79,16 @@ class ProfilMapper(Mapper):
             nicht vorhandenem DB-Tupel.
         """
         result = None
-
+        lernfaecher = []
         cursor = self._connection.cursor()
         command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
+        for i in tuples:
+            lernfaecher.append(lernfaecher_id)
         try:
-            (id, gruppe, lernfaecher, lernvorlieben_id) = tuple[0]
+            (id, gruppe, lernvorlieben_id) = tuples[0]
             profil = Profil()
             
             profil.set_id(id)
@@ -76,36 +108,7 @@ class ProfilMapper(Mapper):
 
         return result
 
-    def find_lernfaecher_by_profil_id(self, profil_id):
-        
-        result_key = []
-        result_value = []
-        result = []
-
-        cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (lernfaecher_id) in tuples:
-            result_key.append(lernfaecher_id)
-
-        for (bezeichnung) in tuples:
-            result_value.append(bezeichnung)
-
-        result = dict.fromkeys(result_key, 0)
-        buff = 0
-        for i in result:
-            for j in range(buff, len(result_value)):
-                result[i] = result_value[j]
-                buff += 1
-                break
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
+    
     def find_by_lernfach_id(self, lernfach_id):
         """Suchen eines Lernfaches nach dessen ID
         :param lernfach_id
@@ -156,11 +159,18 @@ class ProfilMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 profil.set_id(1)
 
+        lernfaecher = profil.get_lernfaecher()
+        
+        command = "INSERT INTO profile (id, gruppe, lernvorlieben_id) VALUES (%s,%s,%s)"
 
-        command = "INSERT INTO profile (id, gruppe, lernfaecher, lernvorlieben_id) VALUES (%s,%s,%s,%s)"
-        """Join/ Zweiter Insert command für Profil has lernfaecher"""
-        data = (profil.get_id(), profil.get_gruppe(), profil.get_lernfaecher(), profil.get_lernvorlieben_id())
+        data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
+        
+        for i in lernfaecher: 
+            command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+            data2 = (profil.get_id(), i)
+            cursor.execute(command2, data2)
+        
 
         self._connection.commit()
         cursor.close()
