@@ -618,7 +618,7 @@ class TeilnahmeChatListOperation(Resource):
 
         Sollten keine Teilnahme-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
         adm = AppAdministration()
-        teilnahmen = adm.get_all_teilnahmen()
+        teilnahmen = adm.get_all_teilnahmenChat()
         return teilnahmen
 
 @lernApp.route('/teilnahmeChat/<int:id>')

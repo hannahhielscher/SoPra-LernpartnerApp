@@ -10,7 +10,7 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen an Chats"""
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT * from teilnahmen_chats")
+        cursor.execute("SELECT * from teilnahmen_chat")
         tuples = cursor.fetchall()
 
         for (id, teilnehmer, konversation) in tuples:
