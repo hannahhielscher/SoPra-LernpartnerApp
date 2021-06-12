@@ -46,5 +46,5 @@ class Profil (BusinessObject):
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_gruppe(dictionary["gruppe"])
         obj.set_lernfaecher(dictionary["lernfaecher"])
-        obj.set_lernvorlieben(dictionary["lernvorlieben"])
+        obj.set_lernvorlieben_id(dictionary["lernvorlieben"])
         return obj
