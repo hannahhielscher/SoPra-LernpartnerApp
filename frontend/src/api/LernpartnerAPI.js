@@ -41,7 +41,7 @@ export default class LernpartnerAPI {
 
         //Person related
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
-        #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
+        //#addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #updatePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;

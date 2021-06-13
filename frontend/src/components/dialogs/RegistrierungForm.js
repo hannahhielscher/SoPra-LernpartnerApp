@@ -7,8 +7,9 @@ import { withStyles, Dialog, DialogTitle, DialogContent, DialogContentText, Dial
     MenuItem,
     } from '@material-ui/core';
 
-import { LernpartnerAPI, PersonBO } from '../../api';
-import { withRouter } from 'react-router-dom';
+import { LernpartnerAPI } from '../../api';
+//import { withRouter } from 'react-router-dom';
+import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 /** 
@@ -24,33 +25,42 @@ class RegistrierungForm extends Component {
 
     constructor(props) {
         super(props);
-    
-        let fn = '', ln = '', alter = '', geschlecht = '', semester = '';
+
         // Init the state
         this.state = {
-            Name: ln,
-            NameValidationFailed: false,
-            NameEdited: false,
-            firstName: fn,
+            name: '',
+            nameValidationFailed: false,
+            nameEdited: false,
+
+            firstName: null,
             firstNameValidationFailed: false,
             firstNameEdited: false,
-            alter: alter,
+
+            alter: null,
             alterValidationFailed: false,
             alterEdited: false,
-            geschlecht: geschlecht,
+
+            geschlecht: null,
             geschlechtValidationFailed: false,
             geschlechtEdited: false,
-            semester: semester,
+
+            semester: null,
             semesterValidationFailed: false,
             semesterEdited: false,
-            studiengang: '',
+
+            studiengang: null,
             studiengangValidationFailed: false,
             studiengangEdited: false,
-            lerngruppe: '',
+
+            lerngruppe: null,
             lerngruppeValidationFailed: false,
             lerngruppeEdited: false,
-            addingInProgress: false,
+
             addingError: null,
+            addingInProgress: false,
+
+            updatingError: null,
+            updatingInProgress: false,
             
         };
         // save this state for canceling
@@ -59,9 +69,17 @@ class RegistrierungForm extends Component {
     
 
     /** Adds the customer */
-    addPerson = () => {
-        let newPerson = new PersonBO(this.state.Name, this.state.firstName, this.state.alter, this.state.geschlecht);
-        LernpartnerAPI.getAPI().addPerson(newPerson).then(person => {
+    registrieren = () => {
+        let person = this.props.person;
+        person.name = this.state.name
+        person.vorname = this.state.vorname
+        person.semester = this.state.semester
+        person.studiengang = this.state.studiengang
+        person.alter = this.state.alter
+        person.geschlecht = this.state.geschlecht
+        person.lerngruppe = this.state.lerngruppe
+        LernpartnerAPI.getAPI().updatePerson(person.id, this.state.name, this.state.vorname, this.state.semester, this.state.studiengang, this.state.alter, this.state.geschlecht,
+          this.state.lerngruppe).then(person => {
             // Backend call sucessfull
             // reinit the dialogs state for a new empty customer
             this.setState(this.baseState);
@@ -101,12 +119,26 @@ class RegistrierungForm extends Component {
         [event.target.id + 'Edited']: true
         });
     }
+
+    //Setzen des Status, bei schließen des Dialogs
+    handleClose = () => {
+      this.setState(this.baseState);
+      this.props.onClose(null);
+  }
+
+  handleChange(change, event) {
+    var toChange = this.state.form;
+    toChange[change] = event.target.value;
+    this.setState({form: toChange});
+  }
+
 	/** Renders the sign in page, if user objext is null */
 	/** Renders the component */
     render() {
-        const { classes, show } = this.props;
-        const { Name, NameValidationFailed, NameEdited, firstName, firstNameValidationFailed, firstNameEdited, alter, alterValidationFailed, alterEdited, geschlecht, geschlechtValidationFailed, geschlechtEdited, semester, semesterValidationFailed, studiengang, lerngruppe, addingInProgress,
-          addingError} = this.state;
+        const { classes, show, person } = this.props;
+        const { name, nameValidationFailed, firstName, firstNameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
+          alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, addingInProgress,
+          updatingInProgress, updatingError} = this.state;
     
         let title = 'Registriere dich jetzt!';
         let header = 'Bitte gib deine Daten ein:';
@@ -114,45 +146,73 @@ class RegistrierungForm extends Component {
         return (
             <Dialog>
               <DialogTitle id='form-dialog-title'>{title}
+                  <IconButton className={classes.closeButton} onClick={this.handleClose}>
+                      <CloseIcon />
+                  </IconButton>
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
                   {header}
                 </DialogContentText>
                 <form className={classes.root} noValidate autoComplete='off'>
-                  <TextField type='text' required fullWidth margin='normal' id='Name' label='Nachname:' value={Name}
-                    onChange={this.textFieldValueChange} error={NameValidationFailed}
-                    helperText={NameValidationFailed ? 'The last name must contain at least one character' : ' '} />
-                  <TextField autoFocus type='text' required fullWidth margin='normal' id='firstName' label='Vorname:' value={firstName} 
+
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='name' label='Nachname:' value={name}
+                    onChange={this.textFieldValueChange} error={nameValidationFailed}
+                    helperText={nameValidationFailed ? 'The last name must contain at least one character' : ' '} />
+
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='firstName' label='Vorname:' value={firstName} 
                     onChange={this.textFieldValueChange} error={firstNameValidationFailed} 
                     helperText={firstNameValidationFailed ? 'The first name must contain at least one character' : ' '} />
-                  <TextField autoFocus type='text' required fullWidth margin='normal' id='alter' label='Alter:' value={alter} 
-                    onChange={this.textFieldValueChange} error={alterValidationFailed} 
-                    helperText={alterValidationFailed ? 'The age must contain at least one character' : ' '} />
-                  <TextField autoFocus type='text' required fullWidth margin='normal' id='geschlecht' label='Geschlecht:' value={geschlecht} 
-                    onChange={this.textFieldValueChange} error={geschlechtValidationFailed} 
-                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} /> 
-                  <TextField autoFocus type='text' required fullWidth margin='normal' id='semester' label='Semester:' value={semester} 
+                  
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='semester' label='Semester:' value={semester} 
                     onChange={this.textFieldValueChange} error={semesterValidationFailed} 
-                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} /> 
+                    helperText={geschlechtValidationFailed ? 'The semester must contain at least one character' : ' '} /> 
+                    
                   <FormControl className={classes.formControl} value = {studiengang}>
                             <InputLabel>Studiengang</InputLabel>
-                             <Select required onChange={this.handleChange}>
+                             <Select required onChange={this.handleChange} error={studiengangValidationFailed}>
                                 <MenuItem value='WI'>Wirtschaftsinformatik</MenuItem>
                                 <MenuItem value='MW'>Medienwirtschaft</MenuItem>
                             </Select>
                    </FormControl>
+                   
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='alter' label='Alter:' value={alter} 
+                    onChange={this.textFieldValueChange} error={alterValidationFailed} 
+                    helperText={alterValidationFailed ? 'The age must contain at least one character' : ' '} />
+
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='geschlecht' label='Geschlecht:' value={geschlecht} 
+                    onChange={this.textFieldValueChange} error={geschlechtValidationFailed} 
+                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} /> 
+                  
                   <FormControl className={classes.formControl} value = {lerngruppe}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
-                             <Select required onChange={this.handleChange}>
-                                <MenuItem value='True'>Ja!</MenuItem>
-                                <MenuItem value='False'>Nein!</MenuItem>
+                             <Select required onChange={this.handleChange} error={lerngruppeValidationFailed}>
+                                <MenuItem value='1'>Ja!</MenuItem>
+                                <MenuItem value='0'>Nein!</MenuItem>
                             </Select>
                    </FormControl>
+
                 </form>
-                <LoadingProgress show={addingInProgress} />
-                <ContextErrorMessage error={addingError} contextErrorMsg={`The customer could not be added.`} onReload={this.addPerson} />
+                <LoadingProgress show={addingInProgress || updatingInProgress} />
+                {
+
+                  <ContextErrorMessage error={updatingError}
+                      contextErrorMsg={`DU konntest leider nicht registriert werden :/`}
+                      onReload={this.registrieren} />
+
+                }
               </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color='secondary'>
+                            Abbrechen
+                </Button>
+                {
+                    <Button disabled={nameValidationFailed || mat_nrValidationFailed} variant='contained'
+                          onClick={this.registrieren} color='primary'>
+                          Jetzt registrieren
+                    </Button>
+                }
+              </DialogActions>
             </Dialog>
         
         );
@@ -170,11 +230,13 @@ const styles = theme => ({
 /** PropTypes */
 RegistrierungForm.propTypes = {
 	/** @ignore */
-	classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired,
 	/** 
 	 * Handler function, which is called if the user wants to sign in.
 	 */
+  onClose: PropTypes.func.isRequired,
 	onSignIn: PropTypes.func.isRequired,
 }
 
-export default withRouter(withStyles(styles)(RegistrierungForm));
+export default withStyles(styles)(RegistrierungForm);
