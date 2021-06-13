@@ -15,6 +15,8 @@ from server.bo.Vorschlag import Vorschlag
 from server.bo.Nachricht import Nachricht
 from server.bo.Lernvorlieben import Lernvorlieben
 from server.bo.Konversation import Konversation
+from server.bo.Profil import Profil
+
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -61,7 +63,7 @@ person = api.inherit('Person', nbo, {
 profil = api.inherit('Profil', bo, {
     #hier String oder Boolean?
     'gruppe': fields.String(attribute='_gruppe', description='Teilnahme an einer Gruppe'),    
-    'lernfaecher': fields.String( attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernfaecher': fields.String(attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
 })
 
@@ -120,7 +122,7 @@ class PersonenListOperationen(Resource):
 
     @lernApp.marshal_with(person, code=200)
     @lernApp.expect(person)  # Wir erwarten ein Person-Objekt von Client-Seite.
-    @secured
+    #@secured
     def post(self):
         """Anlegen eines neuen Person-Objekts.
 
@@ -162,7 +164,7 @@ class PersonOperationen(Resource):
     
     @lernApp.marshal_with(person)
     @lernApp.expect(person, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
 
