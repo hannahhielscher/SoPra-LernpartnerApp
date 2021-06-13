@@ -106,7 +106,7 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, { #String oder Boolean?
 
 @lernApp.route('/personen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class PersonenListOperationen(Resource):
+class PersonenOperationen(Resource):
     @lernApp.marshal_list_with(person)
     @secured
     def get(self):
@@ -118,35 +118,30 @@ class PersonenListOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    
+    #@secured
+    def put(self):
+        """Update des User-Objekts."""
 
-    @lernApp.marshal_with(person, code=200)
-    @lernApp.expect(person)  # Wir erwarten ein Person-Objekt von Client-Seite.
-    @secured
-    def post(self):
-        """Anlegen eines neuen Person-Objekts.
-
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der AppAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
+        personId = request.args.get("id")
+        name = request.args.get("name")
+        vorname = request.args.get("vorname")
+        semester = request.args.get("semester")
+        studiengang = request.args.get("studiengang")
+        alter = request.args.get("alter")
+        geschlecht = request.args.get("geschlecht")
+        lerngruppe= request.args.get("lerngruppe")
+        email = request.args.get("email")
         adm = AppAdministration()
-
-        proposal = Person.from_dict(api.payload)
-
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
-        if proposal is not None:
-            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.create_person(proposal.get_name(), proposal.get_vorname(), proposal.get_semester(), proposal.get_studiengang(), proposal.get_alter(), proposal.get_geschlecht(), proposal.get_lerngruppe(),
-                                proposal.get_google_user_id(), proposal.get_email(), proposal.get_personenprofil())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+        person = adm.get_person_by_id(personId)
+        person.set_name(name)
+        person.set_vorname(vorname)
+        person.set_semester(semester)
+        person.set_studiengang(studiengang)
+        person.set_alter(alter)
+        person.set_geschlecht(geschlecht)
+        person.set_lerngruppe(lerngruppe)
+        person.set_email(email)
+        adm.update_person_by_id(person)
 
 @lernApp.route('/personen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
