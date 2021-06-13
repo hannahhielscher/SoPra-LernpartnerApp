@@ -12,15 +12,92 @@ class ProfilMapper(Mapper):
 
     def __init__(self):
         super().__init__()
-        
+
+    def find_all(self):
+        """Auslesen aller Profile.
+        :return Alle Profil-Objekten im System
+        """
+        result = []
+
+        cursor = self._connection.cursor()
+
+        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id = profile.id"
+
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
+
+            buff = False
+            for i in result:
+                if i.get_id() == id:
+                    buff = True
+                    i.set_lernfaecher(lernfaecher)
+
+            if buff == False:
+                profil = Profil()
+                profil.set_id(id)
+                profil.set_gruppe(gruppe)
+                profil.set_lernfaecher(lernfaecher)
+                profil.set_lernvorlieben_id(lernvorlieben_id)
+
+                result.append(profil)
+            else:
+                pass
+
+            self._connection.commit()
+            cursor.close()
+
+        return result
+
+    def find_by_id(self, id):
+        """Suchen eines Profils nach ID. Da diese eindeutig ist,
+        wird genau ein Objekt zurückgegeben.
+
+        :param id Primärschlüsselattribut (->DB)
+        :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
+            nicht vorhandenem DB-Tupel.
+        """
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
+
+            buff = False
+            for i in result:
+                if i.get_id() == id:
+                    buff = True
+                    i.set_lernfaecher(lernfaecher)
+
+            if buff == False:
+                profil = Profil()
+                profil.set_id(id)
+                profil.set_gruppe(gruppe)
+                profil.set_lernfaecher(lernfaecher)
+                profil.set_lernvorlieben_id(lernvorlieben_id)
+
+                result.append(profil)
+            else:
+                pass
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def find_lernfaecher_by_profil_id(self, profil_id):
-        
+
         result_key = []
         result_value = []
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(
+            profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -42,72 +119,6 @@ class ProfilMapper(Mapper):
         cursor.close()
 
         return result
-
-    def find_all(self):
-        """Auslesen aller Profile.
-        :return Alle Profil-Objekten im System
-        """
-        result = []
-
-        cursor = self._connection.cursor()
-
-        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id = profile.id"
-
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
-            profil = Profil()
-            profil.set_id(id)
-            profil.set_gruppe(gruppe)
-            profil.set_lernfaecher(lernfaecher)
-            profil.set_lernvorlieben_id(lernvorlieben_id)
-
-            result.append(profil)
-
-            self._connection.commit()
-            cursor.close()
-
-            return result
-
-    def find_by_id(self, id):
-        """Suchen eines Profils nach ID. Da diese eindeutig ist,
-        wird genau ein Objekt zurückgegeben.
-
-        :param id Primärschlüsselattribut (->DB)
-        :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-            nicht vorhandenem DB-Tupel.
-        """
-        result = None
-        lernfaecher = []
-        cursor = self._connection.cursor()
-        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for i in tuples:
-            lernfaecher.append(lernfaecher_id)
-        try:
-            (id, gruppe, lernvorlieben_id) = tuples[0]
-            profil = Profil()
-            
-            profil.set_id(id)
-            profil.set_gruppe(gruppe)
-            profil.set_lernfaecher(lernfaecher)
-            profil.set_lernvorlieben_id(lernvorlieben_id)
-
-            result = profil
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
     
     def find_by_lernfach_id(self, lernfach_id):
         """Suchen eines Lernfaches nach dessen ID
@@ -158,22 +169,20 @@ class ProfilMapper(Mapper):
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 profil.set_id(1)
-
-        lernfaecher = profil.get_lernfaecher()
         
         command = "INSERT INTO profile (id, gruppe, lernvorlieben_id) VALUES (%s,%s,%s)"
 
         data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
-        
-        for i in lernfaecher: 
-            command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
-            data2 = (profil.get_id(), i)
-            cursor.execute(command2, data2)
-        
+
+        command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+
+        data2 = (profil.get_id(), profil.get_lernfaecher_id())
+        cursor.execute(command2, data2)
 
         self._connection.commit()
         cursor.close()
+
         return profil
 
     def update(self, profil):
