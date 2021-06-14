@@ -129,6 +129,31 @@ class KonversationListeEintrag extends Component {
       });
     }
 
+// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+componentDidMount() {
+  this.getKonversation();
+}
+
+// Wenn die Componente geupdatet wird
+componentDidUpdate(prevProps){
+  if((this.props.show) && (this.props.show !== prevProps.show)) {
+    this.getKonversation();
+  }
+}
+
+render() {
+  const { classes } = this.props;
+  const {nachricht, inhalt, profil, person, konversation,  loadingInProgress, error}
+
+  return(
+    <div>
+
+    <LoadingProgress show={loadingInProgress} />
+    <ContextErrorMessage error={error} contextErrorMsg = {'Deine Konversationen konnten nicht geladen werden'} onReload={this.getKonversationen} /> 
+    </div>
+  )
+
+}
   
     
 }
