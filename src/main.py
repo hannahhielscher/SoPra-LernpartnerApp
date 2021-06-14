@@ -118,7 +118,7 @@ class PersonenOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    #@secured
+    @secured
     def put(self):
         """Update des User-Objekts."""
 

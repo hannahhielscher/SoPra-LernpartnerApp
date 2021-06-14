@@ -15,12 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-
- 
   
-  ;
-
-
 class LernfaecherForm extends component{
   
   constructor(props){
@@ -30,16 +25,17 @@ class LernfaecherForm extends component{
     this.state = {
         profil: null,
         lernfaecher: [],
+        lernfach: null,
         loadingInProgress: false,
         error: null
     };
   }
 
   handleChange = (event) => {
-    const name = event.target.name;
+    const lernfach = event.target.lernfach;
     setState({
       ...state,
-      [name]: event.target.value,
+      [lernfach]: event.target.value,
     });
   }
 
@@ -66,14 +62,14 @@ class LernfaecherForm extends component{
   }
   
   render() {
-    //const { profil, lernfaecher, loadingInProgress, error } = this.state;
+    const { profil, lernfaecher, lernfach, loadingInProgress, error } = this.state;
     return (
       <div>
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="age-native-simple">Lernfach auswählen:</InputLabel>
           <Select
             native
-            value={state.age}
+            value= {this.state.lernfach}
             onChange={handleChange}
             inputProps={{
               name: 'age',
