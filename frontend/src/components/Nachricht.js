@@ -160,12 +160,12 @@ const styles = theme => ({
 
 });
 
-/** PropTypes */
+//** PropTypes */
 Nachricht.propTypes = {
-    /** @ignore */
-    classes: PropTypes.object.isRequired,
-    /** @ignore */
-    location: PropTypes.object.isRequired,
-  }
+  /** @ignore */
+  classes: PropTypes.object.isRequired,
+  Nachricht: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired
+}
   
   export default withStyles(styles)(Nachricht);
