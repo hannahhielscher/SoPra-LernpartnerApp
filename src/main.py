@@ -118,7 +118,7 @@ class PersonenOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    #@secured
+    @secured
     def put(self):
         """Update des User-Objekts."""
 
@@ -159,7 +159,7 @@ class PersonOperationen(Resource):
     
     @lernApp.marshal_with(person)
     @lernApp.expect(person, validate=True)
-    #@secured
+    @secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
 
@@ -446,6 +446,33 @@ class VorschlagByIDOperationen(Resource):
         vorschlag = adm.get_vorschlag_by_id(id)
         adm.delete(vorschlag)
         return '', 200
+
+
+@lernApp.route('/vorschlaege')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class VorschlaegeListOperations(Resource):
+    @lernApp.marshal_list_with(vorschlag)
+    @secured
+    def get(self):
+        """Auslesen aller Vorschlag-Objekte.
+
+        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = AppAdministration()
+        vorschlaege = adm.get_all_vorschlaege()
+        return vorschlaege
+
+@lernApp.route('/vorschlaege/<int:mainpersonid>/<int:lernfachid>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class VorschlaegeByPersonByLernfachOperations(Resource):
+    @lernApp.marshal_list_with(vorschlag)
+    @secured
+    def get(self, mainpersonid, lernfachid):
+        """Auslesen aller Vorschlag-Objekte nach Person und Lernfach.
+
+        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = AppAdministration()
+        vorschlaege = adm.match_berechnen(mainpersonid, lernfachid)
+        return vorschlaege
 
 @lernApp.route('/nachricht')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
