@@ -53,8 +53,6 @@ class KonversationListeEintrag extends Component {
         this.state = {
             konversation: null,
             profil: null,
-            profilID: null,
-            personName: null,
             teilnehmer: null, 
             nachricht: null, 
             inhalt: null,
@@ -76,4 +74,61 @@ class KonversationListeEintrag extends Component {
         });
       }
 
+    
+      // API Anbindung um Nachricht vom Backend zu bekommen 
+    getNachricht = () => {
+      LernpartnerAPI.getAPI().getNachricht(this.props.nachricht)
+      .then(nachrichtBO =>
+          this.setState({
+            nachricht: nachrichtBO,
+            inhalt: nachrichtBO.inhalt,
+            profil: nachrichtBO.profil,
+            person: nachrichtBO.person,
+            konversation: nachrichtBO.konversation,
+            loadingInProgress: false,
+            error: null,
+          })).then(()=>{
+            this.getNachricht()
+            this.getPerson()
+            this.getProfil()
+          })
+          .catch(e =>
+              this.setState({
+                nachricht: null,
+                inhalt: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
+    // API Anbindung um Teilnehmer vom Backend zu bekommen 
+    getKonversation = () => {
+      LernpartnerAPI.getAPI().getKonversation(this.props.konversation)
+      .then(konversationBO =>
+          this.setState({
+            teilnehmer: konversationBO.teilnehmer,
+            loadingInProgress: false,
+            error: null,
+          })).then(()=>{
+            this.getKonversation()
+          })
+          .catch(e =>
+              this.setState({
+                konversation: null,
+                inhalt: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
+  
+    
 }

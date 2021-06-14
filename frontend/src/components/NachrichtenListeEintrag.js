@@ -30,7 +30,7 @@ class NachrichtenListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             nachricht: null, 
-            personName: null, 
+            profil: null, 
             inhalt: null, 
             loadingInProgress: false,
             error: null
@@ -57,6 +57,7 @@ class NachrichtenListeEintrag extends Component {
             this.setState({
               nachricht: nachrichtBO,
               inhalt: nachrichtBO.inhalt,
+              profil: nachrichtBO.profil,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
@@ -76,31 +77,6 @@ class NachrichtenListeEintrag extends Component {
         });
       }
 
-      
-    // API Anbindung um Person vom Backend zu bekommen 
-    getPerson = () => {
-        LernpartnerAPI.getAPI().getNachricht(this.props.nachricht)
-        .then(personBO =>
-            this.setState({
-              person: personBO,
-              profilID: nachrichtBO.person,
-              personName: personBO.name,
-              loadingInProgress: false,
-              error: null,
-            }))
-            .catch(e =>
-                this.setState({
-                  person: null,
-                  profilID: null,
-                  personName: null,
-                  loadingInProgress: false,
-                  error: e,
-                }));
-        this.setState({
-          loadingInProgress: true,
-          error: null
-        });
-      }
 
       
     
@@ -119,7 +95,7 @@ class NachrichtenListeEintrag extends Component {
 
       render() {
         const { classes } = this.props;
-        const {nachricht, inhalt, personName, loadingInProgress, error}
+        const {nachricht, inhalt, profil, loadingInProgress, error}
 
         return(
           <div>
@@ -137,7 +113,7 @@ class NachrichtenListeEintrag extends Component {
                   <StyledTableRow>
                       <StyledTableCell>Nachrichten</StyledTableCell>
                       <StyledTableCell align="center">inhalt</StyledTableCell>
-                      <StyledTableCell align="center">personName</StyledTableCell>
+                      <StyledTableCell align="center">profil</StyledTableCell>
                   </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -172,7 +148,7 @@ const styles = theme => ({
   NachrichtListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
-    vorschlag: PropTypes.object.isRequired,
+    NachrichtListeEintrag: PropTypes.object.isRequired,
     show: PropTypes.bool.isRequired
   }
   
