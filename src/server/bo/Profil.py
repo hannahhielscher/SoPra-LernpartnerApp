@@ -7,7 +7,7 @@ class Profil (BusinessObject):
         super().__init__()
         self._gruppe = False
         self._lernfaecher = []
-        self._lernvorlieben = None
+        self._lernvorlieben_id = None
 
     def get_gruppe(self):
         return self._gruppe
@@ -19,9 +19,9 @@ class Profil (BusinessObject):
         """Auslesen der Lernfächer"""
         return self._lernfaecher
 
-    def set_lernfaecher(self, lernfaecher_neu):
+    def set_lernfaecher(self, lernfach_neu):
         """Setzen der Lernfächer"""
-        self._lernfaecher = lernfaecher_neu
+        self._lernfaecher.append(lernfach_neu)
 
     def get_lernvorlieben_id(self):
         """Auslesen der Lernfächer"""
@@ -37,7 +37,7 @@ class Profil (BusinessObject):
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Profil: {}, {}, {}".format(self._gruppe, self._lernfaecher, self._lernvorlieben)
+        return "Profil: {}, {}, {}".format(self._gruppe, self._lernfaecher, self._lernvorlieben_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):

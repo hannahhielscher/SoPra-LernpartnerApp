@@ -17,7 +17,6 @@ from server.bo.Lernvorlieben import Lernvorlieben
 from server.bo.Konversation import Konversation
 from server.bo.Profil import Profil
 
-
 #SecurityDecorator
 from SecurityDecorator import secured
 
@@ -62,9 +61,10 @@ person = api.inherit('Person', nbo, {
 
 profil = api.inherit('Profil', bo, {
     #hier String oder Boolean?
-    'gruppe': fields.String(attribute='_gruppe', description='Teilnahme an einer Gruppe'),    
-    'lernfaecher': fields.String(attribute='_lernfaecher', description='Lernfaecher der Person'),
-    'lernvorlieben': fields.String(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
+    'gruppe': fields.String(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
+    'lernfaecher': fields.List(cls_or_instance=fields.Integer, attribute='_lernfaecher', description='Lernfaecher der Person'),
+    #'lernfaecher': fields.String(attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernvorlieben': fields.Integer(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
 })
 
 lerngruppe = api.inherit('Lerngruppe', nbo, {
@@ -205,23 +205,11 @@ class PersonByGoogleIDOperationen(Resource):
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
 
-@lernApp.route('/profil/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class ProfilByIDOperationen(Resource):
-    @lernApp.marshal_list_with(profil)
-    @secured
-    def get(self, id):
-        """Auslesen eines bestimmten Profil-Objekts.
-        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
-        """
-        adm = AppAdministration()
-        profil = adm.get_profil_by_id(id)
-        return profil
-
 @lernApp.route('/profile')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilListOperationen(Resource):
     @lernApp.marshal_list_with(profil)
+
     #@secured
     def get(self):
         """Auslesen aller Profil-Objekte.
@@ -232,22 +220,64 @@ class ProfilListOperationen(Resource):
         profile = adm.get_all_profil()
         return profile
 
-    @secured
-    def put(self):
+    #@secured
+    def post(self):
+        """Anlegen eines neuen Profil-Objekts."""
+        #id = request.args.get("id")
+        gruppe = request.args.get("gruppe")
+        lernfaecher = request.args.get("lernfaecher")
+        lernvorlieben_id = request.args.get("lernvorlieben_id")
+        adm = AppAdministration()
+        adm.create_profil(gruppe, lernfaecher, lernvorlieben_id)
+
+    #@secured
+    #def put(self):
+     #   """Updaten eines Profil-Objekts."""
+
+      #  id = request.args.get("id")
+       # gruppe = request.args.get("gruppe")
+        #lernfaecher = request.args.get("lernfaecher")
+        #lernvorlieben_id = request.args.get("lernvorlieben_id")
+
+        #adm = AppAdministration()
+
+        #liste = adm.get_profil_by_id(id)
+        #for i in liste:
+         #   i.set_gruppe(gruppe)
+          #  i.set_lernfaecher(lernfaecher)
+           # i.set_lernvorlieben_id(lernvorlieben_id)
+            #adm.update(i)
+
+@lernApp.route('/profil/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+
+    #@secured
+    def get(self, id):
+        """Auslesen eines bestimmten Profil-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        profil = adm.get_profil_by_id(id)
+        return profil
+
+    @lernApp.marshal_with(profil)
+    @lernApp.expect(profil, validate=True)
+    #@secured
+    def put(self, id):
         """Update des Profil-Objekts."""
 
-        profilId = request.args.get("id")
-        gruppe = request.args.get("gruppe")
-        hochschule = request.args.get("hochschule")
-        lernfaecher = request.args.get("lernfaecher")
-
         adm = AppAdministration()
-        profil = adm.get_profil_by_id(profilId)
-        profil.set_gruppe(gruppe)
-        profil.set_hochschule(hochschule)
-        profil.set_lernfaecher(lernfaecher)
+        c = Profil.from_dict(api.payload)
 
-        adm.update_profil_by_id(profil)
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Profil-Objekts gesetzt."""
+            c.set_id(id)
+            adm.save_profil(c)
+            return '', 200
+        else:
+            return '', 500
 
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

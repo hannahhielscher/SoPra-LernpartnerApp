@@ -7,6 +7,7 @@ from .bo.TeilnahmeChat import TeilnahmeChat
 from .bo.TeilnahmeGruppe import TeilnahmeGruppe
 from .bo.Vorschlag import Vorschlag
 
+
 from .db.KonversationMapper import KonversationMapper
 from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
@@ -107,12 +108,6 @@ class AppAdministration (object):
 
     def create_profil(self, gruppe, lernfaecher, lernvorlieben_id):
         """Eine Person anlegen"""
-
-        profil = Profil()
-        profil.set_gruppe(gruppe)
-        profil.set_lernfaecher(lernfaecher)
-        profil.set_lernvorlieben_id(lernvorlieben_id)
-        profil.set_id(1)
 
         with ProfilMapper() as mapper:
             return mapper.insert(profil)
