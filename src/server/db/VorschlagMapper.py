@@ -18,18 +18,18 @@ class VorschlagMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, main_person_id, match_quote, lernfach, person_id FROM vorschlaege"
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, personen_id FROM vorschlaege"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, main_person_id, match_quote, lernfach, person_id) in tuples:
-            vorschlag = Vorschlaege()
-            person.set_id(id)
-            person.set_main_person_id(main_person_id)
-            person.set_match_quote(match_quote)
-            person.set_lernfach(lernfach)
-            person.set_person_id(person_id)
+        for (id, main_person_id, match_quote, lernfaecher_id, personen_id) in tuples:
+            vorschlag = Vorschlag()
+            vorschlag.set_id(id)
+            vorschlag.set_main_person_id(main_person_id)
+            vorschlag.set_match_quote(match_quote)
+            vorschlag.set_lernfaecher_id(lernfaecher_id)
+            vorschlag.set_personen_id(personen_id)
 
             result.append(vorschlag)
 
@@ -46,19 +46,18 @@ class VorschlagMapper(Mapper):
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfach, person_id FROM vorschlaege WHERE id='{}'".format(
-            id)
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, personen_id FROM vorschlaege WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, main_person_id, match_quote, lernfach, person_id) = tuples[0]
-            vorschlag = Vorschlaege()
-            person.set_id(id)
-            person.set_main_person_id(main_person_id)
-            person.set_match_quote(match_quote)
-            person.set_lernfach(lernfach)
-            person.set_person_id(person_id)
+            (id, main_person_id, match_quote, lernfaecher_id, personen_id) = tuples[0]
+            vorschlag = Vorschlag()
+            vorschlag.set_id(id)
+            vorschlag.set_main_person_id(main_person_id)
+            vorschlag.set_match_quote(match_quote)
+            vorschlag.set_lernfaecher_id(lernfaecher_id)
+            vorschlag.set_personen_id(personen_id)
 
             result = vorschlag
 
@@ -71,41 +70,7 @@ class VorschlagMapper(Mapper):
         cursor.close()
         return result
 
-    def find_by_person_id(self, id):
-        """Suchen eines Vorschlages nach der übergebenen ID.
-        :param id Primärschlüsselattribut eines Vorschlages aus der Datenbank
-        :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfach, person_id FROM vorschlaege WHERE person_id='{}'".format(
-            id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        try:
-            (id, main_person_id, match_quote, lernfach, person_id) = tuples[0]
-            vorschlag = Vorschlaege()
-            person.set_id(id)
-            person.set_main_person_id(main_person_id)
-            person.set_match_quote(match_quote)
-            person.set_lernfach(lernfach)
-            person.set_person_id(person_id)
-
-            result = vorschlag
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-    		keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-        return result
-
-
-    def find_by_main_person_id(self, id):
+    def find_by_main_person_id(self, main_person_id):
         """Suchen eines Vorschlages nach der übergebenen ID.
         :param id Primärschlüsselattribut eines Vorschlages aus der Datenbank
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
@@ -113,26 +78,19 @@ class VorschlagMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfach, person_id FROM vorschlaege WHERE main_person_id='{}'".format(
-            id)
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, personen_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, main_person_id, match_quote, lernfach, person_id) = tuples[0]
-            vorschlag = Vorschlaege()
-            person.set_id(id)
-            person.set_main_person_id(main_person_id)
-            person.set_match_quote(match_quote)
-            person.set_lernfach(lernfach)
-            person.set_person_id(person_id)
+        for (id, main_person_id, match_quote, lernfaecher_id, personen_id) in tuples:
+            vorschlag = Vorschlag()
+            vorschlag.set_id(id)
+            vorschlag.set_main_person_id(main_person_id)
+            vorschlag.set_match_quote(match_quote)
+            vorschlag.set_lernfaecher_id(lernfaecher_id)
+            vorschlag.set_personen_id(personen_id)
 
             result.append(vorschlag)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-    		keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
 
         self._connection.commit()
         cursor.close()
@@ -158,8 +116,8 @@ class VorschlagMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 vorschlag.set_id(1)
 
-        command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfach, person_id) VALUES (%s,%s,%s,%s,%s)"
-        data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfach(), vorschlag.get_person_id())
+        command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfaecher_id, personen_id) VALUES (%s,%s,%s,%s,%s)"
+        data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfaecher_id(), vorschlag.get_personen_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -167,7 +125,7 @@ class VorschlagMapper(Mapper):
 
         return vorschlag
 
-    def update_by_id(self, vorschlag):
+    def update(self, vorschlag):
         """Überschreiben / Aktualisieren eines Vorschlag-Objekts in der DB
         :param vorschlag -> Vorschlag-Objekt
         :return aktualisiertes Vorschlag-Objekt
