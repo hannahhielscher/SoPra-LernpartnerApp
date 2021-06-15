@@ -25,19 +25,19 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_student_id(self, person_id):
+    def find_by_person_id(self, person_id):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, teilnehmer, konversation FROM teilnahmen_chats WHERE teilnehmer={}".format(person_id)
+        command = "SELECT id, person_id, konversation_id FROM teilnahmen_chat WHERE person_id={}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, konversation) in tuples:
+        for (id, person_id, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
-            teilnahme.set_teilnehmer(teilnehmer)
-            teilnahme.set_konversation(konversation)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
 
         self._connection.commit()
@@ -45,19 +45,19 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_konversations_id(self, konversation_id):
+    def find_by_konversation_id(self, konversation_id):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, teilnehmer, konversation FROM teilnahmen_chats WHERE konversation={}".format(konversation_id)
+        command = "SELECT id, person_id, konversation_id FROM teilnahmen_chat WHERE konversation_id={}".format(konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, konversation) in tuples:
+        for (id, person_id, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
-            teilnahme.set_teilnehmer(teilnehmer)
-            teilnahme.set_konversation(konversation)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
 
         self._connection.commit()
@@ -77,7 +77,7 @@ class TeilnahmeChatMapper(Mapper):
         :return das bereits übergebene Teilnahme-Objekt mit aktualisierten Daten
 		'''
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen_chats ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen_chat")
         tuples = cursor.fetchall()
         """TODO User autoincrement"""
         for (maxid) in tuples:
@@ -90,7 +90,7 @@ class TeilnahmeChatMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 teilnahme.set_id(1)
 
-        command = "INSERT INTO teilnahmen_chats (id, teilnehmer, konversation) VALUES (%s,%s,%s)"
+        command = "INSERT INTO teilnahmen_chat (id, person_id, konversation_id) VALUES (%s,%s,%s)"
 
         data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_konversation())
         cursor.execute(command, data)
@@ -108,20 +108,20 @@ class TeilnahmeChatMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "UPDATE teilnahmen_chat SET teilnehmer=%s, konversation=%s WHERE id=%s"
+        command = "UPDATE teilnahmen_chat SET person_id=%s, konversation_id=%s WHERE id=%s"
         data = (teilnahme.get_teilnehmer(), teilnahme.get_konversation(), teilnahme.get_id())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-    def delete(self, konversationId, teilnehmerId):
+    def delete(self, konversationId, personId):
         """Delete an object from the DB"""
         
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM teilnahmen_chats WHERE konversation=%s AND teilnehmer=%s"
-        data = (konversationId, teilnehmerId)
+        command = "DELETE FROM teilnahmen_chat WHERE konversation_id=%s AND person_id=%s"
+        data = (konversationId, personId)
         cursor.execute(command, data)
         self._connection.commit()
         cursor.close()

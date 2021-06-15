@@ -157,4 +157,4 @@ frontend/package-lock.json
 .vscode/settings.json
 
 *.pyc
-*.pyc
+*.pyo

@@ -60,56 +60,32 @@ class KonversationMapper (Mapper):
 
         return result
 
-    def find_nachrichten_by_id(self, id):
-        """Suchen eines Lernfaches nach dessen ID
-        :param lernfach_id
-        :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
-        """
+    def find_by_name(self, name):
 
         result = []
-
         cursor = self._connection.cursor()
-        command = "SELECT nachrichten.nachricht_inhalt, nachrichten.person_id, konversation.name FROM nachrichten INNER JOIN konversation ON nachrichten.konversation_id = konversation.id WHERE konversation.id ='{}'".format(
-            id)
+        command = "SELECT id, name FROM konversationen WHERE name={}".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (nachricht_inhalt, person_id, name) in tuples:
-            nachricht = Nachricht()
-            nachricht.set_nachricht_inhalt(nachricht_inhalt)
-            nachricht.set_person_id(person_id)
-            nachricht.set_name(name)
-            result.append(nachricht)
+        try:
+            (id, name) = tuples[0]
+            konversation = Konversation()
+            konversation.set_id(id)
+            konversation.set_name(name)
+
+            result = konversation
+        
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
         self._connection.commit()
         cursor.close()
 
         return result
 
-   # def find_teilnehmer_by_id(self, id):
-    #    """Suchen eines Lernfaches nach dessen ID
-     #   :param lernfach_id
-      #  :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
-       # """
-
-     #   result = []
-
-      #  cursor = self._connection.cursor()
-       # command = "SELECT teilnahmenchat.person_id FROM teilnahmenchat INNER JOIN konversation ON teilnahmenchat.konversation_id = konversation.id WHERE konversation.id ='{}'".format(
-        #    id)
-        #cursor.execute(command)
-        #tuples = cursor.fetchall()
-
-#        for (person_id) in tuples:
- #           teilnehmer = TeilnahmeChat()
-  #          teilnehmer.set_teilnehmer(person_id)
-   #         result.append(teilnehmer)
-
-    #    self._connection.commit()
-     #   cursor.close()
-
-      #  return result
-    
     def insert(self, konversation):
         """Einfügen eines Konversation-Objekts in die Datenbank.
 
@@ -133,8 +109,8 @@ class KonversationMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 konversation.set_id(1)
 
-        command = "INSERT INTO konversationen (id) VALUES (%s,%s,%s,%s)"
-        data = (konversation.get_id())
+        command = "INSERT INTO konversationen (id, name) VALUES (%s,%s)"
+        data = (konversation.get_id(), konversation.get_name())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -149,8 +125,8 @@ class KonversationMapper (Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE konversationen " + "SET id=%s WHERE google_user_id=%s"
-        data = (konversation.get_id())
+        command = "UPDATE konversationen " + "SET name=%s WHERE id=%s"
+        data = (konversation.get_name(), konversation.get_id())
         cursor.execute(command, data)
 
         self._connection.commit() 
@@ -162,8 +138,9 @@ class KonversationMapper (Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM konversationen WHERE id={}".format(konversation.get_id())
-        cursor.execute(command)
+        command = "DELETE FROM konversationen WHERE id=%s"
+        data = (konversation.get_id())
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
