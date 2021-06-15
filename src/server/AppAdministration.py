@@ -14,11 +14,7 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
-<<<<<<< HEAD
-=======
 from .db.VorschlagMapper import VorschlagMapper
->>>>>>> 91796b79648002efd8d7781e05edf9c5b4aa8dea
-
 
 class AppAdministration (object):
     """Diese Klasse aggregiert nahezu sämtliche Applikationslogik (engl. Business Logic).
@@ -457,28 +453,28 @@ class AppAdministration (object):
             return mapper.update_by_id(id)
 
     def match_berechnen(self, main_person_id, lernfach_id):
-        #Main-Person mit der verglichen wird
-        main_person = get_person_by_id(main_person_id)
 
-        main_profil = get_profil_by_id(main_person.get_personenprofil())
-        main_lernvorlieben = get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
+        adm = AppAdministration()
+
+        #Main-Person mit der verglichen wird
+        main_person = adm.get_person_by_id(main_person_id)
+
+        main_profil = adm.get_profil_by_id(main_person.get_personenprofil())
+        main_lernvorlieben = adm.get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
 
         #Alle anderen Personen/Gruppen
-        match_profil_all = get_profil_by_lernfach_id(lernfach_id)
-        match_lernvorlieben_id = []
+        match_profil_all = adm.get_profil_by_lernfach_id(lernfach_id)
 
-        for lernvorlieben in match_profil_all:
-            match_lernvorlieben_id.append(lernvorlieben.get_lernvorlieben_id())
-
-        #Match ausrechnen
+        #Match berechnen
 
         for profil in match_profil_all:
+
             profil_id = profil.get_id()
 
             gruppe = profil.get_gruppe()
 
             lernvorlieben_id = profil.get_lernvorlieben_id()
-            lernvorlieben = get_lernvorlieben_by_id(lernvorlieben_id)
+            lernvorlieben = adm.get_lernvorlieben_by_id(lernvorlieben_id)
 
 
             for lernvorliebe in lernvorlieben:
