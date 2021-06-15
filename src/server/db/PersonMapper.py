@@ -168,15 +168,15 @@ class PersonMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def update_by_id(self, person):
+    def update_by_id(self, personID):
         """Überschreiben / Aktualisieren eines Person-Objekts in der DB
         :param person -> Person-Objekt
         :return aktualisiertes Person-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, `alter`=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id(), person.get_id())
+        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, `alter`=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE id={}"
+        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id())
 
         cursor.execute(command, data)
 
