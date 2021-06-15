@@ -200,16 +200,25 @@ INSERT INTO `lernapp_SWPra`.`teilnahmen_gruppe` VALUES (2, 2, 1, 1, 1), (3, 3, 2
 UNLOCK TABLES;
 
 -- -----------------------------------------------------
--- Table `lernapp_SWPra`.`konversation`
+-- Table `lernapp_SWPra`.`konversationen`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `lernapp_SWPra`.`konversation` ;
+DROP TABLE IF EXISTS `lernapp_SWPra`.`konversationen` ;
 
-CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`konversation` (
+CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`konversationen` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `konversationen`
+--
+
+LOCK TABLES `lernapp_SWPra`.`konversationen` WRITE;
+/*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` DISABLE KEYS */;
+INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys Chat'), (2, 'Girl Power Chat'), (3, 'Programmier-Pros');
+/*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`nachrichten`
@@ -373,8 +382,7 @@ UNLOCK TABLES;
 -- Table `lernapp_SWPra`.`lernvorlieben`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `lernapp_SWPra`.`lernvorlieben` ;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernvorlieben` (
   `id` INT NOT NULL,
   `tageszeiten_id` INT NOT NULL,
@@ -420,8 +428,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernvorlieben` (
     REFERENCES `lernapp_SWPra`.`lernorte` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+ENGINE = InnoDB;
 
 --
 -- Dumping data for table `lernvorlieben`
@@ -443,20 +450,28 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`vorschlaege` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
   `id` INT NOT NULL,
-  `match_quote` INT NULL,
-  `lernfaecher_id` VARCHAR(45) NULL,
-  `main_person_id` VARCHAR(45) NULL,
+  `main_person_id` INT NULL,
+  `match_quote` FLOAT NULL,
+  `lernfaecher_id` INT NULL,
   `personen_id` INT NOT NULL,
-  `personen_profil_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `personen_id`, `personen_profil_id`),
-  INDEX `fk_vorschlaege_personen1_idx` (`personen_id` ASC, `personen_profil_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`, `personen_id`),
+  INDEX `fk_vorschlaege_personen1_idx` (`personen_id` ASC) VISIBLE,
   CONSTRAINT `fk_vorschlaege_personen1`
-    FOREIGN KEY (`personen_id` , `personen_profil_id`)
-    REFERENCES `lernapp_SWPra`.`personen` (`id` , `profil_id`)
+    FOREIGN KEY (`personen_id`)
+    REFERENCES `lernapp_SWPra`.`personen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `vorschlaege`
+--
+
+LOCK TABLES `lernapp_SWPra`.`vorschlaege` WRITE;
+/*!40000 ALTER TABLE `lernapp_SWPra`.`vorschlaege` DISABLE KEYS */;
+INSERT INTO `lernapp_SWPra`.`vorschlaege` VALUES (1, 1, 60.6, 3, 2),(2, 1, 100, 3, 3),(3, 1, 10, 3, 4),(4, 2, 0, 2, 3);
+/*!40000 ALTER TABLE `lernapp_SWPra`.`vorschlaege` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`teilnahmen_chat`

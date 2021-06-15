@@ -19,12 +19,13 @@ class KonversationMapper (Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT id FROM konversation")
+        cursor.execute("SELECT id, name FROM konversation")
         tuples = cursor.fetchall()
 
-        for (id) in tuples:
+        for (id, name) in tuples:
             konversation = Konversation()
             konversation.set_id(id)
+            konversation.set_name(name)
             result.append(konversation)
 
         self._connection.commit()
@@ -32,19 +33,27 @@ class KonversationMapper (Mapper):
 
         return result
 
-    def find_by_konversation_id(self, id):
+    def find_by_id(self, id):
         """Auslesen aller Tuples mit einer gegebenen ID"""
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id FROM konversationen WHERE id={} ORDER BY id".format(id)
+        command = "SELECT id, name FROM konversationen WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id) in tuples:
+        try:
+            (id, name) = tuples[0]
             konversation = Konversation()
             konversation.set_id(id)
-            result.append(konversation)
+            konversation.set_name(name)
+
+            result = konversation
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
 
         self._connection.commit()
         cursor.close()
@@ -77,29 +86,29 @@ class KonversationMapper (Mapper):
 
         return result
 
-    def find_teilnehmer_by_id(self, id):
-        """Suchen eines Lernfaches nach dessen ID
-        :param lernfach_id
-        :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
-        """
+   # def find_teilnehmer_by_id(self, id):
+    #    """Suchen eines Lernfaches nach dessen ID
+     #   :param lernfach_id
+      #  :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
+       # """
 
-        result = []
+     #   result = []
 
-        cursor = self._connection.cursor()
-        command = "SELECT teilnahmenchat.person_id FROM teilnahmenchat INNER JOIN konversation ON teilnahmenchat.konversation_id = konversation.id WHERE konversation.id ='{}'".format(
-            id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
+      #  cursor = self._connection.cursor()
+       # command = "SELECT teilnahmenchat.person_id FROM teilnahmenchat INNER JOIN konversation ON teilnahmenchat.konversation_id = konversation.id WHERE konversation.id ='{}'".format(
+        #    id)
+        #cursor.execute(command)
+        #tuples = cursor.fetchall()
 
-        for (person_id) in tuples:
-            teilnehmer = TeilnahmeChat()
-            teilnehmer.set_teilnehmer(person_id)
-            result.append(teilnehmer)
+#        for (person_id) in tuples:
+ #           teilnehmer = TeilnahmeChat()
+  #          teilnehmer.set_teilnehmer(person_id)
+   #         result.append(teilnehmer)
 
-        self._connection.commit()
-        cursor.close()
+    #    self._connection.commit()
+     #   cursor.close()
 
-        return result
+      #  return result
     
     def insert(self, konversation):
         """Einfügen eines Konversation-Objekts in die Datenbank.

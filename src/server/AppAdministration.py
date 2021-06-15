@@ -14,7 +14,10 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
-from .db.LernvorliebenMapper import LernvorliebenMapper
+<<<<<<< HEAD
+=======
+from .db.VorschlagMapper import VorschlagMapper
+>>>>>>> 91796b79648002efd8d7781e05edf9c5b4aa8dea
 
 
 class AppAdministration (object):
@@ -338,17 +341,17 @@ class AppAdministration (object):
     def get_konversation_by_id(self, id):
         """Gibt die Konversation mit der gegebenen Id zurück."""
         with KonversationMapper() as mapper:
-            return mapper.find_by_key(id)
+            return mapper.find_by_id(id)
 
     def get_nachrichten_by_id(self, id):
         """Gibt die Nachrichten mit der gegebenen Id zurück."""
         with KonversationMapper() as mapper:
             return mapper.find_by_key(id)
 
-    def get_teilnehmer_by_id(self, id):
-        """Gibt die teilnehmer mit der gegebenen Id zurück."""
-        with KonversationMapper() as mapper:
-            return mapper.find_by_key(id)
+    #def get_teilnehmer_by_id(self, id):
+     #   """Gibt die teilnehmer mit der gegebenen Id zurück."""
+      #  with KonversationMapper() as mapper:
+       #     return mapper.find_by_key(id)
 
     def save_konversation(self, konversation):
         """Speichert die Konversation."""
@@ -415,15 +418,14 @@ class AppAdministration (object):
     Vorschlag-spezifische Methoden
     """
 
-    def create_vorschlag(self, main_person_id, match_quote, lernfach, person_id):
-        """Eine Person anlegen"""
+    def create_vorschlag(self, main_person_id, match_quote, lernfaecher_id, personen_id):
+        """Einen Vorschlag anlegen"""
 
         vorschlag = Vorschlag()
-
         vorschlag.set_main_person_id(main_person_id)
         vorschlag.set_match_quote(match_quote)
-        vorschlag.set_lernfach(lernfach)
-        vorschlag.set_person_id(person_id)
+        vorschlag.set_lernfaecher_id(lernfaecher_id)
+        vorschlag.set_personen_id(personen_id)
         vorschlag.set_id(1)
 
         with VorschlagMapper() as mapper:
@@ -434,12 +436,12 @@ class AppAdministration (object):
         with VorschlagMapper() as mapper:
             return mapper.find_all()
 
-    def get_vorschlaege_by_id(self, id):
+    def get_vorschlag_by_id(self, id):
         """Gibt den Vorschlag mit der gegebenen Id zurück."""
         with VorschlagMapper() as mapper:
-            return mapper.find_by_key(id)
+            return mapper.find_by_id(id)
 
-    def get_vorschlag_by_main_person_id(self, id):
+    def get_vorschlaege_by_main_person_id(self, id):
         """Gibt den Vorschlag mit der gegebenen Id zurück."""
         with VorschlagMapper() as mapper:
             return mapper.find_by_main_person_id(id)
@@ -454,12 +456,12 @@ class AppAdministration (object):
         with VorschlagMapper() as mapper:
             return mapper.update_by_id(id)
 
-    def match_berechnen(self, person_id_for_matches):
-        """person_id_for_matches auslesen."""
-        person = get_person_by_id(person_id_for_matches)
+    def match_berechnen(self, main_person_id):
+        """main_person_id auslesen."""
+        main_person = get_person_by_id(main_person_id)
 
         """person_for_matches: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-        person_for_matches = person.get_all()
+        person_for_matches = main_person.get_all()
 
         profil_id = 0
         for i in range(len(person_for_matches) - 1, len(person_for_matches)):
@@ -521,14 +523,7 @@ class AppAdministration (object):
 
             """For-Schleife für einzelne Profil"""
             for i in range(1, len(profil) - 1):
-                """Gefilterte Werte (dargestellt als 0) abfangen und aus profil löschen"""
-                if profil[i] == 0:
-                    profil.remove(profil[i])
-                    anzahl_attribute -= 1
                 for j in range(buff, len(profil_to_match) - 1):
-                    """Gefilterte Werte auch in profil_to_match löschen"""
-                    if len(profil) != len(profil_to_match):
-                        profil_to_match.remove(profil_to_match[j])
                     """Gleiche Werte abfragen"""
                     if profil[i] == profil_to_match[j]:
                         """1 hinzufügen bei Match"""
@@ -603,7 +598,7 @@ class AppAdministration (object):
             quote = i
             for j in range(buff4, len(all_person_id)):
                 person_id = j
-                create_vorschlag(person_id_for_matches, quote, lernfach, person_id)
+                create_vorschlag(person_id_for_matches, quote, lernfaecher_id, person_id)
                 buff4 += 1
                 break
 
