@@ -21,7 +21,7 @@ class Mapper (AbstractContextManager, ABC):
             Die App befindet sich somit im **Production Mode** und zwar im *Standard Environment*.
             Hierbei handelt es sich also um die Verbindung zwischen Google App Engine und Cloud SQL."""
 
-            self._connection = connector.connect(user='demo', password='demo',
+            self._connection = connector.connect(user='root', password='sw-praktikum21',
                                           unix_socket='',
                                           database='lernapp')
         else:

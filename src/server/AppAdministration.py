@@ -6,6 +6,7 @@ from .bo.Profil import Profil
 from .bo.TeilnahmeChat import TeilnahmeChat
 from .bo.TeilnahmeGruppe import TeilnahmeGruppe
 from .bo.Vorschlag import Vorschlag
+from .bo.Lernvorlieben import Lernvorlieben
 
 
 from .db.KonversationMapper import KonversationMapper
@@ -13,7 +14,10 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
+<<<<<<< HEAD
+=======
 from .db.VorschlagMapper import VorschlagMapper
+>>>>>>> 91796b79648002efd8d7781e05edf9c5b4aa8dea
 
 
 class AppAdministration (object):

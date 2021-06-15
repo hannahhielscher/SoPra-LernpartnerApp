@@ -857,7 +857,7 @@ class TeilnahmeGruppeOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LernvorliebenByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
-    @secured
+   # @secured
     def get(self, id):
         """Auslesen eines bestimmten Lernvorlieben-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
