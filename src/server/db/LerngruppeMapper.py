@@ -97,6 +97,30 @@ class LerngruppeMapper(Mapper):
 
         return result
 
+    def find_by_lernfach_id(self, lernfach_id):
+        """Suche eines Profiles nach einem bestimmten Lernfach"""
+
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.profil_id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id  FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(lernfach_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (profil_id, gruppe, lernfaecher_id, lernvorlieben_id) in tuples:
+            profil = Profil()
+            profil.set_id(profil_id)
+            profil.set_gruppe(gruppe)
+            #profil.set_lernfaecher(find_lernfaecher_id_by_profil_id(profil_id))
+            profil.set_lernfaecher(lernfaecher_id)
+            profil.set_lernvorlieben_id(lernvorlieben_id)
+            result.append(profil)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, lerngruppe):
         """Einfügen eines lerngruppen-Objekts in die Datenbank.
 

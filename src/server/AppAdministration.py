@@ -128,10 +128,10 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.find_by_lernfach_id(lernfach_id)
 
-    def get_lernfaecher_by_profil_id(self, profil_id):
-        #Lernfaecher zu bestimmtem Profil auslesen
+    def get_lernfaecher_id_by_profil_id(self, profil_id):
+        """Lernfaecher ID zu bestimmtem Profil auslesen"""
         with ProfilMapper() as mapper:
-            return mapper.find_lernfaecher_by_profil_id(profil_id)
+            return mapper.find_lernfaecher_id_by_profil_id(profil_id)
 
     def save_profil(self, profil):
         """Profil speichern"""
@@ -452,152 +452,46 @@ class AppAdministration (object):
         with VorschlagMapper() as mapper:
             return mapper.update_by_id(id)
 
-    def match_berechnen(self, main_person_id):
-        """main_person_id auslesen."""
+    def match_berechnen(self, main_person_id, lernfach_id):
+        #Main-Person mit der verglichen wird
         main_person = get_person_by_id(main_person_id)
 
-        """person_for_matches: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-        person_for_matches = main_person.get_all()
+        main_profil = get_profil_by_id(main_person.get_personenprofil())
+        main_lernvorlieben = get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
 
-        profil_id = 0
-        for i in range(len(person_for_matches) - 1, len(person_for_matches)):
-            profil_id = person_for_matches[i]
+        #Alle anderen Personen/Gruppen
+        match_profil_all = get_profil_by_lernfach_id(lernfach_id)
+        match_lernvorlieben_id = []
 
-        profil_for_matches = get_profil_by_id(profil_id)
+        for lernvorlieben in match_profil_all:
+            match_lernvorlieben_id.append(lernvorlieben.get_lernvorlieben_id())
 
-        """profil: Profil zu dem Matches errechnet werden sollen"""
-        profil = profil_for_matches.print_all()
+        #Match ausrechnen
 
-        """lernvorlieben_id: Lernvorliebe zu Profil für das verglichen wird"""
-        lernvorlieben_id = 0
-        for i in range(len(profil) - 1, len(profil)):
-            lernvorlieben_id = profil[i]
+        for profil in match_profil_all:
+            profil_id = profil.get_id()
 
-        lernvorlieben_for_matches = get_lernvorlieben_by_id(lernvorlieben_id)
+            gruppe = profil.get_gruppe()
 
-        """lernvorlieben: Lernvorlieben zu dem Matches errechnet werden sollen"""
-        lernvorlieben = lernvorlieben_for_matches.print_all()
-
-        """Alle Profile auslesen."""
-        result_profile = get_all_profil()
+            lernvorlieben_id = profil.get_lernvorlieben_id()
+            lernvorlieben = get_lernvorlieben_by_id(lernvorlieben_id)
 
 
-        """Profil-Match ausrechnen"""
+            for lernvorliebe in lernvorlieben:
+                quote = 0
+                if lernvorliebe.get_tageszeiten() == main_lernvorlieben.get_tageszeiten():
+                    quote += 1
+                if lernvorliebe.get_tage() == main_lernvorlieben.get_tage():
+                    quote += 1
+                if lernvorliebe.get_frequenz() == main_lernvorlieben.get_frequenz():
+                    quote += 1
+                if lernvorliebe.get_lernart() == main_lernvorlieben.get_lernart():
+                    quote += 1
+                if lernvorliebe.get_gruppengroesse() == main_lernvorlieben.get_gruppengroesse():
+                    quote += 1
+                if lernvorliebe.get_lernort() == main_lernvorlieben.get_lernort():
+                    quote += 1
 
-        """prozentzahl_profil_all: Liste aller Prozentsätze zu jedem Profil
-        all_person_id: Aller IDs der Personen mit denen verglichen wird"""
-        prozentzahl_profil_all = []
-        result_lernvorlieben = []
-        all_person_id = []
+                quote_ges = (quote / 6 ) * 100
 
-        """For-Schleife mit allen Profilen die verglichen werden"""
-        for p in result_profile:
-            """Inhalt Profile die verglichen werden über eine Methode holen und in einer Liste speichern
-                profil_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-            profil_to_match = p.get_all()
-
-            for i in range(0,1):
-                all_person_id.append(profil_to_match[i])
-
-            """Lernvorlieben-ID des einzelnen Profils"""
-            lernvorlieben_id_to_matches = 0
-
-            """Lernvorlieben-ID ausfiltern und in lernvorlieben_for_matches speichern"""
-            for m in range(len(profil_to_match) - 1, len(profil_to_match)):
-                lernvorlieben_id_to_matches = profil_to_match[m]
-
-            """Nacheinander Lernvorlieben anhand der ID holen und in result_lernvorlieben abspeichern"""
-            result_lernvorlieben.append(get_lernvorlieben_by_id(lernvorlieben_id_to_matches))
-
-            """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
-                prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
-                prozent_result: Prozentzahl des einzelnen Matches/Profil mit dem im Moment verglichen wird"""
-            buff = 1
-            prozentzahl_profil = []
-            prozent_result_profil = 0
-            anzahl_attribute = len(profil) - 2
-
-            """For-Schleife für einzelne Profil"""
-            for i in range(1, len(profil) - 1):
-                for j in range(buff, len(profil_to_match) - 1):
-                    """Gleiche Werte abfragen"""
-                    if profil[i] == profil_to_match[j]:
-                        """1 hinzufügen bei Match"""
-                        prozentzahl_profil.append(1)
-                    """break, um Schleife abzubrechen und buff hochzählen um im nächsten Durchlauf das nächste Element zu vergleichen"""
-                    buff += 1
-                    break
-
-            """Prozent berechnen"""
-            """Gezählte Matches in prozent_result speichern"""
-            for k in prozentzahl_profil:
-                prozent_result_profil += k
-            """Aus den Matches den Prozentsatz errechnen"""
-            prozent_result_profil = (prozent_result_profil / anzahl_attribute) * 100
-            """Ergebnis zu prozentzahl_profil_all hinzufügen"""
-            prozentzahl_profil_all.append(prozent_result_profil)
-
-
-        """Lernvorlieben-Match ausrechnen"""
-
-        """prozentzahl_lernvorlieben_all: Liste aller Prozentsätze zu jedem Profil"""
-        prozentzahl_lernvorlieben_all = []
-
-        """For-Schleife mit allen Profilen die verglichen werden"""
-        for l in result_lernvorlieben:
-            """Inhalt Lernvorlieben die verglichen werden über eine Methode holen und in einer Liste speichern
-                lernvorlieben_to_match: Liste aller Attribute eines Profiles, mit denen verglichen wird"""
-            lernvorlieben_to_match = l.get_all()
-
-            """buff: Start der 2.For-Schleife, um ID beim Vergleich zu überspringen
-                prozentzahl: Liste mit 1 für Match, um Anzahl der Matches zu zählen
-                prozent_result: Prozentzahl des einzelnen Matches/Profil mit dem im Moment verglichen wird"""
-            buff2 = 1
-            prozentzahl_lernvorlieben = []
-            prozent_result_lernvorlieben = 0
-            anzahl_attribute = len(lernvorlieben) - 1
-
-            """For-Schleife für einzelne Profil"""
-            for i in range(1, len(lernvorlieben)):
-                for j in range(buff2, len(lernvorlieben_to_match)):
-                    """Gleiche Werte abfragen"""
-                    if lernvorlieben[i] == lernvorlieben_to_match[j]:
-                        """1 hinzufügen bei Match"""
-                        prozentzahl_lernvorlieben.append(1)
-                    """break, um Schleife abzubrechen und buff hochzählen um im nächsten Durchlauf das nächste Element zu vergleichen"""
-                    buff2 += 1
-                    break
-
-            """Prozent berechnen"""
-            """Gezählte Matches in prozent_result speichern"""
-            for k in prozentzahl_lernvorlieben:
-                prozent_result_lernvorlieben += k
-            """Aus den Matches den Prozentsatz errechnen"""
-            prozent_result_lernvorlieben = (prozent_result_lernvorlieben / anzahl_attribute) * 100
-            """Ergebnis zu prozentzahl_profil_all hinzufügen"""
-            prozentzahl_lernvorlieben_all.append(prozent_result_lernvorlieben)
-
-
-        """Insgesamtes Match ausrechnen"""
-        buff3 = 0
-        match_ges_all = []
-        for i in range(len(prozentzahl_profil_all)):
-            for j in range(buff3, len(prozentzahl_lernvorlieben_all)):
-                match_ges = (prozentzahl_profil_all[i] + prozentzahl_lernvorlieben_all[j]) / 2
-                buff3 += 1
-                match_ges_all.append(match_ges)
-                break
-
-        """Vorschlag in DB speichern"""
-        buff4 = 0
-        for i in range(len(match_ges_all)):
-            quote = i
-            for j in range(buff4, len(all_person_id)):
-                person_id = j
-                create_vorschlag(person_id_for_matches, quote, lernfaecher_id, person_id)
-                buff4 += 1
-                break
-
-        return get_vorschlag_by_main_person_id(person_id_for_matches)
-
-
+                create_vorschlag(profil_id, gruppe, lernfach_id, quote_ges)
