@@ -14,10 +14,7 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
-<<<<<<< HEAD
-=======
 from .db.VorschlagMapper import VorschlagMapper
->>>>>>> 91796b79648002efd8d7781e05edf9c5b4aa8dea
 
 
 class AppAdministration (object):
