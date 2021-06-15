@@ -26,19 +26,19 @@ class ProfilMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
+        for (id, gruppe, lernfaecher_id, lernvorlieben_id) in tuples:
 
             buff = False
-            for i in result:
-                if i.get_id() == id:
+            for profil in result:
+                if profil.get_id() == id:
                     buff = True
-                    i.set_lernfaecher(lernfaecher)
+                    profil.set_lernfaecher(lernfaecher_id)
 
             if buff == False:
                 profil = Profil()
                 profil.set_id(id)
                 profil.set_gruppe(gruppe)
-                profil.set_lernfaecher(lernfaecher)
+                profil.set_lernfaecher(lernfaecher_id)
                 profil.set_lernvorlieben_id(lernvorlieben_id)
 
                 result.append(profil)
@@ -90,14 +90,14 @@ class ProfilMapper(Mapper):
         return result
 
     def find_lernfaecher_by_profil_id(self, profil_id):
+        """Gibt ein Lernfacher + Bezeichnung eines Profiles zurück"""
 
         result_key = []
         result_value = []
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(
-            profil_id)
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -119,28 +119,106 @@ class ProfilMapper(Mapper):
         cursor.close()
 
         return result
-    
-    def find_by_lernfach_id(self, lernfach_id):
-        """Suchen eines Lernfaches nach dessen ID
-        :param lernfach_id
-        :return Profil-Objekt, welche mit der lernfach ID übereinstimmt
-        """
+
+    def find_lernfaecher_by_profil_id(self, profil_id):
+        """Gibt ein Lernfacher + Bezeichnung eines Profiles zurück"""
+
+        result_key = []
+        result_value = []
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (lernfaecher_id) in tuples:
+            result_key.append(lernfaecher_id)
+
+        for (bezeichnung) in tuples:
+            result_value.append(bezeichnung)
+
+        result = dict.fromkeys(result_key, 0)
+        buff = 0
+        for i in result:
+            for j in range(buff, len(result_value)):
+                result[i] = result_value[j]
+                buff += 1
+                break
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_lernfaecher_id_by_profil_id(self, profil_id):
+        """Gibt Lernfächer eines Profiles zurück"""
 
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.profile_id, profile.studiengang, profile.semester, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profile_id INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher = lernfaecher.id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(
-            lernfach_id)
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id FROM profile_has_lernfaecher WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (profil_id, lernvorlieben_id) in tuples:
+        for (lernfaecher_id) in tuples:
+            result.append(lernfaecher_id)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+    
+    def find_by_lernfach_id(self, lernfach_id):
+        """Suche eines Profiles nach einem bestimmten Lernfach"""
+
+        result = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.profil_id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id  FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(lernfach_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (profil_id, gruppe, lernfaecher_id, lernvorlieben_id) in tuples:
             profil = Profil()
             profil.set_id(profil_id)
-    
-            profil.set_lernfaecher(find_lernfaecher_by_person_id(profil_id))
+            profil.set_gruppe(gruppe)
+            #profil.set_lernfaecher(find_lernfaecher_id_by_profil_id(profil_id))
+            profil.set_lernfaecher(lernfaecher_id)
             profil.set_lernvorlieben_id(lernvorlieben_id)
             result.append(profil)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
+    def find_lernfaecher_by_profil_id(self, profil_id):
+        """Gebe lernfaecher_id und dessen Bezeichnung von einer Person zurück"""
+
+        result_key = []
+        result_value = []
+
+        cursor = self._connection.cursor()
+        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(
+            profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (lernfaecher_id) in tuples:
+            result_key.append(lernfaecher_id)
+
+        for (bezeichnung) in tuples:
+            result_value.append(bezeichnung)
+
+        result = dict.fromkeys(result_key, 0)
+        buff = 0
+        for i in result:
+            for j in range(buff, len(result_value)):
+                result[i] = result_value[j]
+                buff += 1
+                break
 
         self._connection.commit()
         cursor.close()

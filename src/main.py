@@ -62,7 +62,7 @@ person = api.inherit('Person', nbo, {
 profil = api.inherit('Profil', bo, {
     'gruppe': fields.Boolean(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
     'lernfaecher': fields.List(cls_or_instance=fields.Integer, attribute='_lernfaecher', description='Lernfaecher der Person'),
-    'lernvorlieben': fields.Integer(attribute='_lernvorlieben', description='Lernvorlieben der Person'),
+    'lernvorlieben_id': fields.Integer(attribute='_lernvorlieben_id', description='Lernvorlieben der Person'),
 })
 
 lerngruppe = api.inherit('Lerngruppe', nbo, {
@@ -247,6 +247,33 @@ class ProfilListOperationen(Resource):
           #  i.set_lernfaecher(lernfaecher)
            # i.set_lernvorlieben_id(lernvorlieben_id)
             #adm.update(i)
+
+"""Test-Methoden START"""
+@lernApp.route('/profil-by-lernfach/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+
+    def get(self, id):
+        """Auslesen eines Profiles nach einem bestimmten Lernfach
+        """
+        adm = AppAdministration()
+        profil = adm.get_profil_by_lernfach_id(id)
+        return profil
+
+@lernApp.route('/lernfach-by-profil/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+
+    def get(self, id):
+        """Auslesen der Lernfach IDs eines Profiles
+        """
+        adm = AppAdministration()
+        profil = adm.get_lernfaecher_id_by_profil_id(id)
+        return profil
+
+"""Test-Methoden STOP"""
 
 @lernApp.route('/profil/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -465,7 +492,7 @@ class VorschlaegeListOperations(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeByPersonByLernfachOperations(Resource):
     @lernApp.marshal_list_with(vorschlag)
-    @secured
+    #@secured
     def get(self, mainpersonid, lernfachid):
         """Auslesen aller Vorschlag-Objekte nach Person und Lernfach.
 
@@ -830,7 +857,7 @@ class TeilnahmeGruppeOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LernvorliebenByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
-    @secured
+   # @secured
     def get(self, id):
         """Auslesen eines bestimmten Lernvorlieben-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
