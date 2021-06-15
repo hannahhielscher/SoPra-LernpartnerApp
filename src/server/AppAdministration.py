@@ -15,6 +15,7 @@ from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
 from .db.VorschlagMapper import VorschlagMapper
+from .db.LernvorliebenMapper import LernvorliebenMapper
 
 
 class AppAdministration (object):

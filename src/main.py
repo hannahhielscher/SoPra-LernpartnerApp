@@ -95,8 +95,8 @@ teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
     'lerngruppe': fields.Integer(attribute='_teilnehmer', description='ID der Lerngruppe')
 })
 
-lernvorlieben = api.inherit('Lernvorlieben', bo, { #String oder Boolean?
-    'tageszeiten': fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
+lernvorlieben = api.inherit('Lernvorlieben', bo, {
+    "tageszeiten": fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
     'tage': fields.String(attribute='_tage', description='Bevorzugte Tage'),
     'frequenz': fields.String(attribute='_frequenz', description='Bevorzugte Frequenz'),
     'lernart': fields.String(attribute='_lernart', description='Bevorzugte Lernart'),
@@ -866,7 +866,7 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         return lernvorlieben
 
-    @secured
+   # @secured
     def put(self):
         """Update des Lernvorlieben-Objekts."""
 
@@ -888,7 +888,7 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben.set_lernort(lernort)
         adm.update_lernvorlieben_by_id(lernvorlieben)
 
-    @secured
+   # @secured
     def delete(self, id):
         """Löschen eines bestimmten Lernvorlieben-Objekts.
 
