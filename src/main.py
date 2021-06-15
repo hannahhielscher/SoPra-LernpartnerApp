@@ -77,7 +77,9 @@ vorschlag = api.inherit('Vorschlag', bo, {
 })
 
 nachricht = api.inherit('Nachricht', bo, {
-    'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
+    'nachricht_inhalt': fields.String(attribute='_nachricht_inhalt', description='Inhalt der Nachricht'),
+    'person_id': fields.Integer(attribute='_person_id', description='ID des Senders'),
+    'konversation_id': fields.Integer(attribute='_konversation_id', description='ID der Konversation, in der die Nachricht gesendet wurde'),
 })
 
 konversation = api.inherit('Konversation', bo, {
@@ -368,6 +370,8 @@ class LerngruppeOperationen(Resource):
         adm.delete_ById(id)
         return '', 200
 
+
+"""Vorschlagspezifisch"""
 @lernApp.route('/vorschlaege')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeListOperations(Resource):
@@ -401,17 +405,6 @@ class VorschlaegeListOperations(Resource):
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
 
-@lernApp.route('/vorschlaege/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class VorschlaegeListOperations(Resource):
-    @lernApp.marshal_list_with(vorschlag)
-    #@secured
-    def get(self):
-        """Auslesen aller gematchten Vorschlag-Objekte.
-        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = AppAdministration()
-        vorschlaege = adm.get_all_vorschlaege()
-        return vorschlaege
 
 @lernApp.route('/vorschlag/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -447,20 +440,6 @@ class VorschlagByIDOperationen(Resource):
         adm.delete(vorschlag)
         return '', 200
 
-
-@lernApp.route('/vorschlaege')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class VorschlaegeListOperations(Resource):
-    @lernApp.marshal_list_with(vorschlag)
-    @secured
-    def get(self):
-        """Auslesen aller Vorschlag-Objekte.
-
-        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = AppAdministration()
-        vorschlaege = adm.get_all_vorschlaege()
-        return vorschlaege
-
 @lernApp.route('/vorschlaege/<int:mainpersonid>/<int:lernfachid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeByPersonByLernfachOperations(Resource):
@@ -474,10 +453,12 @@ class VorschlaegeByPersonByLernfachOperations(Resource):
         vorschlaege = adm.match_berechnen(mainpersonid, lernfachid)
         return vorschlaege
 
-@lernApp.route('/nachricht')
+"""Nachrichtspezifisch"""        
+@lernApp.route('/nachrichten')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtListOperation(Resource):
+class NachrichtenOperation(Resource):
 
+    #Brauchen wir das überhaupt? Komplett alle Nachrichten ist ja unnötig
     @lernApp.marshal_list_with(nachricht)
     def get(self):
         """Auslesen aller Nachrichten-Objekte.
@@ -487,23 +468,27 @@ class NachrichtListOperation(Resource):
         nachricht = adm.get_all_nachrichten()
         return nachricht
 
-    @lernApp.marshal_list_with(nachricht, envelope='response')
+    @lernApp.marshal_with(nachricht)
     def post(self):
-        """Anlegen eines neuen Nachrichtenobjekts."""
+        """Anlegen/schreiben einer Nachricht."""
         adm = AppAdministration()
-        n = nachricht.from_dict(api.payload)
 
-        if n is not None:
-            insert_n = adm.create_nachricht(n)
-            nachricht = adm.get_nachricht_by_id(insert_n.get_id())
-            return nachricht, 200
+        proposal = Nachricht.from_dict(api.payload)
+
+        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        if proposal is not None:
+            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            wird auch dem Client zurückgegeben. 
+            """
+            c = adm.create_nachricht(proposal.get_inhalt(), proposal.get_empfaenger())
+            return c, 200
         else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
-
 
 @lernApp.route('/nachricht/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtOperation(Resource):
+class NachrichtByIDOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
     def get (self, id):
@@ -516,7 +501,7 @@ class NachrichtOperation(Resource):
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
-
+    #Kann man Nachrichten später updaten?
     @lernApp.marshal_with(nachricht)
     def put(self, id):
         """Update eines bestimmten Nachrichtenenobjekts."""
@@ -539,17 +524,6 @@ class NachrichtOperation(Resource):
         adm.delete_nachricht(na)
         return '', 200
 
-    @lernApp.marshal_with(nachricht)
-    def post(self, id):
-        """Anlegen/schreiben einer Nachricht."""
-        adm = AppAdministration()
-        n = adm.get_nachricht_by_id(id)
-
-        if n is not None:
-            result = adm.create_nachricht(n)
-            return result
-        else:
-            return "", 500
 
 @lernApp.route('/nachricht-by-inhalt/<string:inhalt>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -574,43 +548,47 @@ class NachrichtByPersonIdOperation(Resource):
     def get (self, person_id):
         """Auslesen einer bestimmten Nachricht anhand der Id der Person."""
         adm = AppAdministration()
-        message = adm.get_nachricht_by_person_id(person_id)
-
-        if message is not None:
-            return message
-        else:
-            return '', 500 #Wenn es keine Nachricht mit der id gibt.
-
-@lernApp.route('/nachricht-by-profil-id/<string:profil_id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtByProfilIdOperation(Resource):
-
-    @lernApp.marshal_with(nachricht)
-    def get (self, profil_id):
-        """Auslesen einer bestimmten Nachricht anhand der Id des Profils."""
-        adm = AppAdministration()
-        mes = adm.get_nachricht_by_profil_id(profil_id)
-
-        if mes is not None:
-            return mes
-        else:
-            return '', 500 #Wenn es keine Nachricht mit der id gibt.
-
-@lernApp.route('/nachrichten-by-id/<string:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtByIdOperation(Resource):
-
-    @lernApp.marshal_with(konversation)
-    def get(self, id):
-        """Auslesen einer bestimmten Nachricht anhand der Id."""
-        adm = AppAdministration()
-        nachricht = adm.get_nachricht_by_id(id)
+        nachricht = adm.get_nachricht_by_person_id(person_id)
 
         if nachricht is not None:
             return nachricht
         else:
-            return '', 500  # Wenn es keine Nachricht mit der id gibt.
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
+@lernApp.route('/nachricht-by-konversation/<int:konversation_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByKonversationIdOperation(Resource):
+
+    @lernApp.marshal_with(nachricht)
+    #@secured
+    def get (self, konversation_id):
+        """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_konversation_id(konversation_id)
+
+        if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+@lernApp.route('/nachricht-by-konversation-by-person/<int:konversation_id>/<int:person_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByKonversationByPersonOperation(Resource):
+
+    @lernApp.marshal_with(nachricht)
+    #@secured
+    def get (self, konversation_id, person_id):
+        """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_konversation_by_person(konversation_id, person_id)
+
+        if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+
+"""Konversationspezifische"""
 @lernApp.route('/konversationen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationListOperation(Resource):
@@ -830,7 +808,7 @@ class TeilnahmeGruppeOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LernvorliebenByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
-    @secured
+   # @secured
     def get(self, id):
         """Auslesen eines bestimmten Lernvorlieben-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.

@@ -78,9 +78,9 @@ export default class LernpartnerAPI {
         //Nachrichtenbezogen
         #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
-        #setKonversationAtNachrichten = (nachrichtenId, konversationId) => `${this.#lernappServerBaseURL}/nachrichten/konversation?nachrichtenId=${nachrichtenId}&konversationId=${konversationId}`;
-        #addNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
+        #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByIDURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
+        #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
         
         //Konversationbezogen#
@@ -519,5 +519,24 @@ export default class LernpartnerAPI {
             })
           })
         }
+
+        addNachricht() {
+          return this.#fetchAdvanced(this.#addNachrichtURL(), {
+          method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(NachrichtBO)
+          }).then((responseJSON) => {
+            // We always get an array of NachrichtBOs.fromJSON, but only need one object
+            let responseNachrichtBO = NachrichtBO.fromJSON(responseJSON)[0];
+            // console.info(NachrichtBOs);
+            return new Promise(function (resolve) {
+              resolve(responseNachrichtBO);
+            })
+          })
+        }
+      
 
 }
