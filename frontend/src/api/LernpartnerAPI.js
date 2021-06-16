@@ -76,12 +76,13 @@ export default class LernpartnerAPI {
         #addVorschlaegeURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID, lernfachID}`;
 
         //Nachrichtenbezogen
-        #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
+        #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
-        #getNachrichtenByIDURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
-        #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
+        #deleteNachrichentURL = () => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
+        #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
+        #getNachrichtenByInhaltURL= () => `${this.#lernappServerBaseURL}/nachrichten/${inhalt}`;
         
         //Konversationbezogen#
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
@@ -509,7 +510,12 @@ export default class LernpartnerAPI {
 
       
         //Nachrichtbezogene
-        // Gibt alle Nachrichten zurück
+        /** 
+        * Gibt alle Nachrichten zurück
+         * @param {Number} personID to be retrieved
+         * @public
+          */
+
         getNachrichten(personID) {
           return this.#fetchAdvanced(this.#getNachrichtenURL(personID,{method: 'GET'})).then((responseJSON) => {
             let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
@@ -520,7 +526,14 @@ export default class LernpartnerAPI {
           })
         }
 
-        addNachricht() {
+       /**
+         * Adds a Nachricht and returns a Promise, which resolves to a new NachrichtenBO object
+         *  
+         * @param {NachrichtBO} nachrichtBO to be added. The ID of the new nachricht is set by the backend
+         * @public
+         */
+
+        addNachricht(nachrichtenBOs) {
           return this.#fetchAdvanced(this.#addNachrichtURL(), {
           method: 'POST',
             headers: {
@@ -537,6 +550,92 @@ export default class LernpartnerAPI {
             })
           })
         }
-      
+
+         /**
+           * Gibt alle Nachrichten als BO zurück
+           * 
+           * @public
+           */
+
+        getNachrichten() {
+          return this.#fetchAdvanced(this.#getNachrichtenURL()).then((responseJSON) => {
+            let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+              resolve(nachrichtBOs);
+            })           
+          })
+        }
+
+         /** 
+        * gibt die Nachrichten mit der bestimmten konversationsID als BO zurück
+         * @param {Number} konversationID to be retrieved
+         * @public
+          */
+    
+        getNachrichtenByKonversation(konversationID){
+		    return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversationID)).then((responseJSON) => {
+			  let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+			  console.info(nachrichtenBOs)
+			  return new Promise(function (resolve){
+			  	resolve(nachrichtenBOs)
+			})
+		})
+	}
+
+
+          /**
+         * Gibt Promise zurück
+         * 
+         * @param {Number} id to be deleted
+         * @public
+         */
+
+
+        deleteNachrichten(nachrichtenBOs) {
+          return this.#fetchAdvanced(this.#deleteNachrichtenURL(id), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of NachrichtenBOs.fromJSON
+            let responseNachrichtBO = NachrichtBO.fromJSON(responseJSON)[0];
+            // console.info(NachrichtBOs);
+            return new Promise(function (resolve) {
+              resolve(responseNachrichtBO);
+            })
+          })
+        }
+
+         /** 
+        * gibt die Nachrichten mit der bestimmten konversationsID und PersonID als BO zurück
+         * @param {Number} konversationId to be retrieved
+         * @param {Number} personID 
+         * @public
+          */
+    
+          getNachrichtenByKonversationByPerson(konversationID, personID) {
+            return this.#fetchAdvanced(this.#getNachrichtenURL(konversationID, personID, {method: 'GET'})).then((responseJSON) => {
+              let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+              //console.info(nachrichtenBOs)
+              return new Promise(function (resolve) {
+                resolve(nachrichtenBOs);
+              })
+            })
+          }
+
+           /** 
+          * gibt die Nachrichten mit dem bestimmten Inhalt als BO zurück
+         * @param {String} inhalt to be retrieved
+         * @public
+          */
+    
+        getNachrichtByInhalt(nachrichtenBOs){
+          return this.#fetchAdvanced(this.#getNachrichtenByInhaltURL(inhalt)).then((responseJSON) => {
+          let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+          console.info(nachrichtenBOs)
+          return new Promise(function (resolve){
+            resolve(nachrichtenBOs)
+             })
+           })
+          }
+
 
 }
