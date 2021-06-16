@@ -29,7 +29,11 @@ class Mapper (AbstractContextManager, ABC):
             also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal
             installierten mySQL-Datenbank her."""
 
+<<<<<<< HEAD
             self._connection = connector.connect(user='root', password='root',
+=======
+            self._connection = connector.connect(user='root', password='sw-praktikum21',
+>>>>>>> Fehlerbehebung-Nachricht
                                   host='127.0.0.1',
                                   database='lernapp_SWPra')
 

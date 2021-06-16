@@ -14,8 +14,14 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
+<<<<<<< HEAD
+=======
 from .db.VorschlagMapper import VorschlagMapper
+<<<<<<< HEAD
 from .db.LernvorliebenMapper import LernvorliebenMapper
+=======
+>>>>>>> 91796b79648002efd8d7781e05edf9c5b4aa8dea
+>>>>>>> Fehlerbehebung-Nachricht
 
 
 class AppAdministration (object):
@@ -295,29 +301,34 @@ class AppAdministration (object):
     def get_nachricht_by_id(self, id):
         """Gibt die Nachricht mit der gegebenen Id zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(id)
+            return mapper.find_by_id(id)
 
     def get_nachricht_by_inhalt(self, inhalt):
         """Gibt die Nachricht mit dem gegebenen Inhalt zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(inhalt)
+            return mapper.find_by_inhalt(inhalt)
 
     def get_nachricht_by_person_id(self, person_id):
         """Gibt die Nachricht mit der gegebenen Id der Person zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(person_id)
+            return mapper.find_by_person_id(person_id)
 
-    def get_nachricht_by_profil_id(self, profil_id):
-        """Gibt die Nachricht mit der gegebenen Id des Profils zurück."""
+    def get_nachricht_by_konversation_id(self, konversation_id):
+        """Gibt die Nachrichten nach Konversation zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(profil_id)
+            return mapper.find_by_konversation_id(konversation_id)
 
-    def save_nachricht(self, nachricht):
+    def get_nachricht_by_konversation_by_person(self, konversation_id, person_id):
+        """Gibt die Nachrichten nach Konversation und Sender zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_konversation_by_person(konversation_id, person_id)
+
+    def create_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.insert(nachricht)
 
-    def update_nachricht(self, nachricht):
+    def save_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.update(nachricht)

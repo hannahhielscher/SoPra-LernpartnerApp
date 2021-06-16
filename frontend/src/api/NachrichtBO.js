@@ -2,66 +2,50 @@ import BusinessObject from './BusinessObject';
 
 export default class NachrichtBO extends BusinessObject{
 
-	constructor(ainhalt, aperson, aprofil, akonversation){
+	constructor(anachricht_inhalt, aperson_id, akonversation_id){
         super();
-        this.inhalt = ainhalt;
-        this.person = aperson;
-        this.profil = aprofil;
-        this.koversation = akonversation;
+        this.nachricht_inhalt = anachricht_inhalt;
+        this.person_id = aperson_id;
+        this.konversation_id = akonversation_id;
     }
-
-
     /*
 	erhalte 
 	*/
-    getinhalt(){
-        return this.inhalt;
+    getnachricht_inhalt(){
+        return this.nachricht_inhalt;
     }
     /*
 	setze 
 	*/
-    setinhalt(ainhalt){
-        this.inhalt = ainhalt;
+    setnachricht_inhalt(anachricht_inhalt){
+        this.nachricht_inhalt = anachricht_inhalt;
     }
 
       /*
 	erhalte 
 	*/
-    getperson(){
-        return this.person;
+    getperson_id(){
+        return this.person_id;
     }
 
     /*
 	setze 
 	*/
-    setperson(aperson){
-        this.person = aperson;
+    setperson_id(aperson_id){
+        this.person_id = aperson_id;
     }
     
-      /*
+    /*
 	erhalte 
 	*/
-    getprofil(){
-        return this.profil;
+    getkonversation_id(){
+        return this.konversation_id;
     }
     /*
 	setze 
 	*/
-    setprofil(aprofil){
-        this.profil = aprofil;
-    }
-
-      /*
-	erhalte 
-	*/
-    getkonversation(){
-        return this.konversation;
-    }
-    /*
-	setze 
-	*/
-    setkonversation(akonversation){
-        this.konversation = akonversation;
+    setkonversation_id(akonversation_id){
+        this.konversation_id = akonversation_id;
     }
 
     static fromJSON(nachrichten) {
