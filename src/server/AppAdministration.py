@@ -15,6 +15,8 @@ from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
 from .db.VorschlagMapper import VorschlagMapper
+from .db.LernvorliebenMapper import LernvorliebenMapper
+
 
 class AppAdministration (object):
     """Diese Klasse aggregiert nahezu sämtliche Applikationslogik (engl. Business Logic).
@@ -338,23 +340,18 @@ class AppAdministration (object):
         """Gibt die Konversation mit der gegebenen Id zurück."""
         with KonversationMapper() as mapper:
             return mapper.find_by_id(id)
-
-    def get_nachrichten_by_id(self, id):
-        """Gibt die Nachrichten mit der gegebenen Id zurück."""
+    
+    def get_konversation_by_name(self, name):
+        """Gibt die Konversation nach Name zurück"""
         with KonversationMapper() as mapper:
-            return mapper.find_by_key(id)
+            return mapper.find_by_name(name)
 
-    #def get_teilnehmer_by_id(self, id):
-     #   """Gibt die teilnehmer mit der gegebenen Id zurück."""
-      #  with KonversationMapper() as mapper:
-       #     return mapper.find_by_key(id)
-
-    def save_konversation(self, konversation):
+    def create_konversation(self, konversation):
         """Speichert die Konversation."""
         with KonversationMapper() as mapper:
             return mapper.insert(konversation)
 
-    def update_konversation(self, konversation):
+    def save_konversation(self, konversation):
         """Speichert die Konversation."""
         with KonversationMapper() as mapper:
             return mapper.update(konversation)
@@ -385,15 +382,15 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_all()
 
-    def get_teilnahmeChat_by_student_id(self, student_id):
+    def get_teilnahmeChat_by_person_id(self, personid):
         """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
         with TeilnahmeChatMapper() as mapper:
-            return mapper.find_by_student_id(student_id)
+            return mapper.find_by_person_id(personid)
 
-    def get_teilnahmeChat_by_konversations_id(self, konversations_id):
+    def get_teilnahmeChat_by_konversation_id(self, konversationid):
         """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
-            return mapper.find_by_konversations_id(konversations_id)
+            return mapper.find_by_konversation_id(konversationid)
 
     def save_teilnahmeChat(self, teilnahme):
         """Speichert die Teilnahme."""

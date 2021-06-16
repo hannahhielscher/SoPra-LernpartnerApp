@@ -5,12 +5,12 @@ class Lernvorlieben(BusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._tageszeiten = {"Morgens:": False, "Mittags:": False, "Abends:": False}
-        self._tage = {"Unter der Woche": False, "Am Wochenende": False}
-        self._frequenz = {"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
-        self._lernart = {"Visuell:": False, "Auditiv:": False, "Motorisch:": False, "Kommunikativ:": False}
-        self._gruppengroesse = {"Bis zu 3 Personen:": False, "3-5 Personen:": False, "Über 5 Personen:": False}
-        self._lernort = {"Remote:": False, "Hochschule:": False, "Bibliothek:": False, "Cafe:": False}
+        self._tageszeiten = None #{"Morgens:": False, "Mittags:": False, "Abends:": False}
+        self._tage = None #{"Unter der Woche": False, "Am Wochenende": False}
+        self._frequenz = None #{"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
+        self._lernart = None #{"Visuell:": False, "Auditiv:": False, "Motorisch:": False, "Kommunikativ:": False}
+        self._gruppengroesse = None #{"Bis zu 3 Personen:": False, "3-5 Personen:": False, "Über 5 Personen:": False}
+        self._lernort = None #{"Remote:": False, "Hochschule:": False, "Bibliothek:": False, "Cafe:": False}
 
 
     def get_tageszeiten(self):

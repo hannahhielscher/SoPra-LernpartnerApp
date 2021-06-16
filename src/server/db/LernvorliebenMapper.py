@@ -49,20 +49,20 @@ class LernvorliebenMapper(Mapper):
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort FROM Lernvorlieben WHERE id='{}'".format(id)
+        command = "SELECT lernvorlieben.id, lernvorlieben.tageszeiten_id, lernvorlieben.tage_id, lernvorlieben.frequenzen_id, lernvorlieben.lernarten_id, lernvorlieben.gruppengroessen_id, lernvorlieben.lernorte_id FROM lernvorlieben WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) = tuples[0]
+            (id, tageszeiten_id, tage_id, frequenzen_id, lernarten_id, gruppengroessen_id, lernorte_id) = tuples[0]
             lernvorlieben = Lernvorlieben()
             lernvorlieben.set_id(id)
-            lernvorlieben.set_tageszeiten(tageszeiten)
-            lernvorlieben.set_tage(tage)
-            lernvorlieben.set_frequenz(frequenz)
-            lernvorlieben.set_lernart(lernart)
-            lernvorlieben.set_gruppengroesse(gruppengroesse)
-            lernvorlieben.set_lernort(lernort)
+            lernvorlieben.set_tageszeiten(tageszeiten_id)
+            lernvorlieben.set_tage(tage_id)
+            lernvorlieben.set_frequenz(frequenzen_id)
+            lernvorlieben.set_lernart(lernarten_id)
+            lernvorlieben.set_gruppengroesse(gruppengroessen_id)
+            lernvorlieben.set_lernort(lernorte_id)
             
             result = lernvorlieben
 
@@ -95,7 +95,7 @@ class LernvorliebenMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 lernvorlieben.set_id(1)
 
-        command = "INSERT INTO lernvorlieben (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        command = "INSERT INTO lernvorlieben (id, tageszeiten_id, tage_id, frequenzen_id, lernarten_id, gruppengroessen_id, lernorte_id) VALUES (%s,%s,%s,%s,%s,%s,%s)"
         data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
         cursor.execute(command, data)
 
@@ -111,7 +111,7 @@ class LernvorliebenMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE lernvorlieben " + "SET tageszeiten=%s, tage=%s, frequenz=%s, lernart=%s, gruppengroesse=%s, lernort=%s WHERE id=%s"
+        command = "UPDATE lernvorlieben " + "SET tageszeiten_id=%s, tage_id=%s, frequenzen_id=%s, lernarten_id=%s, gruppengroessen_id=%s, lernorte_id=%s WHERE id=%s"
         data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
 
         cursor.execute(command, data)
