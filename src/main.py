@@ -148,7 +148,7 @@ class PersonenOperationen(Resource):
 class PersonOperationen(Resource):
     @lernApp.marshal_list_with(person)
    
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.

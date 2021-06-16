@@ -451,27 +451,38 @@ class AppAdministration (object):
 
     def match_berechnen(self, main_person_id, lernfach_id):
 
-        adm = AppAdministration()
+        # Main-Person mit der verglichen wird
+        with PersonMapper() as mapper:
+            main_person = mapper.find_by_id(main_person_id)
+        main_personenprofil_id = main_person.get_personenprofil()
+        #main_person = PersonMapper.find_by_id(main_person_id)
 
-        #Main-Person mit der verglichen wird
-        main_person = adm.get_person_by_id(main_person_id)
+        with ProfilMapper() as mapper:
+            main_profil = mapper.find_by_id(main_personenprofil_id)
+        #main_profil = get_profil_by_id(main_person.get_personenprofil())
+        main_lernvorlieben_id = main_profil.get_lernvorlieben_id()
 
-        main_profil = adm.get_profil_by_id(main_person.get_personenprofil())
-        main_lernvorlieben = adm.get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
+        with LernvorliebenMapper() as mapper:
+            main_lernvorlieben = mapper.find_by_id(main_lernvorlieben_id)
+        #main_lernvorlieben = get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
+
 
         #Alle anderen Personen/Gruppen
-        match_profil_all = adm.get_profil_by_lernfach_id(lernfach_id)
+        #with ProfilMapper() as mapper:
+         #   match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
 
         #Match berechnen
 
-        for profil in match_profil_all:
+        """for profil in match_profil_all:
 
             profil_id = profil.get_id()
 
             gruppe = profil.get_gruppe()
 
             lernvorlieben_id = profil.get_lernvorlieben_id()
-            lernvorlieben = adm.get_lernvorlieben_by_id(lernvorlieben_id)
+
+            with LernvorliebenMapper() as mapper:
+                lernvorlieben = mapper.find_by_id(lernvorlieben_id)
 
 
             for lernvorliebe in lernvorlieben:
@@ -491,4 +502,4 @@ class AppAdministration (object):
 
                 quote_ges = (quote / 6 ) * 100
 
-                create_vorschlag(profil_id, gruppe, lernfach_id, quote_ges)
+                create_vorschlag(profil_id, gruppe, lernfach_id, quote_ges)"""
