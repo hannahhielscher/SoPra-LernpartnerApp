@@ -14,7 +14,7 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
-
+from .db.LerngruppeMapper import LerngruppeMapper
 from .db.VorschlagMapper import VorschlagMapper
 from .db.LernvorliebenMapper import LernvorliebenMapper
 
@@ -199,7 +199,7 @@ class AppAdministration (object):
     Lerngruppen-spezifische Methoden
     """
 
-    def create_lerngruppe(self, name, gruppenprofil):
+    def create_lerngruppe(self, name, profil_id):
         """Eine Lerngruppe anlegen"""
 
         lerngruppe = Lerngruppe()
@@ -464,11 +464,12 @@ class AppAdministration (object):
         #main_personenprofil_id = main_person.get_personenprofil()
 
         with ProfilMapper() as mapper:
-            main_profil = mapper.find_by_id(main_person.get_personenprofil())
+            main_profil_list = mapper.find_by_id(main_person.get_personenprofil())
 
-        #Liste wegen Rückgabewert --> kommt aber nur 1 Wert in diesem Fall
-        for profil in main_profil:
+        #Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
+        for profil in main_profil_list:
             main_lernvorlieben_id = profil.get_lernvorlieben_id()
+            main_profil = profil
 
         with LernvorliebenMapper() as mapper:
             main_lernvorlieben = mapper.find_by_id(main_lernvorlieben_id)
@@ -477,9 +478,9 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
 
-        #for profil in match_profil_all:
-         #   if profil.get_id() == main_profil.get_id():
-          #      match_profil_all.remove(profil)
+        for profil in match_profil_all:
+            if profil.get_id() == main_profil.get_id():
+                match_profil_all.remove(profil)
 
         #Match berechnen
 
@@ -508,7 +509,7 @@ class AppAdministration (object):
             if lernvorlieben.get_lernort() == main_lernvorlieben.get_lernort():
                 quote += 1
 
-            quote_ges = (quote / 6 ) * 100
+            quote_ges = round(((quote / 6 ) * 100), 2)
 
             vorschlag = Vorschlag()
             vorschlag.set_main_person_id(main_person_id)

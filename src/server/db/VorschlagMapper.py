@@ -122,7 +122,7 @@ class VorschlagMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 vorschlag.set_id(1)
 
-        command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfaecher_id, profil_id) VALUES (%s,%s,%s,%s,%s)"
+        command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) VALUES (%s,%s,%s,%s,%s)"
         data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfaecher_id(), vorschlag.get_match_profil_id())
         cursor.execute(command, data)
 

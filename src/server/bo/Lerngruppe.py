@@ -19,6 +19,5 @@ class Lerngruppe(NamedBusinessObject):
         obj = Lerngruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
-        #obj.set_teilnehmer(dictionary["teilnehmer"])
         obj.set_gruppenprofil(dictionary["gruppenprofil"])
         return obj

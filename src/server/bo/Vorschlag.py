@@ -56,6 +56,6 @@ class Vorschlag(bo.BusinessObject):
         obj.set_main_person_id(dictionary["main_person_id"])
         obj.set_match_quote(dictionary["match_quote"])
         obj.set_lernfaecher_id(dictionary["lernfaecher_id"])
-        obj.set_profil_id(dictionary["match_profil_id"])
+        obj.set_match_profil_id(dictionary["match_profil_id"])
         return obj
 

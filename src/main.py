@@ -263,18 +263,6 @@ class ProfilByIDOperationen(Resource):
         profil = adm.get_profil_by_lernfach_id(id)
         return profil
 
-@lernApp.route('/lernfach-by-profil/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class ProfilByIDOperationen(Resource):
-    @lernApp.marshal_list_with(profil)
-
-    def get(self, id):
-        """Auslesen der Lernfach IDs eines Profiles
-        """
-        adm = AppAdministration()
-        profil = adm.get_lernfaecher_id_by_profil_id(id)
-        return profil
-
 """Test-Methoden STOP"""
 
 @lernApp.route('/profil/<int:id>')
@@ -308,12 +296,13 @@ class ProfilByIDOperationen(Resource):
         else:
             return '', 500
 
+"""Lerngruppenspezifisch"""
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeListOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
     
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Lerngruppen-Objekte.
         Sollten keine Lerngruppen-Objekte verfügbar sein,
@@ -325,7 +314,7 @@ class LerngruppeListOperationen(Resource):
 
     @lernApp.marshal_with(lerngruppe, code=200)
     @lernApp.expect(lerngruppe)  # Wir erwarten ein Person-Objekt von Client-Seite.
-    @secured
+    #@secured
     def post(self):
         """Anlegen eines neuen Lerngruppen-Objekts.
 
@@ -355,7 +344,7 @@ class LerngruppeListOperationen(Resource):
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
    
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Lerngruppen-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -366,7 +355,7 @@ class LerngruppeOperationen(Resource):
         
     @lernApp.marshal_with(lerngruppe)
     @lernApp.expect(lerngruppe, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update eines bestimmten Lerngruppen-Objekts.
 
@@ -387,7 +376,7 @@ class LerngruppeOperationen(Resource):
         else:
             return '', 500
 
-    @secured
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten Lerngruppen-Objekts.
 
@@ -682,6 +671,7 @@ class KonversationByIdOperation(Resource):
         adm.delete_konversation(k)
         return '', 200
 
+#notwendig?
 @lernApp.route('/konversation/<string:name>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByNameOperation(Resource):
