@@ -19,7 +19,6 @@ class NachrichtForm extends Component {
      // Init the state
      this.state = {
          nachricht: '',
-         empfaenger: null,
          konversation: null,
          sender: null,
 
@@ -33,15 +32,14 @@ class NachrichtForm extends Component {
 
     /** Nachricht hinzufügen */
     addNachricht = () => {
-        let newNachricht= new NachrichtBO(this.state.nachricht);
-        LernpartnerAPI.getAPI().addNachricht(newNachricht).then(person => {
+        let newNachricht= new NachrichtBO(this.state.nachricht, this.state.sender, this.state.konversation);
+        LernpartnerAPI.getAPI().addNachricht(newNachricht).then(nachricht => {
             // Backend call sucessfull
             this.setState(this.baseState);
             this.props.onClose(nachricht); 
         }).catch(e =>
             this.setState({
-                updatingInProgress: false,    // disable loading indicator 
-                updatingError: e              // show error message
+                           // show error message
             })
         );
 
@@ -68,7 +66,7 @@ class NachrichtForm extends Component {
     
     
     render() { 
-        const { classes, show } = this.props;
+        const { classes } = this.props;
         const { nachricht } = this.state;
     
         //let title = 'Verfasse eine Nachricht';

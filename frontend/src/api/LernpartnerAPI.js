@@ -73,7 +73,7 @@ export default class LernpartnerAPI {
         //Vorschlagbezogen
         #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
         //#getSelectedLernfach = () => `${this.#lernappServerBaseURL}`
-        #addVorschlaegeURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID, lernfachID}`;
+        #getVorschlaegeByPersonByLernfachURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}/${lernfachID}`;
 
         //Nachrichtenbezogen
         #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
@@ -83,7 +83,7 @@ export default class LernpartnerAPI {
         #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
         
-        //Konversationbezogen#
+        //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
         #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
@@ -497,8 +497,8 @@ export default class LernpartnerAPI {
          * @param {Number} lernfachID to be retrieved
          * @public
           */
-        getVorschlaege(mainpersonID, lernfachID) {
-          return this.#fetchAdvanced(this.#getVorschlaegeURL(mainpersonID, lernfachID, {method: 'GET'})).then((responseJSON) => {
+        getVorschlaegeByPersonByLernfach(mainpersonID, lernfachID) {
+          return this.#fetchAdvanced(this.#getVorschlaegeByPersonByLernfachURL(mainpersonID, lernfachID, {method: 'GET'})).then((responseJSON) => {
             let vorschlaegeBOs = VorschlagBO.fromJSON(responseJSON);
             //console.info(vorschlaegeBOs)
             return new Promise(function (resolve) {

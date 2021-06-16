@@ -4,12 +4,13 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/header';
-//import Profil from './components/Profil';
 //import ChatListe from './components/ChatListe';
-//import VorschlagListe from './components/VorschlagListe';
+import VorschlagListe from './components/VorschlagListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
+import RegistrierungForm from './components/dialogs/RegistrierungForm';
+import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
@@ -38,7 +39,8 @@ class App extends React.Component {
 			currentUser: null,
 			appError: null,
 			authError: null,
-			authLoading: false
+			authLoading: false,
+			Userneu: null
 		};
 	}
 
@@ -118,7 +120,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, appError, authError, authLoading } = this.state;
+		const { currentUser, Userneu, appError, authError, authLoading } = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -130,10 +132,16 @@ class App extends React.Component {
 						{
 							// Is a user signed in?
 							currentUser ?
-								<>
-									
-									<Route path='/about' component={About} />
-								</>
+								Userneu ?
+									<>
+										<Route path='/registrierung' component={RegistrierungForm} />
+									</>
+									:
+									<>
+										<Route path='/meinprofil' component={MeinProfil} />
+										<Route path='/meinevorschlaege' component={VorschlagListe} />
+									</>
+								
 								:
 								// else show the sign in page
 								<>
