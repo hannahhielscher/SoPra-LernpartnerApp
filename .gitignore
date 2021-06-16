@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+*.pyc
+*.pyo
+
 # dependencies
 /frontend/node_modules
 /.pnp
@@ -155,7 +158,3 @@ dmypy.json
 
 frontend/package-lock.json
 .vscode/settings.json
-
-*.pyc
-.cpython-39.pyc
-*.pyo

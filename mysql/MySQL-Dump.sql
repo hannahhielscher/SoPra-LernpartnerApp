@@ -453,11 +453,11 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
   `main_person_id` INT NULL,
   `match_quote` FLOAT NULL,
   `lernfaecher_id` INT NULL,
-  `personen_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `personen_id`),
-  INDEX `fk_vorschlaege_personen1_idx` (`personen_id` ASC) VISIBLE,
+  `match_profil_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `match_profil_id`),
+  INDEX `fk_vorschlaege_personen1_idx` (`match_profil_id` ASC) VISIBLE,
   CONSTRAINT `fk_vorschlaege_personen1`
-    FOREIGN KEY (`personen_id`)
+    FOREIGN KEY (`match_profil_id`)
     REFERENCES `lernapp_SWPra`.`personen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
