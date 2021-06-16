@@ -96,12 +96,12 @@ teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
 })
 
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
-    "tageszeiten": fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
-    'tage': fields.String(attribute='_tage', description='Bevorzugte Tage'),
-    'frequenz': fields.String(attribute='_frequenz', description='Bevorzugte Frequenz'),
-    'lernart': fields.String(attribute='_lernart', description='Bevorzugte Lernart'),
+    "tageszeiten": fields.Integer(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
+    'tage': fields.Integer(attribute='_tage', description='Bevorzugte Tage'),
+    'frequenz': fields.Integer(attribute='_frequenz', description='Bevorzugte Frequenz'),
+    'lernart': fields.Integer(attribute='_lernart', description='Bevorzugte Lernart'),
     'gruppengroesse': fields.Integer(attribute='_gruppengroesse', description='Bevorzugte Gruppengroesse'),
-    'lernort': fields.String(attribute='_lernort', description='Bevorzugter Lernort'),
+    'lernort': fields.Integer(attribute='_lernort', description='Bevorzugter Lernort'),
 })
 
 @lernApp.route('/personen')
@@ -889,38 +889,34 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         return lernvorlieben
 
-   # @secured
-    def put(self):
+    @lernApp.marshal_list_with(lernvorlieben)
+   #@secured
+    def put(self, id):
         """Update des Lernvorlieben-Objekts."""
 
-        lernvorliebenId = request.args.get("id")
-        tageszeiten = request.args.get("tageszeiten")
-        tage = request.args.get("tage")
-        frequenz = request.args.get("frequenz")
-        lernart = request.args.get("lernart")
-        gruppengroesse = request.args.get("gruppengroesse")
-        lernort = request.args.get("lernort")
-        
         adm = AppAdministration()
-        lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
-        lernvorlieben.set_tageszeiten(tageszeiten)
-        lernvorlieben.set_tage(tage)
-        lernvorlieben.set_frequenz(frequenz)
-        lernvorlieben.set_lernart(lernart)
-        lernvorlieben.set_gruppengroesse(gruppengroesse)
-        lernvorlieben.set_lernort(lernort)
-        adm.update_lernvorlieben_by_id(lernvorlieben)
+        c = Lernvorlieben.from_dict(api.payload)
 
-   # @secured
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Lernvorlieben-Objekts gesetzt."""
+            c.set_id(id)
+            adm.save_lernvorlieben(c)
+            return '', 200
+        else:
+            return '', 500
+
+
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten Lernvorlieben-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        lernvorlieben = adm.get_lernvorliebe_by_id(id)
+        lernvorlieben = adm.get_lernvorlieben_by_id(id)
         adm.delete_lernvorlieben(lernvorlieben)
         return '', 200
+
 
 @lernApp.route('/lernvorlieben')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
