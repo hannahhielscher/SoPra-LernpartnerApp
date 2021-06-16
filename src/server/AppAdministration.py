@@ -14,8 +14,10 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
+
 from .db.VorschlagMapper import VorschlagMapper
 from .db.LernvorliebenMapper import LernvorliebenMapper
+
 
 
 class AppAdministration (object):
@@ -295,29 +297,34 @@ class AppAdministration (object):
     def get_nachricht_by_id(self, id):
         """Gibt die Nachricht mit der gegebenen Id zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(id)
+            return mapper.find_by_id(id)
 
     def get_nachricht_by_inhalt(self, inhalt):
         """Gibt die Nachricht mit dem gegebenen Inhalt zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(inhalt)
+            return mapper.find_by_inhalt(inhalt)
 
     def get_nachricht_by_person_id(self, person_id):
         """Gibt die Nachricht mit der gegebenen Id der Person zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(person_id)
+            return mapper.find_by_person_id(person_id)
 
-    def get_nachricht_by_profil_id(self, profil_id):
-        """Gibt die Nachricht mit der gegebenen Id des Profils zurück."""
+    def get_nachricht_by_konversation_id(self, konversation_id):
+        """Gibt die Nachrichten nach Konversation zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(profil_id)
+            return mapper.find_by_konversation_id(konversation_id)
 
-    def save_nachricht(self, nachricht):
+    def get_nachricht_by_konversation_by_person(self, konversation_id, person_id):
+        """Gibt die Nachrichten nach Konversation und Sender zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_konversation_by_person(konversation_id, person_id)
+
+    def create_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.insert(nachricht)
 
-    def update_nachricht(self, nachricht):
+    def save_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.update(nachricht)
@@ -450,28 +457,28 @@ class AppAdministration (object):
             return mapper.update_by_id(id)
 
     def match_berechnen(self, main_person_id, lernfach_id):
-        #Main-Person mit der verglichen wird
-        main_person = get_person_by_id(main_person_id)
 
-        main_profil = get_profil_by_id(main_person.get_personenprofil())
-        main_lernvorlieben = get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
+        adm = AppAdministration()
+
+        #Main-Person mit der verglichen wird
+        main_person = adm.get_person_by_id(main_person_id)
+
+        main_profil = adm.get_profil_by_id(main_person.get_personenprofil())
+        main_lernvorlieben = adm.get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
 
         #Alle anderen Personen/Gruppen
-        match_profil_all = get_profil_by_lernfach_id(lernfach_id)
-        match_lernvorlieben_id = []
+        match_profil_all = adm.get_profil_by_lernfach_id(lernfach_id)
 
-        for lernvorlieben in match_profil_all:
-            match_lernvorlieben_id.append(lernvorlieben.get_lernvorlieben_id())
-
-        #Match ausrechnen
+        #Match berechnen
 
         for profil in match_profil_all:
+
             profil_id = profil.get_id()
 
             gruppe = profil.get_gruppe()
 
             lernvorlieben_id = profil.get_lernvorlieben_id()
-            lernvorlieben = get_lernvorlieben_by_id(lernvorlieben_id)
+            lernvorlieben = adm.get_lernvorlieben_by_id(lernvorlieben_id)
 
 
             for lernvorliebe in lernvorlieben:
