@@ -454,52 +454,63 @@ class AppAdministration (object):
         # Main-Person mit der verglichen wird
         with PersonMapper() as mapper:
             main_person = mapper.find_by_id(main_person_id)
-        main_personenprofil_id = main_person.get_personenprofil()
-        #main_person = PersonMapper.find_by_id(main_person_id)
+        #main_personenprofil_id = main_person.get_personenprofil()
 
         with ProfilMapper() as mapper:
-            main_profil = mapper.find_by_id(main_personenprofil_id)
-        #main_profil = get_profil_by_id(main_person.get_personenprofil())
-        main_lernvorlieben_id = main_profil.get_lernvorlieben_id()
+            main_profil = mapper.find_by_id(main_person.get_personenprofil())
+
+        #Liste wegen Rückgabewert --> kommt aber nur 1 Wert in diesem Fall
+        for profil in main_profil:
+            main_lernvorlieben_id = profil.get_lernvorlieben_id()
 
         with LernvorliebenMapper() as mapper:
             main_lernvorlieben = mapper.find_by_id(main_lernvorlieben_id)
-        #main_lernvorlieben = get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
-
 
         #Alle anderen Personen/Gruppen
-        #with ProfilMapper() as mapper:
-         #   match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
+        with ProfilMapper() as mapper:
+            match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
+
+        #for profil in match_profil_all:
+         #   if profil.get_id() == main_profil.get_id():
+          #      match_profil_all.remove(profil)
 
         #Match berechnen
 
-        """for profil in match_profil_all:
+        result = []
+
+        for profil in match_profil_all:
 
             profil_id = profil.get_id()
-
-            gruppe = profil.get_gruppe()
 
             lernvorlieben_id = profil.get_lernvorlieben_id()
 
             with LernvorliebenMapper() as mapper:
                 lernvorlieben = mapper.find_by_id(lernvorlieben_id)
 
+            quote = 0
+            if lernvorlieben.get_tageszeiten() == main_lernvorlieben.get_tageszeiten():
+                quote += 1
+            if lernvorlieben.get_tage() == main_lernvorlieben.get_tage():
+                quote += 1
+            if lernvorlieben.get_frequenz() == main_lernvorlieben.get_frequenz():
+                quote += 1
+            if lernvorlieben.get_lernart() == main_lernvorlieben.get_lernart():
+                quote += 1
+            if lernvorlieben.get_gruppengroesse() == main_lernvorlieben.get_gruppengroesse():
+                quote += 1
+            if lernvorlieben.get_lernort() == main_lernvorlieben.get_lernort():
+                quote += 1
 
-            for lernvorliebe in lernvorlieben:
-                quote = 0
-                if lernvorliebe.get_tageszeiten() == main_lernvorlieben.get_tageszeiten():
-                    quote += 1
-                if lernvorliebe.get_tage() == main_lernvorlieben.get_tage():
-                    quote += 1
-                if lernvorliebe.get_frequenz() == main_lernvorlieben.get_frequenz():
-                    quote += 1
-                if lernvorliebe.get_lernart() == main_lernvorlieben.get_lernart():
-                    quote += 1
-                if lernvorliebe.get_gruppengroesse() == main_lernvorlieben.get_gruppengroesse():
-                    quote += 1
-                if lernvorliebe.get_lernort() == main_lernvorlieben.get_lernort():
-                    quote += 1
+            quote_ges = (quote / 6 ) * 100
 
-                quote_ges = (quote / 6 ) * 100
+            vorschlag = Vorschlag()
+            vorschlag.set_main_person_id(main_person_id)
+            vorschlag.set_match_quote(quote_ges)
+            vorschlag.set_lernfaecher_id(lernfach_id)
+            vorschlag.set_profil_id(profil_id)
+            vorschlag.set_id(1)
 
-                create_vorschlag(profil_id, gruppe, lernfach_id, quote_ges)"""
+            with VorschlagMapper() as mapper:
+                result.append(mapper.insert(vorschlag))
+
+        return result

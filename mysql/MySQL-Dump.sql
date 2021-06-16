@@ -159,7 +159,8 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`profile_has_lernfaecher` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`profile_has_lernfaecher` VALUES (1, 1), (1, 2), (2, 4), (2, 5), (3, 1), (3, 2), (4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (7, 7), (7, 8);
+INSERT INTO `lernapp_SWPra`.`profile_has_lernfaecher` VALUES (1, 1), (1, 2), (2, 4), (2, 5), (3, 1), (3, 2), 
+(4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (7, 7), (7, 8);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,15 +451,15 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`vorschlaege` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
   `id` INT NOT NULL,
-  `main_person_id` INT NULL,
   `match_quote` FLOAT NULL,
   `lernfaecher_id` INT NULL,
-  `personen_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `personen_id`),
-  INDEX `fk_vorschlaege_personen1_idx` (`personen_id` ASC) VISIBLE,
+  `main_person_id` INT NULL,
+  `profil_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `profil_id`),
+  INDEX `fk_vorschlaege_personen1_idx` (`profil_id` ASC) VISIBLE,
   CONSTRAINT `fk_vorschlaege_personen1`
-    FOREIGN KEY (`personen_id`)
-    REFERENCES `lernapp_SWPra`.`personen` (`id`)
+    FOREIGN KEY (`profil_id`)
+    REFERENCES `lernapp_SWPra`.`personen` (`profil_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
