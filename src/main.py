@@ -597,6 +597,18 @@ class NachrichtByKonversationIdOperation(Resource):
             return nachricht
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
+    
+    @lernApp.marshal_with(nachricht)
+    @secured
+    def delete(self, konversation_id):
+        """Löschen aller Nachrichten anhand der Id der Konversation."""
+        adm = AppAdministration()
+        nachrichten = adm.delete_by_konversation_id(konversation_id)
+
+        if nachrichten is not None:
+            return nachrichten
+        else:
+            return '', 500
 
 @lernApp.route('/nachricht-by-konversation-by-person/<int:konversation_id>/<int:person_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

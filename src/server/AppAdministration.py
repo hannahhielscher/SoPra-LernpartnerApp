@@ -333,6 +333,11 @@ class AppAdministration (object):
         """Löscht die Nachricht."""
         with NachrichtMapper() as mapper:
             mapper.delete(nachricht)
+    
+    def delete_by_konversation_id(self, konversation_id):
+        """Löscht alle Nachrichten einer Konversation"""
+        with Nachricht.Mapper() as mapper:
+            mapper.delete_by_konversation_id(konversation_id)
 
     """
     Konversation-spezifische Methoden
