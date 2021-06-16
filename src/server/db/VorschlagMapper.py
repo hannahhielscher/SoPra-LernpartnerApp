@@ -18,18 +18,18 @@ class VorschlagMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, profil_id FROM vorschlaege"
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, main_person_id, match_quote, lernfaecher_id, profil_id) in tuples:
+        for (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) in tuples:
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(match_quote)
             vorschlag.set_lernfaecher_id(lernfaecher_id)
-            vorschlag.set_profil_id(profil_id)
+            vorschlag.set_match_profil_id(match_profil_id)
 
             result.append(vorschlag)
 
@@ -46,18 +46,18 @@ class VorschlagMapper(Mapper):
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, profil_id FROM vorschlaege WHERE id='{}'".format(id)
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, main_person_id, match_quote, lernfaecher_id, profil_id) = tuples[0]
+            (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) = tuples[0]
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(match_quote)
             vorschlag.set_lernfaecher_id(lernfaecher_id)
-            vorschlag.set_profil_id(profil_id)
+            vorschlag.set_match_profil_id(match_profil_id)
 
             result = vorschlag
 
@@ -78,18 +78,18 @@ class VorschlagMapper(Mapper):
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, profil_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, main_person_id, match_quote, lernfaecher_id, profil_id) = tuples[0]
+            (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) = tuples[0]
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(match_quote)
             vorschlag.set_lernfaecher_id(lernfaecher_id)
-            vorschlag.set_profil_id(profil_id)
+            vorschlag.set_match_profil_id(match_profil_id)
 
             result = vorschlag
 
@@ -123,7 +123,7 @@ class VorschlagMapper(Mapper):
                 vorschlag.set_id(1)
 
         command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfaecher_id, profil_id) VALUES (%s,%s,%s,%s,%s)"
-        data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfaecher_id(), vorschlag.get_profil_id())
+        data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfaecher_id(), vorschlag.get_match_profil_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -138,9 +138,9 @@ class VorschlagMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE vorschlaege " + "SET match_quote=%s, profil_id=%s WHERE WHERE id=%s"
+        command = "UPDATE vorschlaege " + "SET match_quote=%s, match_profil_id=%s WHERE WHERE id=%s"
         data = (
-        vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.lernfach(), vorschlag.get_profil_id())
+        vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.lernfach(), vorschlag.get_match_profil_id())
 
         cursor.execute(command, data)
 

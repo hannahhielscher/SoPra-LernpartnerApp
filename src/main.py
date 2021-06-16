@@ -73,7 +73,7 @@ vorschlag = api.inherit('Vorschlag', bo, {
     'main_person_id': fields.Integer(attribute='_main_person_id', description='Person ID zu der Matches berechnet werden'),
     'match_quote': fields.Float(attribute='_match_quote', description='Prozentzahl des Matches'),
     'lernfaecher_id': fields.Integer(attribute='_lernfaecher_id', description='Gesuchte Lernfach bezogen auf das Match'),
-    'profil_id': fields.Integer(attribute='_profil_id', description='Profil ID der gematchten Person'),
+    'match_profil_id': fields.Integer(attribute='_match_profil_id', description='Profil ID der gematchten Person'),
 })
 
 nachricht = api.inherit('Nachricht', bo, {
@@ -422,7 +422,7 @@ class VorschlaegeListOperations(Resource):
             """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
             wird auch dem Client zurückgegeben. 
             """
-            c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_profil_id())
+            c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_match_profil_id())
             return c, 200
         else:
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.

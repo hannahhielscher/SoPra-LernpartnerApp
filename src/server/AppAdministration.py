@@ -411,14 +411,14 @@ class AppAdministration (object):
     Vorschlag-spezifische Methoden
     """
 
-    def create_vorschlag(self, main_person_id, match_quote, lernfaecher_id, personen_id):
+    def create_vorschlag(self, main_person_id, match_quote, lernfaecher_id, match_profil_id):
         """Einen Vorschlag anlegen"""
 
         vorschlag = Vorschlag()
         vorschlag.set_main_person_id(main_person_id)
         vorschlag.set_match_quote(match_quote)
         vorschlag.set_lernfaecher_id(lernfaecher_id)
-        vorschlag.set_personen_id(personen_id)
+        vorschlag.set_match_match_profil_idd(match_profil_id)
         vorschlag.set_id(1)
 
         with VorschlagMapper() as mapper:
@@ -480,7 +480,7 @@ class AppAdministration (object):
 
         for profil in match_profil_all:
 
-            profil_id = profil.get_id()
+            match_profil_id = profil.get_id()
 
             lernvorlieben_id = profil.get_lernvorlieben_id()
 
@@ -507,7 +507,7 @@ class AppAdministration (object):
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(quote_ges)
             vorschlag.set_lernfaecher_id(lernfach_id)
-            vorschlag.set_profil_id(profil_id)
+            vorschlag.set_match_profil_id(match_profil_id)
             vorschlag.set_id(1)
 
             with VorschlagMapper() as mapper:
