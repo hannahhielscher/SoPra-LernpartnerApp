@@ -80,8 +80,9 @@ export default class LernpartnerAPI {
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
-        #deleteNachrichentURL = () => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
-        #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
+        #deleteNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
+        #deleteNachrichtenByKonversationURL = () => `${this.#lernappServerBaseURL}/nachrichten/${konversationID}`;
+        #getNachrichtenByPersonURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
         #getNachrichtenByInhaltURL= () => `${this.#lernappServerBaseURL}/nachrichten/${inhalt}`;
         
         //Konversationbezogen#
@@ -511,13 +512,13 @@ export default class LernpartnerAPI {
       
         //Nachrichtbezogene
         /** 
-        * Gibt alle Nachrichten zurück
+        * Gibt alle Nachrichten einer Person zurück
          * @param {Number} personID to be retrieved
          * @public
           */
 
         getNachrichten(personID) {
-          return this.#fetchAdvanced(this.#getNachrichtenURL(personID,{method: 'GET'})).then((responseJSON) => {
+          return this.#fetchAdvanced(this.#getNachrichtenByPersonURL(personID,{method: 'GET'})).then((responseJSON) => {
             let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
             //console.info(nachrichtenBOs)
             return new Promise(function (resolve) {
@@ -533,14 +534,14 @@ export default class LernpartnerAPI {
          * @public
          */
 
-        addNachricht(nachrichtenBOs) {
+        addNachricht(nachrichtBO) {
           return this.#fetchAdvanced(this.#addNachrichtURL(), {
           method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
             },
-            body: JSON.stringify(NachrichtBO)
+            body: JSON.stringify(nachrichtBO)
           }).then((responseJSON) => {
             // We always get an array of NachrichtBOs.fromJSON, but only need one object
             let responseNachrichtBO = NachrichtBO.fromJSON(responseJSON)[0];
@@ -561,7 +562,7 @@ export default class LernpartnerAPI {
           return this.#fetchAdvanced(this.#getNachrichtenURL()).then((responseJSON) => {
             let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
-              resolve(nachrichtBOs);
+              resolve(nachrichtenBOs);
             })           
           })
         }
@@ -573,26 +574,26 @@ export default class LernpartnerAPI {
           */
     
         getNachrichtenByKonversation(konversationID){
-		    return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversationID)).then((responseJSON) => {
-			  let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
-			  console.info(nachrichtenBOs)
-			  return new Promise(function (resolve){
-			  	resolve(nachrichtenBOs)
-			})
-		})
-	}
+		      return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversationID)).then((responseJSON) => {
+			      let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+			      //console.info(nachrichtenBOs)
+			      return new Promise(function (resolve){
+			  	    resolve(nachrichtenBOs)
+			      })
+		      })
+	      }
 
 
           /**
-         * Gibt Promise zurück
+         * Gibt Promise zurück, Löscht Nachricht mit bestimmter ID
          * 
          * @param {Number} id to be deleted
          * @public
          */
 
 
-        deleteNachrichten(nachrichtenBOs) {
-          return this.#fetchAdvanced(this.#deleteNachrichtenURL(id), {
+        deleteNachricht(id) {
+          return this.#fetchAdvanced(this.#deleteNachrichtURL(id), {
             method: 'DELETE'
           }).then((responseJSON) => {
             // We always get an array of NachrichtenBOs.fromJSON
@@ -605,14 +606,31 @@ export default class LernpartnerAPI {
         }
 
          /** 
-        * gibt die Nachrichten mit der bestimmten konversationsID und PersonID als BO zurück
+         * gibt die Nachrichten mit der bestimmten konversationsID und PersonID als BO zurück
          * @param {Number} konversationId to be retrieved
          * @param {Number} personID 
          * @public
-          */
+         */
     
           getNachrichtenByKonversationByPerson(konversationID, personID) {
-            return this.#fetchAdvanced(this.#getNachrichtenURL(konversationID, personID, {method: 'GET'})).then((responseJSON) => {
+            return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversationID, personID, {method: 'GET'})).then((responseJSON) => {
+              let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
+              //console.info(nachrichtenBOs)
+              return new Promise(function (resolve) {
+                resolve(nachrichtenBOs);
+              })
+            })
+          }
+ 
+          /** 
+           * löscht Nachrichten einer konversation
+           * @param {Number} konversationId to be retrieved
+           * @param {Number} personID 
+           * @public
+           */
+      
+          deleteNachrichtenByKonversation(konversationID) {
+            return this.#fetchAdvanced(this.#deleteNachrichtenByKonversationURL(konversationID, personID, {method: 'GET'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
               //console.info(nachrichtenBOs)
               return new Promise(function (resolve) {
@@ -623,11 +641,11 @@ export default class LernpartnerAPI {
 
            /** 
           * gibt die Nachrichten mit dem bestimmten Inhalt als BO zurück
-         * @param {String} inhalt to be retrieved
-         * @public
+          * @param {String} inhalt to be retrieved
+          * @public
           */
     
-        getNachrichtByInhalt(nachrichtenBOs){
+        getNachrichtByInhalt(inhalt){
           return this.#fetchAdvanced(this.#getNachrichtenByInhaltURL(inhalt)).then((responseJSON) => {
           let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
           console.info(nachrichtenBOs)

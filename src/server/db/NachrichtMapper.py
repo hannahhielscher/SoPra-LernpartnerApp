@@ -213,3 +213,16 @@ class NachrichtMapper (Mapper):
 
         self._connection.commit()
         cursor.close()
+
+    def delete_by_konversation_id(self, konversation_id):
+        """Löschen aller Nachrichten einer Konversation.
+
+        :param konversation_id -> ID
+        """
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM nachrichten WHERE konversation_id={}".format(nachricht.get_konversation_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
