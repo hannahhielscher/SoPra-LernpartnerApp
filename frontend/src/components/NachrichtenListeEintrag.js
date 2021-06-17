@@ -29,18 +29,16 @@ class NachrichtenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            nachricht: null, 
-            profil: null, 
+            nachricht: '', 
+            personID: null, 
+            konversation_ID: null,  
             inhalt: null, 
             loadingInProgress: false,
             error: null
         };
     }
 
-    /** Handles onChange events of the underlying ExpansionPanel */
-    expansionPanelStateChanged = () => {
-    this.props.onExpandedStateChange(this.props.customer);
-    }
+
     
     //Handles the onClick event of the show profil button
     showProfilButtonClicked = (event) => {
@@ -91,8 +89,8 @@ class NachrichtenListeEintrag extends Component {
       }
 
       render() {
-        const { classes } = this.props;
-        const {nachricht, inhalt, profil, loadingInProgress, error}
+        const { classes, personID, konversation_ID } = this.props;
+        const {nachrichten, inhalt, personID, konversation_ID, loadingInProgress, error}
 
         return(
           <div>
@@ -137,9 +135,13 @@ class NachrichtenListeEintrag extends Component {
       }
 }
 
-const styles = theme => ({
-
-    });
+const styles = (theme) => ({
+  root: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+    margin: 10,
+  },
+});
   
   /** PropTypes */
   NachrichtListeEintrag.propTypes = {
