@@ -110,11 +110,11 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`lerngruppen` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lerngruppen` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NULL,
-  `profile_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `profile_id`),
-  INDEX `fk_lerngruppen_profile1_idx` (`profile_id` ASC) VISIBLE,
+  `profil_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `profil_id`),
+  INDEX `fk_lerngruppen_profile1_idx` (`profil_id` ASC) VISIBLE,
   CONSTRAINT `fk_lerngruppen_profile1`
-    FOREIGN KEY (`profile_id`)
+    FOREIGN KEY (`profil_id`)
     REFERENCES `lernapp_SWPra`.`profile` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -159,7 +159,8 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`profile_has_lernfaecher` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`profile_has_lernfaecher` VALUES (1, 1), (1, 2), (2, 4), (2, 5), (3, 1), (3, 2), (4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (7, 7), (7, 8);
+INSERT INTO `lernapp_SWPra`.`profile_has_lernfaecher` VALUES (1, 1), (1, 2), (2, 4), (2, 5), (3, 1), (3, 2), 
+(4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (7, 7), (7, 8), (8, 2), (9, 3), (10, 2);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,15 +451,15 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`vorschlaege` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
   `id` INT NOT NULL,
-  `main_person_id` INT NULL,
+  `main_person_id` VARCHAR(45) NULL,
   `match_quote` FLOAT NULL,
-  `lernfaecher_id` INT NULL,
-  `personen_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `personen_id`),
-  INDEX `fk_vorschlaege_personen1_idx` (`personen_id` ASC) VISIBLE,
-  CONSTRAINT `fk_vorschlaege_personen1`
-    FOREIGN KEY (`personen_id`)
-    REFERENCES `lernapp_SWPra`.`personen` (`id`)
+  `lernfaecher_id` VARCHAR(45) NULL,
+  `match_profil_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `match_profil_id`),
+  INDEX `fk_vorschlaege_profile1_idx` (`match_profil_id` ASC) VISIBLE,
+  CONSTRAINT `fk_vorschlaege_profile1`
+    FOREIGN KEY (`match_profil_id`)
+    REFERENCES `lernapp_SWPra`.`profile` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -492,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_chat` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_teilnehmer_chat_konversation1`
     FOREIGN KEY (`konversation_id`)
-    REFERENCES `lernapp_SWPra`.`konversation` (`id`)
+    REFERENCES `lernapp_SWPra`.`konversationen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

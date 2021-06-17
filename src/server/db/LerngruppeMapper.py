@@ -20,7 +20,7 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT * FROM lerngruppen")
+        cursor.execute("SELECT id, name, profil_id FROM lerngruppen")
         tuples = cursor.fetchall()
 
         for (id, name, profil_id) in tuples:
@@ -44,7 +44,7 @@ class LerngruppeMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id) in tuples:
+        for (id, name, profil_id) in tuples:
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
@@ -56,12 +56,13 @@ class LerngruppeMapper(Mapper):
 
         return result
 
+    #notwendig?
     def find_by_name(self, name):
         """Auslesen der Lerngruppe anhand des Namens
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT name, id FROM lerngruppen WHERE name={} ORDER BY name".format(name)
+        command = "SELECT name, id, profil_id FROM lerngruppen WHERE name={}".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -69,6 +70,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
+            lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -85,7 +87,7 @@ class LerngruppeMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id,) in tuples:
+        for (id, name, profil_id) in tuples:
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
@@ -103,7 +105,7 @@ class LerngruppeMapper(Mapper):
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.profil_id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id  FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(lernfach_id)
+        command = "SELECT profile_has_lernfaecher.profil_id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile_has_lernfaecher INNER JOIN profile ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.lernfaecher_id ='{}'".format(lernfach_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

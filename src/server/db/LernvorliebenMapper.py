@@ -18,7 +18,7 @@ class LernvorliebenMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort FROM Lernvorlieben"
+        command = "SELECT lernvorlieben.id, lernvorlieben.tageszeiten_id, lernvorlieben.tage_id, lernvorlieben.frequenzen_id, lernvorlieben.lernarten_id, lernvorlieben.gruppengroessen_id, lernvorlieben.lernorte_id FROM lernvorlieben"
 
         cursor.execute(command)
         tuples = cursor.fetchall()

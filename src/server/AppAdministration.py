@@ -14,8 +14,10 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
+from .db.LerngruppeMapper import LerngruppeMapper
 from .db.VorschlagMapper import VorschlagMapper
 from .db.LernvorliebenMapper import LernvorliebenMapper
+
 
 
 class AppAdministration (object):
@@ -197,7 +199,7 @@ class AppAdministration (object):
     Lerngruppen-spezifische Methoden
     """
 
-    def create_lerngruppe(self, name, gruppenprofil):
+    def create_lerngruppe(self, name, profil_id):
         """Eine Lerngruppe anlegen"""
 
         lerngruppe = Lerngruppe()
@@ -295,29 +297,34 @@ class AppAdministration (object):
     def get_nachricht_by_id(self, id):
         """Gibt die Nachricht mit der gegebenen Id zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(id)
+            return mapper.find_by_id(id)
 
     def get_nachricht_by_inhalt(self, inhalt):
         """Gibt die Nachricht mit dem gegebenen Inhalt zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(inhalt)
+            return mapper.find_by_inhalt(inhalt)
 
     def get_nachricht_by_person_id(self, person_id):
         """Gibt die Nachricht mit der gegebenen Id der Person zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(person_id)
+            return mapper.find_by_person_id(person_id)
 
-    def get_nachricht_by_profil_id(self, profil_id):
-        """Gibt die Nachricht mit der gegebenen Id des Profils zurück."""
+    def get_nachricht_by_konversation_id(self, konversation_id):
+        """Gibt die Nachrichten nach Konversation zurück."""
         with NachrichtMapper() as mapper:
-            return mapper.find_by_key(profil_id)
+            return mapper.find_by_konversation_id(konversation_id)
 
-    def save_nachricht(self, nachricht):
+    def get_nachricht_by_konversation_by_person(self, konversation_id, person_id):
+        """Gibt die Nachrichten nach Konversation und Sender zurück."""
+        with NachrichtMapper() as mapper:
+            return mapper.find_by_konversation_by_person(konversation_id, person_id)
+
+    def create_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.insert(nachricht)
 
-    def update_nachricht(self, nachricht):
+    def save_nachricht(self, nachricht):
         """Speichert die Nachricht."""
         with NachrichtMapper() as mapper:
             return mapper.update(nachricht)
@@ -326,6 +333,11 @@ class AppAdministration (object):
         """Löscht die Nachricht."""
         with NachrichtMapper() as mapper:
             mapper.delete(nachricht)
+    
+    def delete_by_konversation_id(self, konversation_id):
+        """Löscht alle Nachrichten einer Konversation"""
+        with Nachricht.Mapper() as mapper:
+            mapper.delete_by_konversation_id(konversation_id)
 
     """
     Konversation-spezifische Methoden
@@ -411,14 +423,14 @@ class AppAdministration (object):
     Vorschlag-spezifische Methoden
     """
 
-    def create_vorschlag(self, main_person_id, match_quote, lernfaecher_id, personen_id):
+    def create_vorschlag(self, main_person_id, match_quote, lernfaecher_id, match_profil_id):
         """Einen Vorschlag anlegen"""
 
         vorschlag = Vorschlag()
         vorschlag.set_main_person_id(main_person_id)
         vorschlag.set_match_quote(match_quote)
         vorschlag.set_lernfaecher_id(lernfaecher_id)
-        vorschlag.set_personen_id(personen_id)
+        vorschlag.set_match_match_profil_idd(match_profil_id)
         vorschlag.set_id(1)
 
         with VorschlagMapper() as mapper:
@@ -449,46 +461,73 @@ class AppAdministration (object):
         with VorschlagMapper() as mapper:
             return mapper.update_by_id(id)
 
-    def match_berechnen(self, main_person_id, lernfach_id):
-        #Main-Person mit der verglichen wird
-        main_person = get_person_by_id(main_person_id)
+    def delete_vorschlag_by_id(self, id):
+        with VorschlagMapper() as mapper:
+            return mapper.delete(id)
 
-        main_profil = get_profil_by_id(main_person.get_personenprofil())
-        main_lernvorlieben = get_lernvorlieben_by_id(main_profil.get_lernvorlieben_id())
+    def match_berechnen(self, main_person_id, lernfach_id):
+
+        # Main-Person mit der verglichen wird
+        with PersonMapper() as mapper:
+            main_person = mapper.find_by_id(main_person_id)
+        #main_personenprofil_id = main_person.get_personenprofil()
+
+        with ProfilMapper() as mapper:
+            main_profil_list = mapper.find_by_id(main_person.get_personenprofil())
+
+        #Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
+        for profil in main_profil_list:
+            main_lernvorlieben_id = profil.get_lernvorlieben_id()
+            main_profil = profil
+
+        with LernvorliebenMapper() as mapper:
+            main_lernvorlieben = mapper.find_by_id(main_lernvorlieben_id)
 
         #Alle anderen Personen/Gruppen
-        match_profil_all = get_profil_by_lernfach_id(lernfach_id)
-        match_lernvorlieben_id = []
-
-        for lernvorlieben in match_profil_all:
-            match_lernvorlieben_id.append(lernvorlieben.get_lernvorlieben_id())
-
-        #Match ausrechnen
+        with ProfilMapper() as mapper:
+            match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
 
         for profil in match_profil_all:
-            profil_id = profil.get_id()
+            if profil.get_id() == main_profil.get_id():
+                match_profil_all.remove(profil)
 
-            gruppe = profil.get_gruppe()
+        #Match berechnen
+
+        result = []
+
+        for profil in match_profil_all:
+
+            match_profil_id = profil.get_id()
 
             lernvorlieben_id = profil.get_lernvorlieben_id()
-            lernvorlieben = get_lernvorlieben_by_id(lernvorlieben_id)
 
+            with LernvorliebenMapper() as mapper:
+                lernvorlieben = mapper.find_by_id(lernvorlieben_id)
 
-            for lernvorliebe in lernvorlieben:
-                quote = 0
-                if lernvorliebe.get_tageszeiten() == main_lernvorlieben.get_tageszeiten():
-                    quote += 1
-                if lernvorliebe.get_tage() == main_lernvorlieben.get_tage():
-                    quote += 1
-                if lernvorliebe.get_frequenz() == main_lernvorlieben.get_frequenz():
-                    quote += 1
-                if lernvorliebe.get_lernart() == main_lernvorlieben.get_lernart():
-                    quote += 1
-                if lernvorliebe.get_gruppengroesse() == main_lernvorlieben.get_gruppengroesse():
-                    quote += 1
-                if lernvorliebe.get_lernort() == main_lernvorlieben.get_lernort():
-                    quote += 1
+            quote = 0
+            if lernvorlieben.get_tageszeiten() == main_lernvorlieben.get_tageszeiten():
+                quote += 1
+            if lernvorlieben.get_tage() == main_lernvorlieben.get_tage():
+                quote += 1
+            if lernvorlieben.get_frequenz() == main_lernvorlieben.get_frequenz():
+                quote += 1
+            if lernvorlieben.get_lernart() == main_lernvorlieben.get_lernart():
+                quote += 1
+            if lernvorlieben.get_gruppengroesse() == main_lernvorlieben.get_gruppengroesse():
+                quote += 1
+            if lernvorlieben.get_lernort() == main_lernvorlieben.get_lernort():
+                quote += 1
 
-                quote_ges = (quote / 6 ) * 100
+            quote_ges = round(((quote / 6 ) * 100), 2)
 
-                create_vorschlag(profil_id, gruppe, lernfach_id, quote_ges)
+            vorschlag = Vorschlag()
+            vorschlag.set_main_person_id(main_person_id)
+            vorschlag.set_match_quote(quote_ges)
+            vorschlag.set_lernfaecher_id(lernfach_id)
+            vorschlag.set_match_profil_id(match_profil_id)
+            vorschlag.set_id(1)
+
+            with VorschlagMapper() as mapper:
+                result.append(mapper.insert(vorschlag))
+
+        return result

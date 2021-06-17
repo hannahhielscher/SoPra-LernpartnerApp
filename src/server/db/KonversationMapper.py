@@ -19,7 +19,7 @@ class KonversationMapper (Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT id, name FROM konversation")
+        cursor.execute("SELECT id, name FROM konversationen")
         tuples = cursor.fetchall()
 
         for (id, name) in tuples:

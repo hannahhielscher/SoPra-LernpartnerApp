@@ -18,8 +18,10 @@ class NachrichtForm extends Component {
 
      // Init the state
      this.state = {
-         nachricht: ''
-    
+         nachricht: '',
+         konversation: null,
+         sender: null,
+
       };
 
       // save this state for canceling
@@ -30,15 +32,14 @@ class NachrichtForm extends Component {
 
     /** Nachricht hinzufügen */
     addNachricht = () => {
-        let newNachricht= new NachrichtBO(this.state.nachricht);
-        LernpartnerAPI.getAPI().addNachricht(newNachricht).then(person => {
+        let newNachricht= new NachrichtBO(this.state.nachricht, this.state.sender, this.state.konversation);
+        LernpartnerAPI.getAPI().addNachricht(newNachricht).then(nachricht => {
             // Backend call sucessfull
             this.setState(this.baseState);
             this.props.onClose(nachricht); 
         }).catch(e =>
             this.setState({
-                updatingInProgress: false,    // disable loading indicator 
-                updatingError: e              // show error message
+                           // show error message
             })
         );
 
@@ -65,8 +66,8 @@ class NachrichtForm extends Component {
     
     
     render() { 
-        const { classes, show } = this.props;
-        const { nachricht} = this.state;
+        const { classes } = this.props;
+        const { nachricht } = this.state;
     
         //let title = 'Verfasse eine Nachricht';
     
@@ -76,7 +77,7 @@ class NachrichtForm extends Component {
         placeholder= "schreibe eine Nachricht"
         type="text"
         onChange={this.handleChange}
-        value={this.state.nachricht}
+        value={nachricht}
         disabled={this.props.disabled} />
     </form>
     );

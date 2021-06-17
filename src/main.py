@@ -73,11 +73,13 @@ vorschlag = api.inherit('Vorschlag', bo, {
     'main_person_id': fields.Integer(attribute='_main_person_id', description='Person ID zu der Matches berechnet werden'),
     'match_quote': fields.Float(attribute='_match_quote', description='Prozentzahl des Matches'),
     'lernfaecher_id': fields.Integer(attribute='_lernfaecher_id', description='Gesuchte Lernfach bezogen auf das Match'),
-    'personen_id': fields.Integer(attribute='_personen_id', description='Person ID der gematchten Person'),
+    'match_profil_id': fields.Integer(attribute='_match_profil_id', description='Profil ID der gematchten Person'),
 })
 
 nachricht = api.inherit('Nachricht', bo, {
-    'inhalt': fields.String(attribute='_inhalt', description='Inhalt der Nachricht'),
+    'nachricht_inhalt': fields.String(attribute='_nachricht_inhalt', description='Inhalt der Nachricht'),
+    'person_id': fields.Integer(attribute='_person_id', description='ID des Senders'),
+    'konversation_id': fields.Integer(attribute='_konversation_id', description='ID der Konversation, in der die Nachricht gesendet wurde'),
 })
 
 konversation = api.inherit('Konversation', bo, {
@@ -96,19 +98,19 @@ teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
 })
 
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
-    "tageszeiten": fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
-    'tage': fields.String(attribute='_tage', description='Bevorzugte Tage'),
-    'frequenz': fields.String(attribute='_frequenz', description='Bevorzugte Frequenz'),
-    'lernart': fields.String(attribute='_lernart', description='Bevorzugte Lernart'),
+    "tageszeiten": fields.Integer(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
+    'tage': fields.Integer(attribute='_tage', description='Bevorzugte Tage'),
+    'frequenz': fields.Integer(attribute='_frequenz', description='Bevorzugte Frequenz'),
+    'lernart': fields.Integer(attribute='_lernart', description='Bevorzugte Lernart'),
     'gruppengroesse': fields.Integer(attribute='_gruppengroesse', description='Bevorzugte Gruppengroesse'),
-    'lernort': fields.String(attribute='_lernort', description='Bevorzugter Lernort'),
+    'lernort': fields.Integer(attribute='_lernort', description='Bevorzugter Lernort'),
 })
 
 @lernApp.route('/personen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonenOperationen(Resource):
     @lernApp.marshal_list_with(person)
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Personen-Objekte.
         Sollten keine Personen-Objekte verfügbar sein,
@@ -118,7 +120,7 @@ class PersonenOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    @secured
+    #@secured
     def put(self):
         """Update des User-Objekts."""
 
@@ -148,7 +150,7 @@ class PersonenOperationen(Resource):
 class PersonOperationen(Resource):
     @lernApp.marshal_list_with(person)
    
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -159,7 +161,7 @@ class PersonOperationen(Resource):
     
     @lernApp.marshal_with(person)
     @lernApp.expect(person, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
 
@@ -180,7 +182,7 @@ class PersonOperationen(Resource):
         else:
             return '', 500
 
-    @secured
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten Personen-Objekts.
 
@@ -261,18 +263,6 @@ class ProfilByIDOperationen(Resource):
         profil = adm.get_profil_by_lernfach_id(id)
         return profil
 
-@lernApp.route('/lernfach-by-profil/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class ProfilByIDOperationen(Resource):
-    @lernApp.marshal_list_with(profil)
-
-    def get(self, id):
-        """Auslesen der Lernfach IDs eines Profiles
-        """
-        adm = AppAdministration()
-        profil = adm.get_lernfaecher_id_by_profil_id(id)
-        return profil
-
 """Test-Methoden STOP"""
 
 @lernApp.route('/profil/<int:id>')
@@ -306,12 +296,13 @@ class ProfilByIDOperationen(Resource):
         else:
             return '', 500
 
+"""Lerngruppenspezifisch"""
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeListOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
     
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Lerngruppen-Objekte.
         Sollten keine Lerngruppen-Objekte verfügbar sein,
@@ -323,7 +314,7 @@ class LerngruppeListOperationen(Resource):
 
     @lernApp.marshal_with(lerngruppe, code=200)
     @lernApp.expect(lerngruppe)  # Wir erwarten ein Person-Objekt von Client-Seite.
-    @secured
+    #@secured
     def post(self):
         """Anlegen eines neuen Lerngruppen-Objekts.
 
@@ -353,7 +344,7 @@ class LerngruppeListOperationen(Resource):
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
    
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Lerngruppen-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -364,7 +355,7 @@ class LerngruppeOperationen(Resource):
         
     @lernApp.marshal_with(lerngruppe)
     @lernApp.expect(lerngruppe, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update eines bestimmten Lerngruppen-Objekts.
 
@@ -385,7 +376,7 @@ class LerngruppeOperationen(Resource):
         else:
             return '', 500
 
-    @secured
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten Lerngruppen-Objekts.
 
@@ -395,50 +386,42 @@ class LerngruppeOperationen(Resource):
         adm.delete_ById(id)
         return '', 200
 
-@lernApp.route('/vorschlaege')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class VorschlaegeListOperations(Resource):
-    @lernApp.marshal_list_with(vorschlag)
+
+"""Vorschlagspezifisch"""
+#notwendig?
+#@lernApp.route('/vorschlaege')
+#@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+#class VorschlaegeListOperations(Resource):
+ #   @lernApp.marshal_list_with(vorschlag)
     #@secured
-    def get(self):
-        """Auslesen aller Vorschlag-Objekte.
-        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = AppAdministration()
-        vorschlaege = adm.get_all_vorschlaege()
-        return vorschlaege
+  #  def get(self):
+   #     """Auslesen aller Vorschlag-Objekte.
+    #    Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+     #   adm = AppAdministration()
+      #  vorschlaege = adm.get_all_vorschlaege()
+       # return vorschlaege
 
-    @lernApp.marshal_with(vorschlag, code=200)
-    @lernApp.expect(vorschlag)
+    #@lernApp.marshal_with(vorschlag, code=200)
+    #@lernApp.expect(vorschlag)
     #@secured
-    def post(self):
-        """Anlegen eines neuen Vorschlag-Objekts.
-        """
-        adm = AppAdministration()
+    #def post(self):
+     #   """Anlegen eines neuen Vorschlag-Objekts.
+      #  """
+       # adm = AppAdministration()
 
-        proposal = Vorschlag.from_dict(api.payload)
+        #proposal = Vorschlag.from_dict(api.payload)
 
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
-        if proposal is not None:
-            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_personen_id())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+        #"""RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        #if proposal is not None:
+         #   """ Das serverseitig erzeugte Objekt ist das maßgebliche und
+          #  wird auch dem Client zurückgegeben.
+           # """
+            #c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_match_profil_id())
+            #return c, 200
+        #else:
+             #Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+         #   return '', 500
 
-@lernApp.route('/vorschlaege/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class VorschlaegeListOperations(Resource):
-    @lernApp.marshal_list_with(vorschlag)
-    #@secured
-    def get(self):
-        """Auslesen aller gematchten Vorschlag-Objekte.
-        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = AppAdministration()
-        vorschlaege = adm.get_all_vorschlaege()
-        return vorschlaege
 
 @lernApp.route('/vorschlag/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -446,47 +429,19 @@ class VorschlagByIDOperationen(Resource):
     @lernApp.marshal_list_with(vorschlag)
     #@secured
     def get(self, id):
-        """Auslesen eines bestimmten Vorschlag-Objekts.
+        """Auslesen aller Vorschlag-Objekte einer main_person_id.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
+
         adm = AppAdministration()
         vorschlag = adm.get_vorschlaege_by_main_person_id(id)
         return vorschlag
 
-    #@secured
-    def put(self, id):
-        """Update des Vorschlag-Objekts."""
-        adm = AppAdministration()
-        c = Vorschlag.from_dict(api.payload)
-
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Vorschlag-Objekts gesetzt."""
-            c.set_id(id)
-            adm.save_vorschlag(c)
-            return '', 200
-        else:
-            return '', 500
-
     def delete(self, id):
         """Löschen eines bestimmten Nachrichtenobjekts."""
+        s
         adm = AppAdministration()
-        vorschlag = adm.get_vorschlag_by_id(id)
-        adm.delete(vorschlag)
-        return '', 200
-
-
-@lernApp.route('/vorschlaege')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class VorschlaegeListOperations(Resource):
-    @lernApp.marshal_list_with(vorschlag)
-    @secured
-    def get(self):
-        """Auslesen aller Vorschlag-Objekte.
-
-        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = AppAdministration()
-        vorschlaege = adm.get_all_vorschlaege()
-        return vorschlaege
+        adm.delete_vorschlag_by_id(id)
 
 @lernApp.route('/vorschlaege/<int:mainpersonid>/<int:lernfachid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -495,16 +450,18 @@ class VorschlaegeByPersonByLernfachOperations(Resource):
     #@secured
     def get(self, mainpersonid, lernfachid):
         """Auslesen aller Vorschlag-Objekte nach Person und Lernfach.
-
         Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+
         adm = AppAdministration()
         vorschlaege = adm.match_berechnen(mainpersonid, lernfachid)
         return vorschlaege
 
-@lernApp.route('/nachricht')
+"""Nachrichtspezifisch"""        
+@lernApp.route('/nachrichten')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtListOperation(Resource):
+class NachrichtenOperation(Resource):
 
+    #Brauchen wir das überhaupt? Komplett alle Nachrichten ist ja unnötig
     @lernApp.marshal_list_with(nachricht)
     def get(self):
         """Auslesen aller Nachrichten-Objekte.
@@ -514,23 +471,27 @@ class NachrichtListOperation(Resource):
         nachricht = adm.get_all_nachrichten()
         return nachricht
 
-    @lernApp.marshal_list_with(nachricht, envelope='response')
+    @lernApp.marshal_with(nachricht)
     def post(self):
-        """Anlegen eines neuen Nachrichtenobjekts."""
+        """Anlegen/schreiben einer Nachricht."""
         adm = AppAdministration()
-        n = nachricht.from_dict(api.payload)
 
-        if n is not None:
-            insert_n = adm.create_nachricht(n)
-            nachricht = adm.get_nachricht_by_id(insert_n.get_id())
-            return nachricht, 200
+        proposal = Nachricht.from_dict(api.payload)
+
+        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        if proposal is not None:
+            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
+            wird auch dem Client zurückgegeben. 
+            """
+            c = adm.create_nachricht(proposal.get_inhalt(), proposal.get_empfaenger())
+            return c, 200
         else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
-
 
 @lernApp.route('/nachricht/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtOperation(Resource):
+class NachrichtByIDOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
     def get (self, id):
@@ -543,7 +504,7 @@ class NachrichtOperation(Resource):
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
-
+    #Kann man Nachrichten später updaten?
     @lernApp.marshal_with(nachricht)
     def put(self, id):
         """Update eines bestimmten Nachrichtenenobjekts."""
@@ -566,17 +527,6 @@ class NachrichtOperation(Resource):
         adm.delete_nachricht(na)
         return '', 200
 
-    @lernApp.marshal_with(nachricht)
-    def post(self, id):
-        """Anlegen/schreiben einer Nachricht."""
-        adm = AppAdministration()
-        n = adm.get_nachricht_by_id(id)
-
-        if n is not None:
-            result = adm.create_nachricht(n)
-            return result
-        else:
-            return "", 500
 
 @lernApp.route('/nachricht-by-inhalt/<string:inhalt>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -601,45 +551,59 @@ class NachrichtByPersonIdOperation(Resource):
     def get (self, person_id):
         """Auslesen einer bestimmten Nachricht anhand der Id der Person."""
         adm = AppAdministration()
-        message = adm.get_nachricht_by_person_id(person_id)
-
-        if message is not None:
-            return message
-        else:
-            return '', 500 #Wenn es keine Nachricht mit der id gibt.
-
-@lernApp.route('/nachricht-by-profil-id/<string:profil_id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtByProfilIdOperation(Resource):
-
-    @lernApp.marshal_with(nachricht)
-    def get (self, profil_id):
-        """Auslesen einer bestimmten Nachricht anhand der Id des Profils."""
-        adm = AppAdministration()
-        mes = adm.get_nachricht_by_profil_id(profil_id)
-
-        if mes is not None:
-            return mes
-        else:
-            return '', 500 #Wenn es keine Nachricht mit der id gibt.
-
-@lernApp.route('/nachrichten-by-id/<string:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class NachrichtByIdOperation(Resource):
-
-    @lernApp.marshal_with(konversation)
-    def get(self, id):
-        """Auslesen einer bestimmten Nachricht anhand der Id."""
-        adm = AppAdministration()
-        nachricht = adm.get_nachricht_by_id(id)
+        nachricht = adm.get_nachricht_by_person_id(person_id)
 
         if nachricht is not None:
             return nachricht
         else:
-            return '', 500  # Wenn es keine Nachricht mit der id gibt.
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+
+@lernApp.route('/nachricht-by-konversation/<int:konversation_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByKonversationIdOperation(Resource):
+
+    @lernApp.marshal_with(nachricht)
+    #@secured
+    def get (self, konversation_id):
+        """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_konversation_id(konversation_id)
+
+        if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
+    
+    @lernApp.marshal_with(nachricht)
+    @secured
+    def delete(self, konversation_id):
+        """Löschen aller Nachrichten anhand der Id der Konversation."""
+        adm = AppAdministration()
+        nachrichten = adm.delete_by_konversation_id(konversation_id)
+
+        if nachrichten is not None:
+            return nachrichten
+        else:
+            return '', 500
+
+@lernApp.route('/nachricht-by-konversation-by-person/<int:konversation_id>/<int:person_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class NachrichtByKonversationByPersonOperation(Resource):
+
+    @lernApp.marshal_with(nachricht)
+    #@secured
+    def get (self, konversation_id, person_id):
+        """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
+        adm = AppAdministration()
+        nachricht = adm.get_nachricht_by_konversation_by_person(konversation_id, person_id)
+
+        if nachricht is not None:
+            return nachricht
+        else:
+            return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
 
-"""Konversationspezifisch"""
+"""Konversationspezifische"""
 @lernApp.route('/konversationen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationenOperation(Resource):
@@ -706,6 +670,7 @@ class KonversationByIdOperation(Resource):
         adm.delete_konversation(k)
         return '', 200
 
+#notwendig?
 @lernApp.route('/konversation/<string:name>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByNameOperation(Resource):
@@ -889,38 +854,34 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         return lernvorlieben
 
-   # @secured
-    def put(self):
+    @lernApp.marshal_list_with(lernvorlieben)
+   #@secured
+    def put(self, id):
         """Update des Lernvorlieben-Objekts."""
 
-        lernvorliebenId = request.args.get("id")
-        tageszeiten = request.args.get("tageszeiten")
-        tage = request.args.get("tage")
-        frequenz = request.args.get("frequenz")
-        lernart = request.args.get("lernart")
-        gruppengroesse = request.args.get("gruppengroesse")
-        lernort = request.args.get("lernort")
-        
         adm = AppAdministration()
-        lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
-        lernvorlieben.set_tageszeiten(tageszeiten)
-        lernvorlieben.set_tage(tage)
-        lernvorlieben.set_frequenz(frequenz)
-        lernvorlieben.set_lernart(lernart)
-        lernvorlieben.set_gruppengroesse(gruppengroesse)
-        lernvorlieben.set_lernort(lernort)
-        adm.update_lernvorlieben_by_id(lernvorlieben)
+        c = Lernvorlieben.from_dict(api.payload)
 
-   # @secured
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Lernvorlieben-Objekts gesetzt."""
+            c.set_id(id)
+            adm.save_lernvorlieben(c)
+            return '', 200
+        else:
+            return '', 500
+
+
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten Lernvorlieben-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        lernvorlieben = adm.get_lernvorliebe_by_id(id)
+        lernvorlieben = adm.get_lernvorlieben_by_id(id)
         adm.delete_lernvorlieben(lernvorlieben)
         return '', 200
+
 
 @lernApp.route('/lernvorlieben')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

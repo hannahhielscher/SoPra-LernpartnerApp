@@ -6,7 +6,7 @@ class Vorschlag(bo.BusinessObject):
         self._main_person_id = 0
         self._match_quote = 0
         self._lernfaecher_id = 0
-        self._personen_id = 0
+        self._match_profil_id = 0
 
     def get_main_person_id(self):
         """Auslesen der Person zu der verglichen wird"""
@@ -32,21 +32,21 @@ class Vorschlag(bo.BusinessObject):
         """Auslesen des Lernfaches"""
         self._lernfaecher_id = lernfaecher_id
 
-    def get_personen_id(self):
+    def get_match_profil_id(self):
         """Auslesen der Personen mit denen verglichen wird"""
-        return self._personen_id
+        return self._match_profil_id
 
-    def set_personen_id(self, personen_id):
+    def set_match_profil_id(self, match_profil_id):
         """Setzen der Personen mit denen verglichen wird"""
-        self._personen_id = personen_id
+        self._match_profil_id = match_profil_id
 
     def get_all(self):
-        inhalt = [self.id, self._main_person_id, self._match_quote, self._lernfaecher_id, self._personen_id]
+        inhalt = [self.id, self._main_person_id, self._match_quote, self._lernfaecher_id, self._match_profil_id]
         return inhalt
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Profil: {}, {}, {}".format(self._main_person_id, self._match_quote, self._lernfaecher_id, self._personen_id)
+        return "Profil: {}, {}, {}".format(self._main_person_id, self._match_quote, self._lernfaecher_id, self._match_profil_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -56,6 +56,6 @@ class Vorschlag(bo.BusinessObject):
         obj.set_main_person_id(dictionary["main_person_id"])
         obj.set_match_quote(dictionary["match_quote"])
         obj.set_lernfaecher_id(dictionary["lernfaecher_id"])
-        obj.set_personen_id(dictionary["personen_id"])
+        obj.set_match_profil_id(dictionary["match_profil_id"])
         return obj
 

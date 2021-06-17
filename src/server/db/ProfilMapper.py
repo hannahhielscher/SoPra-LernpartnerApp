@@ -186,6 +186,7 @@ class ProfilMapper(Mapper):
             #profil.set_lernfaecher(find_lernfaecher_id_by_profil_id(profil_id))
             profil.set_lernfaecher(lernfaecher_id)
             profil.set_lernvorlieben_id(lernvorlieben_id)
+
             result.append(profil)
 
         self._connection.commit()

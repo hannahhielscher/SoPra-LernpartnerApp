@@ -18,18 +18,18 @@ class VorschlagMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, personen_id FROM vorschlaege"
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege"
 
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, main_person_id, match_quote, lernfaecher_id, personen_id) in tuples:
+        for (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) in tuples:
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(match_quote)
             vorschlag.set_lernfaecher_id(lernfaecher_id)
-            vorschlag.set_personen_id(personen_id)
+            vorschlag.set_match_profil_id(match_profil_id)
 
             result.append(vorschlag)
 
@@ -38,26 +38,27 @@ class VorschlagMapper(Mapper):
 
         return result
 
+    #pass?
     def find_by_id(self, id):
         """Suchen eines Vorschlages nach der übergebenen ID.
         :param id Primärschlüsselattribut eines Vorschlages aus der Datenbank
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-        result = None
+
         cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, personen_id FROM vorschlaege WHERE id='{}'".format(id)
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, main_person_id, match_quote, lernfaecher_id, personen_id) = tuples[0]
+            (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) = tuples[0]
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(match_quote)
             vorschlag.set_lernfaecher_id(lernfaecher_id)
-            vorschlag.set_personen_id(personen_id)
+            vorschlag.set_match_profil_id(match_profil_id)
 
             result = vorschlag
 
@@ -78,17 +79,17 @@ class VorschlagMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, personen_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
+        command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, main_person_id, match_quote, lernfaecher_id, personen_id) in tuples:
+        for (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) in tuples:
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
             vorschlag.set_match_quote(match_quote)
             vorschlag.set_lernfaecher_id(lernfaecher_id)
-            vorschlag.set_personen_id(personen_id)
+            vorschlag.set_match_profil_id(match_profil_id)
 
             result.append(vorschlag)
 
@@ -116,8 +117,8 @@ class VorschlagMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 vorschlag.set_id(1)
 
-        command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfaecher_id, personen_id) VALUES (%s,%s,%s,%s,%s)"
-        data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfaecher_id(), vorschlag.get_personen_id())
+        command = "INSERT INTO vorschlaege (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) VALUES (%s,%s,%s,%s,%s)"
+        data = (vorschlag.get_id(), vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.get_lernfaecher_id(), vorschlag.get_match_profil_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -126,28 +127,15 @@ class VorschlagMapper(Mapper):
         return vorschlag
 
     def update(self, vorschlag):
-        """Überschreiben / Aktualisieren eines Vorschlag-Objekts in der DB
-        :param vorschlag -> Vorschlag-Objekt
-        :return aktualisiertes Vorschlag-Objekt
-        """
-        cursor = self._connection.cursor()
+        pass
 
-        command = "UPDATE vorschlaege " + "SET match_quote=%s, person_id=%s WHERE WHERE id=%s"
-        data = (
-        vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.lernfach(), vorschlag.get_person_id())
-
-        cursor.execute(command, data)
-
-        self._connection.commit()
-        cursor.close()
-
-    def delete(self, vorschlag):
+    def delete(self, id):
         """Löschen der Daten eines Vorschlages aus der Datenbank
         :param vorschlag -> Vorschlag-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM vorschlaege WHERE id={}".format(vorschlag.get_id())
+        command = "DELETE FROM vorschlaege WHERE main_person_id={}".format(id)
         cursor.execute(command)
 
         self._connection.commit()

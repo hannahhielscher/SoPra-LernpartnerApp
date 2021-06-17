@@ -40,7 +40,7 @@ class LernfaecherForm extends component{
   }
 
   getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.profilid)
+    LernpartnerAPI.getAPI().getProfil(this.props.currentUser.getpersonenprofil())
     .then(profilBO =>
         this.setState({
           profil: profilBO,
@@ -62,27 +62,28 @@ class LernfaecherForm extends component{
   }
   
   render() {
-    const { profil, lernfaecher, lernfach, loadingInProgress, error } = this.state;
+    const { lernfaecher, lernfach, loadingInProgress, error } = this.state;
     return (
       <div>
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="age-native-simple">Lernfach auswählen:</InputLabel>
           <Select
             native
-            value= {this.state.lernfach}
+            value= {lernfach}
             onChange={handleChange}
             inputProps={{
               name: 'age',
               id: 'age-native-simple',
             }}
           >
-            {this.state.lernfaecher.map(lernfaecher => (
-            <option key={lernfaecher} value={lernfaecher}>
-              {lernfaecher}
+            {lernfaecher.map(lernfach => (
+            <option key={lernfach} value={lernfach}>
+              {lernfach}
             </option>
             ))}
           </Select>
         </FormControl>
+        <VorschlagListe lernfach={lernfach}/>
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
       </div>
@@ -90,4 +91,4 @@ class LernfaecherForm extends component{
   } 
 }
 
-export default withStyles(useStyles)(LernfaecherForm);
+export default withRouter(withStyles(useStyles)(LernfaecherForm));
