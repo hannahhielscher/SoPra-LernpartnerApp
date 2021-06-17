@@ -85,12 +85,13 @@ export default class LernpartnerAPI {
         #getNachrichtenByPersonURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
         #getNachrichtenByInhaltURL= () => `${this.#lernappServerBaseURL}/nachrichten/${inhalt}`;
         
-        //Konversationbezogen#
+        //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
         #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
         #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
         #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
+        #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversation/${name}`;
 
         //TeilnahmeChatbezogen
         #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
@@ -654,6 +655,122 @@ export default class LernpartnerAPI {
              })
            })
           }
+
+          //Konversations bezogen
+
+           /**
+           * Gibt alle Konversationen als BO zurück
+           * 
+           * @public
+           */
+
+        getKonversationen() {
+          return this.#fetchAdvanced(this.#getKonversationenURL()).then((responseJSON) => {
+            let konversationenBOs = KonversationBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+              resolve(konversationenBOs);
+            })           
+          })
+        }
+
+         /** 
+        * gibt die Konversation mit der bestimmten ID als BO zurück
+         * @param {Number} id to be retrieved
+         * @public
+          */
+    
+          getKonversation(id){
+            return this.#fetchAdvanced(this.#getKonversationURL(id)).then((responseJSON) => {
+              let konversationenBOs = KonversationBO.fromJSON(responseJSON);
+              //console.info(konversationenBOs)
+              return new Promise(function (resolve){
+                resolve(konversationenBOs)
+              })
+            })
+          }
+
+          /** 
+          * Adds a KOnversation and returns a Promise, which resolves to a new KonversationBO object
+          *  
+          * @param {KonversationBO} konversationBO to be added. The ID of the new nachricht is set by the backend
+          * @public
+          */
+ 
+         addKonversation(konversationBO) {
+           return this.#fetchAdvanced(this.#addKonversationURL(), {
+           method: 'POST',
+             headers: {
+               'Accept': 'application/json, text/plain',
+               'Content-type': 'application/json',
+             },
+             body: JSON.stringify(konversationBO)
+           }).then((responseJSON) => {
+             // We always get an array of NachrichtBOs.fromJSON, but only need one object
+             let responseKonversationBO = KonversationBO.fromJSON(responseJSON)[0];
+             // console.info(KonversationBOs);
+             return new Promise(function (resolve) {
+               resolve(responseKonversationBO);
+             })
+           })
+         }
+
+          /**
+         * Gibt Promise zurück, Löscht Konversation mit bestimmter ID
+         * 
+         * @param {Number} id to be deleted
+         * @public
+         */
+
+
+        deleteKonversation(id) {
+          return this.#fetchAdvanced(this.#deleteKonversationURL(id), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of KonversationBOs.fromJSON
+            let responseKonversationBO = KonversationBO.fromJSON(responseJSON)[0];
+            // console.info(KonversationBOs);
+            return new Promise(function (resolve) {
+              resolve(responseKonversationBO);
+            })
+          })
+        }
+
+         /**
+         * Gibt Promise zurück, Löscht Nachricht mit bestimmter ID
+         * 
+         * @param {String} name to be retrived 
+         * @public
+         */
+
+
+          getKonversationByName(name){
+            return this.#fetchAdvanced(this.#getKonversationByNameURL(name)).then((responseJSON) => {
+            let konversationBOs = KonversationBO.fromJSON(responseJSON);
+            console.info(konversationBOs)
+            return new Promise(function (resolve){
+              resolve(konversationBOs)
+               })
+             })
+            }
+
+          //setzt den Zustand einer Konversation mit der bestimmten ID auf einen neuen Zustand
+	        setKonversation(id) { 
+		      //immer Zustand 1 holen
+		        return this.#fetchAdvanced(this.#setKonversationURL(id),{method: 'PUT'}).then((responseJSON) => {
+			      let konversationBOs = KonversationBO.fromJSON(responseJSON);
+			      console.info(konversationBOs)
+			      return new Promise(function (resolve){
+			      	resolve(konversationBOs);
+		           	})
+	        	  })
+          	}
+
+
+
+
+
+
+
 
 
 }
