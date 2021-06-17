@@ -14,6 +14,7 @@ import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
+import LernfaecherForm from './components/dialogs/LernfaecherForm';
 
 /**function App() {
   return (
@@ -134,12 +135,21 @@ class App extends React.Component {
 							currentUser ?
 								Userneu ?
 									<>
-										<Route path='/registrierung' component={RegistrierungForm} />
+										<Redirect from='/' to='registrierung'/>
+										<Route path='/registrierung'>
+											<RegistrierungForm/>	
+										</Route>
+									
 									</>
 									:
 									<>
-										<Route path='/meinprofil' component={MeinProfil} />
-										<Route path='/meinevorschlaege' component={VorschlagListe} />
+										<Route path='/meinprofil'>
+											<MeinProfil/>
+										</Route>
+
+										<Route path='/meinevorschlaege'>
+											<LernfaecherForm/>
+										</Route>
 									</>
 								
 								:

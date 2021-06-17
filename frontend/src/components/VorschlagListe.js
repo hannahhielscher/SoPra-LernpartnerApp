@@ -52,7 +52,7 @@ class VorschlagListe extends Component {
 
     // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getVorschlaege = () => {
-            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentUser.id)
+            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentUser.id, this.props.lernfach)
             .then(vorschlagBOs =>
                 this.setState({
                     vorschlaege: vorschlagBOs,
@@ -102,14 +102,17 @@ class VorschlagListe extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, lernfach } = this.props;
         const { vorschlaege, expandedVorschlagID, error, loadingInProgress}  = this.state;
     
         return (
+          
           <div className={classes.root}>
+            <h1>Test: Vorschläge für Lernfach {lernfach}</h1>
             { 
               // Show the list of VorschlagListeEintrag components
               // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
+  
               vorschlaege.map(vorschlag =>
                 <VorschlagListeEintrag key={vorschlag.getID()} vorschlag={vorschlag} expandedState={expandedVorschlagID === vorschlag.getID()}
                   onExpandedStateChange={this.onExpandedStateChange}

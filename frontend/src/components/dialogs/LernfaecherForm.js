@@ -62,7 +62,7 @@ class LernfaecherForm extends component{
   }
   
   render() {
-    const { profil, lernfaecher, lernfach, loadingInProgress, error } = this.state;
+    const { lernfaecher, lernfach, loadingInProgress, error } = this.state;
     return (
       <div>
         <FormControl className={classes.formControl}>
@@ -77,12 +77,13 @@ class LernfaecherForm extends component{
             }}
           >
             {lernfaecher.map(lernfach => (
-            <option key={lernfaecher} value={lernfaecher}>
+            <option key={lernfach} value={lernfach}>
               {lernfach}
             </option>
             ))}
           </Select>
         </FormControl>
+        <VorschlagListe lernfach={lernfach}/>
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
       </div>
@@ -90,4 +91,4 @@ class LernfaecherForm extends component{
   } 
 }
 
-export default withStyles(useStyles)(LernfaecherForm);
+export default withRouter(withStyles(useStyles)(LernfaecherForm));
