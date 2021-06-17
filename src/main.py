@@ -225,7 +225,7 @@ class ProfilListOperationen(Resource):
     #@secured
     def post(self):
         """Anlegen eines neuen Profil-Objekts."""
-        #id = request.args.get("id")
+        id = request.args.get("id")
         gruppe = request.args.get("gruppe")
         lernfaecher = request.args.get("lernfaecher")
         lernvorlieben_id = request.args.get("lernvorlieben_id")
@@ -249,21 +249,6 @@ class ProfilListOperationen(Resource):
           #  i.set_lernfaecher(lernfaecher)
            # i.set_lernvorlieben_id(lernvorlieben_id)
             #adm.update(i)
-
-"""Test-Methoden START"""
-@lernApp.route('/profil-by-lernfach/<int:id>')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class ProfilByIDOperationen(Resource):
-    @lernApp.marshal_list_with(profil)
-
-    def get(self, id):
-        """Auslesen eines Profiles nach einem bestimmten Lernfach
-        """
-        adm = AppAdministration()
-        profil = adm.get_profil_by_lernfach_id(id)
-        return profil
-
-"""Test-Methoden STOP"""
 
 @lernApp.route('/profil/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -915,6 +900,20 @@ class LernvorliebenListOperationen(Resource):
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
 
+"""Test-Methoden START"""
+@lernApp.route('/profil-by-lernfach/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+
+    def get(self, id):
+        """Auslesen eines Profiles nach einem bestimmten Lernfach
+        """
+        adm = AppAdministration()
+        profil = adm.get_profil_by_lernfach_id(id)
+        return profil
+
+"""Test-Methoden STOP"""
 
 if __name__ == '__main__':
     app.run(debug=True)
