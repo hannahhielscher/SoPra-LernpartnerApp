@@ -60,7 +60,7 @@ class KonversationListe extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            konversationen : [],
+            konversationen : '',
             error: null,
             loadingInProgress: false, 
             expandedKonversationID: expandedID,
@@ -95,8 +95,8 @@ componentDidMount() {
   this.getKonversationen();
   this.setState({
       currentStudentName: this.props.currentPerson.getname(),
-  })
-}
+        })
+    }
 
  /** 
      * Handles onExpandedStateChange events from the VorschlagListeEintrag component. Toggels the expanded state of 
@@ -125,9 +125,10 @@ render() {
         const { konversationen, expandedVorschlagID, error, loadingInProgress}  = this.state; 
 
         return(
+          
 
         );
-  }
+      }
 
 }
 
