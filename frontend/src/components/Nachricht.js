@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, Grid } from '@material-ui/core';
+import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import NachrichtenListeEintrag from './NachrichtenListeEintrag';
+//import SaveIcon from '@material-ui/icons/Save';
+//import Table from '@material-ui/core/Table';
+//import TableBody from '@material-ui/core/TableBody';
+//import TableCell from '@material-ui/core/TableCell';
+//import TableContainer from '@material-ui/core/TableContainer';
+//import TableHead from '@material-ui/core/TableHead';
+//import TableRow from '@material-ui/core/TableRow';
+//import Paper from '@material-ui/core/Paper';
 
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 
@@ -62,7 +63,7 @@ class Nachricht extends Component {
 
    // Init an empty state
    this.state = {
-     nachrichten: [],
+     nachrichten: '',
      error: null,
      loadingInProgress: false,
      expandedNachrichtID: expandedID,
@@ -138,34 +139,39 @@ nachrichtFormClosed = modul => {
 
     return (
       <div className={classes.root}>
+      <h1>Alle Nachrichten: </h1>
       { 
-        // Show the list of VorschlagListeEintrag components
-        // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
+        // Show the list of NachrichtListeEintrag components
+        // Do not use strict comparison, since expandedNachrichtID maybe a string if given from the URL parameters
         nachrichten.map(nachricht =>
           <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachricht} expandedState={expandedNachrichtID === nachricht.getID()}
             onExpandedStateChange={this.onExpandedStateChange}
           />)
       }
       <LoadingProgress show={loadingInProgress} />
-        <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Nachrichten konnten nicht geladen werden!`} onReload={this.getNachrichten} />
+      <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
      
     </div>
         
     )
 
-}
+}}
 
 // Component specific styles 
 const styles = theme => ({
-
+  root: {
+    width: '100%',
+  }
 });
 
-//** PropTypes */
+/** PropTypes */
 Nachricht.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  Nachricht: PropTypes.object.isRequired,
+  /** @ignore */
+  location: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired
 }
   
-  export default withStyles(styles)(Nachricht);
+
+export default withStyles(styles)(Nachricht);
