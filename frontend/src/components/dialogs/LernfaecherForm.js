@@ -40,7 +40,7 @@ class LernfaecherForm extends component{
   }
 
   getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.profilid)
+    LernpartnerAPI.getAPI().getProfil(this.props.currentUser.getpersonenprofil())
     .then(profilBO =>
         this.setState({
           profil: profilBO,
@@ -69,16 +69,16 @@ class LernfaecherForm extends component{
           <InputLabel htmlFor="age-native-simple">Lernfach auswählen:</InputLabel>
           <Select
             native
-            value= {this.state.lernfach}
+            value= {lernfach}
             onChange={handleChange}
             inputProps={{
               name: 'age',
               id: 'age-native-simple',
             }}
           >
-            {this.state.lernfaecher.map(lernfaecher => (
+            {lernfaecher.map(lernfach => (
             <option key={lernfaecher} value={lernfaecher}>
-              {lernfaecher}
+              {lernfach}
             </option>
             ))}
           </Select>

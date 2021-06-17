@@ -73,7 +73,7 @@ export default class LernpartnerAPI {
         //Vorschlagbezogen
         #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
         //#getSelectedLernfach = () => `${this.#lernappServerBaseURL}`
-        #addVorschlaegeURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID, lernfachID}`;
+        #getVorschlaegeByPersonByLernfachURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}/${lernfachID}`;
 
         //Nachrichtenbezogen
         #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
@@ -500,8 +500,8 @@ export default class LernpartnerAPI {
          * @param {Number} lernfachID to be retrieved
          * @public
           */
-        getVorschlaege(mainpersonID, lernfachID) {
-          return this.#fetchAdvanced(this.#getVorschlaegeURL(mainpersonID, lernfachID, {method: 'GET'})).then((responseJSON) => {
+        getVorschlaegeByPersonByLernfach(mainpersonID, lernfachID) {
+          return this.#fetchAdvanced(this.#getVorschlaegeByPersonByLernfachURL(mainpersonID, lernfachID, {method: 'GET'})).then((responseJSON) => {
             let vorschlaegeBOs = VorschlagBO.fromJSON(responseJSON);
             //console.info(vorschlaegeBOs)
             return new Promise(function (resolve) {
