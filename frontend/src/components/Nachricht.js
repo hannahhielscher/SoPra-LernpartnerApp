@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
+import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography, Paper, CardActions } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
@@ -13,7 +17,7 @@ import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 //import TableContainer from '@material-ui/core/TableContainer';
 //import TableHead from '@material-ui/core/TableHead';
 //import TableRow from '@material-ui/core/TableRow';
-//import Paper from '@material-ui/core/Paper';
+import Paper from '@material-ui/core/Paper';
 
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 
@@ -25,28 +29,6 @@ import NachrichtenListeEintrag from './NachrichtenListeEintrag';
  * Hierfür werden alle Nachrichten des aktuell eingeloggten Student geladen und in die Componente NachrichtenListeEintrag gemappt
  * 
  */
-
-
-//Css Style für Tabellen Zellen
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
-
-
-//Css Style für Tabllen Zeilen
-const StyledTableRow = withStyles((theme) => ({
-    root: {
-      '&:nth-of-type(4n+1)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  }))(TableRow);
 
 
 class Nachricht extends Component {
@@ -64,6 +46,7 @@ class Nachricht extends Component {
    // Init an empty state
    this.state = {
      nachrichten: '',
+     inhalt: null,
      error: null,
      loadingInProgress: false,
      expandedNachrichtID: expandedID,
@@ -80,20 +63,51 @@ class Nachricht extends Component {
   }
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
- getNachrichten = () => {
-    LernappAPI.getAPI().getNachrichten()
-      .then(nachrichtenBOs =>
-        this.setState({               // Set new state when CustomerBOs have been fetched
-          nachrichten: nachrichtenBOs,
-          loadingInProgress: false,   // disable loading indicator 
-          error: null
-        })).catch(e =>
-          this.setState({             // Reset state with error from catch 
-            nachrichten: [],
-            loadingInProgress: false, // disable loading indicator 
-            error: e
-          })
-        );
+ getNachrichten= () => {
+  LernpartnerAPI.getAPI()
+    .getNachrichten(this.props.sender.getID(), this.props.empfaenger.getID())
+    .then((nachrichtenBOs) =>
+      this.setState({
+        nachrichten: nachrichten,
+        loadingInProgress: false,
+        loadingError: null,
+      })
+    )
+    .catch((e) =>
+      this.setState({
+        nachrichten: null,
+        loadingInProgress: false,
+        loadingError: e,
+      })
+    );
+  this.setState({
+    loadingInProgress: true,
+    loadingError: null,
+  });
+};
+
+addNachricht = () => {
+    let newNachricht = new NachrichtBO(
+      this.state.inhalt,
+      this.props.sender.getID(),
+      this.props.empfaenger.getID()
+    );
+    LernpartnerAPI.getAPI()
+      .addNachricht(newNachricht)
+      .then((nachricht) => {
+        this.state.nachricht.push(nachricht);
+        this.setState({ inhalt: "" });
+        // Backend call sucessfull
+        // reinit the dialogs state for a new empty customer
+      })
+      .catch((e) =>
+        this.setState({
+          updatingInProgress: false, // disable loading indicator
+          updatingError: e, // show error message
+        })
+      );
+
+        
 
 this.setState({
     loadingInProgress: true,
@@ -123,44 +137,113 @@ nachrichtFormClosed = modul => {
     }
   }
 
-  nachrichtDeleted = nachricht => {
-    const newNachricht = this.state.nachrichten.filter(nachrichtFromState => nachrichtFromState.getID() !== nachricht.getID());
-    this.setState({
-      nachrichten: newNachricht,
-      filteredNachrichten: [...newNachricht],
-      showNachrichtenForm: false
-    });
-  }
+  handleChange = (e) => {
+    this.setState({ content: e.target.value });
+  };
+
+  handleClose = () => {
+    this.props.onClose();
+  };
+
+  //nachrichtDeleted = nachricht => {
+   // const newNachricht = this.state.nachrichten.filter(nachrichtFromState => nachrichtFromState.getID() !== nachricht.getID());
+   // this.setState({
+     // nachrichten: newNachricht,
+     // filteredNachrichten: [...newNachricht],
+     // showNachrichtenForm: false
+  //  });}
 
  // Rendert die Componente 
- render() {
-    const { classes } = this.props;
-    const { nachrichten, loadingInProgress, error, showNachrichtForm, expandedNachrichtID} = this.state;
-
-    return (
-      <div className={classes.root}>
-      <h1>Alle Nachrichten: </h1>
-      { 
-        // Show the list of NachrichtListeEintrag components
-        // Do not use strict comparison, since expandedNachrichtID maybe a string if given from the URL parameters
-        nachrichten.map(nachricht =>
-          <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachricht} expandedState={expandedNachrichtID === nachricht.getID()}
-            onExpandedStateChange={this.onExpandedStateChange}
-          />)
+    render() {
+      const { classes, sender, empfaenger } = this.props;
+      const { nachrichten, inhalt, loadingInProgress, error, expandedNachrichtID } = this.state;
+      if (nachrichten) {
+        nachrichten.sort((a, b) => {
+          return a.getID() - b.getID();
+        });
       }
+  
+      return (
+        <div>
+          <h1 class="Gruppenname">
+            {empfaenger.getFirstname() + " " + empfaenger.getLastname()}
+          </h1>
+          {nachrichten
+            ? nachrichten.map((nachricht) => {
+                {
+                  if (nachricht.getSender() != sender.getID()) {
+                    return (
+                      <div id="empfänger_text">
+                        <Grid
+                          item
+                          xs
+                          className={classes.outerColumn}
+                          style={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Typography>{nachricht.getInhalt()}</Typography>
+                        </Grid>
+                        <Divider />
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div id="sender_text">
+                        <Grid
+                          item
+                          className={classes.outerColumn}
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justify="flex-end"
+                        >
+                          <Typography>{nachricht.getInhalt()}</Typography>
+                        </Grid>
+                        <Divider />
+                      </div>
+                    );
+                  }
+                }
+              })
+            : null}
+  
+          <form className={classes.root} noValidate autoComplete="off">
+            <TextField
+              id="standard-basic"
+              label="Bitte Text eingeben"
+              value={inhalt}
+              onChange={this.handleChange}
+            />
+          </form>
+          <Button className={classes.button_style} variant="outlined" color="primary" onClick={this.handleClose}>
+          <ArrowBackIcon/>
+          </Button>
+          <Button color="primary" variant="contained" onClick={this.addNachricht}>
+            senden 
+          </Button>
+
       <LoadingProgress show={loadingInProgress} />
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
-     
-    </div>
-        
-    )
+      
+      </div>
+    );
 
 }}
 
-// Component specific styles 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    width: '100%',
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "100ch",
+    },
+  },
+  outerColumn: {
+    margin: 5,
+    padding: 5,
+    height: 50,
+  },
+  button_style: {
+    margin: 5,
+    padding: 5,
   }
 });
 
