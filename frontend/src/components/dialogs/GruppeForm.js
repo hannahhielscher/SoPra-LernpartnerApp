@@ -7,8 +7,12 @@ import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 
 
-class GruppenForm extends Component {
+class GruppeForm extends Component {
 
-  constructor(props) { }
+  constructor(props) { 
+    super(props);
+
+
+  }
 
 }
