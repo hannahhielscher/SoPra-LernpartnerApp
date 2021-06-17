@@ -47,6 +47,8 @@ class Nachricht extends Component {
    this.state = {
      nachrichten: '',
      inhalt: null,
+     personID: null, 
+     konversation_id: null, 
      error: null,
      loadingInProgress: false,
      expandedNachrichtID: expandedID,
@@ -65,7 +67,7 @@ class Nachricht extends Component {
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
   LernpartnerAPI.getAPI()
-    .getNachrichten(this.props.sender.getID(), this.props.empfaenger.getID())
+    .getNachrichten(this.props.personID.getID(), this.props.konversation_id.getID())
     .then((nachrichtenBOs) =>
       this.setState({
         nachrichten: nachrichten,
@@ -89,8 +91,8 @@ class Nachricht extends Component {
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
       this.state.inhalt,
-      this.props.sender.getID(),
-      this.props.empfaenger.getID()
+      this.props.personID.getID(),
+      this.props.konversation_id.getID()
     );
     LernpartnerAPI.getAPI()
       .addNachricht(newNachricht)
@@ -98,7 +100,7 @@ addNachricht = () => {
         this.state.nachricht.push(nachricht);
         this.setState({ inhalt: "" });
         // Backend call sucessfull
-        // reinit the dialogs state for a new empty customer
+        // reinit the dialogs state for a new empty nachricht
       })
       .catch((e) =>
         this.setState({
@@ -155,8 +157,8 @@ nachrichtFormClosed = modul => {
 
  // Rendert die Componente 
     render() {
-      const { classes, sender, empfaenger } = this.props;
-      const { nachrichten, inhalt, loadingInProgress, error, expandedNachrichtID } = this.state;
+      const { classes, personID, konversation_id } = this.props;
+      const { nachrichten, inhalt, personID, konversation_id, loadingInProgress, error, expandedNachrichtID } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
           return a.getID() - b.getID();
@@ -166,12 +168,12 @@ nachrichtFormClosed = modul => {
       return (
         <div>
           <h1 class="Gruppenname">
-            {empfaenger.getFirstname() + " " + empfaenger.getLastname()}
+            {konversation_id.getFirstname() + " " + konversation_id.getLastname()}
           </h1>
           {nachrichten
             ? nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getSender() != sender.getID()) {
+                  if (nachricht.getPersonID() != personID.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid
@@ -185,7 +187,9 @@ nachrichtFormClosed = modul => {
                         <Divider />
                       </div>
                     );
-                  } else {
+                  } 
+                  
+                  else {
                     return (
                       <div id="sender_text">
                         <Grid
