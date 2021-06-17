@@ -90,7 +90,7 @@ class VorschlagListeEintrag extends Component {
     render(){
 
           const { classes, expandedState } = this.props;
-          const {vorschlag, profil, profilID, personName, personVorname, showProfil, showAnfrageForm, loadingInProgress, error } = this.state;
+          const {vorschlag, profil, profilID, personName, personVorname, showProfil, showAnfrageForm } = this.state;
 
           return (
             <div>
