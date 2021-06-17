@@ -110,7 +110,7 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonenOperationen(Resource):
     @lernApp.marshal_list_with(person)
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Personen-Objekte.
         Sollten keine Personen-Objekte verfügbar sein,
@@ -120,7 +120,7 @@ class PersonenOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    @secured
+    #@secured
     def put(self):
         """Update des User-Objekts."""
 
@@ -161,7 +161,7 @@ class PersonOperationen(Resource):
     
     @lernApp.marshal_with(person)
     @lernApp.expect(person, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
 
@@ -182,7 +182,7 @@ class PersonOperationen(Resource):
         else:
             return '', 500
 
-    @secured
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten Personen-Objekts.
 
@@ -388,38 +388,38 @@ class LerngruppeOperationen(Resource):
 
 
 """Vorschlagspezifisch"""
-@lernApp.route('/vorschlaege')
-@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class VorschlaegeListOperations(Resource):
-    @lernApp.marshal_list_with(vorschlag)
+#@lernApp.route('/vorschlaege')
+#@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+#class VorschlaegeListOperations(Resource):
+ #   @lernApp.marshal_list_with(vorschlag)
     #@secured
-    def get(self):
-        """Auslesen aller Vorschlag-Objekte.
-        Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = AppAdministration()
-        vorschlaege = adm.get_all_vorschlaege()
-        return vorschlaege
+  #  def get(self):
+   #     """Auslesen aller Vorschlag-Objekte.
+    #    Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+     #   adm = AppAdministration()
+      #  vorschlaege = adm.get_all_vorschlaege()
+       # return vorschlaege
 
-    @lernApp.marshal_with(vorschlag, code=200)
-    @lernApp.expect(vorschlag)
+    #@lernApp.marshal_with(vorschlag, code=200)
+    #@lernApp.expect(vorschlag)
     #@secured
-    def post(self):
-        """Anlegen eines neuen Vorschlag-Objekts.
-        """
-        adm = AppAdministration()
+    #def post(self):
+     #   """Anlegen eines neuen Vorschlag-Objekts.
+      #  """
+       # adm = AppAdministration()
 
-        proposal = Vorschlag.from_dict(api.payload)
+        #proposal = Vorschlag.from_dict(api.payload)
 
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
-        if proposal is not None:
-            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_match_profil_id())
-            return c, 200
-        else:
+        #"""RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
+        #if proposal is not None:
+         #   """ Das serverseitig erzeugte Objekt ist das maßgebliche und
+          #  wird auch dem Client zurückgegeben.
+           # """
+            #c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_match_profil_id())
+            #return c, 200
+        #else:
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+         #   return '', 500
 
 
 @lernApp.route('/vorschlag/<int:id>')
@@ -428,11 +428,11 @@ class VorschlagByIDOperationen(Resource):
     @lernApp.marshal_list_with(vorschlag)
     #@secured
     def get(self, id):
-        """Auslesen eines bestimmten Vorschlag-Objekts.
+        """Auslesen eines bestimmten Vorschlag-Objekts nach main_person.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
-        vorschlag = adm.get_vorschlaege_by_main_person_id(id)
+        vorschlag = adm.get_vorschlag_by_id(id)
         return vorschlag
 
     #@secured

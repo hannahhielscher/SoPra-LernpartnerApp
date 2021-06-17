@@ -44,7 +44,7 @@ class VorschlagMapper(Mapper):
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-        result = None
+  
         cursor = self._connection.cursor()
         command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE id='{}'".format(id)
         cursor.execute(command)
@@ -76,7 +76,6 @@ class VorschlagMapper(Mapper):
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-        result = None
         cursor = self._connection.cursor()
         command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
         cursor.execute(command)
