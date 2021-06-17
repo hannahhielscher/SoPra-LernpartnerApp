@@ -8,7 +8,7 @@ import { withStyles, Dialog, DialogTitle, DialogContent, DialogContentText, Dial
     } from '@material-ui/core';
 
 import { LernpartnerAPI } from '../../api';
-//import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
@@ -239,4 +239,4 @@ RegistrierungForm.propTypes = {
 	onSignIn: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(RegistrierungForm);
+export default withRouter(withStyles(styles)(RegistrierungForm));
