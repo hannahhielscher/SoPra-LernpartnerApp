@@ -4,6 +4,7 @@ import VorschlagBO from './VorschlagBO';
 import LerngruppeBO from './LerngruppeBO';
 import LernvorliebenBO from './LernvorliebenBO';
 import NachrichtBO from './NachrichtBO';
+import KonversationBO from './KonversationBO'
 import TeilnahmeChatBO from './TeilnahmeChatBO';
 import TeilnahmeGruppeBO from './TeilnahmeGruppeBO';
 
@@ -100,7 +101,7 @@ export default class LernpartnerAPI {
         #addTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappivServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
-        #getTeilnahmeChatByKonversationsIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
+        #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
 
         //TeilnahmeGruppebezogen
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
@@ -764,6 +765,133 @@ export default class LernpartnerAPI {
 		           	})
 	        	  })
           	}
+
+             //Teilnahme Chat bezogene
+
+          /**
+           * Gibt alle Teilnahmen eines Chats als BO zurück
+           * 
+           * @public
+           */
+
+           getTeilnahmeChat() {
+            return this.#fetchAdvanced(this.#getTeilnahmeChatURL()).then((responseJSON) => {
+            let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+              resolve(teilnahmechatBOs);
+               })           
+              })
+            }
+
+          /** 
+           * gibt die Teilnehmer mit der bestimmten ID als BO zurück
+           * @param {Number} id to be retrieved
+           * @public
+          */
+  
+          getTeilnahmeChatById(id){
+            return this.#fetchAdvanced(this.#getTeilnahmeChatByIdURL(id)).then((responseJSON) => {
+            let teilnachechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+            //console.info(teilnahmechatBOs)
+            return new Promise(function (resolve){
+              resolve(teilnahmechatBOs)
+               })
+             })
+            }
+
+            /**
+             * setzt den Zustand einer Konversation mit der bestimmten ID auf einen neuen Zustand
+             * 
+             * @param {Number} id to be deleted
+             * @public
+             */
+
+             setTeilnahmeChat(id) { 
+             //immer Zustand 1 holen
+               return this.#fetchAdvanced(this.#setTeilnahmeChatURL(id),{method: 'PUT'}).then((responseJSON) => {
+               let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+               console.info(teilnahmechatBOs)
+               return new Promise(function (resolve){
+                 resolve(teilnahmeBOs);
+                 })
+                })
+              }
+
+            /** 
+             * Adds a Teilnahme and returns a Promise, which resolves to a new TeilnahmeChatBO object
+             *  
+             * @param {TeilnahmeChatBO} teilnahmechatBO to be added. The ID of the new teilnahemChat is set by the backend
+             * @public
+            */
+
+            addTeilnahmeChat(teilnahmechatBO) {
+              return this.#fetchAdvanced(this.#addTeilnahmeChatURL(), {
+               method: 'POST',
+               headers: {
+                  'Accept': 'application/json, text/plain',
+                  'Content-type': 'application/json',
+                 },
+               body: JSON.stringify(teilnahmechatBO)
+               }).then((responseJSON) => {
+               // We always get an array of TeilnahmeChatBOs.fromJSON, but only need one object
+               let responseTeilnahmeChatBO = TeilnahmeChatBO.fromJSON(responseJSON)[0];
+               // console.info(TeilnahmeChatBOs);
+                 return new Promise(function (resolve) {
+                  resolve(responseTeilnahmeChatBO);
+                     })
+                   })
+               }
+
+             /** 
+             * löscht Nachrichten einer konversation
+             * @param {Number} id to be retrieved
+             * @public
+             */
+    
+            deleteTeilnahmeChat(id) {
+              return this.#fetchAdvanced(this.#deleteTeilnahmeChatURL(id), {
+                method: 'DELETE'
+                }).then((responseJSON) => {
+                // We always get an array of TeilnahmeChatBOs.fromJSON
+                let responseTeilnahmeChatBO = TeilnahmeChatBO.fromJSON(responseJSON)[0];
+                // console.info(KonversationBOs);
+                return new Promise(function (resolve) {
+                  resolve(responseTeilnahmeChatBO);
+                })
+              })
+            }
+
+             /** 
+              * Gibt alle TeilnahmenChat einer Person zurück
+              * @param {Number} personid to be retrieved
+              * @public
+              */
+
+              getTeilnahmeChatByStudentId(personid) {
+                return this.#fetchAdvanced(this.#getTeilnahmeChatByStudentIdURL(personid,{method: 'GET'})).then((responseJSON) => {
+                let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+                //console.info(teilnahmechatBOs)
+                return new Promise(function (resolve) {
+                  resolve(teilnahemchatBOs);
+                  })
+                })
+              }
+              
+             /** 
+              * gibt die Nachrichten mit der bestimmten konversationsID als BO zurück
+              * @param {Number} id to be retrieved
+              * @public
+             */
+  
+            getTeilnahmeChatByKonversationId(id){
+               return this.#fetchAdvanced(this.#getTeilnahmeChatByKonversationIdURL(id)).then((responseJSON) => {
+               let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+              //console.info(teilnahmechatBOs)
+              return new Promise(function (resolve){
+               resolve(teilnahmechatBOs)
+                })
+              })
+             }
 
 
 
