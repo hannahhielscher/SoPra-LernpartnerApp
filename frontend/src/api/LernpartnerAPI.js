@@ -893,6 +893,64 @@ export default class LernpartnerAPI {
               })
              }
 
+            //Teilnahme Gruppe bezogen
+
+            /**
+           * Gibt alle Teilnahmen einer Gruppe als BO zurück
+           * 
+           * @public
+           */
+
+           getTeilnahmeGruppe() {
+            return this.#fetchAdvanced(this.#getTeilnahmeGruppeURL()).then((responseJSON) => {
+            let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+              resolve(teilnahmegruppeBOs);
+               })           
+              })
+            }
+
+            /** 
+             * Adds a Teilnahme and returns a Promise, which resolves to a new TeilnahmeGruppeBO object
+             *  
+             * @param {TeilnahmeGruppeBO} teilnahmegruppeBO to be added. The ID of the new teilnahemgruppe is set by the backend
+             * @public
+            */
+
+             addTeilnahmeGruppe(teilnahmegruppeBO) {
+              return this.#fetchAdvanced(this.#addTeilnahmeGruppeURL(), {
+               method: 'POST',
+               headers: {
+                  'Accept': 'application/json, text/plain',
+                  'Content-type': 'application/json',
+                 },
+               body: JSON.stringify(teilnahmegruppeBO)
+               }).then((responseJSON) => {
+               // We always get an array of TeilnahmeGruppeBOs.fromJSON, but only need one object
+               let responseTeilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
+               // console.info(TeilnahmeGruppeBOs);
+                 return new Promise(function (resolve) {
+                  resolve(responseTeilnahmeGruppeBO);
+                     })
+                   })
+               }
+
+              /** 
+               * gibt die Teilnehmer mit der bestimmten ID als BO zurück
+               * @param {Number} id to be retrieved
+               * @public
+              */
+  
+              getTeilnahmeGruppeById(id){
+                return this.#fetchAdvanced(this.#getTeilnahmeGruppeByIdURL(id)).then((responseJSON) => {
+                let teilnachegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
+                //console.info(teilnahmegruppeBOs)
+                return new Promise(function (resolve){
+                 resolve(teilnahmegruppeBOs)
+                  })
+                })
+              }
+
 
 
 
