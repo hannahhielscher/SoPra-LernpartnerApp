@@ -388,6 +388,7 @@ class LerngruppeOperationen(Resource):
 
 
 """Vorschlagspezifisch"""
+#notwendig?
 #@lernApp.route('/vorschlaege')
 #@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 #class VorschlaegeListOperations(Resource):
@@ -418,7 +419,7 @@ class LerngruppeOperationen(Resource):
             #c = adm.create_vorschlag(proposal.get_id(), proposal.get_main_person_id(), proposal.get_match_quote(), proposal.get_lernfaecher_id(), proposal.get_match_profil_id())
             #return c, 200
         #else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+             #Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
          #   return '', 500
 
 
@@ -428,33 +429,19 @@ class VorschlagByIDOperationen(Resource):
     @lernApp.marshal_list_with(vorschlag)
     #@secured
     def get(self, id):
-        """Auslesen eines bestimmten Vorschlag-Objekts nach main_person.
+        """Auslesen aller Vorschlag-Objekte einer main_person_id.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
+
         adm = AppAdministration()
-        vorschlag = adm.get_vorschlag_by_id(id)
+        vorschlag = adm.get_vorschlaege_by_main_person_id(id)
         return vorschlag
-
-    #@secured
-    def put(self, id):
-        """Update des Vorschlag-Objekts."""
-        adm = AppAdministration()
-        c = Vorschlag.from_dict(api.payload)
-
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Vorschlag-Objekts gesetzt."""
-            c.set_id(id)
-            adm.save_vorschlag(c)
-            return '', 200
-        else:
-            return '', 500
 
     def delete(self, id):
         """Löschen eines bestimmten Nachrichtenobjekts."""
+        s
         adm = AppAdministration()
-        vorschlag = adm.get_vorschlag_by_id(id)
-        adm.delete(vorschlag)
-        return '', 200
+        adm.delete_vorschlag_by_id(id)
 
 @lernApp.route('/vorschlaege/<int:mainpersonid>/<int:lernfachid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -463,8 +450,8 @@ class VorschlaegeByPersonByLernfachOperations(Resource):
     #@secured
     def get(self, mainpersonid, lernfachid):
         """Auslesen aller Vorschlag-Objekte nach Person und Lernfach.
-
         Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+
         adm = AppAdministration()
         vorschlaege = adm.match_berechnen(mainpersonid, lernfachid)
         return vorschlaege

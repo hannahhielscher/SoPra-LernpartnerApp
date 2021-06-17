@@ -451,9 +451,9 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`vorschlaege` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
   `id` INT NOT NULL,
+  `main_person_id` VARCHAR(45) NULL,
   `match_quote` FLOAT NULL,
   `lernfaecher_id` VARCHAR(45) NULL,
-  `main_person_id` VARCHAR(45) NULL,
   `match_profil_id` INT NOT NULL,
   PRIMARY KEY (`id`, `match_profil_id`),
   INDEX `fk_vorschlaege_profile1_idx` (`match_profil_id` ASC) VISIBLE,

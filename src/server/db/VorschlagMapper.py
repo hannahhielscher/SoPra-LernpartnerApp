@@ -38,13 +38,14 @@ class VorschlagMapper(Mapper):
 
         return result
 
+    #pass?
     def find_by_id(self, id):
         """Suchen eines Vorschlages nach der übergebenen ID.
         :param id Primärschlüsselattribut eines Vorschlages aus der Datenbank
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-  
+
         cursor = self._connection.cursor()
         command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE id='{}'".format(id)
         cursor.execute(command)
@@ -76,13 +77,13 @@ class VorschlagMapper(Mapper):
         :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
+        result = []
         cursor = self._connection.cursor()
         command = "SELECT id, main_person_id, match_quote, lernfaecher_id, match_profil_id FROM vorschlaege WHERE main_person_id='{}'".format(main_person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) = tuples[0]
+        for (id, main_person_id, match_quote, lernfaecher_id, match_profil_id) in tuples:
             vorschlag = Vorschlag()
             vorschlag.set_id(id)
             vorschlag.set_main_person_id(main_person_id)
@@ -90,12 +91,7 @@ class VorschlagMapper(Mapper):
             vorschlag.set_lernfaecher_id(lernfaecher_id)
             vorschlag.set_match_profil_id(match_profil_id)
 
-            result = vorschlag
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+            result.append(vorschlag)
 
         self._connection.commit()
         cursor.close()
@@ -131,28 +127,15 @@ class VorschlagMapper(Mapper):
         return vorschlag
 
     def update(self, vorschlag):
-        """Überschreiben / Aktualisieren eines Vorschlag-Objekts in der DB
-        :param vorschlag -> Vorschlag-Objekt
-        :return aktualisiertes Vorschlag-Objekt
-        """
-        cursor = self._connection.cursor()
+        pass
 
-        command = "UPDATE vorschlaege " + "SET match_quote=%s, match_profil_id=%s WHERE WHERE id=%s"
-        data = (
-        vorschlag.get_main_person_id(), vorschlag.get_match_quote(), vorschlag.lernfach(), vorschlag.get_match_profil_id())
-
-        cursor.execute(command, data)
-
-        self._connection.commit()
-        cursor.close()
-
-    def delete(self, vorschlag):
+    def delete(self, id):
         """Löschen der Daten eines Vorschlages aus der Datenbank
         :param vorschlag -> Vorschlag-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM vorschlaege WHERE id={}".format(vorschlag.get_id())
+        command = "DELETE FROM vorschlaege WHERE main_person_id={}".format(id)
         cursor.execute(command)
 
         self._connection.commit()

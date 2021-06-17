@@ -461,6 +461,10 @@ class AppAdministration (object):
         with VorschlagMapper() as mapper:
             return mapper.update_by_id(id)
 
+    def delete_vorschlag_by_id(self, id):
+        with VorschlagMapper() as mapper:
+            return mapper.delete(id)
+
     def match_berechnen(self, main_person_id, lernfach_id):
 
         # Main-Person mit der verglichen wird
