@@ -655,7 +655,7 @@ class KonversationByIdOperation(Resource):
         adm.delete_konversation(k)
         return '', 200
 
-@lernApp.route('/konversationen/<int: id>')
+@lernApp.route('/konversationen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByPersonOperation(Resource):
     
