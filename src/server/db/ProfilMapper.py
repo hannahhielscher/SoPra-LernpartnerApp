@@ -172,8 +172,8 @@ class ProfilMapper(Mapper):
         :param profil das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
-        cursor = self.connection.cursor()
-        cursor.execute("SELECT MAX(id_) AS maxid FROM profile ")
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM profile ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
@@ -191,10 +191,10 @@ class ProfilMapper(Mapper):
         data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
-        command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+        #command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
 
-        data2 = (profil.get_id(), profil.get_lernfaecher_id())
-        cursor.execute(command2, data2)
+        #data2 = (profil.get_id(), profil_has_lernfaecher.get_lernfaecher)
+        #cursor.execute(command2, data2)
 
         self._connection.commit()
         cursor.close()
@@ -211,6 +211,11 @@ class ProfilMapper(Mapper):
         command = "UPDATE profile " + "SET gruppe=%s, lernvorlieben_id=%s WHERE id=%s"
         data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
+
+        command2 = "UPDATE profile_has_lernfaecher" + "SET profil_id=s%, lernfaecher_id=set%  WHERE id=s%"
+
+        data2 = (profil.get_id(), profil.get_lernfaecher_id())
+        cursor.execute(command2, data2)
 
         self._connection.commit()
         cursor.close()
