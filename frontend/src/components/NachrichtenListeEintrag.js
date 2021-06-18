@@ -16,10 +16,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
 
+import Nachricht from './Nachricht'
+
 /**
- * Es wird eine einzelne Nachricht von einer einzelnen Person mit den notwendigen Informationen dargestellt
+ * Es wird eine einzelne Nachricht von einer Person  dargestellt
+ *
  * 
- * Hierfür werden Profilname, die konversation, Teilnehmer und der Inhalt angezeigt 
+ * Hierfür wird der Inhalt der Nachricht angezeigt 
  * 
  */
 
@@ -29,10 +32,12 @@ class NachrichtenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            nachricht: '', 
+            nachricht: [], 
             personID: null, 
             konversation_ID: null,  
             inhalt: null, 
+            showProfil: false,
+            showNachrichtForm: false,
             loadingInProgress: false,
             error: null
         };
@@ -41,10 +46,10 @@ class NachrichtenListeEintrag extends Component {
 
     
     //Handles the onClick event of the show profil button
-    showProfilButtonClicked = (event) => {
+    showNachrichtButtonClicked = (event) => {
       event.stopPropagation();
       this.setState({
-        showCustomerForm: true
+        showNachrichtForm: true
       });
     }
 
@@ -55,12 +60,11 @@ class NachrichtenListeEintrag extends Component {
             this.setState({
               nachricht: nachrichtBO,
               inhalt: nachrichtBO.inhalt,
-              profil: nachrichtBO.profil,
+              person_ID: nachrichtBO.person_ID,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
               this.getNachricht()
-              this.getPerson()
             })
             .catch(e =>
                 this.setState({
@@ -89,8 +93,8 @@ class NachrichtenListeEintrag extends Component {
       }
 
       render() {
-        const { classes, personID, konversation_ID } = this.props;
-        const {nachrichten, inhalt, personID, konversation_ID, loadingInProgress, error}
+        const { classes } = this.props;
+        const {nachrichten, inhalt, personID, konversation_ID}
 
         return(
           <div>

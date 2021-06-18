@@ -359,6 +359,11 @@ class AppAdministration (object):
         """Gibt die Konversation mit der gegebenen Id zurück."""
         with KonversationMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_konversation_by_personid(self, personid):
+        """Gibt alle Konversationen einer Person zurück"""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_personid(self, personid)
     
     def get_konversation_by_name(self, name):
         """Gibt die Konversation nach Name zurück"""

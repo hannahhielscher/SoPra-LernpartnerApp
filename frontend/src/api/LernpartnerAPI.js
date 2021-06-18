@@ -88,11 +88,12 @@ export default class LernpartnerAPI {
         
         //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
-        #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversation/${name}`;
+        #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationen/${personid}`;
+        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversationen/${name}`;
 
         //TeilnahmeChatbezogen
         #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
@@ -690,6 +691,20 @@ export default class LernpartnerAPI {
             })
           }
 
+           /**
+           * Gibt alle Konversationen einer Person als BO zurück
+           * @param {Number} personid to be retrieved
+           * @public
+           */
+
+          getKonversationenByPerson(personid) {
+            return this.#fetchAdvanced(this.#getKonversationenByPersonURL(personid)).then((responseJSON) => {
+              let konversationenBOs = KonversationBO.fromJSON(responseJSON);
+              return new Promise(function (resolve) {
+                resolve(konversationenBOs);
+              })           
+            })
+          }
           /** 
           * Adds a KOnversation and returns a Promise, which resolves to a new KonversationBO object
           *  

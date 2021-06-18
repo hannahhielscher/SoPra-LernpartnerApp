@@ -5,16 +5,7 @@ import { withStyles, Button, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import SaveIcon from '@material-ui/icons/Save';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
-import NachrichtenListeEintrag from './NachrichtenListeEintrag';
+import KonversationListeEintrag from './KonversationListeEintrag';
 
 /**
  * Es werden alle Konversationen des aktuell eingeloggten Studenten angezeigt
@@ -24,28 +15,6 @@ import NachrichtenListeEintrag from './NachrichtenListeEintrag';
  * Hierfür werden alle Konversationen des aktuell eingeloggten Student geladen und in die Componente NachrichtenListeEintrag gemappt
  * 
  */
-
-
-//Css Style für Tabellen Zellen
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
-
-
-//Css Style für Tabllen Zeilen
-const StyledTableRow = withStyles((theme) => ({
-    root: {
-      '&:nth-of-type(4n+1)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  }))(TableRow);
 
 class KonversationListe extends Component {
     constructor(props){
@@ -60,15 +29,17 @@ class KonversationListe extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            konversationen : '',
+            konversationen : [],
             error: null,
             loadingInProgress: false, 
-            expandedKonversationID: expandedID,
+            //expandedKonversationID: expandedID,
         };
+
+      }
 
       // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getKonversationen = () => {
-      LernpartnerAPI.getAPI().getKonversationen(this.props.currentPerson.id)
+      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getid())
       .then(konversationenBOs =>
           this.setState({
               konversationen: konversationenBOs,
@@ -85,10 +56,9 @@ class KonversationListe extends Component {
           loadingInProgress: true,
           loadingKonversationenError: null
       });
-}
     }
+    
 
-}
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
@@ -96,14 +66,14 @@ componentDidMount() {
   this.setState({
       currentStudentName: this.props.currentPerson.getname(),
         })
-    }
+}
 
  /** 
      * Handles onExpandedStateChange events from the VorschlagListeEintrag component. Toggels the expanded state of 
      * the VorschlagListeEintrag of the given VorschlagBO.
      * 
      * @param {konversation} KonversationBO of the KonversationListeEintrag to be toggeled
-     */
+     
   onExpandedStateChange = konversation => {
     // console.log(konversationID);
     // Set expandend Konversation Eintrag to null by default
@@ -119,24 +89,41 @@ componentDidMount() {
     expandedKonversastionID: newID,
     });
 }
+*/
 
 render() {
-  const { classes } = this.props;
-        const { konversationen, expandedVorschlagID, error, loadingInProgress}  = this.state; 
+  const { classes, currentPerson } = this.props;
+        const { konversationen, error, loadingInProgress}  = this.state; 
 
         return(
-          
+          <div className={classes.root}>
+
+            { 
+              // Show the list of KonversationListeEintrag components
+              // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
+  
+              konversationen.map(konversation =>
+                <KonversationListeEintrag key={konversation.getID()} konversation={konversation}
+                />)
+            }
+            <LoadingProgress show={loadingInProgress} />
+            <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Chats nicht geladen werden!`} onReload={this.getKonversationen} />
+          </div>
 
         );
+
       }
-
 }
-
-
 
 /** Component specific styles */
 const styles = theme => ({
- 
+  root: {
+    width: '100%',
+  },
+  customerFilter: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  }
 });
 
 /** PropTypes */

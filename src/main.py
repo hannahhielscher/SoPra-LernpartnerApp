@@ -614,7 +614,7 @@ class KonversationenOperation(Resource):
         else:
             return "", 500
 
-@lernApp.route('/konversation/<int:id>')
+@lernApp.route('/konversationen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByIdOperation(Resource):
 
@@ -655,12 +655,28 @@ class KonversationByIdOperation(Resource):
         adm.delete_konversation(k)
         return '', 200
 
+@lernApp.route('/konversationen/<int: id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class KonversationByPersonOperation(Resource):
+    
+    @lernApp.marshal_with(konversation)
+    @secured
+    def get (self, personid):
+        """Auslesen einer bestimmten Konversation."""
+        adm = AppAdministration()
+        konversation = adm.get_konversation_by_personid(personid)
+
+        if konversation is not None:
+            return konversation
+        else:
+            return '', 500 #Wenn es keine Konversation mit der id gibt.
+
 #notwendig?
-@lernApp.route('/konversation/<string:name>')
+@lernApp.route('/konversationen/<string:name>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByNameOperation(Resource):
 
-    lernApp.marshal_with(konversation)
+    @lernApp.marshal_with(konversation)
     @secured
     def get (self, name):
         """Auslesen einer bestimmten Konversation."""
