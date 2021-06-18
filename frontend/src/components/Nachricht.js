@@ -167,8 +167,8 @@ nachrichtFormClosed = modul => {
   
       return (
         <div>
-          <h1 class="Gruppenname">
-            {konversation_id.getFirstname() + " " + konversation_id.getLastname()}
+          <h1 class="Chatname">
+            {konversation_id.getName() + " " + konversation_id.getVorname()}
           </h1>
           {nachrichten
             ? nachrichten.map((nachricht) => {
@@ -176,11 +176,10 @@ nachrichtFormClosed = modul => {
                   if (nachricht.getPersonID() != personID.getID()) {
                     return (
                       <div id="empfänger_text">
-                        <Grid
-                          item
+                        <Grid item
                           xs
                           className={classes.outerColumn}
-                          style={{ display: "flex", alignItems: "center" }}
+                          style={{ display: "flex", alignItems: "center", position: "rigth" }}
                         >
                           <Typography>{nachricht.getInhalt()}</Typography>
                         </Grid>
@@ -199,6 +198,7 @@ nachrichtFormClosed = modul => {
                           direction="row"
                           alignItems="center"
                           justify="flex-end"
+                          position= "left"
                         >
                           <Typography>{nachricht.getInhalt()}</Typography>
                         </Grid>
@@ -213,7 +213,7 @@ nachrichtFormClosed = modul => {
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
               id="standard-basic"
-              label="Bitte Text eingeben"
+              label="schreibe eine Nachricht"
               value={inhalt}
               onChange={this.handleChange}
             />

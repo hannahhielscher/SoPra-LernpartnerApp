@@ -107,7 +107,7 @@ render() {
                 />)
             }
             <LoadingProgress show={loadingInProgress} />
-            <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Chats konnten nicht geladen werden!`} onReload={this.getKonversationen} />
+            <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Chats nicht geladen werden!`} onReload={this.getKonversationen} />
           </div>
 
         );

@@ -32,7 +32,7 @@ componentDidMount() {
   this.getKonversation();
 }
 
-//Handles the onClick event of the show profil button
+//Handles the onClick event of the show Konversation button
 showKonversationButtonClicked = (event) => {
   event.stopPropagation();
   this.setState({
