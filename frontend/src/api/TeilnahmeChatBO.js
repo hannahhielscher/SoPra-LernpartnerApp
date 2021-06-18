@@ -42,13 +42,13 @@ export default class TeilnahmeChatBO extends BusinessObject{
 		if (Array.isArray(teilnahmeChats)) {
 			results = [];
 			teilnahmeChats.forEach((c) => {
-				Object.setPrototypeOf(c, TeilnahmeChatsBO.prototype);
+				Object.setPrototypeOf(c, TeilnahmeChatBO.prototype);
 				results.push(c);
 			})
 		} else {
 			// Es gibt wohl nur ein Objekt
 			let c = teilnahmeChats;
-			Object.setPrototypeOf(c, TeilnahmeChatsBO.prototype);
+			Object.setPrototypeOf(c, TeilnahmeChatBO.prototype);
 			results = c;
 		}
 		return results;
