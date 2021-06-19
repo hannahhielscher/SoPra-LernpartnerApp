@@ -5,12 +5,12 @@
 
 const firebaseConfig = {
     /* Fill in your Data ! */
-    apiKey: "AIzaSyDXQJdZ9G7mn2rOukzafZjonsE47t3qkm0",
-    authDomain: "sopra-testing.firebaseapp.com",
-    projectId: "sopra-testing",
-    storageBucket: "sopra-testing.appspot.com",
-    messagingSenderId: "619506054291",
-    appId: "1:619506054291:web:9020b75095163bc998c966"
+    apiKey: "AIzaSyA2FD_xZ56T_MKX7RbSQzHnv0F9IGa3_OU",
+    authDomain: "lernpartnerapp.firebaseapp.com",
+    projectId: "lernpartnerapp",
+    storageBucket: "lernpartnerapp.appspot.com",
+    messagingSenderId: "469788803525",
+    appId: "1:469788803525:web:bccec40d16ceede3e5cbac"
   };
   
   export default firebaseConfig;
