@@ -48,15 +48,15 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`personen` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`personen` (
   `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
+  `p_name` VARCHAR(45) NULL,
   `vorname` VARCHAR(45) NULL,
   `semester` INT NULL,
-  `alter` INT NULL,
+  `studiengang` VARCHAR(45) NULL,
+  `p_alter` INT NULL,
   `geschlecht` VARCHAR(45) NULL,
-  `lerngruppe` VARCHAR(45) NULL,
+  `lerngruppe` TINYINT NULL,
   `google_user_id` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
-  `studiengang` VARCHAR(45) NULL,
   `profil_id` INT NOT NULL,
   PRIMARY KEY (`id`, `profil_id`),
   INDEX `fk_person_profil1_idx` (`profil_id` ASC) VISIBLE,
@@ -73,10 +73,10 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`personen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 3, 20, 'männlich', false, '1', 'timmueller@gmail.com', 'Wirtschaftsinformatik und digitale Medien', 1), (2, 'Maier', 'Lisa', 2, 19, 'weiblich', true, '2', 'lischen2002@gmx.de', 'CR/PR', 2),
-(3, 'Baum', 'Manuela', 2, 22, 'weiblich', true,  '3', 'manni99@gmail.com', 'Wirtschaftsinformatik und digitale Medien', 3), (4, 'Possible', 'Kim', 3, 20, 'weiblich', true, '4', 'kimpossible@hotmail.de', 'Wirtschaftsinformatik und digitale Medien', 4), 
-(5, 'Smith', 'John', 4, 24, 'männlich', true, '5', 'jonny@hotmail.com', 'CR/PR', 5), (6, 'Jones', 'Alex', 5, 23, 'männlich', false, '6', 'alexjones@gmail.com', 'Medieninformatik', 6),  
-(7, 'Becker', 'Klaus', 3, 19, 'männlich', true, '7', 'becker77@gmx.de', 'Medieninformatik', 7);
+INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 3, 'Wirtschaftsinformatik und digitale Medien', 20, 'männlich', false, 1, 'timmueller@gmail.com', 1), (2, 'Maier', 'Lisa', 2, 'CR/PR', 19, 'weiblich', true, 2, 'lischen2002@gmx.de', 2),
+(3, 'Baum', 'Manuela', 2, 'Wirtschaftsinformatik und digitale Medien', 22, 'weiblich', true,  3, 'manni99@gmail.com', 3), (4, 'Possible', 'Kim', 3, 'Wirtschaftsinformatik und digitale Medien', 20, 'weiblich', true, 4, 'kimpossible@hotmail.de', 4), 
+(5, 'Smith', 'John', 4, 'CR/PR', 24, 'männlich', true, 5, 'jonny@hotmail.com', 5), (6, 'Jones', 'Alex', 5, 'Medieninformatik', 23, 'männlich', false, 6, 'alexjones@gmail.com', 6),  
+(7, 'Becker', 'Klaus', 3, 'Medieninformatik', 19, 'männlich', true, 7, 'becker77@gmx.de', 7);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` ENABLE KEYS */;
 UNLOCK TABLES;
 
