@@ -6,6 +6,7 @@ import 'firebase/auth';
 import Header from './components/layout/Header';
 //import ChatListe from './components/ChatListe';
 //import VorschlagListe from './components/VorschlagListe';
+import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
@@ -41,7 +42,8 @@ class App extends React.Component {
 			appError: null,
 			authError: null,
 			authLoading: false,
-			Userneu: null
+			Userneu: null,
+			currentPerson: null
 		};
 	}
 
@@ -107,6 +109,33 @@ class App extends React.Component {
 		firebase.auth().signInWithRedirect(provider);
 	}
 
+	//aktuell eingeloggten Student vom Backend abfragen
+	
+	getPersonByGoogleID = () => {
+
+		  LernpartnerAPI.getAPI().getPersonByGoogleIDURL(this.state.currentUser.uid)
+			.then(personBO =>
+				this.setState({
+					currentPerson: personBO,
+					error: null,
+					loadingInProgress: false,
+				})
+				).catch(e =>
+					this.setState({
+						currentPerson: null,
+						error: e,
+						loadingInProgress: false,
+					}));
+			this.setState({
+				error: null,
+				loadingInProgress: true
+			});
+		
+		setTimeout(()=>{
+		  console.log(this.state);
+		},1000);
+		}
+	
 	/**
 	 * Lifecycle method, which is called when the component gets inserted into the browsers DOM.
 	 * Initializes the firebase SDK.
