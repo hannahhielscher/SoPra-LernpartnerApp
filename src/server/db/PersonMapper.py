@@ -145,7 +145,7 @@ class PersonMapper(Mapper):
                 person.set_id(1)
 
         command = "INSERT INTO personen (id, name, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_profil_id())
+        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_personenprofil())
         cursor.execute(command, data)
 
         self._connection.commit()
