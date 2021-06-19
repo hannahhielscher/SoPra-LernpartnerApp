@@ -85,12 +85,6 @@ class NachrichtenListeEintrag extends Component {
         this.getNachricht();
       }
   
-      // Wenn die Componente geupdatet wird
-      componentDidUpdate(prevProps){
-        if((this.props.show) && (this.props.show !== prevProps.show)) {
-          this.getNachricht();
-        }
-      }
 
       render() {
         const { classes } = this.props;

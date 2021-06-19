@@ -3,18 +3,18 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import Header from './components/layout/header';
+import Header from './components/layout/Header';
 //import ChatListe from './components/ChatListe';
-import VorschlagListe from './components/VorschlagListe';
+//import VorschlagListe from './components/VorschlagListe';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-import MeinProfil from './components/MeinProfil';
+//import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
-import LernfaecherForm from './components/dialogs/LernfaecherForm';
+//import LernfaecherForm from './components/dialogs/LernfaecherForm';
 
 /**function App() {
   return (
@@ -133,25 +133,13 @@ class App extends React.Component {
 						{
 							// Is a user signed in?
 							currentUser ?
-								Userneu ?
-									<>
-										<Redirect from='/' to='registrierung'/>
-										<Route path='/registrierung'>
-											<RegistrierungForm/>	
-										</Route>
+								<>
+									<Redirect from='/' to='registrierung'/>
+									<Route path='/registrierung'>
+										<RegistrierungForm/>	
+									</Route>
 									
-									</>
-									:
-									<>
-										<Route path='/meinprofil'>
-											<MeinProfil/>
-										</Route>
-
-										<Route path='/meinevorschlaege'>
-											<LernfaecherForm/>
-										</Route>
-									</>
-								
+								</>
 								:
 								// else show the sign in page
 								<>

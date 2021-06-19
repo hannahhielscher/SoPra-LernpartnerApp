@@ -52,7 +52,6 @@ class Nachricht extends Component {
      error: null,
      loadingInProgress: false,
      expandedNachrichtID: expandedID,
-     showNachrichtForm: false, 
    };
  }
 

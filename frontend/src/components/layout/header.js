@@ -29,14 +29,14 @@ class Header extends Component {
 
     return (
       <Paper variant='outlined' >
-        //<ProfileDropDown user={user} />
+        <ProfileDropDown user={user} />
         <Typography variant='h3' component='h1' align='center'>
           Lernapp
         </Typography>
         <Typography variant='h4' component='h2' align='center'>
           Hier könnte Ihre Werbung stehen
         </Typography>
-        /*{
+        {
           user ?
             <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
               <Tab label='Profil' />
@@ -45,7 +45,7 @@ class Header extends Component {
               <Tab label='About' component={RouterLink} to={`/about`} />
             </Tabs>
             : null
-        }*/
+        }
       </Paper>
     )
   }
