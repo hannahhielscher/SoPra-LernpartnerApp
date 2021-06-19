@@ -163,7 +163,7 @@ class AppAdministration (object):
     """
     Lernvorlieben-spezifische Methoden
     """
-    def create_lernvorlieben(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
+    def create_lernvorlieben(self, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
         """Lernvorlieben anlegen"""
 
         lernvorlieben = Lernvorlieben()

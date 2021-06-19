@@ -61,7 +61,7 @@ def secured(function):
                         lernvorlieben_id = lernvorlieben.get_id()
                         profil = adm.create_profil(1, False, 'Null', lernvorlieben_id)
                         profil_id = profil.get_id()
-                        user = adm.create_person(1, 'Null', 0, 'Null', 0, 'Null', False, google_user_id, email, profil_id)
+                        person = adm.create_person(1, 'Null', 0, 'Null', 0, 'Null', False, google_user_id, email, profil_id)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 
