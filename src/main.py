@@ -856,6 +856,8 @@ class LernvorliebenByIDOperationen(Resource):
         return lernvorlieben
 
     @lernApp.marshal_list_with(lernvorlieben)
+    @lernApp.expect(lernvorlieben, validate=True)
+
    #@secured
     def put(self, id):
         """Update des Lernvorlieben-Objekts."""

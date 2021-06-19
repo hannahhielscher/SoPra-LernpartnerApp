@@ -68,8 +68,22 @@ class AppAdministration (object):
     """
     Person-spezifische Methoden
     """
-    def create_person(self, person):
+    def create_person(self, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id):
         """Eine Person anlegen"""
+
+        person = Person()
+        person.set_name(name)
+        person.set_vorname(vorname)
+        person.set_semester(semester)
+        person.set_studiengang(studiengang)
+        person.set_alter(alter)
+        person.set_geschlecht(geschlecht)
+        person.set_lerngruppe(lerngruppe)
+        person.set_google_user_id(google_user_id)
+        person.set_email(email)
+        person.set_personenprofil(profil_id)
+        
+        person.set_id(1)
 
         with PersonMapper() as mapper:
             return mapper.insert(person)
