@@ -77,7 +77,8 @@ class App extends React.Component {
 					currentUser: user,
 					authError: null,
 					authLoading: false
-				});
+				})}).then(() => {
+				this.getPersonByGoogleID()
 			}).catch(e => {
 				this.setState({
 					authError: e,
