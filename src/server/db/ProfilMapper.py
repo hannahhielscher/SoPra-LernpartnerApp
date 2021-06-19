@@ -191,8 +191,14 @@ class ProfilMapper(Mapper):
         data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
-        #command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+        lernfaecher = profil.get_lernfaecher()
+        for lernfach in lernfaecher:
 
+            command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+            data = (profil.get_id(), lernfach)
+            cursor.execute(command2, data)
+        
+        
         #data2 = (profil.get_id(), profil_has_lernfaecher.get_lernfaecher)
         #cursor.execute(command2, data2)
 
