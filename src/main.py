@@ -110,7 +110,7 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonenOperationen(Resource):
     @lernApp.marshal_list_with(person)
-    #@secured
+    @secured
     def get(self):
         """Auslesen aller Personen-Objekte.
         Sollten keine Personen-Objekte verfügbar sein,
@@ -120,7 +120,7 @@ class PersonenOperationen(Resource):
         persons = adm.get_all_persons()
         return persons
 
-    #@secured
+    @secured
     def put(self):
         """Update des User-Objekts."""
 
@@ -150,7 +150,7 @@ class PersonenOperationen(Resource):
 class PersonOperationen(Resource):
     @lernApp.marshal_list_with(person)
    
-    #@secured
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -161,7 +161,7 @@ class PersonOperationen(Resource):
     
     @lernApp.marshal_with(person)
     @lernApp.expect(person, validate=True)
-    #@secured
+    @secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
 
