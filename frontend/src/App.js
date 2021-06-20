@@ -77,6 +77,7 @@ class App extends React.Component {
 					currentUser: user,
 					authError: null,
 					authLoading: false
+				
 				})}).then(() => {
 				this.getPersonByGoogleID()
 			}).catch(e => {
@@ -113,8 +114,7 @@ class App extends React.Component {
 	//aktuell eingeloggten Student vom Backend abfragen
 	
 	getPersonByGoogleID = () => {
-
-		  LernpartnerAPI.getAPI().getPersonByGoogleIDURL(this.state.currentUser.uid)
+		LernpartnerAPI.getAPI().getPersonByGoogleID(this.state.currentUser.uid)
 			.then(personBO =>
 				this.setState({
 					currentPerson: personBO,
@@ -151,7 +151,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, Userneu, appError, authError, authLoading } = this.state;
+		const { currentUser, currentPerson, Userneu, appError, authError, authLoading } = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -159,7 +159,7 @@ class App extends React.Component {
 				<CssBaseline />
 				<Router basename={process.env.PUBLIC_URL}>
 					<Container maxWidth='md'>
-						<Header user={currentUser} />
+						<Header user={currentUser} person={currentPerson}/>
 						{
 							// Is a user signed in?
 							currentUser ?
@@ -181,6 +181,7 @@ class App extends React.Component {
 						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
 						<ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
 					</Container>
+				
 				</Router>
 			</ThemeProvider>
 		);
