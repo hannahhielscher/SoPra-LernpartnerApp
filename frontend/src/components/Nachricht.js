@@ -7,8 +7,6 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
@@ -17,9 +15,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 //import TableContainer from '@material-ui/core/TableContainer';
 //import TableHead from '@material-ui/core/TableHead';
 //import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 
-import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 
 /**
  * Es werden alle Nachrichten des aktuell eingeloggten Studenten angezeigt

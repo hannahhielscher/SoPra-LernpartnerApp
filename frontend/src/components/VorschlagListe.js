@@ -41,6 +41,7 @@ class VorschlagListe extends Component {
 
         // initiiere einen leeren state
         this.state = {
+            lernfach: lernfach,
             vorschlaege : [],
             //currentPersonName: null,
             error: null,
@@ -74,9 +75,7 @@ class VorschlagListe extends Component {
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getVorschlaege();
-        this.setState({
-            currentStudentName: this.props.currentUser.getname(),
-        })
+
     }
     
     /** 

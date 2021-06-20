@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/Header';
 import KonversationListe from './components/KonversationListe';
-//import VorschlagListe from './components/VorschlagListe';
+import VorschlagListe from './components/VorschlagListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
