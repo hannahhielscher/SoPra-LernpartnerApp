@@ -166,7 +166,7 @@ class App extends React.Component {
 								<>
 									<Redirect from='/' to='registrierung'/>
 									<Route path='/registrierung'>
-										<RegistrierungForm/>
+										<RegistrierungForm/>	
 									</Route>
 									
 								</>
