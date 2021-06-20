@@ -48,11 +48,11 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`personen` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`personen` (
   `id` INT NOT NULL,
-  `p_name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NULL,
   `vorname` VARCHAR(45) NULL,
   `semester` INT NULL,
   `studiengang` VARCHAR(45) NULL,
-  `p_alter` INT NULL,
+  `alter` INT NULL,
   `geschlecht` VARCHAR(45) NULL,
   `lerngruppe` TINYINT NULL,
   `google_user_id` VARCHAR(45) NULL,

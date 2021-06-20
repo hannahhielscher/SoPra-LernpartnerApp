@@ -160,14 +160,14 @@ class RegistrierungForm extends Component {
                     onChange={this.textFieldValueChange} error={nameValidationFailed}
                     helperText={nameValidationFailed ? 'The last name must contain at least one character' : ' '} />
 
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='firstName' label='Vorname:' value={firstName} 
-                    onChange={this.textFieldValueChange} error={firstNameValidationFailed} 
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='firstName' label='Vorname:' value={firstName}
+                    onChange={this.textFieldValueChange} error={firstNameValidationFailed}
                     helperText={firstNameValidationFailed ? 'The first name must contain at least one character' : ' '} />
-                  
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='semester' label='Semester:' value={semester} 
-                    onChange={this.textFieldValueChange} error={semesterValidationFailed} 
-                    helperText={geschlechtValidationFailed ? 'The semester must contain at least one character' : ' '} /> 
-                    
+
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='semester' label='Semester:' value={semester}
+                    onChange={this.textFieldValueChange} error={semesterValidationFailed}
+                    helperText={geschlechtValidationFailed ? 'The semester must contain at least one character' : ' '} />
+
                   <FormControl className={classes.formControl} value = {studiengang}>
                             <InputLabel>Studiengang</InputLabel>
                              <Select required onChange={this.handleChange} error={studiengangValidationFailed}>
@@ -175,15 +175,15 @@ class RegistrierungForm extends Component {
                                 <MenuItem value='MW'>Medienwirtschaft</MenuItem>
                             </Select>
                    </FormControl>
-                   
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='alter' label='Alter:' value={alter} 
-                    onChange={this.textFieldValueChange} error={alterValidationFailed} 
+
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='alter' label='Alter:' value={alter}
+                    onChange={this.textFieldValueChange} error={alterValidationFailed}
                     helperText={alterValidationFailed ? 'The age must contain at least one character' : ' '} />
 
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='geschlecht' label='Geschlecht:' value={geschlecht} 
-                    onChange={this.textFieldValueChange} error={geschlechtValidationFailed} 
-                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} /> 
-                  
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='geschlecht' label='Geschlecht:' value={geschlecht}
+                    onChange={this.textFieldValueChange} error={geschlechtValidationFailed}
+                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} />
+
                   <FormControl className={classes.formControl} value = {lerngruppe}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
                              <Select required onChange={this.handleChange} error={lerngruppeValidationFailed}>
@@ -214,7 +214,7 @@ class RegistrierungForm extends Component {
                 }
               </DialogActions>
             </Dialog>
-        
+
         );
       }
     
