@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Card,
+import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Card,
     FormControl,
     InputLabel,
     Select,
@@ -207,7 +207,7 @@ class RegistrierungForm extends Component {
                             Abbrechen
                 </Button>
                 {
-                    <Button disabled={nameValidationFailed || mat_nrValidationFailed} variant='contained'
+                    <Button disabled={nameValidationFailed || firstNameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
                           onClick={this.registrieren} color='primary'>
                           Jetzt registrieren
                     </Button>

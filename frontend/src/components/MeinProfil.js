@@ -8,7 +8,7 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import ProfilBO from '../api/ProfilBO';
 
-class Profil extends Component {
+class MeinProfil extends Component {
 
     constructor(props){
         super(props);
@@ -17,16 +17,16 @@ class Profil extends Component {
         this.state = {
             profil: null,
             gruppe: false,
-            personVorname = null,
-            personName = null,
-            personSemester = 0,
-            personStudiengang = None,
-            lerngruppe = false
-            personProfilID = null,
-            personLernfaecher = null,
-            personLernvorliebenID = null
+            personVorname: null,
+            personName: null,
+            personSemester: 0,
+            personStudiengang: null,
+            lerngruppe: false,
+            personProfilID: null,
+            personLernfaecher: null,
+            personLernvorliebenID: null,
             loadingInProgress: false,
-            loadingError: null,
+            loadingError: null
         };
     }
 
@@ -128,26 +128,26 @@ class Profil extends Component {
   }
 
    /** Renders the component */
-  render() {
-    const { classes } = this.props;
-    // Use the states customer
-    const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
+    render() {
+      const { classes } = this.props;
+      // Use the states customer
+      const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
 
-    // console.log(this.props);
-    return (
-      <div className={classes.root}>
-    """  <Button color="primary" onClick= {this.showVorschlagButtonClick}>Mein Profil bearbeiten</Button>"""
-      <Typography variant='body1' color={'textSecondary'}>
+      // console.log(this.props);
+      return (
+        <div className={classes.root}>
+        <Button color="primary" onClick= {this.showVorschlagButtonClick}>Mein Profil bearbeiten</Button>
+        <Typography variant='body1' color={'textSecondary'}>
 
-                            <b>Semester: </b> {personSemester} <br />
-                            <b>Studiengang: </b>{personStudiengang}<br />
-                            <b>Lernfächer: </b>{personLernfaecher}<br />
-                            <b>Lernvorlieben: </b>{personLernvorlieben}<br />
+                              <b>Semester: </b> {personSemester} <br />
+                              <b>Studiengang: </b>{personStudiengang}<br />
+                              <b>Lernfächer: </b>{personLernfaecher}<br />
+                              <b>Lernvorlieben: </b>{personLernvorlieben}<br />
 
-
-      </div>
-    );
-  }
+        </Typography>
+        </div>
+      );
+    }
 }
 
   const styles = theme => ({
@@ -187,5 +187,5 @@ Profil.propTypes = {
 }
 
 
-export default withStyles(styles)(Profil);
+export default withStyles(styles)(MeinProfil);
 

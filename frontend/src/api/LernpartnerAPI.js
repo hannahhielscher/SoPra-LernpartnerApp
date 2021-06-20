@@ -42,19 +42,19 @@ export default class LernpartnerAPI {
 
         //Person related
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
-        //#addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
+        #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #updatePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
-        #getPersonByGoogleIDURL = (google_user_id) => `${this.#ElectivServerBaseURL}/personbygoogle/${google_user_id}`;
+        #getPersonByGoogleIDURL = (google_user_id) => `${this.#lernappServerBaseURL}/personbygoogle/${google_user_id}`;
         
         //Gruppenbezogen
         #getLerngruppenURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
-        #getLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #updateLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #deleteLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
@@ -65,11 +65,11 @@ export default class LernpartnerAPI {
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
         //Lernvorliebenbezogen
-        #getLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+        #getLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
-        #updateLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
-        #deleteLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+        #updateLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+        #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
 
         //Vorschlagbezogen
         #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
@@ -81,25 +81,26 @@ export default class LernpartnerAPI {
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
-        #deleteNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
-        #deleteNachrichtenByKonversationURL = () => `${this.#lernappServerBaseURL}/nachrichten/${konversationID}`;
+        #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
+        #deleteNachrichtenByKonversationURL = (konversationID) => `${this.#lernappServerBaseURL}/nachrichten/${konversationID}`;
         #getNachrichtenByPersonURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
-        #getNachrichtenByInhaltURL= () => `${this.#lernappServerBaseURL}/nachrichten/${inhalt}`;
+        #getNachrichtenByInhaltURL= (inhalt) => `${this.#lernappServerBaseURL}/nachrichten/${inhalt}`;
         
         //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
-        #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversation/${id}`;
-        #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversation/${name}`;
+        #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationen/${personid}`;
+        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversationen/${name}`;
 
         //TeilnahmeChatbezogen
         #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
         #getTeilnahmeChatByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #addTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
-        #deleteTeilnahmeChatURL = (id) => `${this.#lernappivServerBaseURL}/teilnahmeChat/${id}`;
+        #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
 
@@ -250,7 +251,7 @@ export default class LernpartnerAPI {
               let lerngruppenBOs = LerngruppeBO.fromJSON(responseJSON);
               // console.info(customerBOs);
               return new Promise(function (resolve) {
-                resolve(lerngruppeBOs);
+                resolve(lerngruppenBOs);
               })           
             })
           }
@@ -632,7 +633,7 @@ export default class LernpartnerAPI {
            */
       
           deleteNachrichtenByKonversation(konversationID) {
-            return this.#fetchAdvanced(this.#deleteNachrichtenByKonversationURL(konversationID, personID, {method: 'GET'})).then((responseJSON) => {
+            return this.#fetchAdvanced(this.#deleteNachrichtenByKonversationURL(konversationID, {method: 'DELETE'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
               //console.info(nachrichtenBOs)
               return new Promise(function (resolve) {
@@ -690,6 +691,20 @@ export default class LernpartnerAPI {
             })
           }
 
+           /**
+           * Gibt alle Konversationen einer Person als BO zurück
+           * @param {Number} personid to be retrieved
+           * @public
+           */
+
+          getKonversationenByPerson(personid) {
+            return this.#fetchAdvanced(this.#getKonversationenByPersonURL(personid)).then((responseJSON) => {
+              let konversationenBOs = KonversationBO.fromJSON(responseJSON);
+              return new Promise(function (resolve) {
+                resolve(konversationenBOs);
+              })           
+            })
+          }
           /** 
           * Adds a KOnversation and returns a Promise, which resolves to a new KonversationBO object
           *  
@@ -791,7 +806,7 @@ export default class LernpartnerAPI {
   
           getTeilnahmeChatById(id){
             return this.#fetchAdvanced(this.#getTeilnahmeChatByIdURL(id)).then((responseJSON) => {
-            let teilnachechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+            let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
             //console.info(teilnahmechatBOs)
             return new Promise(function (resolve){
               resolve(teilnahmechatBOs)
@@ -812,7 +827,7 @@ export default class LernpartnerAPI {
                let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
                console.info(teilnahmechatBOs)
                return new Promise(function (resolve){
-                 resolve(teilnahmeBOs);
+                 resolve(teilnahmechatBOs);
                  })
                 })
               }
@@ -872,7 +887,7 @@ export default class LernpartnerAPI {
                 let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
                 //console.info(teilnahmechatBOs)
                 return new Promise(function (resolve) {
-                  resolve(teilnahemchatBOs);
+                  resolve(teilnahmechatBOs);
                   })
                 })
               }
@@ -943,7 +958,7 @@ export default class LernpartnerAPI {
   
               getTeilnahmeGruppeById(id){
                 return this.#fetchAdvanced(this.#getTeilnahmeGruppeByIdURL(id)).then((responseJSON) => {
-                let teilnachegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
+                let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
                 //console.info(teilnahmegruppeBOs)
                 return new Promise(function (resolve){
                  resolve(teilnahmegruppeBOs)

@@ -23,6 +23,7 @@ def secured(function):
     def wrapper(*args, **kwargs):
         # Verify Firebase auth.
         id_token = request.cookies.get("token")
+
         error_message = None
         claims = None
         objects = None
@@ -43,27 +44,27 @@ def secured(function):
                     google_user_id = claims.get("user_id")
                     email = claims.get("email")
 
-                    user = adm.get_user_by_google_user_id(google_user_id)
-                    if user is not None:
+                    person = adm.get_person_by_google_user_id(google_user_id)
+                    if person is not None:
                         """Fall: Der Benutzer ist unserem System bereits bekannt.
                         Wir gehen davon aus, dass die google_user_id sich nicht ändert.
                         Wohl aber können sich der zugehörige Klarname (name) und die
                         E-Mail-Adresse ändern. Daher werden diese beiden Daten sicherheitshalber
                         in unserem System geupdated."""
-                        user.set_email(email)
-                        adm.save_user(user)
+                        person.set_email(email)
+                        adm.save_person(person)
                     else:
                         """Fall: Der Benutzer war bislang noch nicht eingelogged. 
                         Wir legen daher ein neues User-Objekt an, um dieses ggf. später
                         nutzen zu können.
                         """
-                        lernvorlieben = adm.create_lernvorlieben(0, 0, 0, 0, 0, 0)
+                        """lernvorlieben = adm.create_lernvorlieben(1, 1, 1, 1, 1, 1, 1)
                         lernvorlieben_id = lernvorlieben.get_id()
-                        profil = adm.create_profil(False, 'Null', lernvorlieben_id)
-                        profil_id = profil.get_id()
-                        user = adm.create_person('Null', 0, 'Null', 0, 'Null', False, google_user_id, email, profil_id)
+                        profil = adm.create_profil(1, False, [1, 2, 3], lernvorlieben_id)
+                        profil_id = profil.get_id()"""
+                        person = adm.create_person(1, 'Null', 'Null', 0, 'Null', 0, 'Null', False, google_user_id, email, 11)
 
-                    print(request.method, request.path, "angefragt durch:", name, email)
+                    print(request.method, request.path, "angefragt durch:", email)
 
                     objects = function(*args, **kwargs)
                     return objects

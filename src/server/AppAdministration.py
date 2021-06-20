@@ -68,8 +68,22 @@ class AppAdministration (object):
     """
     Person-spezifische Methoden
     """
-    def create_person(self, person):
+    def create_person(self, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id):
         """Eine Person anlegen"""
+
+        person = Person()
+        person.set_name(name)
+        person.set_vorname(vorname)
+        person.set_semester(semester)
+        person.set_studiengang(studiengang)
+        person.set_alter(alter)
+        person.set_geschlecht(geschlecht)
+        person.set_lerngruppe(lerngruppe)
+        person.set_google_user_id(google_user_id)
+        person.set_email(email)
+        person.set_personenprofil(profil_id)
+        
+        person.set_id(1)
 
         with PersonMapper() as mapper:
             return mapper.insert(person)
@@ -114,6 +128,13 @@ class AppAdministration (object):
     def create_profil(self, gruppe, lernfaecher, lernvorlieben_id):
         """Eine Person anlegen"""
 
+        profil = Profil()
+
+        profil.set_gruppe(gruppe)
+        profil.set_lernfaecher(lernfaecher)
+        profil.set_lernvorlieben_id(lernvorlieben_id)
+        profil.set_id(1)
+
         with ProfilMapper() as mapper:
             return mapper.insert(profil)
 
@@ -156,7 +177,7 @@ class AppAdministration (object):
     """
     Lernvorlieben-spezifische Methoden
     """
-    def create_lernvorlieben(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
+    def create_lernvorlieben(self, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
         """Lernvorlieben anlegen"""
 
         lernvorlieben = Lernvorlieben()
@@ -352,6 +373,11 @@ class AppAdministration (object):
         """Gibt die Konversation mit der gegebenen Id zurück."""
         with KonversationMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_konversation_by_personid(self, personid):
+        """Gibt alle Konversationen einer Person zurück"""
+        with KonversationMapper() as mapper:
+            return mapper.find_by_personid(self, personid)
     
     def get_konversation_by_name(self, name):
         """Gibt die Konversation nach Name zurück"""

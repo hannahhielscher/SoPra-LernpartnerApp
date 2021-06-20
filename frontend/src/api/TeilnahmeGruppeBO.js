@@ -56,13 +56,13 @@ export default class TeilnahmeGruppeBO extends BusinessObject{
 		if (Array.isArray(teilnahmeGruppen)) {
 			results = [];
 			teilnahmeGruppen.forEach((c) => {
-				Object.setPrototypeOf(c, TeilnahmeGruppenBO.prototype);
+				Object.setPrototypeOf(c, TeilnahmeGruppeBO.prototype);
 				results.push(c);
 			})
 		} else {
 			// Es gibt wohl nur ein Objekt
 			let c = teilnahmeGruppen;
-			Object.setPrototypeOf(c, TeilnahmeGruppenBO.prototype);
+			Object.setPrototypeOf(c, TeilnahmeGruppeBO.prototype);
 			results = c;
 		}
 		return results;
