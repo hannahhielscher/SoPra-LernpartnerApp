@@ -4,18 +4,18 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/Header';
-//import ChatListe from './components/ChatListe';
+import KonversationListe from './components/KonversationListe';
 //import VorschlagListe from './components/VorschlagListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-//import MeinProfil from './components/MeinProfil';
+import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
-//import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import LernfaecherForm from './components/dialogs/LernfaecherForm';
 
 /**function App() {
   return (
@@ -164,10 +164,17 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from='/' to='registrierung'/>
-									<Route path='/registrierung'>
-										<RegistrierungForm/>	
+									<Redirect from='/' to='meinprofil'/>
+									<Route path='/meinprofil'>
+										<MeinProfil/>	
 									</Route>
+									<Route path='/meinevorschlaege'>
+										<LernfaecherForm/>	
+									</Route>
+									<Route path='/meinechats'>
+										<KonversationListe/>	
+									</Route>
+									<Route path='/about' component={About} />
 									
 								</>
 								:
