@@ -8,6 +8,7 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import TextField from "@material-ui/core/TextField";
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
@@ -43,7 +44,6 @@ class Nachricht extends Component {
    this.state = {
      nachrichten: '',
      inhalt: null,
-     personID: null, 
      konversation_id: null, 
      error: null,
      loadingInProgress: false,
@@ -153,7 +153,7 @@ nachrichtFormClosed = modul => {
  // Rendert die Componente 
     render() {
       const { classes, personID, konversation_id } = this.props;
-      const { nachrichten, inhalt, personID, konversation_id, loadingInProgress, error, expandedNachrichtID } = this.state;
+      const { nachrichten, inhalt, konversation_id } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
           return a.getID() - b.getID();
@@ -204,6 +204,8 @@ nachrichtFormClosed = modul => {
                 }
               })
             : null}
+
+          <NachrichtForm show={NachrichtForm}></NachrichtForm>
   
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
