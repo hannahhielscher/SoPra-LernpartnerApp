@@ -14,10 +14,12 @@ import TextField from "@material-ui/core/TextField";
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
 //import Select from '@material-ui/core/Select';
-//import ContextErrorMessage from './dialogs/ContextErrorMessage';
-//import LoadingProgress from './dialogs/LoadingProgress';
+import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import LoadingProgress from './dialogs/LoadingProgress';
 
 import Nachricht from './Nachricht'
+import NachrichtForm from './NachrichtForm'
+import GruppeForm from './GruppeForm'
 
 /**
  * Es wird eine einzelne Nachricht von einer Person  dargestellt
@@ -59,8 +61,8 @@ class NachrichtenListeEintrag extends Component {
 
 
       // API Anbindung um Nachricht vom Backend zu bekommen 
-    getNachricht = () => {
-        LernpartnerAPI.getAPI().getNachricht(this.props.nachricht)
+    getNachrichten = () => {
+        LernpartnerAPI.getAPI().getNachrichten(this.props.nachricht)
         .then(nachrichtBO =>
             this.setState({
               nachricht: nachrichtBO,
@@ -68,7 +70,7 @@ class NachrichtenListeEintrag extends Component {
               loadingInProgress: false,
               error: null,
             })).then(()=>{
-              this.getNachricht()
+              this.getNachrichten()
             })
             .catch(e =>
                 this.setState({
@@ -87,7 +89,7 @@ class NachrichtenListeEintrag extends Component {
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getNachricht();
+        this.getNachrichten();
       }
   
 
@@ -106,12 +108,11 @@ class NachrichtenListeEintrag extends Component {
           </Grid>
           
           <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="customized table">
+          <Table className={classes.table} aria-label="nachrichten tabelle">
               <TableHead>
                   <StyledTableRow>
                       <StyledTableCell>Nachrichten</StyledTableCell>
-                      <StyledTableCell align="center">inhalt</StyledTableCell>
-                      <StyledTableCell align="center">profil</StyledTableCell>
+                      <StyledTableCell align="center"> {inhalt} </StyledTableCell>
                   </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -131,7 +132,7 @@ class NachrichtenListeEintrag extends Component {
               </TableBody>
           </Table>
           <LoadingProgress show={loadingInProgress} />
-          <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachrichten konnten nicht geladen werden'} onReload={this.getNachrichten} /> 
+          <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachricht konnte nicht geladen werden'} onReload={this.getNachrichten} /> 
           </TableContainer>
         </div>
         )
