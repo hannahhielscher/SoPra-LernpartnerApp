@@ -138,6 +138,11 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.insert(profil)
 
+    """def insert_lernfaecher(self, profil_id, lernfach):
+
+        with ProfilMapper as mapper:
+            return mapper.insert_lernfaecher(profil_id, lernfach)"""
+
     def get_all_profil(self):
         """Auslesen aller Profile"""
         with ProfilMapper() as mapper:
