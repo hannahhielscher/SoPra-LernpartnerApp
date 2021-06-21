@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
+import
 
 class MeinProfil extends Component {
 
@@ -30,12 +31,8 @@ class MeinProfil extends Component {
     }
 
 
-/**   showVorschlagButtonClick = (event) => {
-      event.stopPropagation();
-      this.setState({
-        showVorschlag: true
-      });
-    }**/
+
+
 
 
     // API Anbindung um Profil vom Backend zu bekommen
@@ -130,7 +127,21 @@ class MeinProfil extends Component {
   }
 
 
-
+    //wird aufgerufen, wenn Dialog Fenster geschloßen wird
+    MeinProfilFormClosed = projekt => {
+        if (projekt) {
+            const newProjektList = [...this.state.projekte, projekt];
+            this.setState({
+                projekte: newProjektList,
+                filteredProjekte: [...newProjektList],
+                showProjekteForm: false
+            });
+        } else {
+            this.setState({
+                showProjekteForm: false
+            });
+        }
+    }
 
    /** Renders the component */
     render() {
