@@ -8,6 +8,7 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import TextField from "@material-ui/core/TextField";
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
@@ -32,18 +33,19 @@ class Nachricht extends Component {
   constructor(props) {
     super(props);
 
-   // console.log(props);
+   /**  console.log(props);
    let expandedID = null;
 
-   if (this.props.location.expandCustomer) {
-     expandedID = this.props.location.expandCustomer.getID();
+   if (this.props.location.expandNachricht) {
+     expandedID = this.props.location.expandNachricht.getID();
    }
+
+   */
 
    // Init an empty state
    this.state = {
      nachrichten: '',
      inhalt: null,
-     personID: null, 
      konversation_id: null, 
      error: null,
      loadingInProgress: false,
@@ -55,14 +57,22 @@ class Nachricht extends Component {
  addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
-      showModulForm: true
+      showNachrichtForm: true
     });
   }
+
+  //Öffnet das Dialog-Fenster Gruppefrom, wenn der Button geklickt wurde
+ showGruppeFormButtonClicked = event => {
+  event.stopPropagation();
+  this.setState({
+    showGruppeForm: true
+  });
+}
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
   LernpartnerAPI.getAPI()
-    .getNachrichten(this.props.personID.getID(), this.props.konversation_id.getID())
+    .getNachrichten(this.props.currentPerson.getID(), this.props.konversation_id.getID())
     .then((nachrichtenBOs) =>
       this.setState({
         nachrichten: nachrichten,
@@ -86,7 +96,7 @@ class Nachricht extends Component {
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
       this.state.inhalt,
-      this.props.personID.getID(),
+      this.props.currentPerson.getID(),
       this.props.konversation_id.getID()
     );
     LernpartnerAPI.getAPI()
@@ -125,7 +135,8 @@ nachrichtFormClosed = modul => {
       this.setState({
         nachrichten: newNachricht,
         filteredNachrichten: [...newNachricht],
-        showNachrichtForm: false
+        showNachrichtForm: false,
+        showGruppeForm: false
       });
     } else {
       this.setState({
@@ -152,8 +163,8 @@ nachrichtFormClosed = modul => {
 
  // Rendert die Componente 
     render() {
-      const { classes, personID, konversation_id } = this.props;
-      const { nachrichten, inhalt, personID, konversation_id, loadingInProgress, error, expandedNachrichtID } = this.state;
+      const { classes, currentPerson } = this.props;
+      const { nachrichten, inhalt, konversation_id, showGruppeForm, showNachrichtForm } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
           return a.getID() - b.getID();
@@ -168,7 +179,7 @@ nachrichtFormClosed = modul => {
           {nachrichten
             ? nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getPersonID() != personID.getID()) {
+                  if (nachricht.getCurrentPerson() != currentPerson.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid item
@@ -220,10 +231,15 @@ nachrichtFormClosed = modul => {
             senden 
           </Button>
 
+          <Button variant='contained' color='secondary' onClick={this.showGruppeFormButtonClicked}>
+              Gruppe erstellen 
+          </Button>
+
       <LoadingProgress show={loadingInProgress} />
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
       
       </div>
+      //<NachrichtForm show={NachrichtForm}></NachrichtForm>
     );
 
 }}

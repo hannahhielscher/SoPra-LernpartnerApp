@@ -212,7 +212,7 @@ class PersonByGoogleIDOperationen(Resource):
 class ProfilListOperationen(Resource):
     @lernApp.marshal_list_with(profil)
 
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Profil-Objekte.
         Sollte kein Profil-Objekte verfügbar sein,
@@ -222,7 +222,7 @@ class ProfilListOperationen(Resource):
         profile = adm.get_all_profil()
         return profile
 
-    @secured
+    #@secured
     def post(self):
         """Anlegen eines neuen Profil-Objekts."""
         id = request.args.get("id")
@@ -230,7 +230,7 @@ class ProfilListOperationen(Resource):
         lernfaecher = request.args.get("lernfaecher")
         lernvorlieben_id = request.args.get("lernvorlieben_id")
         adm = AppAdministration()
-        adm.create_profil(gruppe, lernfaecher, lernvorlieben_id)
+        adm.create_profil( gruppe, lernfaecher, lernvorlieben_id)
 
     #@secured
     #def put(self):
@@ -255,7 +255,7 @@ class ProfilListOperationen(Resource):
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
 
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Profil-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -266,7 +266,7 @@ class ProfilByIDOperationen(Resource):
 
     @lernApp.marshal_with(profil)
     @lernApp.expect(profil, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update des Profil-Objekts."""
 
@@ -930,6 +930,17 @@ class ProfilByIDOperationen(Resource):
         adm = AppAdministration()
         profil = adm.get_profil_by_lernfach_id(id)
         return profil
+
+@lernApp.route('/profil-lernfach')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+    #@secured
+    def post(self):
+        """Anlegen eines neuen Profil-Objekts."""
+        id = request.args.get("id")
+        adm = AppAdministration()
+        adm.create_lernfaecher(id)
 
 """Test-Methoden STOP"""
 

@@ -70,7 +70,7 @@ class RegistrierungForm extends Component {
 
     /** Adds the customer */
     registrieren = () => {
-        let person = this.props.person;
+        let person = this.props.currentPerson;
         person.name = this.state.name
         person.vorname = this.state.vorname
         person.semester = this.state.semester
