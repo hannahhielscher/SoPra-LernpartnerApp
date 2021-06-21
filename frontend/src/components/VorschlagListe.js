@@ -52,7 +52,7 @@ class VorschlagListe extends Component {
 
     // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getVorschlaege = () => {
-            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentUser.id, this.props.lernfach)
+            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentPerson.id, this.props.lernfach)
             .then(vorschlagBOs =>
                 this.setState({
                     vorschlaege: vorschlagBOs,
@@ -74,9 +74,7 @@ class VorschlagListe extends Component {
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getVorschlaege();
-        this.setState({
-            currentStudentName: this.props.currentUser.getname(),
-        })
+
     }
     
     /** 

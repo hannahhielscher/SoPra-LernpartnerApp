@@ -20,13 +20,14 @@ class KonversationListe extends Component {
     constructor(props){
         super(props);
 
-        // console.log(props);
+        /**  console.log(props);
         let expandedID = null;
 
         if (this.props.location.expandKonversation) {
         expandedID = this.props.location.expandKonversation.getID();
         }
-
+        */
+       
         // initiiere einen leeren state
         this.state = {
             konversationen : [],

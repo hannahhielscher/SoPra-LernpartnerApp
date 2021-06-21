@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
+import { LernpartnerAPI } from '../../api';
+import VorschlagListe from '../VorschlagListe';
+import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import LoadingProgress from './dialogs/LoadingProgress';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -16,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
   
-class LernfaecherForm extends component{
+class LernfaecherForm extends component {
   
   constructor(props){
     super(props);
@@ -40,7 +45,7 @@ class LernfaecherForm extends component{
   }
 
   getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.currentUser.getpersonenprofil())
+    LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getpersonenprofil())
     .then(profilBO =>
         this.setState({
           profil: profilBO,
@@ -62,6 +67,7 @@ class LernfaecherForm extends component{
   }
   
   render() {
+    const { currentPerson } = this.props;
     const { lernfaecher, lernfach, loadingInProgress, error } = this.state;
     return (
       <div>
@@ -83,7 +89,7 @@ class LernfaecherForm extends component{
             ))}
           </Select>
         </FormControl>
-        <VorschlagListe lernfach={lernfach}/>
+        <VorschlagListe currentPerson = {currentPerson} lernfach={lernfach}/>
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
       </div>

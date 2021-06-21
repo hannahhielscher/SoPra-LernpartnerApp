@@ -26,7 +26,7 @@ function About() {
       <Paper elevation={0} className={classes.root}>
         <div className={classes.content}>
           <Typography variant='h6'>
-            App zum AUffinden von Lernpartnern
+            App zum Auffinden von Lernpartnern
           </Typography>
           <Typography variant='body2'>
             © Hochschule der Medien 2020, all rights reserved.

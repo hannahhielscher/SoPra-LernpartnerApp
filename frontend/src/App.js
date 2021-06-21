@@ -4,18 +4,18 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/Header';
-//import ChatListe from './components/ChatListe';
-//import VorschlagListe from './components/VorschlagListe';
+import KonversationListe from './components/KonversationListe';
+import VorschlagListe from './components/VorschlagListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-//import MeinProfil from './components/MeinProfil';
+import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
-//import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import LernfaecherForm from './components/dialogs/LernfaecherForm';
 
 /**function App() {
   return (
@@ -77,6 +77,7 @@ class App extends React.Component {
 					currentUser: user,
 					authError: null,
 					authLoading: false
+				
 				})}).then(() => {
 				this.getPersonByGoogleID()
 			}).catch(e => {
@@ -113,8 +114,7 @@ class App extends React.Component {
 	//aktuell eingeloggten Student vom Backend abfragen
 	
 	getPersonByGoogleID = () => {
-
-		  LernpartnerAPI.getAPI().getPersonByGoogleIDURL(this.state.currentUser.uid)
+		LernpartnerAPI.getAPI().getPersonByGoogleID(this.state.currentUser.uid)
 			.then(personBO =>
 				this.setState({
 					currentPerson: personBO,
@@ -151,7 +151,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, Userneu, appError, authError, authLoading } = this.state;
+		const { currentUser, currentPerson, Userneu, appError, authError, authLoading } = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -159,15 +159,22 @@ class App extends React.Component {
 				<CssBaseline />
 				<Router basename={process.env.PUBLIC_URL}>
 					<Container maxWidth='md'>
-						<Header user={currentUser} />
+						<Header user={currentUser} person={currentPerson}/>
 						{
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from='/' to='registrierung'/>
-									<Route path='/registrierung'>
-										<RegistrierungForm/>	
+									<Redirect from='/' to='meinprofil'/>
+									<Route path='/meinprofil'>
+										<MeinProfil currentPerson = {currentPerson}/>	
 									</Route>
+									<Route path='/meinevorschlaege'>
+										<LernfaecherForm currentPerson = {currentPerson}/>	
+									</Route>
+									<Route path='/meinechats'>
+										<KonversationListe currentPerson = {currentPerson}/>	
+									</Route>
+									<Route path='/about' component={About} />
 									
 								</>
 								:
@@ -181,6 +188,7 @@ class App extends React.Component {
 						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
 						<ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
 					</Container>
+				
 				</Router>
 			</ThemeProvider>
 		);

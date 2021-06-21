@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import ProfilBO from '../api/ProfilBO';
 
 class MeinProfil extends Component {
 
@@ -30,10 +29,6 @@ class MeinProfil extends Component {
         };
     }
 
-  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-        this.getPerson();
-  }
 
 /**   showVorschlagButtonClick = (event) => {
       event.stopPropagation();
@@ -41,8 +36,6 @@ class MeinProfil extends Component {
         showVorschlag: true
       });
     }**/
-
-
 
 
     // API Anbindung um Profil vom Backend zu bekommen
@@ -126,6 +119,18 @@ class MeinProfil extends Component {
       loadingError: null
     });
   }
+
+
+
+  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
+        this.getPerson();
+        this.getProfil();
+        this.getLernvorlieben();
+  }
+
+
+
 
    /** Renders the component */
     render() {
