@@ -33,8 +33,8 @@ class NachrichtenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            nachricht: [], 
-            personID: null, 
+            nachricht: [], //Liste mit den IDs aller Nachrichten
+            teilnahmeChat: [], //Liste mit den IDS aller Teilnehmer  
             konversation_ID: null,  
             inhalt: null, 
             showProfil: false,
@@ -61,7 +61,6 @@ class NachrichtenListeEintrag extends Component {
             this.setState({
               nachricht: nachrichtBO,
               inhalt: nachrichtBO.inhalt,
-              person_ID: nachrichtBO.person_ID,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
@@ -80,6 +79,30 @@ class NachrichtenListeEintrag extends Component {
         });
       }
 
+      // API Anbindung um Teilnehmer vom Backend zu bekommen 
+    getTeilnahemChat = () => {
+      LernpartnerAPI.getAPI().getTeilnahemChat(this.props.teilnahmeChat)
+      .then(teilnahmeChatBO =>
+          this.setState({
+            teilnahmeChat: teilnahmeChatBO,
+            teilnehmer: teilnahmeChatBO.teilnehmer,
+            loadingInProgress: false,
+            error: null,
+          })).then(()=>{
+            this.getTeilnahemChat()
+          })
+          .catch(e =>
+              this.setState({
+                teilnahmeChat: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
@@ -88,8 +111,8 @@ class NachrichtenListeEintrag extends Component {
   
 
       render() {
-        const { classes } = this.props;
-        const {nachrichten, inhalt, personID, konversation_ID}
+        const { classes, currentperson } = this.props;
+        const {nachrichten, inhalt, personID, konversation_ID, teilnahmeChat}
 
         return(
           <div>
@@ -126,6 +149,7 @@ class NachrichtenListeEintrag extends Component {
                   }
               </TableBody>
           </Table>
+          <NachrichtForm show={NachrichtForm}></NachrichtForm>
           <LoadingProgress show={loadingInProgress} />
           <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachrichten konnten nicht geladen werden'} onReload={this.getNachrichten} /> 
           </TableContainer>

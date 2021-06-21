@@ -33,12 +33,14 @@ class Nachricht extends Component {
   constructor(props) {
     super(props);
 
-   // console.log(props);
+   /**  console.log(props);
    let expandedID = null;
 
-   if (this.props.location.expandCustomer) {
-     expandedID = this.props.location.expandCustomer.getID();
+   if (this.props.location.expandNachricht) {
+     expandedID = this.props.location.expandNachricht.getID();
    }
+
+   */
 
    // Init an empty state
    this.state = {
@@ -62,7 +64,7 @@ class Nachricht extends Component {
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
   LernpartnerAPI.getAPI()
-    .getNachrichten(this.props.personID.getID(), this.props.konversation_id.getID())
+    .getNachrichten(this.props.currentPerson.getID(), this.props.konversation_id.getID())
     .then((nachrichtenBOs) =>
       this.setState({
         nachrichten: nachrichten,
@@ -86,7 +88,7 @@ class Nachricht extends Component {
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
       this.state.inhalt,
-      this.props.personID.getID(),
+      this.props.currentPerson.getID(),
       this.props.konversation_id.getID()
     );
     LernpartnerAPI.getAPI()
@@ -152,7 +154,7 @@ nachrichtFormClosed = modul => {
 
  // Rendert die Componente 
     render() {
-      const { classes, personID, konversation_id } = this.props;
+      const { classes, currentPerson } = this.props;
       const { nachrichten, inhalt, konversation_id } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
@@ -168,7 +170,7 @@ nachrichtFormClosed = modul => {
           {nachrichten
             ? nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getPersonID() != personID.getID()) {
+                  if (nachricht.getCurrentPerson() != currentPerson.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid item
@@ -204,8 +206,6 @@ nachrichtFormClosed = modul => {
                 }
               })
             : null}
-
-          <NachrichtForm show={NachrichtForm}></NachrichtForm>
   
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
