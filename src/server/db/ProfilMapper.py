@@ -187,25 +187,25 @@ class ProfilMapper(Mapper):
                 profil.set_id(1)
         
         command = "INSERT INTO profile (id, gruppe, lernvorlieben_id) VALUES (%s,%s,%s)"
-
         data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
         cursor.execute(command, data)
 
         lernfaecher = profil.get_lernfaecher()
-        for lernfach in lernfaecher:
+        command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
 
-            command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
-            data = (profil.get_id(), lernfach)
-            cursor.execute(command2, data)
-        
-        
-        #data2 = (profil.get_id(), profil_has_lernfaecher.get_lernfaecher)
-        #cursor.execute(command2, data2)
+        for lernfach in lernfaecher:
+            for i in lernfach:
+                data2 = (profil.get_id(), i)
+                #print(lernfaecher)
+                #print(lernfach)
+                #print(i)
+                cursor.execute(command2, data2)
 
         self._connection.commit()
         cursor.close()
 
         return profil
+
 
     def update(self, profil):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.

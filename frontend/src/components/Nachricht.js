@@ -7,9 +7,8 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import TextField from "@material-ui/core/TextField";
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
@@ -17,9 +16,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 //import TableContainer from '@material-ui/core/TableContainer';
 //import TableHead from '@material-ui/core/TableHead';
 //import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 
-import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 
 /**
  * Es werden alle Nachrichten des aktuell eingeloggten Studenten angezeigt
@@ -36,18 +33,19 @@ class Nachricht extends Component {
   constructor(props) {
     super(props);
 
-   // console.log(props);
+   /**  console.log(props);
    let expandedID = null;
 
-   if (this.props.location.expandCustomer) {
-     expandedID = this.props.location.expandCustomer.getID();
+   if (this.props.location.expandNachricht) {
+     expandedID = this.props.location.expandNachricht.getID();
    }
+
+   */
 
    // Init an empty state
    this.state = {
      nachrichten: '',
      inhalt: null,
-     personID: null, 
      konversation_id: null, 
      error: null,
      loadingInProgress: false,
@@ -66,7 +64,7 @@ class Nachricht extends Component {
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
   LernpartnerAPI.getAPI()
-    .getNachrichten(this.props.personID.getID(), this.props.konversation_id.getID())
+    .getNachrichten(this.props.currentPerson.getID(), this.props.konversation_id.getID())
     .then((nachrichtenBOs) =>
       this.setState({
         nachrichten: nachrichten,
@@ -90,7 +88,7 @@ class Nachricht extends Component {
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
       this.state.inhalt,
-      this.props.personID.getID(),
+      this.props.currentPerson.getID(),
       this.props.konversation_id.getID()
     );
     LernpartnerAPI.getAPI()
@@ -156,8 +154,8 @@ nachrichtFormClosed = modul => {
 
  // Rendert die Componente 
     render() {
-      const { classes, personID, konversation_id } = this.props;
-      const { nachrichten, inhalt, personID, konversation_id, loadingInProgress, error, expandedNachrichtID } = this.state;
+      const { classes, currentPerson } = this.props;
+      const { nachrichten, inhalt, konversation_id } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
           return a.getID() - b.getID();
@@ -172,7 +170,7 @@ nachrichtFormClosed = modul => {
           {nachrichten
             ? nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getPersonID() != personID.getID()) {
+                  if (nachricht.getCurrentPerson() != currentPerson.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid item

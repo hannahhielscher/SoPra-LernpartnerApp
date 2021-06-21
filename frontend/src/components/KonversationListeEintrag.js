@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
 import { withStyles, Typography, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
+import Nachricht from './Nachricht';
 
-/**
+/** 
+ * 
  * Es wird ein einzelne Konversationen von einer Person dargestellt
  * 
  * Hierfür wird der Name der Konversation angezeigt
@@ -19,6 +20,7 @@ class KonversationListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             konversation: null,
+            showKonversation: false,
             showProfil: false,
             loadingInProgress: false,
             error: null
