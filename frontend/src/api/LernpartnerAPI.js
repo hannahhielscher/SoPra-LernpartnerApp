@@ -198,10 +198,10 @@ export default class LernpartnerAPI {
         getPersonByGoogleID(google_user_id) {
           return this.#fetchAdvanced(this.#getPersonByGoogleIDURL(google_user_id)).then((responseJSON) => {
             // We always get an array of PersonBOs.fromJSON, but only need one object
-            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
-            // console.info(responsePersonBO);
+            let personBO = PersonBO.fromJSON(responseJSON);
+            console.info(personBO);
             return new Promise(function (resolve) {
-              resolve(responsePersonBO);
+              resolve(personBO);
             })
           })
         }
