@@ -41,7 +41,6 @@ class VorschlagListe extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            lernfach: lernfach,
             vorschlaege : [],
             //currentPersonName: null,
             error: null,
@@ -53,7 +52,7 @@ class VorschlagListe extends Component {
 
     // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getVorschlaege = () => {
-            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentUser.id, this.props.lernfach)
+            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentPerson.id, this.props.lernfach)
             .then(vorschlagBOs =>
                 this.setState({
                     vorschlaege: vorschlagBOs,

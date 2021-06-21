@@ -166,13 +166,13 @@ class App extends React.Component {
 								<>
 									<Redirect from='/' to='meinprofil'/>
 									<Route path='/meinprofil'>
-										<MeinProfil/>	
+										<MeinProfil currentPerson = {currentPerson}/>	
 									</Route>
 									<Route path='/meinevorschlaege'>
-										<LernfaecherForm/>	
+										<LernfaecherForm currentPerson = {currentPerson}/>	
 									</Route>
 									<Route path='/meinechats'>
-										<KonversationListe/>	
+										<KonversationListe currentPerson = {currentPerson}/>	
 									</Route>
 									<Route path='/about' component={About} />
 									

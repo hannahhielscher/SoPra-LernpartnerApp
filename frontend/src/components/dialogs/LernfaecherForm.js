@@ -45,7 +45,7 @@ class LernfaecherForm extends component {
   }
 
   getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.currentUser.getpersonenprofil())
+    LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getpersonenprofil())
     .then(profilBO =>
         this.setState({
           profil: profilBO,
@@ -67,6 +67,7 @@ class LernfaecherForm extends component {
   }
   
   render() {
+    const { currentPerson } = this.props;
     const { lernfaecher, lernfach, loadingInProgress, error } = this.state;
     return (
       <div>
@@ -88,7 +89,7 @@ class LernfaecherForm extends component {
             ))}
           </Select>
         </FormControl>
-        <VorschlagListe lernfach={lernfach}/>
+        <VorschlagListe currentPerson = {currentPerson} lernfach={lernfach}/>
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
       </div>
