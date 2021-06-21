@@ -57,9 +57,17 @@ class Nachricht extends Component {
  addButtonClicked = event => {
     event.stopPropagation();
     this.setState({
-      showModulForm: true
+      showNachrichtForm: true
     });
   }
+
+  //Öffnet das Dialog-Fenster Gruppefrom, wenn der Button geklickt wurde
+ showGruppeFormButtonClicked = event => {
+  event.stopPropagation();
+  this.setState({
+    showGruppeForm: true
+  });
+}
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
@@ -127,7 +135,8 @@ nachrichtFormClosed = modul => {
       this.setState({
         nachrichten: newNachricht,
         filteredNachrichten: [...newNachricht],
-        showNachrichtForm: false
+        showNachrichtForm: false,
+        showGruppeForm: false
       });
     } else {
       this.setState({
@@ -155,7 +164,7 @@ nachrichtFormClosed = modul => {
  // Rendert die Componente 
     render() {
       const { classes, currentPerson } = this.props;
-      const { nachrichten, inhalt, konversation_id } = this.state;
+      const { nachrichten, inhalt, konversation_id, showGruppeForm, showNachrichtForm } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
           return a.getID() - b.getID();
@@ -222,10 +231,15 @@ nachrichtFormClosed = modul => {
             senden 
           </Button>
 
+          <Button variant='contained' color='secondary' onClick={this.showGruppeFormButtonClicked}>
+              Gruppe erstellen 
+          </Button>
+
       <LoadingProgress show={loadingInProgress} />
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
       
       </div>
+      //<NachrichtForm show={NachrichtForm}></NachrichtForm>
     );
 
 }}
