@@ -33,11 +33,6 @@ class MeinProfil extends Component {
         };
     }
 
-
-
-
-
-
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
       LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.currentPerson.getgoogle_user_id())
@@ -69,7 +64,7 @@ class MeinProfil extends Component {
       });
     }
 
-     getProfil = () => {
+    getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.personProfilID).then(profilBO =>
       this.setState({
             profil: profilBO,
@@ -119,10 +114,10 @@ class MeinProfil extends Component {
 
 
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-        this.getPerson();
-        this.getProfil();
-        this.getLernvorlieben();
+  componentDidMount() {
+    this.getPerson();
+    this.getProfil();
+    this.getLernvorlieben();
   }
 
 /**
@@ -200,9 +195,9 @@ MeinProfil.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   person: PropTypes.object.isRequired,
- // show: PropTypes.bool.isRequired
+  show: PropTypes.bool.isRequired
 }
 
 
-export default withStyles(styles)(MeinProfil);
+export default withRouter(withStyles(styles)(MeinProfil));
 

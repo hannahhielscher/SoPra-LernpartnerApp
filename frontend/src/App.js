@@ -154,7 +154,7 @@ class App extends React.Component {
 							currentUser ?
 								<>
 									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil' component={MeinProfil}>
+									<Route path='/meinprofil' >
 									<MeinProfil currentPerson={currentPerson}/>
 									</Route>
 
