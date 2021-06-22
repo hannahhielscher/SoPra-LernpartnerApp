@@ -85,6 +85,7 @@ class AppAdministration (object):
         
         person.set_id(1)
 
+        
         with PersonMapper() as mapper:
             return mapper.insert(person)
 

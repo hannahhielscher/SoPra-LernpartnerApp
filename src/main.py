@@ -110,7 +110,7 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonenOperationen(Resource):
     @lernApp.marshal_list_with(person)
-    @secured
+    #@secured
     def get(self):
         """Auslesen aller Personen-Objekte.
         Sollten keine Personen-Objekte verfügbar sein,
@@ -132,7 +132,6 @@ class PersonenOperationen(Resource):
         alter = request.args.get("alter")
         geschlecht = request.args.get("geschlecht")
         lerngruppe= request.args.get("lerngruppe")
-        email = request.args.get("email")
         adm = AppAdministration()
         person = adm.get_person_by_id(personId)
         person.set_name(name)
@@ -142,7 +141,6 @@ class PersonenOperationen(Resource):
         person.set_alter(alter)
         person.set_geschlecht(geschlecht)
         person.set_lerngruppe(lerngruppe)
-        person.set_email(email)
         adm.update_person_by_id(person)
 
 @lernApp.route('/personen/<int:id>')

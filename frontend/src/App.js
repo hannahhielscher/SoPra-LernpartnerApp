@@ -45,7 +45,8 @@ class App extends React.Component {
 			authError: null,
 			authLoading: false,
 			Userneu: null,
-			currentPerson: null
+			currentPerson: null,
+			showRegistrierung: true
 		};
 	}
 
@@ -123,9 +124,7 @@ class App extends React.Component {
 					personName: personBO.getvorname(),
 					error: null,
 					loadingInProgress: false,
-				})).then(() => {
-					this.checkPersonName()
-				}).catch(e =>
+				})).catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -172,7 +171,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, personneu, appError, authError, authLoading } = this.state;
+		const { currentUser, currentPerson, showRegistrierung, appError, authError, authLoading } = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -188,7 +187,7 @@ class App extends React.Component {
 								<>
 									<Redirect from='/' to='meinprofil'/>
 									<Route path='/meinprofil'>
-										<RegistrierungForm show = {personneu} currentPerson = {currentPerson}/>
+										<RegistrierungForm show = {showRegistrierung} currentPerson={currentPerson} />
 									</Route>
 									<Route path='/meinevorschlaege'>
 

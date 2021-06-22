@@ -25,7 +25,9 @@ class MeinProfil extends Component {
             personLernfaecher: null,
             personLernvorliebenID: null,
             loadingInProgress: false,
-            loadingError: null
+            loadingError: null,
+
+            showRegistrierungForm: false
         };
     }
 
@@ -121,6 +123,22 @@ class MeinProfil extends Component {
   }
 
 
+  checkPersonName = (personName) => {
+		if (personName = 'Null') {
+			this.setState({
+				personneu: true
+			})
+			.catch(e =>
+				this.setState({
+          personneu: false,
+          error: e
+				}));
+			this.setState({
+				error: null,
+				loadingInProgress: true
+			});
+			}
+		}
 
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
     componentDidMount() {
@@ -141,6 +159,7 @@ class MeinProfil extends Component {
       // console.log(this.props);
       return (
         <div className={classes.root}>
+        <RegistrierungForm show = {showRegistrierungForm} currentPerson={currentPerson} />
         <Button color="primary" onClick= {this.showVorschlagButtonClick}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
 

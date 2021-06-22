@@ -7,6 +7,7 @@ class NamedBusinessObject(BusinessObject):
 
     def get_name(self):
         """Auslesen des Namens"""
+        return self._name
 
     def set_name(self, name):
         """Setzen des Namens"""

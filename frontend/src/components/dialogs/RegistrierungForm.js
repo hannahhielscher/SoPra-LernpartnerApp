@@ -32,9 +32,9 @@ class RegistrierungForm extends Component {
             nameValidationFailed: false,
             nameEdited: false,
 
-            firstName: null,
-            firstNameValidationFailed: false,
-            firstNameEdited: false,
+            vorname: null,
+            vornameValidationFailed: false,
+            vornameEdited: false,
 
             alter: null,
             alterValidationFailed: false,
@@ -62,9 +62,12 @@ class RegistrierungForm extends Component {
             updatingError: null,
             updatingInProgress: false,
             
+            
         };
         // save this state for canceling
         this.baseState = this.state;
+        this.handleChangeStudiengang = this.handleChangeStudiengang.bind(this);
+        this.handleChangeLerngruppe = this.handleChangeLerngruppe.bind(this);
         }
     
 
@@ -144,10 +147,18 @@ class RegistrierungForm extends Component {
         this.setStateValueChange(event, error);
     }
 
-      //Setzen des Status, bei schließen des Dialogs
+    //Setzen des Status, bei schließen des Dialogs
       handleClose = () => {
         this.setState(this.baseState);
-        this.props.onClose(null);
+        //this.props.onClose(null);
+    }
+
+    handleChangeStudiengang(event) {
+      this.setState({studiengang: event.target.value});
+    }
+
+    handleChangeLerngruppe(event) {
+      this.setState({lerngruppe: event.target.value});
     }
 
   
@@ -155,7 +166,7 @@ class RegistrierungForm extends Component {
 	/** Renders the component */
     render() {
         const { classes, show, currentPerson } = this.props;
-        const { name, nameValidationFailed, firstName, firstNameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
+        const { name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
           alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, addingInProgress,
           updatingInProgress, updatingError} = this.state;
     
@@ -180,17 +191,17 @@ class RegistrierungForm extends Component {
                     onChange={this.textFieldValueChange} error={nameValidationFailed}
                     helperText={nameValidationFailed ? 'The last name must contain at least one character' : ' '} />
 
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='firstName' label='Vorname:' value={firstName} 
-                    onChange={this.textFieldValueChange} error={firstNameValidationFailed} 
-                    helperText={firstNameValidationFailed ? 'The first name must contain at least one character' : ' '} />
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='vorname' label='Vorname:' value={vorname} 
+                    onChange={this.textFieldValueChange} error={vornameValidationFailed} 
+                    helperText={vornameValidationFailed ? 'The first name must contain at least one character' : ' '} />
                   
                   <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='semester' label='Semester:' value={semester} 
                     onChange={this.numberValueChange} error={semesterValidationFailed} 
                     helperText={geschlechtValidationFailed ? 'The semester must contain at least one character' : ' '} /> 
                     
-                  <FormControl className={classes.formControl} value = {studiengang}>
+                  <FormControl className={classes.formControl}>
                             <InputLabel>Studiengang</InputLabel>
-                             <Select required error={studiengangValidationFailed}>
+                             <Select required error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
                                 <MenuItem value='WI'>Wirtschaftsinformatik</MenuItem>
                                 <MenuItem value='MW'>Medienwirtschaft</MenuItem>
                             </Select>
@@ -204,9 +215,9 @@ class RegistrierungForm extends Component {
                     onChange={this.textFieldValueChange} error={geschlechtValidationFailed} 
                     helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} /> 
                   
-                  <FormControl className={classes.formControl} value = {lerngruppe}>
+                  <FormControl className={classes.formControl}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
-                             <Select required error={lerngruppeValidationFailed}>
+                             <Select required error={lerngruppeValidationFailed} value={lerngruppe} onChange={this.handleChangeLerngruppe}>
                                 <MenuItem value='1'>Ja!</MenuItem>
                                 <MenuItem value='0'>Nein!</MenuItem>
                             </Select>
@@ -227,7 +238,7 @@ class RegistrierungForm extends Component {
                             Abbrechen
                 </Button>
                 {
-                    <Button disabled={nameValidationFailed || firstNameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
+                    <Button disabled={nameValidationFailed || vornameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
                           onClick={this.registrieren} color='primary'>
                           Jetzt registrieren
                     </Button>
