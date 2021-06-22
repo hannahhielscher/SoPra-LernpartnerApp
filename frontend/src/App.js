@@ -35,7 +35,7 @@ class App extends React.Component {
 			authLoading: false,
 			Userneu: null,
 			currentPerson: null,
-			showRegistrierung: true
+			
 		};
 	}
 
@@ -160,7 +160,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, showRegistrierung, appError, authError, authLoading } = this.state;
+		const { currentUser, currentPerson, personneu, appError, authError, authLoading } = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -176,7 +176,7 @@ class App extends React.Component {
 								<>
 									<Redirect from='/' to='meinprofil'/>
 									<Route path='/meinprofil' >
-									<MeinProfil currentPerson={currentPerson}/>
+									<MeinProfil currentPerson={currentPerson} showRegistrierungForm={personneu}/>
 									</Route>
 
 									<Route path='/meinevorschlaege'>

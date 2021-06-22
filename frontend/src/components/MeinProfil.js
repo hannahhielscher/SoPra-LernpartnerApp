@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
 //import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
+import RegistrierungForm from './dialogs/RegistrierungForm';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -30,8 +31,7 @@ class MeinProfil extends Component {
             personLernvorliebenID: null,
             loadingInProgress: false,
             loadingError: null,
-
-            showRegistrierungForm: false
+            showRegistrierungForm: this.props.showRegistrierungForm
         };
     }
 
@@ -92,7 +92,7 @@ class MeinProfil extends Component {
   }
 
 
-     getLernvorlieben = () => {
+    getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
@@ -113,7 +113,7 @@ class MeinProfil extends Component {
     });
   }
 
-
+  /** 
   checkPersonName = (personName) => {
 		if (personName = 'Null') {
 			this.setState({
@@ -130,12 +130,23 @@ class MeinProfil extends Component {
 			});
 			}
 		}
-
+  */
+  //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
+  userFormClosed = (currentPerson) => {
+    if (currentPerson) {
+        this.setState({
+            currentPerson: currentPerson,
+            showRegistrierungForm: false
+        });
+    } else {
+        this.setState({
+          showRegistrierungForm: false
+        });
+    }
+  }
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
   componentDidMount() {
-    this.getPerson();
-    this.getProfil();
-    this.getLernvorlieben();
+    
   }
 
 /**
@@ -159,9 +170,9 @@ class MeinProfil extends Component {
 
    /** Renders the component */
     render() {
-      const { classes } = this.props;
+      const { classes , currentPerson, showRegistrierungForm } = this.props;
       // Use the states customer
-      const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
+      const { personProfil, personName, personVorname, showRegistrierungForm, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
 
       // console.log(this.props);
       return (
