@@ -94,7 +94,7 @@ teilnahmechat = api.inherit('TeilnahmeChat', bo, {
 
 teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
-    'lerngruppe': fields.Integer(attribute='_teilnehmer', description='ID der Lerngruppe')
+    'lerngruppe': fields.Integer(attribute='_lerngruppe', description='ID der Lerngruppe')
 })
 
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
@@ -833,7 +833,7 @@ class TeilnahmeGruppeOperation(Resource):
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
-        teilnahme = adm.get_teilnahmegruppe_by_id(id)
+        teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
 
         if teilnahme is not None:
             return teilnahme

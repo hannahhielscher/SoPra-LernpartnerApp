@@ -12,23 +12,11 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 //import RegistrierungForm from './components/dialogs/RegistrierungForm';
 //import MeinProfil from './components/MeinProfil';
+import GruppenForm from './components/dialogs/GruppeForm';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
 //import LernfaecherForm from './components/dialogs/LernfaecherForm';
-
-/**function App() {
-  return (
-    <div>
-        <p>
-          Hallo
-        </p>
-    </div>
-  );
-}
-*/
-
-//export default App;
 
 class App extends React.Component {
 
@@ -165,7 +153,7 @@ class App extends React.Component {
 							currentUser ?
 								<>
 									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil'>
+									<Route path='/meinprofil' component={GruppenForm}>
 
 									</Route>
 									<Route path='/meinevorschlaege'>
