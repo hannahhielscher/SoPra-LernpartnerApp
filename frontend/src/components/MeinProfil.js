@@ -40,7 +40,7 @@ class MeinProfil extends Component {
 
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.person.getgoogle_user_id)
+      LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.currentPerson.getgoogle_user_id())
       .then(personBO =>
           this.setState({
             person: personBO,
@@ -99,15 +99,11 @@ class MeinProfil extends Component {
     LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
-            profilLernfaecher: lernvorliebenBO.lernfaecher,
-            profilLernvorlieben: lernvorliebenBO.lernvorlieben,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
           lernvorlieben: null,
-          profilLernfaecher: null,
-          profilLernvorlieben: false,
           loadingInProgress: false,
           error: e,
         })
