@@ -18,14 +18,14 @@ class Profil extends Component {
         this.state = {
             profil: null,
             gruppe: false,
-            personVorname = null,
-            personName = null,
-            personSemester = 0,
-            personStudiengang = null,
-            lerngruppe = false
-            personProfilID = None,
-            personLernfaecher = null,
-            personLernvorliebenID = null
+            personVorname: null,
+            personName: null,
+            personSemester: 0,
+            personStudiengang: null,
+            lerngruppe: false,
+            personProfilID: None,
+            personLernfaecher: null,
+            personLernvorliebenID: null,
             loadingInProgress: false,
             loadingError: null,
         };
@@ -144,14 +144,11 @@ class Profil extends Component {
                             <b>Studiengang: </b>{personStudiengang}<br />
                             <b>Lernfächer: </b>{personLernfaecher}<br />
                             <b>Lernvorlieben: </b>{personLernvorlieben}<br />
-
-
-      </div>
     );
   }
 }
 
-  const styles = theme => ({
+const styles = theme => ({
   root: {
       width: '100%',
       marginTop: theme.spacing(2),
@@ -176,7 +173,7 @@ class Profil extends Component {
   breite: {
     width: 220
   }
-  });
+});
 
 
 /** PropTypes */

@@ -324,18 +324,18 @@ class LerngruppeListOperationen(Resource):
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
     
-@lernApp.route('/lerngruppen/<int:id>')
+@lernApp.route('/lerngruppe/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
    
-    @secured
+    #@secured
     def get(self, id):
-        """Auslesen eines bestimmten Lerngruppen-Objekts.
+        """Auslesen aller Lerngruppen-Objekte einer Person.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
-        lerngruppe = adm.get_lerngruppe_by_id(id)
+        lerngruppe = adm.get_lerngruppe_by_person_id(id)
         return lerngruppe
         
     @lernApp.marshal_with(lerngruppe)

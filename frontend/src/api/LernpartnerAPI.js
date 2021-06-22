@@ -52,9 +52,9 @@ export default class LernpartnerAPI {
         //Gruppenbezogen
         #getLerngruppenURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
-        #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppe/${id}`;
+        #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppe/${id}`;
+        #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppe/${id}`;
         
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
@@ -280,13 +280,13 @@ export default class LernpartnerAPI {
           }
   
           /**
-           * Gibt eine Lerngruppe mit einer bestimmten ID als BO zurück
+           * Gibt eine Lerngruppe mit einer bestimmten personenID als BO zurück
            * 
-           * @param {Number} lerngruppeID to be retrieved
+           * @param {Number} personenID to be retrieved
            * @public
            */
-          getLerngruppe(lerngruppeID) {
-            return this.#fetchAdvanced(this.#getLerngruppeURL(lerngruppeID)).then((responseJSON) => {
+          getLerngruppe(personenID) {
+            return this.#fetchAdvanced(this.#getLerngruppeURL(personenID)).then((responseJSON) => {
               // We always get an array of LerngruppeBOs.fromJSON, but only need one object
               let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
               // console.info(responseLerngruppeBO);

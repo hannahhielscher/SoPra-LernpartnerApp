@@ -12,8 +12,8 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 //import RegistrierungForm from './components/dialogs/RegistrierungForm';
 //import MeinProfil from './components/MeinProfil';
-import GruppenForm from './components/dialogs/GruppeForm';
-import MeinProfil from './components/MeinProfil';
+//import GruppenForm from './components/dialogs/GruppeForm';
+import GruppenListe from './components/GruppenListe';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
@@ -154,8 +154,11 @@ class App extends React.Component {
 							currentUser ?
 								<>
 									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil' component={MeinProfil}>
-									<MeinProfil currentPerson={currentPerson}/>
+									<Route path='/meinprofil'>
+									</Route>
+
+									<Route path='/meinelerngruppen'>
+									<GruppenListe />
 									</Route>
 
 									<Route path='/meinevorschlaege'>
@@ -175,7 +178,7 @@ class App extends React.Component {
 								</>
 						}
 						<LoadingProgress show={authLoading} />
-						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
+						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sign in process.`} onReload={this.handleSignIn} />
 						<ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
 					</Container>
 				

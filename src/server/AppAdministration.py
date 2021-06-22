@@ -243,6 +243,11 @@ class AppAdministration (object):
         with LerngruppeMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_lerngruppe_by_person_id(self, id):
+        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        with LerngruppeMapper() as mapper:
+            return mapper.find_by_person_id(id)
+
     def get_all_lerngruppen(self):
         """Alle Lerngruppe auslesen"""
         with LerngruppeMapper() as mapper:
