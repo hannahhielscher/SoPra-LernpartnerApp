@@ -165,7 +165,7 @@ class RegistrierungForm extends Component {
 	/** Renders the sign in page, if user objext is null */
 	/** Renders the component */
     render() {
-        const { classes, show, currentPerson } = this.props;
+        const { classes, show, currentPerson, } = this.props;
         const { name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
           alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, addingInProgress,
           updatingInProgress, updatingError} = this.state;
