@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
+import Button from '@material-ui/core/Button';
+
 
 class MeinProfil extends Component {
 
@@ -14,7 +16,9 @@ class MeinProfil extends Component {
 
         // initiiere einen leeren state
         this.state = {
+            person: null,
             profil: null,
+            lernvorlieben: null,
             gruppe: false,
             personVorname: null,
             personName: null,
@@ -30,12 +34,8 @@ class MeinProfil extends Component {
     }
 
 
-/**   showVorschlagButtonClick = (event) => {
-      event.stopPropagation();
-      this.setState({
-        showVorschlag: true
-      });
-    }**/
+
+
 
 
     // API Anbindung um Profil vom Backend zu bekommen
@@ -70,9 +70,9 @@ class MeinProfil extends Component {
     }
 
      getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(personProfilID).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(this.props.personProfilID).then(profilBO =>
       this.setState({
-            profil: profilBOs,
+            profil: profilBO,
             profilLernfaecher: profilBO.lernfaecher,
             profilLernvorliebenID: profilBO.lernvorlieben,
             loadingInProgress: false,
@@ -96,16 +96,16 @@ class MeinProfil extends Component {
 
 
      getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorlieben(personLernvorliebenID).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
-            profilLernvorlieben: profilBO.lernvorlieben,
+            lernvorlieben: lernvorliebenBO,
+            profilLernfaecher: lernvorliebenBO.lernfaecher,
+            profilLernvorlieben: lernvorliebenBO.lernvorlieben,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
-          profil: null,
+          lernvorlieben: null,
           profilLernfaecher: null,
           profilLernvorlieben: false,
           loadingInProgress: false,
@@ -129,7 +129,23 @@ class MeinProfil extends Component {
         this.getLernvorlieben();
   }
 
-
+/**
+    //wird aufgerufen, wenn Dialog Fenster geschloßen wird
+    MeinProfilFormClosed = projekt => {
+        if (projekt) {
+            const newProjektList = [...this.state.projekte, projekt];
+            this.setState({
+                projekte: newProjektList,
+                filteredProjekte: [...newProjektList],
+                showProjekteForm: false
+            });
+        } else {
+            this.setState({
+                showProjekteForm: false
+            });
+        }
+    }
+*/
 
 
    /** Renders the component */

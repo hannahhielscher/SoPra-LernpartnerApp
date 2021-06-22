@@ -13,6 +13,7 @@ import SignIn from './components/pages/SignIn';
 //import RegistrierungForm from './components/dialogs/RegistrierungForm';
 //import MeinProfil from './components/MeinProfil';
 import GruppenForm from './components/dialogs/GruppeForm';
+import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
@@ -153,9 +154,10 @@ class App extends React.Component {
 							currentUser ?
 								<>
 									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil' component={GruppenForm}>
-
+									<Route path='/meinprofil' component={MeinProfil}>
+									<MeinProfil currentPerson={currentPerson}/>
 									</Route>
+
 									<Route path='/meinevorschlaege'>
 
 									</Route>
