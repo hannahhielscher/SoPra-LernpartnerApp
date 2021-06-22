@@ -7,7 +7,7 @@ class TeilnahmeGruppe (bo.BusinessObject):
         super().__init__()
         #self._status = False
         self._teilnehmer= None
-        self._lerngruppe= None
+        self._lerngruppe= 0
 
     def get_teilnehmer(self):
         """Auslesen des Teilnehmers"""
@@ -15,7 +15,7 @@ class TeilnahmeGruppe (bo.BusinessObject):
     
     def set_teilnehmer(self, teilnehmer):
         """setzten des Teilnehmers"""
-        self._teilnehmer= teilnehmer
+        self._teilnehmer = teilnehmer
 
     def get_lerngruppe(self):
         """Auslesen der Lerngruppe"""
@@ -23,7 +23,7 @@ class TeilnahmeGruppe (bo.BusinessObject):
     
     def set_lerngruppe(self, lerngruppe):
         """setzten der neuen Lerngruppe"""
-        self._lerngruppe= lerngruppe
+        self._lerngruppe = lerngruppe
 
 
     #def get_status(self):

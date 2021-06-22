@@ -78,18 +78,18 @@ class LerngruppeMapper(Mapper):
 
         return result
 
-    def find_by_profil_id(self, profil_id):
+    def find_by_person_id(self, person_id):
         """Auslesen der Lerngruppen anhand der ID eines Teilnehmers
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name, profil_id FROM lerngruppen WHERE profil_id={}".format(profil_id)
+        command = "SELECT personen.id, teilnahmen_gruppe.person_id, teilnahmen_gruppe.lerngruppen_id FROM personen INNER JOIN teilnahmen_gruppe ON personen.id = teilnahmen_gruppe.person_id WHERE personen.id = {}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, name, profil_id) in tuples:
             lerngruppe = Lerngruppe()
-            lerngruppe.set_id(id)
+            lerngruppe.set_gruppenprofil(id)
             lerngruppe.set_name(name)
             lerngruppe.set_gruppenprofil(profil_id)
             result.append(lerngruppe)

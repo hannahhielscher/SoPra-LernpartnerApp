@@ -56,25 +56,25 @@ class PersonMapper(Mapper):
         :return Person-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-        result = None
+
         cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, `alter`, geschlecht, lerngruppe, google_user_id, email, studiengang, profil_id FROM personen WHERE id=' {} '".format(id)
+        command = "SELECT id, name, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id=' {} '".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, vorname, semester, alter, geschlecht, lerngruppe, google_user_id, email, studiengang, profil_id) = tuples[0]
+            (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
             person = Person()
             person.set_id(id)
             person.set_name(name)
             person.set_vorname(vorname)
             person.set_semester(semester)
+            person.set_studiengang(studiengang)
             person.set_alter(alter)
             person.set_geschlecht(geschlecht)
             person.set_lerngruppe(lerngruppe)
             person.set_google_user_id(google_user_id)
             person.set_email(email)
-            person.set_studiengang(studiengang)
             person.set_personenprofil(profil_id)
             
             result = person

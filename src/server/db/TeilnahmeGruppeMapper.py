@@ -26,19 +26,21 @@ class TeilnahmeGruppeMapper(Mapper):
 
         return result
 
-    def find_by_student_id(self, person_id):
+    def find_by_person_id(self, person_id):
         """ Findet alle Gruppenteilnahmen einer bestimmten person mittels User Id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, teilnehmer, lerngruppe FROM teilnahmen_gruppe WHERE teilnehmer={}".format(person_id)
+        command = "SELECT teilnahmen_gruppe.id, teilnahmen_gruppe.person_id, teilnahmen_gruppe.lerngruppen_id FROM teilnahmen_gruppe WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, lerngruppe) in tuples:
+        for (id, person_id, lerngruppen_id) in tuples:
             teilnahme = TeilnahmeGruppe()
+
             teilnahme.set_id(id)
-            teilnahme.set_teilnehmer(teilnehmer)
-            teilnahme.set_lerngruppe(lerngruppe)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_lerngruppe(lerngruppen_id)
+
             result.append(teilnahme)
 
         self._connection.commit()

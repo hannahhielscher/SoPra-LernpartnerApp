@@ -171,16 +171,14 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`teilnahmen_gruppe` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_gruppe` (
   `person_id` INT NOT NULL,
-  `person_profil_id` INT NOT NULL,
   `id` INT NOT NULL,
   `lerngruppen_id` INT NOT NULL,
-  `lerngruppen_profil_id` INT NOT NULL,
-  PRIMARY KEY (`person_id`, `person_profil_id`, `id`, `lerngruppen_id`, `lerngruppen_profil_id`),
-  INDEX `fk_person_has_lerngruppe_person1_idx` (`person_id` ASC, `person_profil_id` ASC) VISIBLE,
-  INDEX `fk_teilnahmen_gruppe_lerngruppen1_idx` (`lerngruppen_id` ASC, `lerngruppen_profil_id` ASC) VISIBLE,
+  PRIMARY KEY (`person_id`, `id`, `lerngruppen_id`),
+  INDEX `fk_person_has_lerngruppe_person1_idx` (`person_id` ASC) VISIBLE,
+  INDEX `fk_teilnahmen_gruppe_lerngruppen1_idx` (`lerngruppen_id` ASC) VISIBLE,
   CONSTRAINT `fk_person_has_lerngruppe_person1`
-    FOREIGN KEY (`person_id` , `person_profil_id`)
-    REFERENCES `lernapp_SWPra`.`personen` (`id` , `profil_id`)
+    FOREIGN KEY (`person_id`)
+    REFERENCES `lernapp_SWPra`.`personen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_teilnahmen_gruppe_lerngruppen1`
@@ -196,7 +194,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`teilnahmen_gruppe` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`teilnahmen_gruppe` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`teilnahmen_gruppe` VALUES (2, 2, 1, 1, 1), (3, 3, 2, 1, 1), (4, 4, 3, 1, 1), (2, 2, 4, 2, 2), (3, 3, 5, 2, 2), (4, 4, 6, 2, 2), (4, 4, 7, 3, 3), (3, 3, 8, 3, 3), (4, 4, 9, 3, 3), (4, 4, 10, 3, 3), (7, 7, 11, 3, 3);
+INSERT INTO `lernapp_SWPra`.`teilnahmen_gruppe` VALUES (2, 1, 1), (3, 2, 1), (4, 3, 1), (2, 4, 2), (3, 5, 2), (4, 6, 2), (3, 7, 3), (4, 8, 3), (7, 9, 3);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`teilnahmen_gruppe` ENABLE KEYS */;
 UNLOCK TABLES;
 
