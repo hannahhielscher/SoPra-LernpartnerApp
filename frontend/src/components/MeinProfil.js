@@ -200,11 +200,11 @@ class MeinProfil extends Component {
 
 
 /** PropTypes */
-Profil.propTypes = {
+MeinProfil.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   person: PropTypes.object.isRequired,
-  show: PropTypes.bool.isRequired
+ // show: PropTypes.bool.isRequired
 }
 
 
