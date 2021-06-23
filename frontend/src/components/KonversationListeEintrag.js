@@ -23,8 +23,8 @@ class KonversationListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             konversation: null,
-            showKonversation: false,
-            showProfil: false,
+            //showKonversation: false,
+            //showProfil: false,
             loadingInProgress: false,
             error: null
         };
@@ -64,8 +64,9 @@ render() {
               </ButtonGroup>
             </Grid>
       </Grid>
-      <Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
+      
     </div>
+    //<Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
   )
 
 }
