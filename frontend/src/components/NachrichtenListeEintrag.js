@@ -38,6 +38,7 @@ class NachrichtenListeEintrag extends Component {
             nachricht: [], //Liste mit den IDs aller Nachrichten 
             konversation_ID: null,  
             inhalt: null, 
+            person_id: null,
             //showNachrichtForm: false,
             //showGruppeForm: false, 
             loadingInProgress: false,
@@ -67,6 +68,7 @@ class NachrichtenListeEintrag extends Component {
             this.setState({
               nachricht: nachrichtBO,
               inhalt: nachrichtBO.inhalt,
+              person_id: nachrichtBO.person_id,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
@@ -95,7 +97,7 @@ class NachrichtenListeEintrag extends Component {
 
       render() {
         const { classes, currentperson } = this.props;
-        const {nachrichten, inhalt, konversation_ID}
+        const {nachrichten, inhalt, konversation_ID, person_id}
 
         return(
           <div>
@@ -121,7 +123,7 @@ class NachrichtenListeEintrag extends Component {
                       <>
                       {
                           nachrichten.map(nachricht =>
-                            <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachricht} expandedState={expandedNachrichtID === nachricht.getID()}
+                            <Nachricht key={nachricht.getID()} nachricht={nachricht} username={nachricht.getPersonID()} inhalt={nachricht.getInhalt()} expandedState={expandedNachrichtID === nachricht.getID()}
                               onExpandedStateChange={this.onExpandedStateChange}
                             />)
                       }

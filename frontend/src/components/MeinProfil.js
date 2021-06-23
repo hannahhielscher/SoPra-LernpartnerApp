@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
 //import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
+import RegistrierungForm from './dialogs/RegistrierungForm';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -29,18 +30,14 @@ class MeinProfil extends Component {
             personLernfaecher: null,
             personLernvorliebenID: null,
             loadingInProgress: false,
-            loadingError: null
+            loadingError: null,
+            showRegistrierungForm: this.props.showRegistrierungForm
         };
     }
 
-
-
-
-
-
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.person.getgoogle_user_id)
+      LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.currentPerson.getgoogle_user_id())
       .then(personBO =>
           this.setState({
             person: personBO,
@@ -69,7 +66,7 @@ class MeinProfil extends Component {
       });
     }
 
-     getProfil = () => {
+    getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.personProfilID).then(profilBO =>
       this.setState({
             profil: profilBO,
@@ -95,19 +92,15 @@ class MeinProfil extends Component {
   }
 
 
-     getLernvorlieben = () => {
+    getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
-            profilLernfaecher: lernvorliebenBO.lernfaecher,
-            profilLernvorlieben: lernvorliebenBO.lernvorlieben,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
           lernvorlieben: null,
-          profilLernfaecher: null,
-          profilLernvorlieben: false,
           loadingInProgress: false,
           error: e,
         })
@@ -120,13 +113,40 @@ class MeinProfil extends Component {
     });
   }
 
-
-
+  /** 
+  checkPersonName = (personName) => {
+		if (personName = 'Null') {
+			this.setState({
+				personneu: true
+			})
+			.catch(e =>
+				this.setState({
+          personneu: false,
+          error: e
+				}));
+			this.setState({
+				error: null,
+				loadingInProgress: true
+			});
+			}
+		}
+  */
+  //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
+  userFormClosed = (currentPerson) => {
+    if (currentPerson) {
+        this.setState({
+            currentPerson: currentPerson,
+            showRegistrierungForm: false
+        });
+    } else {
+        this.setState({
+          showRegistrierungForm: false
+        });
+    }
+  }
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-        this.getPerson();
-        this.getProfil();
-        this.getLernvorlieben();
+  componentDidMount() {
+    
   }
 
 /**
@@ -150,13 +170,14 @@ class MeinProfil extends Component {
 
    /** Renders the component */
     render() {
-      const { classes } = this.props;
+      const { classes , currentPerson, showRegistrierungForm } = this.props;
       // Use the states customer
-      const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
+      const { personProfil, personName, personVorname, showRegistrierungForm, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
 
       // console.log(this.props);
       return (
         <div className={classes.root}>
+        <RegistrierungForm show = {showRegistrierungForm} currentPerson={currentPerson} />
         <Button color="primary" onClick= {this.showVorschlagButtonClick}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
 
@@ -204,9 +225,9 @@ MeinProfil.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   person: PropTypes.object.isRequired,
- // show: PropTypes.bool.isRequired
+  show: PropTypes.bool.isRequired
 }
 
 
-export default withStyles(styles)(MeinProfil);
+export default withRouter(withStyles(styles)(MeinProfil));
 

@@ -56,14 +56,14 @@ class PersonMapper(Mapper):
         :return Person-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-
+        
         cursor = self._connection.cursor()
-        command = "SELECT id, name, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id=' {} '".format(id)
+        command = "SELECT id, name, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE id='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
-
+        
         try:
-            (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email, profil_id) = tuples[0]
+            (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email,  profil_id) = tuples[0]
             person = Person()
             person.set_id(id)
             person.set_name(name)
@@ -79,13 +79,17 @@ class PersonMapper(Mapper):
             
             result = person
 
+
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
 			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             result = None
+            
 
         self._connection.commit()
         cursor.close()
+
+        
         return result
 
     def find_by_google_user_id(self, google_user_id):
@@ -122,6 +126,10 @@ class PersonMapper(Mapper):
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
             keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
             result = None
+
+        self._connection.commit()
+        cursor.close()
+
         return result
 
     def insert(self, person):
@@ -144,10 +152,10 @@ class PersonMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 person.set_id(1)
 
-        command = "INSERT INTO personen (id, name, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        command = "INSERT INTO personen (id, `name`, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_personenprofil())
         cursor.execute(command, data)
-
+        
         self._connection.commit()
         cursor.close()
 
@@ -168,15 +176,15 @@ class PersonMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def update_by_id(self, personID):
+    def update_by_id(self, person):
         """Überschreiben / Aktualisieren eines Person-Objekts in der DB
         :param person -> Person-Objekt
         :return aktualisiertes Person-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, `alter`=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id_profil=%s WHERE id={}"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil_id())
+        command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, `alter`=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id=%s WHERE id=%s"
+        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_personenprofil(), person.get_id())
 
         cursor.execute(command, data)
 

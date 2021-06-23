@@ -44,7 +44,7 @@ export default class LernpartnerAPI {
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
         #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
-        #updatePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
+        #updatePersonURL = (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, email) => `${this.#lernappServerBaseURL}/personen?id=${id}&name=${name}&vorname=${vorname}&semester=${semester}&studiengang=${studiengang}&alter=${alter}&geschlecht=${geschlecht}&lerngruppe=${lerngruppe}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
         #getPersonByGoogleIDURL = (google_user_id) => `${this.#lernappServerBaseURL}/personbygoogle/${google_user_id}`;
@@ -167,25 +167,15 @@ export default class LernpartnerAPI {
 
         /**
          * Updated eine Person und gibt Promise zurück, resolves as PersonBO.
-         * 
-         * @param {PersonBO} personBO to be updated
-         * @public
+         
          */
-        updatePerson(personBO) {
-          return this.#fetchAdvanced(this.#updatePersonURL(personBO.getID()), {
+        updatePerson(id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe) {
+          return this.#fetchAdvanced(this.#updatePersonURL(id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe), {
             method: 'PUT',
             headers: {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
-            },
-            body: JSON.stringify(personBO)
-          }).then((responseJSON) => {
-            // We always get an array of PersonBOs.fromJSON
-            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
-            // console.info(PersonBOs);
-            return new Promise(function (resolve) {
-              resolve(responsePersonBO);
-            })
+            }
           })
         }
 
@@ -200,8 +190,8 @@ export default class LernpartnerAPI {
             // We always get an array of PersonBOs.fromJSON, but only need one object
             let personBO = PersonBO.fromJSON(responseJSON);
             console.info(personBO);
-            return new Promise(function (resolve) {
-              resolve(personBO);
+            return new Promise(function (resolve){
+                resolve(personBO)
             })
           })
         }

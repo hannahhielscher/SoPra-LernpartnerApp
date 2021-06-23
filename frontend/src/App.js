@@ -10,7 +10,7 @@ import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
-//import RegistrierungForm from './components/dialogs/RegistrierungForm';
+import RegistrierungForm from './components/dialogs/RegistrierungForm';
 //import MeinProfil from './components/MeinProfil';
 //import GruppenForm from './components/dialogs/GruppeForm';
 import GruppenListe from './components/GruppenListe';
@@ -28,11 +28,14 @@ class App extends React.Component {
 		// Init an empty state
 		this.state = {
 			currentUser: null,
+			personName: null,
+			personneu: false,
 			appError: null,
 			authError: null,
 			authLoading: false,
 			Userneu: null,
-			currentPerson: null
+			currentPerson: null,
+			
 		};
 	}
 
@@ -107,10 +110,10 @@ class App extends React.Component {
 			.then(personBO =>
 				this.setState({
 					currentPerson: personBO,
+					personName: personBO.getvorname(),
 					error: null,
 					loadingInProgress: false,
-				})
-				).catch(e =>
+				})).catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -126,6 +129,23 @@ class App extends React.Component {
 		},1000);
 		}
 	
+	checkPersonName = (personName) => {
+		if (personName = 'Null') {
+			this.setState({
+				personneu: true
+			})
+			.catch(e =>
+				this.setState({
+					personneu: false
+				}));
+			this.setState({
+				error: null,
+				loadingInProgress: true
+			});
+			}
+		}
+	
+
 	/**
 	 * Lifecycle method, which is called when the component gets inserted into the browsers DOM.
 	 * Initializes the firebase SDK.
@@ -140,7 +160,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, Userneu, appError, authError, authLoading } = this.state;
+		const { currentUser, currentPerson, personneu, appError, authError, authLoading } = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -148,6 +168,7 @@ class App extends React.Component {
 				<CssBaseline />
 				<Router basename={process.env.PUBLIC_URL}>
 					<Container maxWidth='md'>
+					
 						<Header user={currentUser} person={currentPerson}/>
 						{
 							// Is a user signed in?
@@ -177,6 +198,8 @@ class App extends React.Component {
 									<SignIn onSignIn={this.handleSignIn} />
 								</>
 						}
+						
+								
 						<LoadingProgress show={authLoading} />
 						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sign in process.`} onReload={this.handleSignIn} />
 						<ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
