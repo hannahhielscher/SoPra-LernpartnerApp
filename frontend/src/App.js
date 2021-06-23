@@ -18,6 +18,7 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
 //import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import Profil from './components/Profil';
 
 class App extends React.Component {
 

@@ -16,17 +16,17 @@ class Profil extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            person: null,
+            person: props.person,
             profil: null,
             lernvorlieben: null,
             gruppe: false,
-            personVorname = null,
-            personName = null,
-            personSemester = 0,
-            personStudiengang = null,
-            lerngruppe = false
-            personProfilID = None,
-            personLernfaecher = null,
+            //personVorname = null,
+            //personName = null,
+            //personSemester = 0,
+            //personStudiengang = null,
+            //lerngruppe = false
+            //personProfilID = None,
+            //personLernfaecher = null,
             personLernvorliebenID = null
             loadingInProgress: false,
             loadingError: null,
@@ -44,7 +44,7 @@ class Profil extends Component {
 
 
 
-
+/**
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
       LernpartnerAPI.getAPI().getPerson(this.props.person.getID())
@@ -75,20 +75,23 @@ class Profil extends Component {
         error: null
       });
     }
+*/
 
      getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.personProfilID).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(this.props.person.personenprofil).then(profilBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
+            profil: profilBO,
+            gruppe: profilBO.gruppe
+            //profilLernfaecher: profilBO.lernfaecher,
             profilLernvorliebenID: profilBO.lernvorlieben,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
           profil: null,
-          profilLernfaecher: null,
-          profilLernvorliebenID: false,
+          gruppe: null,
+          //profilLernfaecher: null,
+          profilLernvorliebenID: null,
           loadingInProgress: false,
           error: e,
         })
@@ -132,20 +135,31 @@ class Profil extends Component {
 
    /** Renders the component */
   render() {
-    const { classes } = this.props;
+    const { classes, person } = this.props;
     // Use the states customer
-    const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
+    const { profil, lernvorlieben, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
 
     // console.log(this.props);
     return (
       <div className={classes.root}>
     """  <Button color="primary" onClick= {this.showVorschlagButtonClick}>Zurueck zu den Vorschlaegen</Button>"""
       <Typography variant='body1' color={'textSecondary'}>
+            gruppe ?
+                <b> {profil.name} </b> <br />
+                //<b>Lernfächer: </b>{personLernfaecher}<br />
+                <b>Lernvorlieben: </b>{lernvorlieben}<br />
 
-                            <b>Semester: </b> {personSemester} <br />
-                            <b>Studiengang: </b>{personStudiengang}<br />
-                            <b>Lernfächer: </b>{personLernfaecher}<br />
-                            <b>Lernvorlieben: </b>{personLernvorlieben}<br />
+                :
+                <b> {profil.vorname} {profil.name} </b> <br />
+                <b>Semester: </b> {person.semester} <br />
+                <b>Studiengang: </b> {person.studiengang} <br />
+                <b>Alter: </b> {person.alter} <br />
+                <b>Geschlecht: </b> {person.geschlecht} <br />
+                //<b>Lernfächer: </b>{personLernfaecher}<br />
+                <b>Lernvorlieben: </b>{lernvorlieben}<br />
+
+
+
 
 
       </div>
