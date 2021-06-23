@@ -5,7 +5,7 @@ import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typogr
 import { withRouter } from 'react-router-dom';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
-//import VorschlagListeEintrag from './VorschlagListeEintrag';
+import GruppenListeEintrag from './GruppenListeEintrag';
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
@@ -43,7 +43,7 @@ class GruppenListe extends Component {
           lerngruppen: [],
           error: null,
           loadingInProgress: false,
-          expandedCustomerID: expandedID,
+          expandedLerngruppeID: expandedID,
           showCustomerForm: false
         };
 
@@ -51,7 +51,7 @@ class GruppenListe extends Component {
 
     /** Fetches all LerngruppenBOs from the backend */
     getLerngruppen = () => {
-        LernpartnerAPI.getAPI().getLerngruppen(this.props.currentPerson.id)
+        LernpartnerAPI.getAPI().getLerngruppe(this.props.currentPerson.id)
             .then(lerngruppeBOs =>
                 this.setState({               // Set new state when LerngruppeBOs have been fetched
                     lerngruppen: lerngruppeBOs,
@@ -73,6 +73,28 @@ class GruppenListe extends Component {
         });
     }
 
+        /**
+     * Handles onExpandedStateChange events from the GruppeListeEintrag component. Toggels the expanded state of
+     * the GruppeListeEintrag of the given LerngruppeBO.
+     *
+     * @param {lerngruppe} LerngruppeBO of the GruppeListeEintrag to be toggeled
+     */
+    onExpandedStateChange = lerngruppe => {
+        // console.log(vorschlagID);
+        // Set expandend Lerngruppe Eintrag to null by default
+        let newID = null;
+
+        // If same lerngruppe entry is clicked, collapse it else expand a new one
+        if (lerngruppe.getID() !== this.state.expandedLerngruppeID) {
+        // Expand the lerngruppe entry with lerngruppeID
+        newID = lerngruppe.getID();
+        }
+        // console.log(newID);
+        this.setState({
+        expandedLerngruppeID: newID,
+        });
+    }
+
     /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
     componentDidMount() {
         this.getLerngruppen();
@@ -91,6 +113,12 @@ class GruppenListe extends Component {
                         </Typography>
                     </Grid>
                 </Grid>
+
+                lerngruppen.map(lerngruppe =>
+                <GruppenListeEintrag key={lerngruppe.getID()} lerngruppe={lerngruppe} expandedState={expandedLerngruppeID === lerngruppe.getID()}
+                  onExpandedStateChange={this.onExpandedStateChange}
+                />)
+
             </div>
         );
       }
@@ -103,20 +131,6 @@ const styles = theme => ({
   },
   content: {
       margin: theme.spacing(1),
-    },
-  table: {
-      minWidth: 700,
-    },
-  formControl: {
-      margin: theme.spacing(1),
-      minWidth: 200,
-      textAlign: "left"
-  },
-  laden: {
-    padding: 0
-  },
-  breite: {
-    width: 220
   }
 });
 

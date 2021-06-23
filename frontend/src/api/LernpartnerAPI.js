@@ -198,10 +198,10 @@ export default class LernpartnerAPI {
         getPersonByGoogleID(google_user_id) {
           return this.#fetchAdvanced(this.#getPersonByGoogleIDURL(google_user_id)).then((responseJSON) => {
             // We always get an array of PersonBOs.fromJSON, but only need one object
-            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
-            // console.info(responsePersonBO);
+            let personBO = PersonBO.fromJSON(responseJSON);
+            console.info(personBO);
             return new Promise(function (resolve) {
-              resolve(responsePersonBO);
+              resolve(personBO);
             })
           })
         }
@@ -288,10 +288,10 @@ export default class LernpartnerAPI {
           getLerngruppe(personenID) {
             return this.#fetchAdvanced(this.#getLerngruppeURL(personenID)).then((responseJSON) => {
               // We always get an array of LerngruppeBOs.fromJSON, but only need one object
-              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
-              // console.info(responseLerngruppeBO);
+              let lerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
+              console.info(lerngruppeBO);
               return new Promise(function (resolve) {
-                resolve(responseLerngruppeBO);
+                resolve(lerngruppeBO);
               })
             })
           }
