@@ -83,7 +83,7 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT lerngruppen.id, lerngruppen.name, lerngruppen.profil_id FROM lerngruppen INNER JOIN teilnahmen_gruppe ON lerngruppen.id = teilnahmen_gruppe.lerngruppen_id WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
+        command = "SELECT lerngruppen.id, lerngruppen.name, lerngruppen.profil_id FROM lerngruppen INNER JOIN teilnahmen_gruppe ON lerngruppen.id = teilnahmen_gruppe.lerngruppe_id WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

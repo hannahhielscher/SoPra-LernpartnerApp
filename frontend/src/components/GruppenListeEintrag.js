@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LernpartnerAPI from '../api/LernpartnerAPI'
+//import LernpartnerAPI from '../api/LernpartnerAPI'
 //import Profil from './Profil';
-//import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
@@ -11,8 +10,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
 //import Select from '@material-ui/core/Select';
-//import ContextErrorMessage from './dialogs/ContextErrorMessage';
-//import LoadingProgress from './dialogs/LoadingProgress';
+import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import LoadingProgress from './dialogs/LoadingProgress';
+//import Profil from './Profil';
+import GruppeVerlassenDialog from './dialogs/GruppeVerlassenDialog';
+import LernpartnerAPI from '../api/LernpartnerAPI'
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -21,19 +23,20 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
  *
  */
 
-class GruppeListeEintrag extends Component {
+class GruppenListeEintrag extends Component {
     constructor(props){
         super(props);
 
         // initiiere einen leeren state
         this.state = {
-            //vorschlag: props.vorschlag,
-            //lerngruppe: props.lerngruppe,
-            profilID: null,
+            lerngruppe: props.lerngruppe,
             gruppeName: this.props.lerngruppe.name,
+            profilID: this.props.lerngruppe.gruppenprofil,
+            teilnahmeGruppe: [],
             showProfil: false,
+            showLerngruppeVerlassenDialog: false,
             //showTeilnehmer: false,
-            showNachrichtenListe: false,
+            //showNachrichtenListe: false,
             loadingInProgress: false,
             error: null
         };
@@ -44,122 +47,102 @@ class GruppeListeEintrag extends Component {
     this.props.onExpandedStateChange(this.props.lerngruppe);
     }
 
-    //Handles the onClick event of the show profil button
+    getTeilnahmeGruppe = () => {
+        LernpartnerAPI.getAPI().getTeilnahmeGruppeById(this.props.personID)
+            .then(teilnahmeGruppeBOs =>
+                this.setState({               // Set new state when LerngruppeBOs have been fetched
+                    teilnahmeGruppe: teilnahmeGruppeBOs,
+                    //name: lerngruppeBO.name
+                    loadingInProgress: false,   // disable loading indicator
+                    error: null
+                })).catch(e =>
+                    this.setState({             // Reset state with error from catch
+                        teilnahmeGruppeBOs: [],
+                        loadingInProgress: false, // disable loading indicator
+                        error: e
+                    })
+                );
+
+        // set loading to true
+        this.setState({
+            loadingInProgress: true,
+            error: null
+        });
+    }
+
+    /** Handles the onClick event of the Profil ansehen button */
     showProfilButtonClicked = (event) => {
-      event.stopPropagation();
-      this.setState({
-        showProfil: true
-      });
+        event.stopPropagation();
+        this.setState({
+            showProfil: true
+        });
     }
 
-    //Handles the onClick event of the show NachrichtenListe button
-    showNachrichtenListeButtonClicked = (event) => {
-      event.stopPropagation();
-      this.setState({
-        showNachrichtenListe: true
-      });
+    /** Handles the onClick event of the delete customer button */
+    verlasseLerngruppeButtonClicked = (event) => {
+        event.stopPropagation();
+        this.setState({
+            showLerngruppeVerlassenDialog: true
+        });
     }
 
-    // API Anbindung um Profil vom Backend zu bekommen
-    getProfil = () => {
-      LernpartnerAPI.getAPI().getProfil(this.props.lerngruppe.getgruppenprofil())
-      .then(profilBO =>
-          this.setState({
-            profil: profilBO,
-            loadingInProgress: false,
-            error: null,
-          }))
-          .catch(e =>
-              this.setState({
-                person: null,
-                loadingInProgress: false,
-                error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
+    /** Handles the onClose event of the CustomerDeleteDialog */
+    verlasseLerngruppeDialogClosed = (teilnahmeGruppe) => {
+        // if customer is not null, delete it
+        if (teilnahmeGruppe) {
+            this.props.onTeilnahmeGruppeDeleted(teilnahmeGruppe);
+        };
+
+        // Don´t show the dialog
+        this.setState({
+            showLerngruppeVerlassenDialog: false
+        });
     }
 
 
     render(){
 
           const { classes, expandedState } = this.props;
-          const {profilID, lerngruppeName, showProfil, showNachrichtenListe } = this.state;
+          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog } = this.state;
 
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  id={`lerngruppe${lerngruppe.getId()}accountpanel-header`}
+                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}
                 >
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
-                    <Grid item>
-          <Typography variant='body1' className={classes.heading}>{lerngruppenName}}
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <ButtonGroup variant='text' size='small'>
-                        <Button color='primary' onClick={this.showProfilButtonClicked}>
-                          Profil ansehen
-                        </Button>
-                        <Button color='secondary' onClick={this.showNachrichtenListeButtonClicked}>
-                          Chat ansehen
-                        </Button>
-                      </ButtonGroup>
-                    </Grid>
-                    <Grid item xs />
-                    <Grid item>
-                      <Typography variant='body2' color={'textSecondary'}>Profil und Chat</Typography>
-                    </Grid>
+                    <Typography variant='body1'>
+                        {lerngruppe.getname()}
+                    </Typography>
                   </Grid>
                 </AccordionSummary>
-                <Profil show={showProfil} profil={profil}/>
-                <NachrichtenListe show={showNachrichtenListe} profil={profil}/>
+                <AccordionDetails>
+                  <ButtonGroup variant='text' size='small'>
+                    <Button color='primary' onClick={this.showProfilButtonClicked}>
+                        Profil ansehen
+                    </Button>
+                    <Button color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
+                        Gruppe verlassen
+                    </Button>
+                  </ButtonGroup>
+                </AccordionDetails>
               </Accordion>
+              <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} onClose={this.verlasseLerngruppeDialogClosed}/>
             </div>
           );
         }
 }
 
-
-const styles = theme => ({
-  root: {
-      width: '100%',
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      padding: theme.spacing(1),
-  },
-  content: {
-      margin: theme.spacing(1),
-    },
-  table: {
-      minWidth: 700,
-    },
-  formControl: {
-      margin: theme.spacing(1),
-      minWidth: 200,
-      textAlign: "left"
-  },
-  button: {
-      margin: theme.spacing(1),
-      },
-  laden: {
-    padding: 0
-  },
-  breite: {
-    width: 220
-  }
-  });
-
 /** PropTypes */
-VorschlagListeEintrag.propTypes = {
-  /** @ignore */
+GruppenListeEintrag.propTypes = {
   classes: PropTypes.object.isRequired,
   vorschlag: PropTypes.object.isRequired,
-  show: PropTypes.bool.isRequired
+  show: PropTypes.bool.isRequired,
+  expandedState: PropTypes.bool.isRequired,
+  onExpandedStateChange: PropTypes.func.isRequired,
 }
 
 
-export default withStyles(styles)(VorschlagListeEintrag);
+export default (GruppenListeEintrag);

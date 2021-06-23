@@ -30,7 +30,7 @@ class TeilnahmeGruppeMapper(Mapper):
         """ Findet alle Gruppenteilnahmen einer bestimmten person mittels User Id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT teilnahmen_gruppe.id, teilnahmen_gruppe.person_id, teilnahmen_gruppe.lerngruppen_id FROM teilnahmen_gruppe WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
+        command = "SELECT teilnahmen_gruppe.id, teilnahmen_gruppe.person_id, teilnahmen_gruppe.lerngruppe_id FROM teilnahmen_gruppe WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -52,7 +52,7 @@ class TeilnahmeGruppeMapper(Mapper):
         """ Findet alle Teilnahmen/Teilnehmer einer bestimmten Gruppen ID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, teilnehmer, lerngruppe FROM teilnahmen_gruppe WHERE lerngruppe={}".format(
+        command = "SELECT id, person_id, lerngruppe_id FROM teilnahmen_gruppe WHERE lerngruppe={}".format(
             lerngruppe_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -84,7 +84,7 @@ class TeilnahmeGruppeMapper(Mapper):
         for (maxid) in tuples:
             teilnahme.set_id(maxid[0] + 1)
 
-            command = "INSERT INTO teilnahmen_gruppe (id, teilnehmer, lerngruppe) VALUES (%s,%s,%s)"
+            command = "INSERT INTO teilnahmen_gruppe (id, person_id, lerngruppe_id) VALUES (%s,%s,%s)"
             data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe())
             cursor.execute(command, data)
 
@@ -101,7 +101,7 @@ class TeilnahmeGruppeMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "UPDATE teilnahmen_gruppe SET teilnehmer=%s, lerngruppe=%s WHERE id=%s"
+        command = "UPDATE teilnahmen_gruppe SET person_id=%s, lerngruppe_id=%s WHERE id=%s"
         data = (teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe(), teilnahme.get_id())
         cursor.execute(command, data)
 

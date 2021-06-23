@@ -322,7 +322,7 @@ class LerngruppeListOperationen(Resource):
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
     
-@lernApp.route('/lerngruppe/<int:id>')
+@lernApp.route('/lerngruppen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
@@ -828,6 +828,7 @@ class TeilnahmeGruppeListOperation(Resource):
 class TeilnahmeGruppeOperation(Resource):
 
     @lernApp.marshal_with(teilnahmegruppe)
+    @secured
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
@@ -838,13 +839,23 @@ class TeilnahmeGruppeOperation(Resource):
         else:
             return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten TeilnahmeGruppe-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        teilnahmegruppe = adm.get_teilnahmegruppe_by_person_id(id)
+        adm.delete_teilnahmegruppe(teilnahmegruppe)
+        return '', 200
     
 
 @lernApp.route('/lernvorlieben/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LernvorliebenByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
-   # @secured
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Lernvorlieben-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.

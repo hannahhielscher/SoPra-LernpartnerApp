@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
 import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-//import ContextErrorMessage from './dialogs/ContextErrorMessage';
-//import LoadingProgress from './dialogs/LoadingProgress';
+import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import LoadingProgress from './dialogs/LoadingProgress';
 import GruppenListeEintrag from './GruppenListeEintrag';
 //import SaveIcon from '@material-ui/icons/Save';
 //import Table from '@material-ui/core/Table';
@@ -41,10 +41,11 @@ class GruppenListe extends Component {
         // Init an empty state
         this.state = {
           lerngruppen: [],
+          personID: this.props.currentPerson.id,
           error: null,
           loadingInProgress: false,
           expandedLerngruppeID: expandedID,
-          showCustomerForm: false
+          //showCustomerForm: false
         };
 
     }
@@ -73,7 +74,7 @@ class GruppenListe extends Component {
         });
     }
 
-        /**
+    /**
      * Handles onExpandedStateChange events from the GruppeListeEintrag component. Toggels the expanded state of
      * the GruppeListeEintrag of the given LerngruppeBO.
      *
@@ -102,7 +103,8 @@ class GruppenListe extends Component {
 
     render() {
         const { classes } = this.props;
-        //const { }  = this.state;
+        const { lerngruppen, personID, expandedLerngruppeID, loadingInProgress, error }  = this.state;
+        console.log(lerngruppen)
 
         return (
             <div className={classes.root}>
@@ -113,12 +115,14 @@ class GruppenListe extends Component {
                         </Typography>
                     </Grid>
                 </Grid>
-
-                lerngruppen.map(lerngruppe =>
-                <GruppenListeEintrag key={lerngruppe.getID()} lerngruppe={lerngruppe} expandedState={expandedLerngruppeID === lerngruppe.getID()}
-                  onExpandedStateChange={this.onExpandedStateChange}
-                />)
-
+                {
+                    lerngruppen.map(lerngruppe =>
+                    <GruppenListeEintrag key={lerngruppe.getID()} lerngruppe={lerngruppe} personID={personID} expandedState={expandedLerngruppeID === lerngruppe.getID()}
+                      onExpandedStateChange={this.onExpandedStateChange}
+                    />)
+                }
+                <LoadingProgress show={loadingInProgress} />
+                <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Lerngruppen konnten nicht geladen werden!`} onReload={this.getLerngruppen} />
             </div>
         );
       }
