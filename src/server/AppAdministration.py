@@ -14,6 +14,7 @@ from .db.NachrichtMapper import NachrichtMapper
 from .db.PersonMapper import PersonMapper
 from .db.ProfilMapper import ProfilMapper
 from .db.TeilnahmeChatMapper import TeilnahmeChatMapper
+from .db.TeilnahmeGruppeMapper import TeilnahmeGruppeMapper
 from .db.LerngruppeMapper import LerngruppeMapper
 from .db.VorschlagMapper import VorschlagMapper
 from .db.LernvorliebenMapper import LernvorliebenMapper
@@ -85,6 +86,7 @@ class AppAdministration (object):
         
         person.set_id(1)
 
+        
         with PersonMapper() as mapper:
             return mapper.insert(person)
 
@@ -286,10 +288,10 @@ class AppAdministration (object):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_all()
 
-    def get_teilnahmegruppe_by_student_id(self, student_id):
+    def get_teilnahmegruppe_by_person_id(self, person_id):
         """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeGruppeMapper() as mapper:
-            return mapper.find_by_student_id(student_id)
+            return mapper.find_by_person_id(person_id)
 
     def get_teilnahmegruppe_by_lerngruppen_id(self, lerngruppe_id):
         """Gibt die Teilnahme einer gegebenen Lerngruppen Id zurück."""

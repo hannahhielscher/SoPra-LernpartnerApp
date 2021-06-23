@@ -14,10 +14,12 @@ import TextField from "@material-ui/core/TextField";
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
 //import Select from '@material-ui/core/Select';
-//import ContextErrorMessage from './dialogs/ContextErrorMessage';
-//import LoadingProgress from './dialogs/LoadingProgress';
+import ContextErrorMessage from './dialogs/ContextErrorMessage';
+import LoadingProgress from './dialogs/LoadingProgress';
 
 import Nachricht from './Nachricht'
+import NachrichtForm from './NachrichtForm'
+import GruppeForm from './GruppeForm'
 
 /**
  * Es wird eine einzelne Nachricht von einer Person  dargestellt
@@ -33,12 +35,12 @@ class NachrichtenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            nachricht: [], //Liste mit den IDs aller Nachrichten
-            teilnahmeChat: [], //Liste mit den IDS aller Teilnehmer  
+            nachricht: [], //Liste mit den IDs aller Nachrichten 
             konversation_ID: null,  
             inhalt: null, 
-            showProfil: false,
-            showNachrichtForm: false,
+            person_id: null,
+            //showNachrichtForm: false,
+            //showGruppeForm: false, 
             loadingInProgress: false,
             error: null
         };
@@ -46,7 +48,7 @@ class NachrichtenListeEintrag extends Component {
 
 
     
-    //Handles the onClick event of the show profil button
+    //open the onClick event of the show Nachricht button
     showNachrichtButtonClicked = (event) => {
       event.stopPropagation();
       this.setState({
@@ -54,17 +56,23 @@ class NachrichtenListeEintrag extends Component {
       });
     }
 
+     //ruft die getNachrichten() Funktion in den Props auf
+     //getNachrichten = () => {
+      //this.props.getNachrichten(); }
+
+
       // API Anbindung um Nachricht vom Backend zu bekommen 
-    getNachricht = () => {
-        LernpartnerAPI.getAPI().getNachricht(this.props.nachricht)
+    getNachrichten = () => {
+        LernpartnerAPI.getAPI().getNachrichten(this.props.nachricht)
         .then(nachrichtBO =>
             this.setState({
               nachricht: nachrichtBO,
               inhalt: nachrichtBO.inhalt,
+              person_id: nachrichtBO.person_id,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
-              this.getNachricht()
+              this.getNachrichten()
             })
             .catch(e =>
                 this.setState({
@@ -78,59 +86,35 @@ class NachrichtenListeEintrag extends Component {
           error: null
         });
       }
-
-      // API Anbindung um Teilnehmer vom Backend zu bekommen 
-    getTeilnahemChat = () => {
-      LernpartnerAPI.getAPI().getTeilnahemChat(this.props.teilnahmeChat)
-      .then(teilnahmeChatBO =>
-          this.setState({
-            teilnahmeChat: teilnahmeChatBO,
-            teilnehmer: teilnahmeChatBO.teilnehmer,
-            loadingInProgress: false,
-            error: null,
-          })).then(()=>{
-            this.getTeilnahemChat()
-          })
-          .catch(e =>
-              this.setState({
-                teilnahmeChat: null,
-                loadingInProgress: false,
-                error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
-    }
+   
 
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getNachricht();
+        this.getNachrichten();
       }
   
 
       render() {
         const { classes, currentperson } = this.props;
-        const {nachrichten, inhalt, personID, konversation_ID, teilnahmeChat}
+        const {nachrichten, inhalt, konversation_ID, person_id}
 
         return(
           <div>
           <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
           <Grid item>
-              <Button color='primary' onClick={this.showNachrichtenButtonClicked}>
+              <Button color='primary' onClick={this.showNachrichtButtonClicked}>
                 Alle Nachrichten anzeigen 
               </Button>
           </Grid>
           </Grid>
           
           <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="customized table">
+          <Table className={classes.table} aria-label="nachrichten tabelle">
               <TableHead>
                   <StyledTableRow>
                       <StyledTableCell>Nachrichten</StyledTableCell>
-                      <StyledTableCell align="center">inhalt</StyledTableCell>
-                      <StyledTableCell align="center">profil</StyledTableCell>
+                      <StyledTableCell align="center"> {inhalt} </StyledTableCell>
                   </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -139,7 +123,7 @@ class NachrichtenListeEintrag extends Component {
                       <>
                       {
                           nachrichten.map(nachricht =>
-                            <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachricht} expandedState={expandedNachrichtID === nachricht.getID()}
+                            <Nachricht key={nachricht.getID()} nachricht={nachricht} username={nachricht.getPersonID()} inhalt={nachricht.getInhalt()} expandedState={expandedNachrichtID === nachricht.getID()}
                               onExpandedStateChange={this.onExpandedStateChange}
                             />)
                       }
@@ -149,9 +133,8 @@ class NachrichtenListeEintrag extends Component {
                   }
               </TableBody>
           </Table>
-          <NachrichtForm show={NachrichtForm}></NachrichtForm>
           <LoadingProgress show={loadingInProgress} />
-          <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachrichten konnten nicht geladen werden'} onReload={this.getNachrichten} /> 
+          <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachricht konnte nicht geladen werden'} onReload={this.getNachrichten} /> 
           </TableContainer>
         </div>
         )
