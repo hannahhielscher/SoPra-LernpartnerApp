@@ -6,8 +6,8 @@ import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import ProfilBO from '../api/ProfilBO';
-import PersonBO from '..api/PersonBO';
+import Button from '@material-ui/core/Button';
+
 
 class Profil extends Component {
 
@@ -16,7 +16,9 @@ class Profil extends Component {
 
         // initiiere einen leeren state
         this.state = {
+            person: null,
             profil: null,
+            lernvorlieben: null,
             gruppe: false,
             personVorname = null,
             personName = null,
@@ -31,10 +33,7 @@ class Profil extends Component {
         };
     }
 
-  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-        this.getPerson();
-  }
+
 
 /**   showVorschlagButtonClick = (event) => {
       event.stopPropagation();
@@ -78,7 +77,7 @@ class Profil extends Component {
     }
 
      getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(personProfilID).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(this.props.personProfilID).then(profilBO =>
       this.setState({
             profil: profilBOs,
             profilLernfaecher: profilBO.lernfaecher,
@@ -104,18 +103,14 @@ class Profil extends Component {
 
 
      getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorlieben(personLernvorliebenID).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
-            profilLernvorlieben: profilBO.lernvorlieben,
+            lernvorlieben: lernvorliebenBO,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
-          profil: null,
-          profilLernfaecher: null,
-          profilLernvorlieben: false,
+          lernvorlieben: null,
           loadingInProgress: false,
           error: e,
         })
@@ -127,6 +122,13 @@ class Profil extends Component {
       loadingError: null
     });
   }
+
+
+  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
+
+  }
+
 
    /** Renders the component */
   render() {

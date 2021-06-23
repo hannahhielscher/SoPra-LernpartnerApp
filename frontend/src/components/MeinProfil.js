@@ -113,7 +113,7 @@ class MeinProfil extends Component {
     });
   }
 
-  /** 
+
   checkPersonName = (personName) => {
 		if (personName = 'Null') {
 			this.setState({
@@ -130,7 +130,7 @@ class MeinProfil extends Component {
 			});
 			}
 		}
-  */
+
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
   userFormClosed = (currentPerson) => {
     if (currentPerson) {
