@@ -177,7 +177,7 @@ class App extends React.Component {
 									<Redirect from='/' to='meinprofil'/>
 									<Route path='/meinprofil' component={MeinProfil}>
 						
-										<MeinProfil currentPerson={currentPerson} />
+										<MeinProfil currentPerson={currentPerson} personName={personName} />
 			
 									</Route>
 
