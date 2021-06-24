@@ -375,7 +375,7 @@ export default class LernpartnerAPI {
           */
          getProfil(profilID) {
           return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
-            let profilBO = ProfilBO.fromJSON(responseJSON)[0];
+            let profilBO = ProfilBO.fromJSON(responseJSON);
             console.info(profilBO)
             return new Promise(function (resolve) {
               resolve(profilBO);

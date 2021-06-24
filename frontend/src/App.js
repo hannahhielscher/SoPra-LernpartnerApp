@@ -159,7 +159,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, personneu, personName appError, authError, authLoading} = this.state;
+		const { currentUser, currentPerson, personneu, personName, appError, authError, authLoading} = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -173,12 +173,17 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
+
 									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil' >
-										<MeinProfil currentPerson={currentPerson} personName={personName}/>
-				
+									<Route path='/meinprofil' component={MeinProfil}>
+						
+										<MeinProfil currentPerson={currentPerson} />
+			
 									</Route>
 
+									<Route path='/registrierung' component={RegistrierungForm}>
+										
+									</Route>
 									<Route path='/meinevorschlaege'>
 
 									</Route>

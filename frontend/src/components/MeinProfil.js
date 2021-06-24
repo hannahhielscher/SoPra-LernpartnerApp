@@ -84,7 +84,7 @@ class MeinProfil extends Component {
             error: null,
             loadingInProgress: false,
           })).then(() => {
-            this.getLernvorlieben()
+            this.getLernvorlieben();
           }).catch(e =>
             this.setState({
               profil: null,
@@ -196,7 +196,7 @@ class MeinProfil extends Component {
       const { classes , currentPerson } = this.props;
       // Use the states customer
       const { profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, loadingInProgress, error} = this.state;
-      
+      console.log(showRegistrierungForm)
     
       return (
         <div className={classes.root}>
