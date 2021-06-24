@@ -98,7 +98,7 @@ ENGINE = InnoDB;
 LOCK TABLES `lernapp_SWPra`.`lernfaecher` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernfaecher` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`lernfaecher` VALUES (1, 'Software Entwicklung'), (2, 'Data Science'), (3, 'Führungsorientiertes Rechnungswesen'), (4, 'Medienrecht'),
-(5, 'Crossmedia-Konzeption'), (6, 'Web-Technologie'), (7, 'Datenbanken'), (8, 'IT-Security');
+(5, 'Crossmedia-Konzeption'), (6, 'Web-Technologie'), (7, 'Datenbanken'), (8, 'IT-Security'), (9, 'Kein Lernfach ausgewählt');
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernfaecher` ENABLE KEYS */;
 UNLOCK TABLES;
 
