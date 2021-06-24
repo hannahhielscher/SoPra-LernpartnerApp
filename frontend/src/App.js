@@ -12,7 +12,7 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
 import MeinProfil from './components/MeinProfil';
-//import GruppenForm from './components/dialogs/GruppeForm';
+import GruppenForm from './components/dialogs/GruppeForm';
 import GruppenListe from './components/GruppenListe';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -176,8 +176,8 @@ class App extends React.Component {
 							currentUser ?
 								<>
 
-									<Redirect from='/' to='profil'/>
-									<Route path='/profil'>
+									<Redirect from='/' to='meinprofil'/>
+									<Route path='/meinprofil'>
 									</Route>
 
 									<Route path='/meinelerngruppen'>

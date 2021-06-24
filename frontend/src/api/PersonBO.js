@@ -3,7 +3,7 @@ import NamedBusinessObject from './NamedBusinessObject';
 
 export default class PersonBO extends NamedBusinessObject{
 
-	constructor(avorname, asemester, astudiengang, aalter, ageschlecht, alerngruppe, agoogle_user_id, aemail, aprofil){
+	constructor(avorname, asemester, astudiengang, aalter, ageschlecht, alerngruppe, agoogle_user_id, aemail, apersonenprofil){
         super();
         this.vorname = avorname;
         this.semester = asemester
@@ -13,7 +13,7 @@ export default class PersonBO extends NamedBusinessObject{
         this.lerngruppe = alerngruppe
         this.google_user_id = agoogle_user_id;
         this.email = aemail;
-        this.profil = aprofil;
+        this.personenprofil = apersonenprofil;
     }
 
     /*
@@ -115,14 +115,14 @@ export default class PersonBO extends NamedBusinessObject{
     /*
 	erhalte 
 	*/
-    getprofil(){
-        return this.profil;
+    getpersonenprofil(){
+        return this.personenprofil;
     }
     /*
 	setze 
 	*/
-    setprofil(aprofil){
-        this.profil = aprofil;
+    setpersonenprofil(apersonenprofil){
+        this.personenprofil = apersonenprofil;
     }
     
     /** 

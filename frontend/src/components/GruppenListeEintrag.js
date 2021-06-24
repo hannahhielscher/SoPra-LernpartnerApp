@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 //import LernpartnerAPI from '../api/LernpartnerAPI'
-import Profil from './Profil';
-import { withRouter } from 'react-router-dom';
+//import Profil from './Profil';
+//import { withRouter } from 'react-router-dom';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import Select from '@material-ui/core/Select';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
+//import Profil from './Profil';
 import GruppeVerlassenDialog from './dialogs/GruppeVerlassenDialog';
 import LernpartnerAPI from '../api/LernpartnerAPI'
 
@@ -111,12 +112,16 @@ class GruppenListeEintrag extends Component {
                         {lerngruppe.getname()}
                     </Typography>
                   </Grid>
-                    <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
-                        Gruppe verlassen
-                    </Button>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Profil user={lerngruppe}/>
+                  <ButtonGroup variant='text' size='small'>
+                    <Button color='primary' onClick={this.showProfilButtonClicked}>
+                        Profil ansehen
+                    </Button>
+                    <Button color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
+                        Gruppe verlassen
+                    </Button>
+                  </ButtonGroup>
                 </AccordionDetails>
               </Accordion>
               <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} currentPerson={currentPerson} onClose={this.verlasseLerngruppeDialogClosed}/>
