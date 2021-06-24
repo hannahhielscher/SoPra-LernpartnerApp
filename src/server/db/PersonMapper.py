@@ -35,7 +35,7 @@ class PersonMapper(Mapper):
             person.set_google_user_id(google_user_id)
             person.set_email(email)
             person.set_studiengang(studiengang)
-            person.set_personenprofil(profil_id)
+            person.set_profil(profil_id)
             
             result.append(person)
 
@@ -75,7 +75,7 @@ class PersonMapper(Mapper):
             person.set_lerngruppe(lerngruppe)
             person.set_google_user_id(google_user_id)
             person.set_email(email)
-            person.set_personenprofil(profil_id)
+            person.set_profil(profil_id)
             
             result = person
 
@@ -119,7 +119,7 @@ class PersonMapper(Mapper):
             person.set_lerngruppe(lerngruppe)
             person.set_google_user_id(google_user_id)
             person.set_email(email)
-            person.set_personenprofil(profil_id)
+            person.set_profil(profil_id)
             
             result = person
         except IndexError:
@@ -153,7 +153,7 @@ class PersonMapper(Mapper):
                 person.set_id(1)
 
         command = "INSERT INTO personen (id, `name`, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_personenprofil())
+        data = (person.get_id(), person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_google_user_id(), person.get_email(), person.get_profil())
         cursor.execute(command, data)
         
         self._connection.commit()
@@ -169,7 +169,7 @@ class PersonMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, `alter`=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id=%s WHERE google_user_id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_personenprofil(), person.get_google_user_id())
+        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil(), person.get_google_user_id())
 
         cursor.execute(command, data)
 
@@ -184,7 +184,7 @@ class PersonMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE personen " + "SET name=%s, vorname=%s, semester=%s, studiengang=%s, `alter`=%s, geschlecht=%s, lerngruppe=%s, email=%s, profil_id=%s WHERE id=%s"
-        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_personenprofil(), person.get_id())
+        data = (person.get_name(), person.get_vorname(), person.get_semester(), person.get_studiengang(), person.get_alter(), person.get_geschlecht(), person.get_lerngruppe(), person.get_email(), person.get_profil(), person.get_id())
 
         cursor.execute(command, data)
 

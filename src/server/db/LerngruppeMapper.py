@@ -27,7 +27,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_gruppenprofil(profil_id)
+            lerngruppe.set_profil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -48,7 +48,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_gruppenprofil(profil_id)
+            lerngruppe.set_profil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -70,7 +70,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe = Lerngruppe()
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_gruppenprofil(profil_id)
+            lerngruppe.set_profil(profil_id)
             result.append(lerngruppe)
 
         self._connection.commit()
@@ -92,7 +92,7 @@ class LerngruppeMapper(Mapper):
 
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
-            lerngruppe.set_gruppenprofil(profil_id)
+            lerngruppe.set_profil(profil_id)
 
             result.append(lerngruppe)
 
@@ -140,7 +140,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe.set_id_lerngruppe(maxid[0]+1)
 
             command = "INSERT INTO lerngruppen (id, name, profil_id) VALUES (%s,%s,%s)"
-            data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
+            data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil())
             cursor.execute(command, data)
 
             self._connection.commit()
@@ -154,7 +154,7 @@ class LerngruppeMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE lerngruppen " + "SET id=%s, name=%s, profil_id=%s  WHERE id=%s"
-        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil_id())
+        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil())
         cursor.execute(command, data)
 
         self._connection.commit()
