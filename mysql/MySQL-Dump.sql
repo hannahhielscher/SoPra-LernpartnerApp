@@ -252,7 +252,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`tageszeiten` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`tageszeiten` (
   `id` INT NOT NULL,
-  `präferenz` VARCHAR(45) NULL,
+  `praeferenz` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -274,7 +274,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`tage` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`tage` (
   `id` INT NOT NULL,
-  `präferenz` VARCHAR(45) NULL,
+  `praeferenz` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -296,7 +296,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`frequenzen` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`frequenzen` (
   `id` INT NOT NULL,
-  `präferenz` VARCHAR(200) NULL,
+  `praeferenz` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -318,7 +318,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`lernarten` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernarten` (
   `id` INT NOT NULL,
-  `präferenz` VARCHAR(45) NULL,
+  `praeferenz` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -340,7 +340,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`gruppengroessen` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`gruppengroessen` (
   `id` INT NOT NULL,
-  `präferenz` VARCHAR(200) NULL,
+  `praeferenz` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -362,7 +362,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`lernorte` ;
 
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernorte` (
   `id` INT NOT NULL,
-  `präferenz` VARCHAR(200) NULL,
+  `praeferenz` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

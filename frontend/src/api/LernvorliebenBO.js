@@ -2,12 +2,11 @@ import BusinessObject from './BusinessObject';
 
 export default class LernvorliebenBO extends BusinessObject{
 
-	constructor(atageszeiten, atage, afrequenz, alerngruppe, alernart, agruppengroesse, alernort){
+	constructor(atageszeiten, atage, afrequenz, alernart, agruppengroesse, alernort){
         super();
         this.tageszeiten = atageszeiten
         this.tage = atage
         this.frequenz = afrequenz
-        this.lerngruppe = alerngruppe
         this.lernart = alernart
         this.gruppengroesse = agruppengroesse
         this.lernort = alernort;
@@ -48,18 +47,6 @@ export default class LernvorliebenBO extends BusinessObject{
 	*/
     setfrequenz(afrequenz){
         this.frequenz=afrequenz;
-    }
-    /*
-	erhalte 
-	*/
-    getlerngruppe(){
-        return this.lerngruppe;
-    }
-    /*
-	setze 
-	*/
-    setlerngruppe(alerngruppe){
-        this.lerngruppe=alerngruppe
     }
      /*
 	erhalte 
