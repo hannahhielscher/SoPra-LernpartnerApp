@@ -4,20 +4,20 @@ class Lerngruppe(NamedBusinessObject):
 
     def __init__(self):
         super().__init__()
-        self._profil = None
+        self._gruppenprofil = None
 
-    def get_profil(self):
+    def get_gruppenprofil(self):
         """Auslesen eines Gruppenprofils"""
-        return self._profil
+        return self._gruppenprofil
 
-    def set_profil(self, profil):
+    def set_gruppenprofil(self, gruppenprofil):
         """Setzen eines Gruppenprofils"""
-        self._profil = profil
+        self._gruppenprofil = gruppenprofil
 
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = Lerngruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_name(dictionary["name"])
-        obj.set_profil(dictionary["profil"])
+        obj.set_gruppenprofil(dictionary["gruppenprofil"])
         return obj

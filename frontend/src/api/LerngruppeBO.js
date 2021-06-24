@@ -3,21 +3,21 @@ import NamedBusinessObject from './NamedBusinessObject';
 
 export default class LerngruppeBO extends NamedBusinessObject{
 
-	constructor(aprofil){
+	constructor(agruppenprofil){
         super();
-        this.profil = aprofil;
+        this.gruppenprofil = agruppenprofil;
     }
     /*
 	erhalte 
 	*/
-    getprofil(){
-        return this.profil;
+    getgruppenprofil(){
+        return this.gruppenprofil;
     }
     /*
 	setze 
 	*/
-    setprofil(aprofil){
-        this.profil = aprofil;
+    setgruppenprofil(agruppenprofil){
+        this.gruppenprofil = agruppenprofil;
     }
     
     /** 
