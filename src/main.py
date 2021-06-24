@@ -47,6 +47,10 @@ nbo = api.inherit('NamedBusinessObject', bo, {
     'name': fields.String(attribute='_name', description='Name des BOs'),
 })
 
+test = api.inherit('Lernfach', {
+    'lernfach_id': fields.Integer(attribute='_lernfachid', description='ID des Lernfachs'),
+})
+
 person = api.inherit('Person', nbo, {
     'vorname': fields.String(attribute='_vorname', description='Vorname der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
@@ -59,9 +63,13 @@ person = api.inherit('Person', nbo, {
     'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
 })
 
+lernfaecher = api.inherit('Lernfaecher', test, {
+    'bezeichnung': fields.String(attribute='_bezeichnung', description='Bezeichnung'),
+})
+
 profil = api.inherit('Profil', bo, {
     'gruppe': fields.Boolean(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
-    'lernfaecher': fields.List(cls_or_instance=fields.Integer, attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernfaecher': fields.List(fields.Nested(lernfaecher)),
     'lernvorlieben_id': fields.Integer(attribute='_lernvorlieben_id', description='Lernvorlieben der Person'),
 })
 
@@ -279,6 +287,21 @@ class ProfilByIDOperationen(Resource):
             return '', 200
         else:
             return '', 500
+
+@lernApp.route('/profile-test/<int:profilid>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDTestOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+
+    #secured
+    def get(self, profilid):
+        """Auslesen eines bestimmten Profil-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        profil = adm.get_profil_test(profilid)
+        
+        return profil
 
 """Lerngruppenspezifisch"""
 @lernApp.route('/lerngruppen')
