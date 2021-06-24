@@ -73,6 +73,7 @@ class LernvorliebenMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
+        
         return result
 
     def insert(self, lernvorlieben):

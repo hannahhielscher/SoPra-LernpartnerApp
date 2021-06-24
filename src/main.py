@@ -248,7 +248,7 @@ class ProfilListOperationen(Resource):
            # i.set_lernvorlieben_id(lernvorlieben_id)
             #adm.update(i)
 
-@lernApp.route('/profil/<int:id>')
+@lernApp.route('/profile/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
@@ -264,7 +264,7 @@ class ProfilByIDOperationen(Resource):
 
     @lernApp.marshal_with(profil)
     @lernApp.expect(profil, validate=True)
-    #@secured
+    @secured
     def put(self, id):
         """Update des Profil-Objekts."""
 
@@ -881,7 +881,7 @@ class LernvorliebenByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
     @lernApp.expect(lernvorlieben, validate=True)
 
-   #@secured
+    @secured
     def put(self, id):
         """Update des Lernvorlieben-Objekts."""
 

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { withStyles, Typography, Button, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import ProfilBO from '../api/ProfilBO';
-import PersonBO from '..api/PersonBO';
+
 
 class Profil extends Component {
 
@@ -16,25 +14,24 @@ class Profil extends Component {
 
         // initiiere einen leeren state
         this.state = {
+            person: props.person,
             profil: null,
+            lernvorlieben: null,
             gruppe: false,
-            personVorname: null,
-            personName: null,
-            personSemester: 0,
-            personStudiengang: null,
-            lerngruppe: false,
-            personProfilID: None,
-            personLernfaecher: null,
-            personLernvorliebenID: null,
+            personVorname = null,
+            personName = null,
+            personSemester = 0,
+            personStudiengang = null,
+            lerngruppe = false,
+            personProfilID = None,
+            personLernfaecher = null,
+            personLernvorliebenID = null,
             loadingInProgress: false,
             loadingError: null,
         };
     }
 
-  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-        this.getPerson();
-  }
+
 
 /**   showVorschlagButtonClick = (event) => {
       event.stopPropagation();
@@ -45,7 +42,7 @@ class Profil extends Component {
 
 
 
-
+/**
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
       LernpartnerAPI.getAPI().getPerson(this.props.person.getID())
@@ -76,20 +73,23 @@ class Profil extends Component {
         error: null
       });
     }
+*/
 
      getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(personProfilID).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(this.props.person.personenprofil).then(profilBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
+            profil: profilBO,
+            gruppe: profilBO.gruppe
+            //profilLernfaecher: profilBO.lernfaecher,
             profilLernvorliebenID: profilBO.lernvorlieben,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
           profil: null,
-          profilLernfaecher: null,
-          profilLernvorliebenID: false,
+          gruppe: null,
+          //profilLernfaecher: null,
+          profilLernvorliebenID: null,
           loadingInProgress: false,
           error: e,
         })
@@ -104,18 +104,14 @@ class Profil extends Component {
 
 
      getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorlieben(personLernvorliebenID).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
-            profilLernvorlieben: profilBO.lernvorlieben,
+            lernvorlieben: lernvorliebenBO,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
-          profil: null,
-          profilLernfaecher: null,
-          profilLernvorlieben: false,
+          lernvorlieben: null,
           loadingInProgress: false,
           error: e,
         })
@@ -128,22 +124,43 @@ class Profil extends Component {
     });
   }
 
+
+  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
+
+  }
+
+
    /** Renders the component */
   render() {
-    const { classes } = this.props;
+    const { classes, person } = this.props;
     // Use the states customer
-    const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
+    const { profil, lernvorlieben, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
 
     // console.log(this.props);
     return (
       <div className={classes.root}>
     """  <Button color="primary" onClick= {this.showVorschlagButtonClick}>Zurueck zu den Vorschlaegen</Button>"""
       <Typography variant='body1' color={'textSecondary'}>
+            gruppe ?
+                <b> {profil.name} </b> <br />
+                //<b>Lernfächer: </b>{personLernfaecher}<br />
+                <b>Lernvorlieben: </b>{lernvorlieben}<br />
 
-                            <b>Semester: </b> {personSemester} <br />
-                            <b>Studiengang: </b>{personStudiengang}<br />
-                            <b>Lernfächer: </b>{personLernfaecher}<br />
-                            <b>Lernvorlieben: </b>{personLernvorlieben}<br />
+                :
+                <b> {profil.vorname} {profil.name} </b> <br />
+                <b>Semester: </b> {person.semester} <br />
+                <b>Studiengang: </b> {person.studiengang} <br />
+                <b>Alter: </b> {person.alter} <br />
+                <b>Geschlecht: </b> {person.geschlecht} <br />
+                //<b>Lernfächer: </b>{personLernfaecher}<br />
+                <b>Lernvorlieben: </b>{lernvorlieben}<br />
+
+
+
+
+
+      </div>
     );
   }
 }

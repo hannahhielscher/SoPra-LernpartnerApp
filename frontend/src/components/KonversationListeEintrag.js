@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
-import Nachricht from './Nachricht';
+//import Nachricht from './Nachricht';
 import KonversationListe from './KonversationListe';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -23,8 +23,8 @@ class KonversationListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             konversation: null,
-            showKonversation: false,
-            showProfil: false,
+            //showKonversation: false,
+            //showProfil: false,
             loadingInProgress: false,
             error: null
         };
@@ -47,7 +47,7 @@ showKonversationButtonClicked = (event) => {
 
 render() {
   const { classes } = this.props;
-  const { konversation } = this.state;
+  const { konversation, loadingInProgress, error } = this.state;
 
   return(
     <div>
@@ -64,8 +64,11 @@ render() {
               </ButtonGroup>
             </Grid>
       </Grid>
-      <Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
+      <LoadingProgress show={loadingInProgress} />
+      <ContextErrorMessage error={error} contextErrorMsg={`Leider konnte deine Konversation nicht geladen werden!`} onReload={this.getKonversationen} />
+      
     </div>
+    //<Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
   )
 
 }

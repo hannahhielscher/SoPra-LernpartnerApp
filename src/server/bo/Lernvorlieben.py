@@ -67,7 +67,7 @@ class Lernvorlieben(BusinessObject):
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Lernvorlieben: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._uhrzeit, self._tage, self._frequenz,self._lernart, self._gruppengroesse, self._lernort)
+        return "Lernvorlieben: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._tageszeiten, self._tage, self._frequenz,self._lernart, self._gruppengroesse, self._lernort)
 
     @staticmethod
     def from_dict(dictionary=dict()):

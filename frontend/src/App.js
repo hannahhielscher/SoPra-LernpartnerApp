@@ -4,20 +4,21 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/Header';
-//import KonversationListe from './components/KonversationListe';
+import KonversationListe from './components/KonversationListe';
 //import VorschlagListe from './components/VorschlagListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-//import MeinProfil from './components/MeinProfil';
-//import GruppenForm from './components/dialogs/GruppeForm';
+import MeinProfil from './components/MeinProfil';
+import GruppenForm from './components/dialogs/GruppeForm';
 import GruppenListe from './components/GruppenListe';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
 //import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import Profil from './components/Profil';
 
 class App extends React.Component {
 
@@ -29,7 +30,7 @@ class App extends React.Component {
 		this.state = {
 			currentUser: null,
 			personName: null,
-			personneu: false,
+			personneu: true,
 			appError: null,
 			authError: null,
 			authLoading: false,
@@ -160,7 +161,7 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, personneu, appError, authError, authLoading } = this.state;
+		const { currentUser, currentPerson, personneu, personName, appError, authError, authLoading} = this.state;
 
 		return (
 			<ThemeProvider theme={Theme}>
@@ -174,6 +175,7 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
+
 									<Redirect from='/' to='meinprofil'/>
 									<Route path='/meinprofil'>
 									</Route>
@@ -181,13 +183,13 @@ class App extends React.Component {
 									<Route path='/meinelerngruppen'>
                                     <GruppenListe currentPerson={currentPerson}/>
 									</Route>
-
+										
 									<Route path='/meinevorschlaege'>
-
 									</Route>
+
 									<Route path='/meinechats'>
-
 									</Route>
+									
 									<Route path='/about' component={About} />
 									
 								</>

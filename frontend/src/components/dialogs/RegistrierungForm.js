@@ -150,7 +150,7 @@ class RegistrierungForm extends Component {
     //Setzen des Status, bei schließen des Dialogs
       handleClose = () => {
         this.setState(this.baseState);
-        //this.props.onClose(null);
+        this.props.onClose(null);
     }
 
     handleChangeStudiengang(event) {
@@ -170,7 +170,7 @@ class RegistrierungForm extends Component {
           alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, addingInProgress,
           updatingInProgress, updatingError} = this.state;
     
-        let title = 'Registriere dich jetzt!';
+        let title = 'Registriere dich zuerst, bevor du die App nutzen kannst!';
         let header = 'Bitte gib deine Daten ein:';
     
         return (
