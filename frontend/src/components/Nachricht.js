@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, TextField, InputAdornment, IconButton, Grid, Typography, Paper, CardActions, Divider } from '@material-ui/core';
+import { withStyles, Button, TextField, IconButton, Grid, Typography, Divider } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -178,7 +178,7 @@ nachrichtFormClosed = nachrichten => {
           {nachrichten
             ? nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getCurrentPerson() != currentPerson.getID()) {
+                  if (nachricht.getCurrentPerson() !== currentPerson.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid item

@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
 //import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
-import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
-import { Button, ButtonGroup } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import TextField from "@material-ui/core/TextField";
-//import TableCell from '@material-ui/core/TableCell';
-//import TableRow from '@material-ui/core/TableRow';
+import { withStyles } from '@material-ui/core';
+//import { Button, ButtonGroup } from '@material-ui/core';
+//import TextField from "@material-ui/core/TextField";
 
 //import InputLabel from '@material-ui/core/InputLabel';
 //import MenuItem from '@material-ui/core/MenuItem';

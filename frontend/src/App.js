@@ -109,12 +109,10 @@ class App extends React.Component {
 			.then(personBO =>
 				this.setState({
 					currentPerson: personBO,
-					personName: personBO.vorname,
-					
+					personName: personBO.getvorname(),
 					error: null,
 					loadingInProgress: false,
-				}))
-				.catch(e =>
+				})).catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -130,6 +128,21 @@ class App extends React.Component {
 		},1000);
 		}
 	
+	checkPersonName = (personName) => {
+		if (personName = 'Null') {
+			this.setState({
+				personneu: true
+			})
+			.catch(e =>
+				this.setState({
+					personneu: false
+				}));
+			this.setState({
+				error: null,
+				loadingInProgress: true
+			});
+			}
+		}
 	
 
 	/**
@@ -146,10 +159,8 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		
-		const { currentUser, currentPerson, personName, personneu, appError, authError, authLoading } = this.state;
-		
-		
+		const { currentUser, currentPerson, personneu, personName appError, authError, authLoading} = this.state;
+
 		return (
 			<ThemeProvider theme={Theme}>
 				{/* Global CSS reset and browser normalization. CssBaseline kickstarts an elegant, consistent, and simple baseline to build upon. */}
@@ -162,13 +173,14 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from= '/' to='/about'/>
-									<Route path='/meinprofil' component={MeinProfil}>
+									<Redirect from='/' to='meinprofil'/>
+									<Route path='/meinprofil' >
 										<MeinProfil currentPerson={currentPerson} personName={personName}/>
+				
 									</Route>
 
 									<Route path='/meinevorschlaege'>
-										
+
 									</Route>
 									<Route path='/meinechats'>
 										<KonversationListe currentPerson={currentPerson} />

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, Grid } from '@material-ui/core';
+import { withStyles} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import KonversationListeEintrag from './KonversationListeEintrag';
+
 
 /**
  * Es werden alle Konversationen des aktuell eingeloggten Studenten angezeigt
@@ -38,9 +39,9 @@ class KonversationListe extends Component {
 
       }
 
-      // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
-    getKonversationen = () => {
-      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getid())
+      // API Anbindung um Konversationen des Students vom Backend zu bekommen 
+    getKonversation = () => {
+      LernpartnerAPI.getAPI().getKonversation(this.props.currentPerson.getID())
       .then(konversationenBOs =>
           this.setState({
               konversationen: konversationenBOs,
@@ -60,7 +61,7 @@ class KonversationListe extends Component {
     }
     
 
-
+/** 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
   this.getKonversationen();
@@ -68,6 +69,7 @@ componentDidMount() {
       currentStudentName: this.props.currentPerson.getname(),
         })
 }
+*/
 
  /** 
      * Handles onExpandedStateChange events from the VorschlagListeEintrag component. Toggels the expanded state of 
@@ -104,7 +106,7 @@ render() {
               // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
   
               konversationen.map(konversation =>
-                <KonversationListeEintrag key={konversation.getID()} konversation={konversation}
+                <KonversationListeEintrag key={konversation.getID()} currentPerson= {currentPerson} konversation={konversation}
                 />)
             }
             <LoadingProgress show={loadingInProgress} />
