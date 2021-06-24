@@ -82,7 +82,7 @@ class AppAdministration (object):
         person.set_lerngruppe(lerngruppe)
         person.set_google_user_id(google_user_id)
         person.set_email(email)
-        person.set_personenprofil(profil_id)
+        person.set_profil(profil_id)
         
         person.set_id(1)
 
@@ -205,6 +205,39 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_praeferenz_by_lernvorlieben_id(self, id):
+        """Lernvorlieben mit einer bestimmten ID auslesen"""
+
+        with LernvorliebenMapper() as mapper:
+            tageszeiten_id = mapper.find_tageszeiten_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            tage_id = mapper.find_tage_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            frequenzen_id = mapper.find_frequenzen_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            lernarten_id = mapper.find_lernarten_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            gruppengroessen_id = mapper.find_gruppengroessen_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            lernorte_id = mapper.find_lernorte_by_lernvorlieben_id(id)
+
+        lernvorlieben = Lernvorlieben()
+
+        lernvorlieben.set_id(id)
+        lernvorlieben.set_tageszeiten(tageszeiten_id)
+        lernvorlieben.set_tage(tage_id)
+        lernvorlieben.set_frequenz(frequenzen_id)
+        lernvorlieben.set_lernart(lernarten_id)
+        lernvorlieben.set_gruppengroesse(gruppengroessen_id)
+        lernvorlieben.set_lernort(lernorte_id)
+
+        return lernvorlieben
+
     def save_lernvorlieben(self, lernvorlieben):
         """Lernvorlieben speichern"""
 
@@ -243,6 +276,11 @@ class AppAdministration (object):
         """Eine Lerngruppe mit einer bestimmten ID auslesen"""
         with LerngruppeMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_lerngruppe_by_person_id(self, id):
+        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        with LerngruppeMapper() as mapper:
+            return mapper.find_by_person_id(id)
 
     def get_all_lerngruppen(self):
         """Alle Lerngruppe auslesen"""
@@ -301,16 +339,20 @@ class AppAdministration (object):
     def get_teilnahmegruppe_by_id(self, id):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_id(id)
+    
+    def get_teilnahmegruppe_by_person_by_gruppe(self, person_id, lerngruppe_id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_person_and_lerngruppe(person_id, lerngruppe_id)
 
     def update_teilnahmegruppe(self,teilnahme):
         """Speichert die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmegruppe(self, teilnahme):
+    def delete_teilnahmegruppe(self, id):
         """Löscht die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete(id)
     
     
     """

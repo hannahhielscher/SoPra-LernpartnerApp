@@ -67,6 +67,7 @@ export default class LernpartnerAPI {
         //Lernvorliebenbezogen
         #getLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
+        #getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
         #updateLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
@@ -108,6 +109,8 @@ export default class LernpartnerAPI {
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
+        #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
+        #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
         //Personenbezogene
         /**
@@ -270,18 +273,18 @@ export default class LernpartnerAPI {
           }
   
           /**
-           * Gibt eine Lerngruppe mit einer bestimmten ID als BO zurück
+           * Gibt eine Lerngruppe mit einer bestimmten personenID als BO zurück
            * 
-           * @param {Number} lerngruppeID to be retrieved
+           * @param {Number} personenID to be retrieved
            * @public
            */
-          getLerngruppe(lerngruppeID) {
-            return this.#fetchAdvanced(this.#getLerngruppeURL(lerngruppeID)).then((responseJSON) => {
-              // We always get an array of LerngruppeBOs.fromJSON, but only need one object
-              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
-              // console.info(responseLerngruppeBO);
+          getLerngruppe(personenID) {
+            return this.#fetchAdvanced(this.#getLerngruppeURL(personenID)).then((responseJSON) => {
+              // We get an array of LerngruppeBOs.fromJSON
+              let lerngruppeBO = LerngruppeBO.fromJSON(responseJSON);
+              //console.info(lerngruppeBO);
               return new Promise(function (resolve) {
-                resolve(responseLerngruppeBO);
+                resolve(lerngruppeBO);
               })
             })
           }
@@ -374,7 +377,8 @@ export default class LernpartnerAPI {
          * @public
           */
          getProfil(profilID) {
-          return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
+          return this.#fetchAdvanced(this.#getProfilURL(profilID,
+          {method: 'GET'})).then((responseJSON) => {
             let profilBO = ProfilBO.fromJSON(responseJSON);
             console.info(profilBO)
             return new Promise(function (resolve) {
@@ -443,6 +447,19 @@ export default class LernpartnerAPI {
             })
           })
         }
+
+        getLernvorliebenPraeferenz(lernvorliebenID) {
+          return this.#fetchAdvanced(this.#getLernvorliebenPraeferenzURL(lernvorliebenID)).then((responseJSON) => {
+            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
+            let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
+            console.info(lernvorliebenBO);
+            return new Promise(function (resolve) {
+              resolve(lernvorliebenBO);
+            })
+          })
+        }
+
+
         /**
          * Adds a lernvorlieben and returns a Promise, which resolves to a new LernvorliebenBO object
          *  
@@ -726,8 +743,6 @@ export default class LernpartnerAPI {
          * @param {Number} id to be deleted
          * @public
          */
-
-
         deleteKonversation(id) {
           return this.#fetchAdvanced(this.#deleteKonversationURL(id), {
             method: 'DELETE'
@@ -945,7 +960,6 @@ export default class LernpartnerAPI {
                * @param {Number} id to be retrieved
                * @public
               */
-  
               getTeilnahmeGruppeById(id){
                 return this.#fetchAdvanced(this.#getTeilnahmeGruppeByIdURL(id)).then((responseJSON) => {
                 let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
@@ -956,6 +970,39 @@ export default class LernpartnerAPI {
                 })
               }
 
+              /** 
+               * gibt die Teilnehmer mit der bestimmten ID als BO zurück
+               * @param {Number} id to be retrieved
+               * @public
+              */
+             getTeilnahmeGruppeByPersonByGruppe(personId, lerngruppeId){
+              return this.#fetchAdvanced(this.#getTeilnahmeGruppeByPersonByGruppeURL(personId, lerngruppeId)).then((responseJSON) => {
+              let teilnahmegruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON);
+              console.info(teilnahmegruppeBO)
+              return new Promise(function (resolve){
+               resolve(teilnahmegruppeBO)
+                })
+              })
+            }
+
+        /**
+         * Gibt Promise zurück, Löscht Konversation mit bestimmter ID
+         *
+         * @param {Number} id to be deleted
+         * @public
+         */
+        deleteTeilnahmeGruppe(id) {
+          return this.#fetchAdvanced(this.#deleteTeilnahmeGruppeURL(id), {
+            method: 'DELETE'
+          }).then((responseJSON) => {
+            // We always get an array of TeilnahmeGruppeBOs.fromJSON
+            let teilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
+             console.info(teilnahmeGruppeBO);
+            return new Promise(function (resolve) {
+              resolve(teilnahmeGruppeBO);
+            })
+          })
+        }
 
 
 
