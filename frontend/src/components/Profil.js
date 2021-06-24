@@ -22,10 +22,10 @@ class Profil extends Component {
             personName = null,
             personSemester = 0,
             personStudiengang = null,
-            lerngruppe = false
+            lerngruppe = false,
             personProfilID = None,
             personLernfaecher = null,
-            personLernvorliebenID = null
+            personLernvorliebenID = null,
             loadingInProgress: false,
             loadingError: null,
         };

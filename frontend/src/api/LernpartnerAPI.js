@@ -375,10 +375,10 @@ export default class LernpartnerAPI {
           */
          getProfil(profilID) {
           return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
-            let profilBOs = ProfilBO.fromJSON(responseJSON);
-            //console.info(ProfilBOs)
+            let profilBO = ProfilBO.fromJSON(responseJSON)[0];
+            console.info(profilBO)
             return new Promise(function (resolve) {
-              resolve(profilBOs);
+              resolve(profilBO);
             })
           })
         }
@@ -436,10 +436,10 @@ export default class LernpartnerAPI {
         getLernvorlieben(lernvorliebenID) {
           return this.#fetchAdvanced(this.#getLernvorliebenURL(lernvorliebenID)).then((responseJSON) => {
             // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
-            let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
-            // console.info(responseLernvorliebenBO);
+            let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
+            console.info(lernvorliebenBO);
             return new Promise(function (resolve) {
-              resolve(responseLernvorliebenBO);
+              resolve(lernvorliebenBO);
             })
           })
         }

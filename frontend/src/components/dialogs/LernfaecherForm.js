@@ -7,9 +7,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { LernpartnerAPI } from '../../api';
-import VorschlagListe from '../VorschlagListe';
-import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import LoadingProgress from './dialogs/LoadingProgress';
+//import VorschlagListe from '../VorschlagListe';
+import ContextErrorMessage from './ContextErrorMessage';
+import LoadingProgress from './LoadingProgress';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
   
-class LernfaecherForm extends component {
+class LernfaecherForm extends Component {
   
   constructor(props){
     super(props);
@@ -29,7 +29,7 @@ class LernfaecherForm extends component {
     // initiiere einen leeren state
     this.state = {
         profil: null,
-        lernfaecher: [],
+        lernfaecher: null,
         lernfach: null,
         loadingInProgress: false,
         error: null
@@ -38,8 +38,7 @@ class LernfaecherForm extends component {
 
   handleChange = (event) => {
     const lernfach = event.target.lernfach;
-    setState({
-      ...state,
+    this.setState({
       [lernfach]: event.target.value,
     });
   }
@@ -65,10 +64,16 @@ class LernfaecherForm extends component {
           error: null
         });
   }
-  
+
+  componentDidMount() {
+    this.getProfil()
+  }
+
   render() {
-    const { currentPerson } = this.props;
-    const { lernfaecher, lernfach, loadingInProgress, error } = this.state;
+    const { classes, currentPerson } = this.props;
+    const { profil, lernfaecher, lernfach, loadingInProgress, error } = this.state;
+    
+    console.log(lernfaecher)
     return (
       <div>
         <FormControl className={classes.formControl}>
@@ -76,20 +81,16 @@ class LernfaecherForm extends component {
           <Select
             native
             value= {lernfach}
-            onChange={handleChange}
+            onChange={this.handleChange}
             inputProps={{
               name: 'age',
               id: 'age-native-simple',
             }}
           >
-            {lernfaecher.map(lernfach => (
-            <option key={lernfach} value={lernfach}>
-              {lernfach}
-            </option>
-            ))}
+           
           </Select>
         </FormControl>
-        <VorschlagListe currentPerson = {currentPerson} lernfach={lernfach}/>
+        
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
       </div>
