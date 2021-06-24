@@ -66,14 +66,14 @@ class LernfaecherForm extends Component {
   }
 
   componentDidMount() {
-    this.getProfil()
+    this.getProfil();
   }
 
   render() {
     const { classes, currentPerson } = this.props;
     const { profil, lernfaecher, lernfach, loadingInProgress, error } = this.state;
     
-    console.log(lernfaecher)
+    console.log(profil)
     return (
       <div>
         <FormControl className={classes.formControl}>

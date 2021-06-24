@@ -11,11 +11,11 @@ import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-import MeinProfil from './components/MeinProfil';
+//import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
-//import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import LernfaecherForm from './components/dialogs/LernfaecherForm';
 //import Profil from './components/Profil';
 
 class App extends React.Component {
@@ -163,15 +163,15 @@ class App extends React.Component {
 							currentUser ?
 								<>
 									<Redirect from='/' to='/about'/>
-									<Route path='/meinprofil' component={MeinProfil}>
-										<MeinProfil currentPerson={currentPerson} />
+									<Route path='/meinprofil' >
+										
 									</Route>
 
 									<Route path='/registrierung' component={RegistrierungForm}>
 										
 									</Route>
 									<Route path='/meinevorschlaege'>
-										
+										<LernfaecherForm currentPerson={currentPerson}/>
 									</Route>
 									<Route path='/meinechats'>
 										

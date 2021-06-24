@@ -82,9 +82,11 @@ class ProfilMapper(Mapper):
                 profil.set_lernvorlieben_id(lernvorlieben_id)
 
                 result.append(profil)
+                print(result)
+                print(type(result))
             else:
                 pass
-
+        
         self._connection.commit()
         cursor.close()
 

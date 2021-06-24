@@ -253,13 +253,14 @@ class ProfilListOperationen(Resource):
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
 
-    #@secured
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Profil-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
         profil = adm.get_profil_by_id(id)
+        
         return profil
 
     @lernApp.marshal_with(profil)
