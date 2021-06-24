@@ -944,7 +944,6 @@ export default class LernpartnerAPI {
                * @param {Number} id to be retrieved
                * @public
               */
-  
               getTeilnahmeGruppeById(id){
                 return this.#fetchAdvanced(this.#getTeilnahmeGruppeByIdURL(id)).then((responseJSON) => {
                 let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
@@ -967,7 +966,7 @@ export default class LernpartnerAPI {
           }).then((responseJSON) => {
             // We always get an array of TeilnahmeGruppeBOs.fromJSON
             let teilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
-            // console.info(teilnahmeGruppeBO);
+             console.info(teilnahmeGruppeBO);
             return new Promise(function (resolve) {
               resolve(teilnahmeGruppeBO);
             })

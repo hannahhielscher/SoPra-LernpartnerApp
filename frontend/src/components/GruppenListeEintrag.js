@@ -32,7 +32,6 @@ class GruppenListeEintrag extends Component {
             lerngruppe: props.lerngruppe,
             gruppeName: this.props.lerngruppe.name,
             profilID: this.props.lerngruppe.gruppenprofil,
-            teilnahmeGruppe: [],
             showProfil: false,
             showLerngruppeVerlassenDialog: false,
             //showTeilnehmer: false,
@@ -45,29 +44,6 @@ class GruppenListeEintrag extends Component {
     /** Handles onChange events of the underlying ExpansionPanel */
     expansionPanelStateChanged = () => {
     this.props.onExpandedStateChange(this.props.lerngruppe);
-    }
-
-    getTeilnahmeGruppe = () => {
-        LernpartnerAPI.getAPI().getTeilnahmeGruppeById(this.props.personID)
-            .then(teilnahmeGruppeBOs =>
-                this.setState({               // Set new state when LerngruppeBOs have been fetched
-                    teilnahmeGruppe: teilnahmeGruppeBOs,
-                    //name: lerngruppeBO.name
-                    loadingInProgress: false,   // disable loading indicator
-                    error: null
-                })).catch(e =>
-                    this.setState({             // Reset state with error from catch
-                        teilnahmeGruppeBOs: [],
-                        loadingInProgress: false, // disable loading indicator
-                        error: e
-                    })
-                );
-
-        // set loading to true
-        this.setState({
-            loadingInProgress: true,
-            error: null
-        });
     }
 
     /** Handles the onClick event of the Profil ansehen button */
@@ -99,11 +75,11 @@ class GruppenListeEintrag extends Component {
         });
     }
 
-
     render(){
 
-          const { classes, expandedState } = this.props;
-          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog } = this.state;
+          const { classes, expandedState, teilnahmeGruppe } = this.props;
+          const { lerngruppe, gruppeName, profilID, showProfil, showLerngruppeVerlassenDialog } = this.state;
+          console.log(teilnahmeGruppe)
 
           return (
             <div>
@@ -142,6 +118,7 @@ GruppenListeEintrag.propTypes = {
   show: PropTypes.bool.isRequired,
   expandedState: PropTypes.bool.isRequired,
   onExpandedStateChange: PropTypes.func.isRequired,
+  onTeilnahmeGruppeDeleted: PropTypes.func.isRequired
 }
 
 

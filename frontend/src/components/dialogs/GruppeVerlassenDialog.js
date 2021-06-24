@@ -14,7 +14,6 @@ class GruppeVerlassenDialog extends Component {
 
     // Init the state
     this.state = {
-      teilnahmeGruppe: props.teilnahmeGruppe,
       verlassenInProgress: false,
       verlassenError: null
     };
@@ -53,6 +52,9 @@ class GruppeVerlassenDialog extends Component {
   render() {
     const { classes, teilnahmeGruppe, show } = this.props;
     const { verlassenInProgress, verlassenError } = this.state;
+    //console.log(verlassenInProgress)
+    console.log(teilnahmeGruppe)
+    //console.log(teilnahmeGruppe.id)
 
     return (
       show ?
@@ -100,7 +102,7 @@ GruppeVerlassenDialog.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   /** The CustomerBO to be deleted */
-  customer: PropTypes.object.isRequired,
+  teilnahmeGruppe: PropTypes.object.isRequired,
   /** If true, the dialog is rendered */
   show: PropTypes.bool.isRequired,
   /**

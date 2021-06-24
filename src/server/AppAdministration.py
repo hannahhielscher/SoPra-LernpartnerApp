@@ -312,10 +312,10 @@ class AppAdministration (object):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmegruppe(self, teilnahme):
+    def delete_teilnahmegruppe(self, id):
         """Löscht die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete(id)
     
     
     """

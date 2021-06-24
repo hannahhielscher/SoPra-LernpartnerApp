@@ -846,8 +846,8 @@ class TeilnahmeGruppeOperation(Resource):
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        teilnahmegruppe = adm.get_teilnahmegruppe_by_person_id(id)
-        adm.delete_teilnahmegruppe(teilnahmegruppe)
+        teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
+        adm.delete_teilnahmegruppe(teilnahme)
         return '', 200
     
 

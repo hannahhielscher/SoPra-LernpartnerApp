@@ -41,7 +41,7 @@ class GruppenListe extends Component {
         // Init an empty state
         this.state = {
           lerngruppen: [],
-          personID: this.props.currentPerson.id,
+          teilnahmeGruppe: [],
           error: null,
           loadingInProgress: false,
           expandedLerngruppeID: expandedID,
@@ -62,6 +62,29 @@ class GruppenListe extends Component {
                 })).catch(e =>
                     this.setState({             // Reset state with error from catch
                         lerngruppen: [],
+                        loadingInProgress: false, // disable loading indicator
+                        error: e
+                    })
+                );
+
+        // set loading to true
+        this.setState({
+            loadingInProgress: true,
+            error: null
+        });
+    }
+
+    getTeilnahmeGruppe = () => {
+        LernpartnerAPI.getAPI().getTeilnahmeGruppeById(this.props.currentPerson.id)
+            .then(teilnahmeGruppeBOs =>
+                this.setState({               // Set new state when LerngruppeBOs have been fetched
+                    teilnahmeGruppe: teilnahmeGruppeBOs,
+                    //name: lerngruppeBO.name
+                    loadingInProgress: false,   // disable loading indicator
+                    error: null
+                })).catch(e =>
+                    this.setState({             // Reset state with error from catch
+                        teilnahmeGruppe: [],
                         loadingInProgress: false, // disable loading indicator
                         error: e
                     })
@@ -96,15 +119,26 @@ class GruppenListe extends Component {
         });
     }
 
+   /**
+   * Handles lerngruppeVerlassen events from the GruppenListeEintrag component
+   */
+    lerngruppeVerlassen = () => {
+        const newLerngruppenListe = this.getLerngruppen()
+        this.setState({
+            lerngruppen: newLerngruppenListe,
+            //showCustomerForm: false
+        });
+    }
+
     /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
     componentDidMount() {
         this.getLerngruppen();
+        this.getTeilnahmeGruppe();
     }
 
     render() {
         const { classes } = this.props;
-        const { lerngruppen, personID, expandedLerngruppeID, loadingInProgress, error }  = this.state;
-        console.log(lerngruppen)
+        const { lerngruppen, personID, teilnahmeGruppe, expandedLerngruppeID, loadingInProgress, error }  = this.state;
 
         return (
             <div className={classes.root}>
@@ -117,8 +151,9 @@ class GruppenListe extends Component {
                 </Grid>
                 {
                     lerngruppen.map(lerngruppe =>
-                    <GruppenListeEintrag key={lerngruppe.getID()} lerngruppe={lerngruppe} personID={personID} expandedState={expandedLerngruppeID === lerngruppe.getID()}
+                    <GruppenListeEintrag key={lerngruppe.getID()} lerngruppe={lerngruppe} teilnahmeGruppe={teilnahmeGruppe} expandedState={expandedLerngruppeID === lerngruppe.getID()}
                       onExpandedStateChange={this.onExpandedStateChange}
+                      onTeilnahmeGruppeDeleted={this.lerngruppeVerlassen}
                     />)
                 }
                 <LoadingProgress show={loadingInProgress} />
