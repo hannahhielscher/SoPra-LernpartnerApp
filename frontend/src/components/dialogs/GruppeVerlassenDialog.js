@@ -50,7 +50,7 @@ class GruppeVerlassenDialog extends Component {
 
   /** Renders the component */
   render() {
-    const { classes, teilnahmeGruppe, show } = this.props;
+    const { classes, teilnahmeGruppe, lerngruppeID, show } = this.props;
     const { verlassenInProgress, verlassenError } = this.state;
     //console.log(verlassenInProgress)
     console.log(teilnahmeGruppe)
@@ -86,6 +86,7 @@ class GruppeVerlassenDialog extends Component {
     );
   }
 }
+
 
 /** Component specific styles */
 const styles = theme => ({

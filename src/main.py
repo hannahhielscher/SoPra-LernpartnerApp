@@ -846,11 +846,11 @@ class TeilnahmeGruppeOperation(Resource):
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
-        adm.delete_teilnahmegruppe(teilnahme)
+        #teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
+        adm.delete_teilnahmegruppe(id)
         return '', 200
 
-@lernApp.route('/teilnahmenGruppe/<int:person_id>/<int:gruppe_id>')
+@lernApp.route('/teilnahmenGruppe/<int:person_id>/<int:lerngruppe_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeByPersonByGruppeOperation(Resource):
 

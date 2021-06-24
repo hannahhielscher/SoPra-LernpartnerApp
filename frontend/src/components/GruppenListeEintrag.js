@@ -31,6 +31,7 @@ class GruppenListeEintrag extends Component {
         this.state = {
             lerngruppe: props.lerngruppe,
             gruppeName: this.props.lerngruppe.name,
+            teilnahmeGruppe: null,
             profilID: this.props.lerngruppe.gruppenprofil,
             showProfil: false,
             showLerngruppeVerlassenDialog: false,
@@ -54,6 +55,20 @@ class GruppenListeEintrag extends Component {
         });
     }
 
+        /** TeilnahmeGruppe holen fürs Verlassen */
+  getTeilnahmeGruppe = () => {
+    LernpartnerAPI.getAPI().getTeilnahmeGruppeByPersonByGruppe(this.props.currentPerson.getID(), this.props.lerngruppe.id)
+    .then(teilnahmeGruppeBO => {
+      this.setState({
+        teilnahmeGruppe: teilnahmeGruppeBO,              // disable loading indicator                 // no error message
+      });
+    }).catch(e =>
+      this.setState({
+        teilnahmeGruppe: null,              // disable loading indicator                     // show error message
+      })
+    );
+    }
+
     /** Handles the onClick event of the delete customer button */
     verlasseLerngruppeButtonClicked = (event) => {
         event.stopPropagation();
@@ -75,11 +90,15 @@ class GruppenListeEintrag extends Component {
         });
     }
 
+     /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+   componentDidMount() {
+       this.getTeilnahmeGruppe();
+   }
+
     render(){
 
-          const { classes, expandedState, teilnahmeGruppe } = this.props;
-          const { lerngruppe, gruppeName, profilID, showProfil, showLerngruppeVerlassenDialog } = this.state;
-          console.log(teilnahmeGruppe)
+          const { classes, expandedState, currentPerson } = this.props;
+          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog } = this.state;
 
           return (
             <div>
@@ -105,7 +124,7 @@ class GruppenListeEintrag extends Component {
                   </ButtonGroup>
                 </AccordionDetails>
               </Accordion>
-              <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} onClose={this.verlasseLerngruppeDialogClosed}/>
+              <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} currentPerson={currentPerson} onClose={this.verlasseLerngruppeDialogClosed}/>
             </div>
           );
         }

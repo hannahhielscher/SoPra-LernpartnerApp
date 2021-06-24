@@ -82,7 +82,7 @@ class TeilnahmeGruppeMapper(Mapper):
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(teilnehmer)
             teilnahme.set_lerngruppe(lerngruppe)
-            result.append(teilnahme)
+            result = teilnahme
 
         self._connection.commit()
         cursor.close()
