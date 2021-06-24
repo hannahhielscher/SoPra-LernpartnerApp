@@ -60,7 +60,7 @@ def secured(function):
                         """
                         lernvorlieben = adm.create_lernvorlieben(1, 1, 1, 1, 1, 1)
                         lernvorlieben_id = lernvorlieben.get_id()
-                        profil = adm.create_profil(False, [] , lernvorlieben_id)
+                        profil = adm.create_profil(False, [9] , lernvorlieben_id)
                         profil_id = profil.get_id()
                         person = adm.create_person('Null', 'Null', 0, 'Null', 0, 'Null', False, google_user_id, email, profil_id)
 

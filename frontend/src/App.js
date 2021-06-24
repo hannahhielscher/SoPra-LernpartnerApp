@@ -28,7 +28,7 @@ class App extends React.Component {
 		this.state = {
 			currentUser: null,
 			personName: null,
-			personneu: false,
+			personneu: true,
 			appError: null,
 			authError: null,
 			authLoading: false,
@@ -109,10 +109,12 @@ class App extends React.Component {
 			.then(personBO =>
 				this.setState({
 					currentPerson: personBO,
-					personName: personBO.getvorname(),
+					personName: personBO.vorname,
+					
 					error: null,
 					loadingInProgress: false,
-				})).catch(e =>
+				}))
+				.catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -128,21 +130,6 @@ class App extends React.Component {
 		},1000);
 		}
 	
-	checkPersonName = (personName) => {
-		if (personName = 'Null') {
-			this.setState({
-				personneu: true
-			})
-			.catch(e =>
-				this.setState({
-					personneu: false
-				}));
-			this.setState({
-				error: null,
-				loadingInProgress: true
-			});
-			}
-		}
 	
 
 	/**
@@ -159,8 +146,10 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, personneu, appError, authError, authLoading } = this.state;
-
+		
+		const { currentUser, currentPerson, personName, personneu, appError, authError, authLoading } = this.state;
+		
+		
 		return (
 			<ThemeProvider theme={Theme}>
 				{/* Global CSS reset and browser normalization. CssBaseline kickstarts an elegant, consistent, and simple baseline to build upon. */}
@@ -173,14 +162,13 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil' >
-									<MeinProfil currentPerson={currentPerson} showRegistrierungForm={personneu}/>
-									
+									<Redirect from= '/' to='/about'/>
+									<Route path='/meinprofil' component={MeinProfil}>
+										<MeinProfil currentPerson={currentPerson} personName={personName}/>
 									</Route>
 
 									<Route path='/meinevorschlaege'>
-
+										
 									</Route>
 									<Route path='/meinechats'>
 										<KonversationListe currentPerson={currentPerson} />

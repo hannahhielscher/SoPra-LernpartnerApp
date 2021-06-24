@@ -65,6 +65,7 @@ class ProfilMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
+    
         for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
 
             buff = False

@@ -20,14 +20,14 @@ class Profil extends Component {
             profil: null,
             lernvorlieben: null,
             gruppe: false,
-            //personVorname = null,
-            //personName = null,
-            //personSemester = 0,
-            //personStudiengang = null,
-            //lerngruppe = false
-            //personProfilID = None,
-            //personLernfaecher = null,
-            personLernvorliebenID = null
+            personVorname = null,
+            personName = null,
+            personSemester = 0,
+            personStudiengang = null,
+            lerngruppe = false,
+            personProfilID = None,
+            personLernfaecher = null,
+            personLernvorliebenID = null,
             loadingInProgress: false,
             loadingError: null,
         };

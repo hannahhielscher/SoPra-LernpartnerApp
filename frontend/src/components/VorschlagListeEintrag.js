@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import Profil from './Profil';
+//import Profil from './Profil';
 //import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
@@ -121,8 +121,7 @@ class VorschlagListeEintrag extends Component {
                     </Grid>
                   </Grid>
                 </AccordionSummary>
-                <Profil show={showProfil} profil={profil}/>
-                <AnfrageForm show={showAnfrageForm} profil={profil}/>
+                
               </Accordion>
             </div>
           );

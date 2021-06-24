@@ -4,7 +4,7 @@ import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Pa
 //import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 import RegistrierungForm from './dialogs/RegistrierungForm';
-import {LernpartnerAPI} from '../api';
+import { LernpartnerAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import Button from '@material-ui/core/Button';
@@ -18,24 +18,30 @@ class MeinProfil extends Component {
         // initiiere einen leeren state
         this.state = {
             person: null,
-            profil: null,
-            lernvorlieben: null,
-            gruppe: false,
+            
             personVorname: null,
             personName: null,
             personSemester: 0,
+            personAlter: null,
             personStudiengang: null,
             lerngruppe: false,
             personProfilID: null,
             personLernfaecher: null,
             personLernvorliebenID: null,
+            profil: null,
+            lernvorlieben: null,
+            lernvorliebenfrequenz: null,
+            gruppe: false,
+            showMeinProfilForm: false,
+            showRegistrierungForm: false,
             loadingInProgress: false,
             loadingError: null,
-            showRegistrierungForm: this.props.showRegistrierungForm
+            
         };
     }
 
     // API Anbindung um Profil vom Backend zu bekommen
+    
     getPerson = () => {
       LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.currentPerson.getgoogle_user_id())
       .then(personBO =>
@@ -43,6 +49,7 @@ class MeinProfil extends Component {
             person: personBO,
             personName: personBO.name,
             personVorname: personBO.vorname,
+            personAlter: personBO.alter,
             personSemester: personBO.semester,
             personStudiengang: personBO.studiengang,
             personProfilID: personBO.personenprofil,
@@ -65,40 +72,45 @@ class MeinProfil extends Component {
         error: null
       });
     }
+    
 
-    getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.personProfilID).then(profilBO =>
-      this.setState({
+   getProfil = () => {
+		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getpersonenprofil())
+			.then(profilBO =>
+				this.setState({
             profil: profilBO,
-            profilLernfaecher: profilBO.lernfaecher,
-            profilLernvorliebenID: profilBO.lernvorlieben,
+            personLernfaecher: profilBO.lernfaecher,
+            personLernvorliebenID: profilBO.lernvorlieben_id,
+            error: null,
             loadingInProgress: false,
-            error: null
-      })).catch(e =>
-        this.setState({ // Reset state with error from catch
-          profil: null,
-          profilLernfaecher: null,
-          profilLernvorliebenID: false,
-          loadingInProgress: false,
-          error: e,
-        })
-      );
+          })).then(() => {
+            this.getLernvorlieben()
+          }).catch(e =>
+            this.setState({
+              profil: null,
+              personLernfaecher: null,
+              error: e,
+              loadingInProgress: false,
+            }));
 
-    // set loading to true
-    this.setState({
-      loadingInProgress: true,
-      loadingError: null
-    });
-  }
+      // set loading to true
+      this.setState({
+        loadingInProgress: true,
+        loadingError: null
+      });
+    }
 
-
+   
     getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorlieben(this.props.personLernvorliebenID).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorlieben(this.state.personLernvorliebenID)
+    .then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
+            lernvorliebenfrequenz: lernvorliebenBO.frequenz,
             loadingInProgress: false,
             error: null
-      })).catch(e =>
+      }))
+      .catch(e =>
         this.setState({ // Reset state with error from catch
           lernvorlieben: null,
           loadingInProgress: false,
@@ -112,16 +124,18 @@ class MeinProfil extends Component {
       loadingError: null
     });
   }
-
-
-  checkPersonName = (personName) => {
-		if (personName = 'Null') {
+  
+  checkPersonName = () => {
+		if (this.state.personName === 'Null') {
 			this.setState({
-				personneu: true
-			})
+				showRegistrierungForm: true
+			})} else {
+        this.setState({
+        showRegistrierungForm: false
+      })
 			.catch(e =>
 				this.setState({
-          personneu: false,
+          showRegistrierungForm: false,
           error: e
 				}));
 			this.setState({
@@ -130,13 +144,20 @@ class MeinProfil extends Component {
 			});
 			}
 		}
-
+  
+  //Handles the onClick event of the show profil button
+  bearbeitenButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showMeinProfilForm: true
+    });
+  }
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
   userFormClosed = (currentPerson) => {
     if (currentPerson) {
         this.setState({
             currentPerson: currentPerson,
-            showRegistrierungForm: false
+            showRegistrierungForm: false,
         });
     } else {
         this.setState({
@@ -145,7 +166,9 @@ class MeinProfil extends Component {
     }
   }
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-  componentDidMount() {
+  componentDidMount(){
+    this.getPerson();
+    this.getProfil();
     
   }
 
@@ -170,28 +193,32 @@ class MeinProfil extends Component {
 
    /** Renders the component */
     render() {
-      const { classes , currentPerson, showRegistrierungForm } = this.props;
+      const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { personProfil, personName, personVorname, showRegistrierungForm, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
-
-      // console.log(this.props);
+      const { profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, loadingInProgress, error} = this.state;
+      
+    
       return (
         <div className={classes.root}>
-        <RegistrierungForm show = {showRegistrierungForm} currentPerson={currentPerson} />
-        <Button color="primary" onClick= {this.showVorschlagButtonClick}>Mein Profil bearbeiten</Button>
+        <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
+        <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
 
+                              
+                              <b>Name: </b>{personVorname} {personName}<br />
+                              <b>Alter: </b> {personAlter} <br />
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
                               <b>Lernfächer: </b>{personLernfaecher}<br />
-                              <b>Lernvorlieben: </b>{personLernvorlieben}<br />
+                              <b>Lernvorlieben-Frequenz: </b>{lernvorliebenfrequenz}<br />
 
         </Typography>
+        
         </div>
       );
     }
 }
-
+//<MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson}/>
   const styles = theme => ({
   root: {
       width: '100%',
@@ -224,7 +251,7 @@ class MeinProfil extends Component {
 MeinProfil.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  person: PropTypes.object.isRequired,
+  currentPerson: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired
 }
 
