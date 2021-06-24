@@ -16,7 +16,7 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
 //import LernfaecherForm from './components/dialogs/LernfaecherForm';
-import Profil from './components/Profil';
+//import Profil from './components/Profil';
 
 class App extends React.Component {
 
@@ -162,16 +162,19 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from= '/' to='/about'/>
+									<Redirect from='/' to='/about'/>
 									<Route path='/meinprofil' component={MeinProfil}>
-										<MeinProfil currentPerson={currentPerson} personName={personName}/>
+										<MeinProfil currentPerson={currentPerson} />
 									</Route>
 
+									<Route path='/registrierung' component={RegistrierungForm}>
+										
+									</Route>
 									<Route path='/meinevorschlaege'>
 										
 									</Route>
 									<Route path='/meinechats'>
-										<KonversationListe currentPerson={currentPerson} />
+										
 
 									</Route>
 									<Route path='/about' component={About} />
