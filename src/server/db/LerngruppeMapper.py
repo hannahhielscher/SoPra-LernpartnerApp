@@ -100,6 +100,7 @@ class LerngruppeMapper(Mapper):
         cursor.close()
 
         return result
+        
 
     def find_by_lernfach_id(self, lernfach_id):
         """Suche eines Profiles nach einem bestimmten Lernfach"""

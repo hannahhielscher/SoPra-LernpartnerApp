@@ -306,6 +306,10 @@ class AppAdministration (object):
     def get_teilnahmegruppe_by_id(self, id):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_id(id)
+    
+    def get_teilnahmegruppe_by_person_by_gruppe(self, person_id, lerngruppe_id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_person_and_lerngruppe(person_id, lerngruppe_id)
 
     def update_teilnahmegruppe(self,teilnahme):
         """Speichert die Nachricht."""

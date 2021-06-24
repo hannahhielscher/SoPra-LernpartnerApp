@@ -108,6 +108,7 @@ export default class LernpartnerAPI {
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
+        #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
         #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
         //Personenbezogene
@@ -953,6 +954,21 @@ export default class LernpartnerAPI {
                   })
                 })
               }
+
+              /** 
+               * gibt die Teilnehmer mit der bestimmten ID als BO zurück
+               * @param {Number} id to be retrieved
+               * @public
+              */
+             getTeilnahmeGruppeByPersonByGruppe(personId, lerngruppeId){
+              return this.#fetchAdvanced(this.#getTeilnahmeGruppeByPersonByGruppeURL(personId, lerngruppeId)).then((responseJSON) => {
+              let teilnahmegruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON);
+              console.info(teilnahmegruppeBO)
+              return new Promise(function (resolve){
+               resolve(teilnahmegruppeBO)
+                })
+              })
+            }
 
         /**
          * Gibt Promise zurück, Löscht Konversation mit bestimmter ID

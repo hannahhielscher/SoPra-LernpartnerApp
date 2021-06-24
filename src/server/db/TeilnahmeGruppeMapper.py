@@ -68,6 +68,26 @@ class TeilnahmeGruppeMapper(Mapper):
         cursor.close()
 
         return result
+    
+    def find_by_person_and_lerngruppe(self, person_id, lerngruppe_id):
+        """ Findet bestimmte Teilnahme nach Person und Lerngruppe """
+        result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, person_id, lerngruppe_id FROM teilnahmen_gruppe WHERE person_id = {} AND lerngruppe_id={} ".format(person_id, lerngruppe_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, teilnehmer, lerngruppe) in tuples:
+            teilnahme = TeilnahmeGruppe()
+            teilnahme.set_id(id)
+            teilnahme.set_teilnehmer(teilnehmer)
+            teilnahme.set_lerngruppe(lerngruppe)
+            result.append(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def find_by_id(self):
         """Reads a tuple with a given ID"""
