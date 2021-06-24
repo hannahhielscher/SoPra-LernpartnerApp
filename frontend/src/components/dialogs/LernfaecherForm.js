@@ -74,6 +74,7 @@ class LernfaecherForm extends Component {
     const { profil, lernfaecher, lernfach, loadingInProgress, error } = this.state;
     
     console.log(profil)
+    console.log(lernfaecher)
     return (
       <div>
         <FormControl className={classes.formControl}>
@@ -87,6 +88,9 @@ class LernfaecherForm extends Component {
               id: 'age-native-simple',
             }}
           >
+           {lernfaecher.map(lernfach =>
+            <option key={lernfach.key} value={lernfach.key}>{lernfach.value}</option>
+          )};
            
           </Select>
         </FormControl>
