@@ -165,7 +165,7 @@ class Profil extends Component {
   }
 }
 
-  const styles = theme => ({
+const styles = theme => ({
   root: {
       width: '100%',
       marginTop: theme.spacing(2),
@@ -190,7 +190,7 @@ class Profil extends Component {
   breite: {
     width: 220
   }
-  });
+});
 
 
 /** PropTypes */

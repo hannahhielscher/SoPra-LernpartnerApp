@@ -5,23 +5,8 @@ export default class TeilnahmeGruppeBO extends BusinessObject{
 	constructor(astatus, ateilnehmer, alerngruppe){
         super();
         this.teilnehmer = ateilnehmer;
-        this.status = astatus;
         this.lerngruppe = alerngruppe;
     }
-
-    /*
-	erhalte 
-	*/
-    getstatus(){
-        return this.status;
-    }
-    /*
-	setze 
-	*/
-    setstatus(astatus){
-        this.status = astatus;
-    }
-
 
     /*
 	erhalte 

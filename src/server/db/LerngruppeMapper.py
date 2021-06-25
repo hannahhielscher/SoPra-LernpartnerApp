@@ -83,21 +83,24 @@ class LerngruppeMapper(Mapper):
         """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT personen.id, teilnahmen_gruppe.person_id, teilnahmen_gruppe.lerngruppen_id FROM personen INNER JOIN teilnahmen_gruppe ON personen.id = teilnahmen_gruppe.person_id WHERE personen.id = {}".format(person_id)
+        command = "SELECT lerngruppen.id, lerngruppen.name, lerngruppen.profil_id FROM lerngruppen INNER JOIN teilnahmen_gruppe ON lerngruppen.id = teilnahmen_gruppe.lerngruppe_id WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, name, profil_id) in tuples:
             lerngruppe = Lerngruppe()
-            lerngruppe.set_gruppenprofil(id)
+
+            lerngruppe.set_id(id)
             lerngruppe.set_name(name)
             lerngruppe.set_gruppenprofil(profil_id)
+
             result.append(lerngruppe)
 
         self._connection.commit()
         cursor.close()
 
         return result
+        
 
     def find_by_lernfach_id(self, lernfach_id):
         """Suche eines Profiles nach einem bestimmten Lernfach"""

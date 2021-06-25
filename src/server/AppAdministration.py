@@ -244,6 +244,11 @@ class AppAdministration (object):
         with LerngruppeMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_lerngruppe_by_person_id(self, id):
+        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        with LerngruppeMapper() as mapper:
+            return mapper.find_by_person_id(id)
+
     def get_all_lerngruppen(self):
         """Alle Lerngruppe auslesen"""
         with LerngruppeMapper() as mapper:
@@ -301,16 +306,20 @@ class AppAdministration (object):
     def get_teilnahmegruppe_by_id(self, id):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_id(id)
+    
+    def get_teilnahmegruppe_by_person_by_gruppe(self, person_id, lerngruppe_id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_person_and_lerngruppe(person_id, lerngruppe_id)
 
     def update_teilnahmegruppe(self,teilnahme):
         """Speichert die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmegruppe(self, teilnahme):
+    def delete_teilnahmegruppe(self, id):
         """Löscht die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete(id)
     
     
     """
