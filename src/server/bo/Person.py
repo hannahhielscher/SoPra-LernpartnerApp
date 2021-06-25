@@ -14,7 +14,7 @@ class Person(NamedBusinessObject):
         self._lerngruppe = False
         self._google_user_id = None
         self._email = None
-        self._personenprofil = None
+        self._profil = None
 
     def get_vorname(self):
         """Auslesen des Vornamens"""
@@ -80,13 +80,13 @@ class Person(NamedBusinessObject):
         """ Setzen der Email """
         self._email = value
     
-    def get_personenprofil(self):
+    def get_profil(self):
         """Auslesen des Personenprofils"""
-        return self._personenprofil
+        return self._profil
 
-    def set_personenprofil(self, value):
+    def set_profil(self, value):
         """Setzen eines Lernprofils (geht das überhaupt?)"""
-        self._personenprofil = value
+        self._profil = value
 
     #def calculate_alter(self):
         #heute = date.today()
@@ -94,13 +94,13 @@ class Person(NamedBusinessObject):
         #return today.year - geb.year - ((today.month, today.day) < (geb.month, geb.day))
 
     def get_all(self):
-        inhalt = [self.id, self.name, self._vorname, self._alter, self._semester, self._studiengang, self._geschlecht, self._lerngruppe, self._email, self._personenprofil]
+        inhalt = [self.id, self.name, self._vorname, self._alter, self._semester, self._studiengang, self._geschlecht, self._lerngruppe, self._email, self._profil]
         return inhalt
 
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Person: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._vorname, self._semester, self._studiengang, self._alter, self._geschlecht, self._personenprofil)
+        return "Person: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._name, self._vorname, self._semester, self._studiengang, self._alter, self._geschlecht, self._profil)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -116,7 +116,7 @@ class Person(NamedBusinessObject):
         obj.set_lerngruppe(dictionary["lerngruppe"])
         obj.set_google_user_id(dictionary["google_user_id"])
         obj.set_email(dictionary["email"])
-        obj.set_personenprofil(dictionary["personenprofil"])
+        obj.set_profil(dictionary["profil"])
         return obj
 
 
