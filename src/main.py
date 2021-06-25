@@ -60,7 +60,7 @@ person = api.inherit('Person', nbo, {
     'lerngruppe': fields.String(attribute='_lerngruppe', description='Lerngruppe der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
     'email': fields.String(attribute='_email', description='Email der Person'),
-    'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
+    'profil': fields.Integer(attribute='_profil', description='Profil ID der Person'),
 })
 
 lernfaecher = api.inherit('Lernfaecher', test, {
@@ -74,7 +74,7 @@ profil = api.inherit('Profil', bo, {
 })
 
 lerngruppe = api.inherit('Lerngruppe', nbo, {
-    'gruppenprofil': fields.Integer(attribute='_gruppenprofil', description='Profil ID der Lerngruppe'),
+    'profil': fields.Integer(attribute='_profil', description='Profil ID der Lerngruppe'),
 })
 
 vorschlag = api.inherit('Vorschlag', bo, {
@@ -90,9 +90,9 @@ nachricht = api.inherit('Nachricht', bo, {
     'konversation_id': fields.Integer(attribute='_konversation_id', description='ID der Konversation, in der die Nachricht gesendet wurde'),
 })
 
-konversation = api.inherit('Konversation', bo, {
-    'nachrichten': fields.String(attribute='_nachrichten', description='Enthaltene Nachrichten der Konversation'),
-    'teilnehmer': fields.String(attribute='_teilnehmer', description='Enthaltene Teilnehmer der Konversation'),
+konversation = api.inherit('Konversation', nbo, {
+    
+    
 })
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
@@ -106,12 +106,12 @@ teilnahmegruppe = api.inherit('TeilnahmeGruppe', bo, {
 })
 
 lernvorlieben = api.inherit('Lernvorlieben', bo, {
-    "tageszeiten": fields.Integer(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
-    'tage': fields.Integer(attribute='_tage', description='Bevorzugte Tage'),
-    'frequenz': fields.Integer(attribute='_frequenz', description='Bevorzugte Frequenz'),
-    'lernart': fields.Integer(attribute='_lernart', description='Bevorzugte Lernart'),
-    'gruppengroesse': fields.Integer(attribute='_gruppengroesse', description='Bevorzugte Gruppengroesse'),
-    'lernort': fields.Integer(attribute='_lernort', description='Bevorzugter Lernort'),
+    "tageszeiten": fields.String(attribute='_tageszeiten', description='Bevorzugte Tageszeit'),
+    'tage': fields.String(attribute='_tage', description='Bevorzugte Tage'),
+    'frequenz': fields.String(attribute='_frequenz', description='Bevorzugte Frequenz'),
+    'lernart': fields.String(attribute='_lernart', description='Bevorzugte Lernart'),
+    'gruppengroesse': fields.String(attribute='_gruppengroesse', description='Bevorzugte Gruppengroesse'),
+    'lernort': fields.String(attribute='_lernort', description='Bevorzugter Lernort'),
 })
 
 @lernApp.route('/personen')
@@ -267,7 +267,7 @@ class ProfilByIDOperationen(Resource):
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
-        profil = adm.get_profil_by_id(id)
+        profil = adm.get_profil_test(id)
         
         return profil
 
@@ -351,13 +351,13 @@ class LerngruppeListOperationen(Resource):
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
    
-    @secured
+    #@secured
     def get(self, id):
-        """Auslesen eines bestimmten Lerngruppen-Objekts.
+        """Auslesen aller Lerngruppen-Objekte einer Person.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
-        lerngruppe = adm.get_lerngruppe_by_id(id)
+        lerngruppe = adm.get_lerngruppe_by_person_id(id)
         return lerngruppe
         
     @lernApp.marshal_with(lerngruppe)
@@ -641,7 +641,7 @@ class KonversationenOperation(Resource):
 class KonversationByIdOperation(Resource):
 
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, id):
         """Auslesen einer bestimmten Konversation."""
         adm = AppAdministration()
@@ -677,21 +677,18 @@ class KonversationByIdOperation(Resource):
         adm.delete_konversation(k)
         return '', 200
 
-@lernApp.route('/konversationen/<int:id>')
+@lernApp.route('/konversationbyperson/<int:personid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByPersonOperation(Resource):
     
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, personid):
         """Auslesen einer bestimmten Konversation."""
+        print('Test')
         adm = AppAdministration()
         konversation = adm.get_konversation_by_personid(personid)
-
-        if konversation is not None:
-            return konversation
-        else:
-            return '', 500 #Wenn es keine Konversation mit der id gibt.
+        return konversation
 
 #notwendig?
 @lernApp.route('/konversationen/<string:name>')
@@ -852,6 +849,7 @@ class TeilnahmeGruppeListOperation(Resource):
 class TeilnahmeGruppeOperation(Resource):
 
     @lernApp.marshal_with(teilnahmegruppe)
+    @secured
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
@@ -862,7 +860,31 @@ class TeilnahmeGruppeOperation(Resource):
         else:
             return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
-    
+    @secured
+    def delete(self, id):
+        """Löschen eines bestimmten TeilnahmeGruppe-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        #teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
+        adm.delete_teilnahmegruppe(id)
+        return '', 200
+
+@lernApp.route('/teilnahmenGruppe/<int:person_id>/<int:lerngruppe_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeGruppeByPersonByGruppeOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmegruppe)
+    @secured
+    def get (self, person_id, lerngruppe_id):
+        """Auslesen einer bestimmten Teilnahme nach Person und Gruppe."""
+        adm = AppAdministration()
+        teilnahme = adm.get_teilnahmegruppe_by_person_by_gruppe(person_id, lerngruppe_id)
+        if teilnahme is not None:
+            return teilnahme
+        else:
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.  
 
 @lernApp.route('/lernvorlieben/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -906,6 +928,19 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben = adm.get_lernvorlieben_by_id(id)
         adm.delete_lernvorlieben(lernvorlieben)
         return '', 200
+
+@lernApp.route('/lernvorlieben-praeferenz/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernvorliebenByIDOperationen(Resource):
+    @lernApp.marshal_list_with(lernvorlieben)
+    #@secured
+    def get(self, id):
+        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernvorlieben_praeferenz = adm.get_praeferenz_by_lernvorlieben_id(id)
+        return lernvorlieben_praeferenz
 
 
 @lernApp.route('/lernvorlieben')

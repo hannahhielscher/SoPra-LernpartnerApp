@@ -109,12 +109,10 @@ class App extends React.Component {
 			.then(personBO =>
 				this.setState({
 					currentPerson: personBO,
-					personName: personBO.vorname,
-					
+					personName: personBO.getvorname(),
 					error: null,
 					loadingInProgress: false,
-				}))
-				.catch(e =>
+				})).catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -130,6 +128,21 @@ class App extends React.Component {
 		},1000);
 		}
 	
+	checkPersonName = (personName) => {
+		if (personName = 'Null') {
+			this.setState({
+				personneu: true
+			})
+			.catch(e =>
+				this.setState({
+					personneu: false
+				}));
+			this.setState({
+				error: null,
+				loadingInProgress: true
+			});
+			}
+		}
 	
 
 	/**
@@ -146,10 +159,8 @@ class App extends React.Component {
 
 	/** Renders the whole app */
 	render() {
-		
-		const { currentUser, currentPerson, personName, personneu, appError, authError, authLoading } = this.state;
-		
-		
+		const { currentUser, currentPerson, personneu, personName, appError, authError, authLoading} = this.state;
+
 		return (
 			<ThemeProvider theme={Theme}>
 				{/* Global CSS reset and browser normalization. CssBaseline kickstarts an elegant, consistent, and simple baseline to build upon. */}
@@ -167,16 +178,16 @@ class App extends React.Component {
 										
 									</Route>
 
-									<Route path='/registrierung' component={RegistrierungForm}>
-										
+									<Route path='/meinelerngruppen'>
+                                    	<GruppenListe currentPerson={currentPerson}/>
 									</Route>
+										
 									<Route path='/meinevorschlaege'>
-										<LernfaecherForm currentPerson={currentPerson}/>
 									</Route>
-									<Route path='/meinechats'>
-										
 
+									<Route path='/meinechats'>
 									</Route>
+									
 									<Route path='/about' component={About} />
 									
 								</>
@@ -190,7 +201,7 @@ class App extends React.Component {
 						
 								
 						<LoadingProgress show={authLoading} />
-						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
+						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sign in process.`} onReload={this.handleSignIn} />
 						<ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
 					</Container>
 				
