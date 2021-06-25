@@ -33,7 +33,7 @@ class MeinProfil extends Component {
             lernvorliebenfrequenz: null,
             gruppe: false,
             showMeinProfilForm: false,
-            showRegistrierungForm: false,
+            showRegistrierungForm: true,
             loadingInProgress: false,
             loadingError: null,
             
@@ -84,7 +84,8 @@ class MeinProfil extends Component {
             error: null,
             loadingInProgress: false,
           })).then(() => {
-            this.getLernvorlieben()
+            this.getLernvorlieben();
+            
           }).catch(e =>
             this.setState({
               profil: null,
@@ -158,7 +159,10 @@ class MeinProfil extends Component {
         this.setState({
             currentPerson: currentPerson,
             showRegistrierungForm: false,
-        });
+        }).then(() => {
+          this.getPerson();
+          this.getProfil();
+        })
     } else {
         this.setState({
           showRegistrierungForm: false
@@ -169,7 +173,7 @@ class MeinProfil extends Component {
   componentDidMount(){
     this.getPerson();
     this.getProfil();
-    
+  
   }
 
 /**
