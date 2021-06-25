@@ -277,7 +277,7 @@ class LernvorliebenMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
-
+        print(lernvorlieben)
         return lernvorlieben
 
     def update(self, lernvorlieben):

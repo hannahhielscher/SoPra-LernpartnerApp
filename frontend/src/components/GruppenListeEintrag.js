@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import GruppeVerlassenDialog from './dialogs/GruppeVerlassenDialog';
+import GruppenForm from './dialogs/GruppenForm';
 import LernpartnerAPI from '../api/LernpartnerAPI'
 
 /**
@@ -37,7 +38,8 @@ class GruppenListeEintrag extends Component {
             //showTeilnehmer: false,
             //showNachrichtenListe: false,
             loadingInProgress: false,
-            error: null
+            error: null,
+            showLerngruppeForm: false
         };
     }
 
@@ -94,10 +96,41 @@ class GruppenListeEintrag extends Component {
        this.getTeilnahmeGruppe();
    }
 
+  /** Handles the onClick event of the edit customer button */
+  editLerngruppeButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showLerngruppeForm: true
+    });
+  }
+
+  /** Handles the onClose event of the CustomerForm */
+  lerngruppeFormClosed = (lerngruppe) => {
+    // customer is not null and therefor changed
+    if (lerngruppe) {
+      this.setState({
+        lerngruppe: lerngruppe,
+        showLerngruppeForm: false
+      });
+    } else {
+      this.setState({
+        showLerngruppeForm: false
+      });
+    }
+  }
+
+    /** Handles the onClick event of the delete customer button */
+    gruppeFormButtonClicked = (event) => {
+        event.stopPropagation();
+        this.setState({
+            showLerngruppeForm: true
+        });
+    }
+
     render(){
 
           const { classes, expandedState, currentPerson } = this.props;
-          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog } = this.state;
+          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
 
           return (
             <div>
@@ -114,11 +147,15 @@ class GruppenListeEintrag extends Component {
                     <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
                         Gruppe verlassen
                     </Button>
+                    <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.gruppeFormButtonClicked}>
+                        Test Form
+                    </Button>
                   </AccordionSummary>
                  <AccordionDetails>
                   <Profil user={lerngruppe}/>
                 </AccordionDetails>
               </Accordion>
+              <GruppenForm show={showLerngruppeForm} onClose={this.lerngruppeFormClosed} />
               <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} currentPerson={currentPerson} onClose={this.verlasseLerngruppeDialogClosed}/>
             </div>
           );

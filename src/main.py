@@ -226,7 +226,7 @@ class ProfilListOperationen(Resource):
         id = request.args.get("id")
         gruppe = request.args.get("gruppe")
         lernfaecher = request.args.get("lernfaecher")
-        lernvorlieben_id = request.args.get("lernvorlieben_id")
+        lernvorlieben_id = request.args.get("lernvorlieben")
         adm = AppAdministration()
         adm.create_profil( gruppe, lernfaecher, lernvorlieben_id)
 
@@ -295,32 +295,14 @@ class LerngruppeListOperationen(Resource):
         lerngruppen = adm.get_all_lerngruppen()
         return lerngruppen
 
-    @lernApp.marshal_with(lerngruppe, code=200)
-    @lernApp.expect(lerngruppe)  # Wir erwarten ein Person-Objekt von Client-Seite.
     @secured
     def post(self):
-        """Anlegen eines neuen Lerngruppen-Objekts.
-
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der AppAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
+        """Anlegen eines neuen Lerngruppen-Objekts."""
+        id = request.args.get("id")
+        name = request.args.get("name")
+        profil = request.args.get("profil")
         adm = AppAdministration()
-
-        proposal = Lerngruppe.from_dict(api.payload)
-
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
-        if proposal is not None:
-            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.create_lerngruppe(proposal.get_name(), proposal.get_gruppenprofil())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+        adm.create_lerngruppe(name, profil)
     
 @lernApp.route('/lerngruppen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -927,31 +909,47 @@ class LernvorliebenByIDOperationen(Resource):
 class LernvorliebenListOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
 
+    #@secured
+    #def post(self):
+     #   """Anlegen eines neuen Lerngruppen-Objekts."""
+      #  id = request.args.get("id")
+       # tageszeiten = request.args.get("tageszeiten")
+        #tage = request.args.get("tage")
+        #frequenzen = request.args.get("frequenzen")
+        #gruppengroesse = request.args.get("gruppengroesse")
+        #lernarten = request.args.get("lernarten")
+        #lernorte = request.args.get("lernorte")
+        #adm = AppAdministration()
+        #adm.create_lernvorlieben(tageszeiten, tage, frequenzen, gruppengroesse, lernarten, lernorte)
+
     @lernApp.marshal_with(lernvorlieben, code=200)
-    @lernApp.expect(lernvorlieben)  # Wir erwarten ein Person-Objekt von Client-Seite.
+    @lernApp.expect(lernvorlieben)
     @secured
-    def post(self):
-        """Anlegen eines neuen Lernvorlieben-Objekts.
-
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der AppAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
+    def post (self):
+        """Anlegen eines neuen Modul-Objekts."""
         adm = AppAdministration()
-
         proposal = Lernvorlieben.from_dict(api.payload)
 
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
         if proposal is not None:
-            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.create_lernvorlieben(proposal.get_tageszeiten(), proposal.get_tage(), proposal.get_frequenz(), proposal.get_lernart(), proposal.get_gruppengroesse(), proposal.get_lernort())
-            return c, 200
+            """ Wir verwenden modul des Proposals für
+             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
+
+            tageszeiten = proposal.get_tageszeiten()
+            tage = proposal.get_tage()
+            frequenzen = proposal.get_frequenz()
+            gruppengroesse = proposal.get_gruppengroesse()
+            lernarten = proposal.get_lernart()
+            lernorte = proposal.get_lernort()
+
+            result = adm.create_lernvorlieben(tageszeiten, tage, frequenzen, gruppengroesse, lernarten, lernorte)
+            #result = adm.create_lernvorlieben(lernvorlieben)
+            print(result)
+            return result, 200
+
         else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
 """Test-Methoden START"""

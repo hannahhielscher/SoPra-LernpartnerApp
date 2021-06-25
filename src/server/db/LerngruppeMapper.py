@@ -137,16 +137,23 @@ class LerngruppeMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            lerngruppe.set_id_lerngruppe(maxid[0]+1)
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                lerngruppe.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                lerngruppe.set_id(1)
 
-            command = "INSERT INTO lerngruppen (id, name, profil_id) VALUES (%s,%s,%s)"
-            data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil)
-            cursor.execute(command, data)
+        command = "INSERT INTO lerngruppen (id, name, profil_id) VALUES (%s,%s,%s)"
+        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil)
+        cursor.execute(command, data)
 
-            self._connection.commit()
-            cursor.close()
+        self._connection.commit()
+        cursor.close()
 
-            return lerngruppe
+        return lerngruppe
 
     def update(self, lerngruppe):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.

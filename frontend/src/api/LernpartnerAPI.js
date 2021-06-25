@@ -51,14 +51,14 @@ export default class LernpartnerAPI {
         
         //Gruppenbezogen
         #getLerngruppenURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
-        #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
+        #addLerngruppeURL = (id, name, profil) => `${this.#lernappServerBaseURL}/lerngruppen?id=${id}&name=${name}&profil=${profil}`;
         #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
+        #addProfilURL = (gruppe, lernfaecher, lernvorlieben) => `${this.#lernappServerBaseURL}/profile?gruppe=${gruppe}&lernfaecher=${lernfaecher}&lernvorlieben=${lernvorlieben}`;
         #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
         #updateProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
         //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
@@ -68,6 +68,7 @@ export default class LernpartnerAPI {
         #getLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
         #getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
+        //#addLernvorliebenURL = (tageszeiten, tage, frequenzen, gruppengroesse, lernarten, lernorte) => `${this.#lernappServerBaseURL}/lernvorlieben?tageszeiten=${tageszeiten}&tage=${tage}&frequenzen=${frequenzen}&gruppengroesse=${gruppengroesse}&lernarten=${lernarten}&lernorte=${lernorte}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
         #updateLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
@@ -254,21 +255,13 @@ export default class LernpartnerAPI {
            * @param {LerngruppeBO} lerngruppeBO to be added. The ID of the new lerngruppe is set by the backend
            * @public
            */
-          addLerngruppe(lerngruppeBO) {
-            return this.#fetchAdvanced(this.#addLerngruppeURL(), {
+          addLerngruppe(id, name, profil) {
+            return this.#fetchAdvanced(this.#addLerngruppeURL(id, name, profil), {
               method: 'POST',
               headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
-              },
-              body: JSON.stringify(lerngruppeBO)
-            }).then((responseJSON) => {
-              // We always get an array of LerngruppeBOs.fromJSON, but only need one object
-              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
-              // console.info(LerngruppeBOs);
-              return new Promise(function (resolve) {
-                resolve(responseLerngruppeBO);
-              })
+              }
             })
           }
   
@@ -354,21 +347,13 @@ export default class LernpartnerAPI {
          * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
          * @public
          */
-        addProfil(profilBO) {
-          return this.#fetchAdvanced(this.#addProfilURL(), {
+        addProfil(gruppe, lernfaecher, lernvorlieben) {
+          return this.#fetchAdvanced(this.#addProfilURL(gruppe, lernfaecher, lernvorlieben), {
             method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
             },
-            body: JSON.stringify(profilBO)
-          }).then((responseJSON) => {
-            // We always get an array of ProfilBOs.fromJSON, but only need one object
-            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
-            // console.info(accountBOs);
-            return new Promise(function (resolve) {
-              resolve(responseProfilBO);
-            })
           })
         }
         /**
@@ -468,23 +453,25 @@ export default class LernpartnerAPI {
          * @param {LernvorliebenBO} lernvorliebenBO to be added. The ID of the new lernvorliebe is set by the backend
          * @public
          */
-        addLernvorlieben(lernvorliebenBO) {
+        addLernvorlieben(lernvorlieben) {
           return this.#fetchAdvanced(this.#addLernvorliebenURL(), {
             method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
             },
-            body: JSON.stringify(lernvorliebenBO)
-          }).then((responseJSON) => {
-            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
-            let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
-            // console.info(LernvorliebenBOs);
-            return new Promise(function (resolve) {
-              resolve(responseLernvorliebenBO);
-            })
-          })
-        }
+             body: JSON.stringify(lernvorlieben)
+           }).then((responseJSON) => {
+             // We always get an array of LernvorliebenBO.fromJSON, but only need one object
+             let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
+             console.info(lernvorliebenBO);
+             return new Promise(function (resolve) {
+               resolve(lernvorliebenBO);
+               console.log(lernvorliebenBO)
+             })
+           })
+         }
+
         /**
          * Gibt Promise zurück
          * 

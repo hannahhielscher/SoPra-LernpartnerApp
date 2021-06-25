@@ -184,17 +184,18 @@ class AppAdministration (object):
     """
     Lernvorlieben-spezifische Methoden
     """
-    def create_lernvorlieben(self, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort):
+    #def create_lernvorlieben(self, lernvorlieben):
+    def create_lernvorlieben(self, tageszeiten, tage, frequenzen, gruppengroesse, lernarten, lernorte):
         """Lernvorlieben anlegen"""
 
         lernvorlieben = Lernvorlieben()
 
         lernvorlieben.set_tageszeiten(tageszeiten)
         lernvorlieben.set_tage(tage)
-        lernvorlieben.set_frequenz(frequenz)           
-        lernvorlieben.set_lernart(lernart)
+        lernvorlieben.set_frequenz(frequenzen)
         lernvorlieben.set_gruppengroesse(gruppengroesse)
-        lernvorlieben.set_lernort(lernort)
+        lernvorlieben.set_lernart(lernarten)
+        lernvorlieben.set_lernort(lernorte)
         lernvorlieben.set_id(1)
 
         with LernvorliebenMapper() as mapper:
@@ -266,7 +267,7 @@ class AppAdministration (object):
         lerngruppe = Lerngruppe()
 
         lerngruppe.set_name(name)
-        lerngruppe.set_gruppenprofil(profil_id)
+        lerngruppe.set_profil(profil_id)
         lerngruppe.set_id(1)
 
         with LerngruppeMapper() as mapper:
