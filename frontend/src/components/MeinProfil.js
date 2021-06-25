@@ -152,6 +152,7 @@ class MeinProfil extends Component {
       showMeinProfilForm: true
     });
   }
+
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
   userFormClosed = (currentPerson) => {
     if (currentPerson) {

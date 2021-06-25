@@ -487,6 +487,24 @@ export default class LernpartnerAPI {
           })
         }
 
+        updateLernvorlieben(lernvorliebenBO) {
+            return this.#fetchAdvanced(this.#updateLernvorliebenURL(lernvorliebenBO.getID()), {
+              method: 'PUT',
+              headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+              },
+              body: JSON.stringify(lernvorliebenBO)
+            }).then((responseJSON) => {
+              // We always get an array of LerngruppeBOs.fromJSON
+              let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
+              // console.info(LerngruppeBOs);
+              return new Promise(function (resolve) {
+                resolve(responseLernvorliebenBO);
+              })
+            })
+          }
+
         //Vorschlagbezogene
         /**
          * Gibt alle Vorschlaege zurück
