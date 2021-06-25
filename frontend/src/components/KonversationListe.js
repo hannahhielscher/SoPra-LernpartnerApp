@@ -41,7 +41,7 @@ class KonversationListe extends Component {
 
       // API Anbindung um Konversationen des Students vom Backend zu bekommen 
     getKonversation = () => {
-      LernpartnerAPI.getAPI().getKonversation(this.props.currentPerson.getID())
+      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getID())
       .then(konversationenBOs =>
           this.setState({
               konversationen: konversationenBOs,
@@ -61,15 +61,12 @@ class KonversationListe extends Component {
     }
     
 
-/** 
+ 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
-  this.getKonversationen();
-  this.setState({
-      currentStudentName: this.props.currentPerson.getname(),
-        })
+  this.getKonversation();
 }
-*/
+
 
  /** 
      * Handles onExpandedStateChange events from the VorschlagListeEintrag component. Toggels the expanded state of 
@@ -110,7 +107,7 @@ render() {
                 />)
             }
             <LoadingProgress show={loadingInProgress} />
-            <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Chats nicht geladen werden!`} onReload={this.getKonversationen} />
+            <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Chats nicht geladen werden!`} onReload={this.getKonversation} />
           </div>
 
         );

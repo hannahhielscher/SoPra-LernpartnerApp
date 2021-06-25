@@ -12,12 +12,12 @@ import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
 import MeinProfil from './components/MeinProfil';
-//import GruppenForm from './components/dialogs/GruppeForm';
+import GruppenForm from './components/dialogs/GruppeForm';
 import GruppenListe from './components/GruppenListe';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
-//import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import LernfaecherForm from './components/dialogs/LernfaecherForm';
 import Profil from './components/Profil';
 
 class App extends React.Component {
@@ -177,17 +177,19 @@ class App extends React.Component {
 								<>
 
 									<Redirect from='/' to='profil'/>
-									<Route path='/profil'>
+									<Route path='/profil' component={Profil}>
 									</Route>
 
 									<Route path='/meinelerngruppen'>
-                                    	<GruppenListe currentPerson={currentPerson}/>
+										<GruppenListe currentPerson={currentPerson} />
+                                    	
 									</Route>
 										
 									<Route path='/meinevorschlaege'>
 									</Route>
 
 									<Route path='/meinechats'>
+										<KonversationListe currentPerson={currentPerson} />
 									</Route>
 									
 									<Route path='/about' component={About} />

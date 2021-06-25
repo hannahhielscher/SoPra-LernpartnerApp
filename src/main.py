@@ -56,11 +56,7 @@ person = api.inherit('Person', nbo, {
     'lerngruppe': fields.String(attribute='_lerngruppe', description='Lerngruppe der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
     'email': fields.String(attribute='_email', description='Email der Person'),
-<<<<<<< Updated upstream
     'profil': fields.Integer(attribute='_profil', description='Profil ID der Person'),
-=======
-    'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
->>>>>>> Stashed changes
 })
 
 profil = api.inherit('Profil', bo, {
@@ -263,12 +259,8 @@ class ProfilByIDOperationen(Resource):
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
-<<<<<<< Updated upstream
-        profil = adm.get_profil_by_id(id)
-=======
         profil = adm.get_profil_test(id)
         
->>>>>>> Stashed changes
         return profil
 
     @lernApp.marshal_with(profil)
@@ -667,10 +659,9 @@ class KonversationByIdOperation(Resource):
 class KonversationByPersonOperation(Resource):
     
     @lernApp.marshal_with(konversation)
-    #@secured
-    def get (self, personid):
+    @secured
+    def get(self, personid):
         """Auslesen einer bestimmten Konversation."""
-        print('Test')
         adm = AppAdministration()
         konversation = adm.get_konversation_by_personid(personid)
         return konversation
