@@ -4,6 +4,7 @@ import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Pa
 //import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 import RegistrierungForm from './dialogs/RegistrierungForm';
+import MeinProfilForm from './dialogs/MeinProfilForm';
 import { LernpartnerAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -20,8 +21,8 @@ class MeinProfil extends Component {
             person: null,
             
             personVorname: null,
-            personName: null,
-            personSemester: 0,
+            personName: this.props.personName,
+            personSemester: null,
             personAlter: null,
             personStudiengang: null,
             lerngruppe: false,
@@ -55,7 +56,13 @@ class MeinProfil extends Component {
             personProfilID: personBO.personenprofil,
             loadingInProgress: false,
             error: null,
-          }))
+          })).then(() => {
+            if (this.state.personName === 'Null'){
+              this.setState({
+                showRegistrierungForm: true
+              })
+            }
+          })
           .catch(e =>
               this.setState({
             person: null,
@@ -75,7 +82,7 @@ class MeinProfil extends Component {
     
 
    getProfil = () => {
-		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getpersonenprofil())
+		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getprofil())
 			.then(profilBO =>
 				this.setState({
             profil: profilBO,
@@ -85,6 +92,7 @@ class MeinProfil extends Component {
             loadingInProgress: false,
           })).then(() => {
             this.getLernvorlieben();
+           
           }).catch(e =>
             this.setState({
               profil: null,
@@ -125,45 +133,27 @@ class MeinProfil extends Component {
     });
   }
   
-  checkPersonName = () => {
-		if (this.state.personName === 'Null') {
-			this.setState({
-				showRegistrierungForm: true
-			})} else {
-        this.setState({
-        showRegistrierungForm: false
-      })
-			.catch(e =>
-				this.setState({
-          showRegistrierungForm: false,
-          error: e
-				}));
-			this.setState({
-				error: null,
-				loadingInProgress: true
-			});
-			}
-		}
   
   //Handles the onClick event of the show profil button
   bearbeitenButtonClicked = (event) => {
-    event.stopPropagation();
     this.setState({
       showMeinProfilForm: true
     });
   }
 
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
-  userFormClosed = (currentPerson) => {
-    if (currentPerson) {
+  userFormClosed = (person) => {
+    this.getPerson();
+    if (person) {
         this.setState({
-            currentPerson: currentPerson,
+            person: person,
             showRegistrierungForm: false,
         });
     } else {
         this.setState({
           showRegistrierungForm: false
-        });
+        })
+      
     }
   }
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
@@ -173,7 +163,7 @@ class MeinProfil extends Component {
     
   }
 
-/**
+
     //wird aufgerufen, wenn Dialog Fenster geschloßen wird
     MeinProfilFormClosed = projekt => {
         if (projekt) {
@@ -189,23 +179,23 @@ class MeinProfil extends Component {
             });
         }
     }
-*/
+
 
 
    /** Renders the component */
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, loadingInProgress, error} = this.state;
-      console.log(showRegistrierungForm)
+      const { profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
+      console.log(showMeinProfilForm)
     
       return (
         <div className={classes.root}>
-        <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
+        <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.MeinProfilFormClosed}/>
+        
         <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
 
-                              
                               <b>Name: </b>{personVorname} {personName}<br />
                               <b>Alter: </b> {personAlter} <br />
                               <b>Semester: </b> {personSemester} <br />
@@ -214,7 +204,7 @@ class MeinProfil extends Component {
                               <b>Lernvorlieben-Frequenz: </b>{lernvorliebenfrequenz}<br />
 
         </Typography>
-        
+        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} lernvorlieben={lernvorlieben} onClose={this.userFormClosed} />
         </div>
       );
     }

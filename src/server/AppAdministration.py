@@ -155,6 +155,15 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_lernfaecher_by_profil_id(self, profil_id):
+        """Lernfaecher mit einer bestimmten ProfilID auslesen"""
+        with ProfilMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profil_id)
+    
+    def get_profil_test(self, profil_id):
+        with ProfilMapper() as mapper:
+            return mapper.find_profil_test(profil_id)
+
     def get_profil_by_lernfach_id(self, lernfach_id):
         """Profil mit einer bestimmten Lernfach ID auslesen"""
         with ProfilMapper() as mapper:

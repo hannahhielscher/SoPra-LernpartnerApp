@@ -44,7 +44,7 @@ export default class LernpartnerAPI {
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
         #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
-        #updatePersonURL = (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, email) => `${this.#lernappServerBaseURL}/personen?id=${id}&name=${name}&vorname=${vorname}&semester=${semester}&studiengang=${studiengang}&alter=${alter}&geschlecht=${geschlecht}&lerngruppe=${lerngruppe}`;
+        #updatePersonURL = (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe) => `${this.#lernappServerBaseURL}/personen?id=${id}&name=${name}&vorname=${vorname}&semester=${semester}&studiengang=${studiengang}&alter=${alter}&geschlecht=${geschlecht}&lerngruppe=${lerngruppe}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
         #getPersonByGoogleIDURL = (google_user_id) => `${this.#lernappServerBaseURL}/personbygoogle/${google_user_id}`;
@@ -69,7 +69,7 @@ export default class LernpartnerAPI {
         //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
         #getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
-        #updateLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+        #updateLernvorliebenURL = (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) => `${this.#lernappServerBaseURL}/lernvorlieben?id=${id}&tageszeiten=${tageszeiten}&tage=${tage}&frequenz=${frequenz}&lernart=${lernart}&gruppengroesse=${gruppengroesse}&lernort=${lernort}`;
         #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
 
         //Vorschlagbezogen
@@ -377,8 +377,7 @@ export default class LernpartnerAPI {
          * @public
           */
          getProfil(profilID) {
-          return this.#fetchAdvanced(this.#getProfilURL(profilID,
-          {method: 'GET'})).then((responseJSON) => {
+          return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
             let profilBO = ProfilBO.fromJSON(responseJSON);
             console.info(profilBO)
             return new Promise(function (resolve) {
@@ -504,21 +503,13 @@ export default class LernpartnerAPI {
           })
         }
 
-        updateLernvorlieben(lernvorliebenBO) {
-            return this.#fetchAdvanced(this.#updateLernvorliebenURL(lernvorliebenBO.getID()), {
+        updateLernvorlieben(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) {
+            return this.#fetchAdvanced(this.#updateLernvorliebenURL(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort), {
               method: 'PUT',
               headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
-              },
-              body: JSON.stringify(lernvorliebenBO)
-            }).then((responseJSON) => {
-              // We always get an array of LerngruppeBOs.fromJSON
-              let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
-              // console.info(LerngruppeBOs);
-              return new Promise(function (resolve) {
-                resolve(responseLernvorliebenBO);
-              })
+              }
             })
           }
 

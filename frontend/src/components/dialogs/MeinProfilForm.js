@@ -22,7 +22,7 @@ import LoadingProgress from './LoadingProgress';
  * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
  */
 
-class ProjektForm extends Component {
+class MeinProfilForm extends Component {
 
     constructor(props) {
         super(props);
@@ -142,9 +142,9 @@ class ProjektForm extends Component {
         lernvorlieben.lernart = this.state.lernart
         lernvorlieben.gruppengroesse = this.state.gruppengroesse
         lernvorlieben.lernort = this.state.lernort
-        lernvorlieben.lernfaecher = this.state.lernfaecher
-        LernpartnerAPI.getAPI().updateLernvorlieben(person.id, this.state.tageszeiten, this.state.tage, this.state.frequenz, this.state.lernart, this.state.gruppengroesse, this.state.lernort,
-          this.state.lernfaecher).then(lernvorlieben => {
+
+        LernpartnerAPI.getAPI().updateLernvorlieben(lernvorlieben.id, this.state.tageszeiten, this.state.tage, this.state.frequenz, this.state.lernart, this.state.gruppengroesse, this.state.lernort)
+        .then(lernvorlieben => {
             // Backend call sucessfull
             // reinit the dialogs state for a new empty customer
             this.setState(this.baseState);
@@ -214,7 +214,7 @@ class ProjektForm extends Component {
     //Setzen des Status, bei schließen des Dialogs
       handleClose = () => {
         this.setState(this.baseState);
-        this.props.onClose(null);
+        this.props.onClose();
     }
 
     handleChangeStudiengang(event) {
@@ -405,7 +405,7 @@ class ProjektForm extends Component {
                 </Button>
                 {
                     <Button disabled={nameValidationFailed || vornameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
-                          onClick={ () => updatenPerson(person); updatenLernvorlieben(lernvorlieben)} color='primary'>
+                          onClick={this.updatenPerson} color='primary'>
                           Änderungen abschließen
                     </Button>
                 }
@@ -436,4 +436,4 @@ MeinProfilForm.propTypes = {
 	onSignIn: PropTypes.func.isRequired,
 }
 
-export default withRouter(withStyles(styles)(MeinProfilForm));}
+export default withStyles(styles)(MeinProfilForm);

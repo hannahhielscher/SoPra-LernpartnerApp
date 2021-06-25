@@ -47,6 +47,8 @@ nbo = api.inherit('NamedBusinessObject', bo, {
     'name': fields.String(attribute='_name', description='Name des BOs'),
 })
 
+
+
 person = api.inherit('Person', nbo, {
     'vorname': fields.String(attribute='_vorname', description='Vorname der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
@@ -59,9 +61,10 @@ person = api.inherit('Person', nbo, {
     'profil': fields.Integer(attribute='_profil', description='Profil ID der Person'),
 })
 
+
 profil = api.inherit('Profil', bo, {
     'gruppe': fields.Boolean(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
-    'lernfaecher': fields.List(cls_or_instance=fields.Integer, attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernfaecher': fields.List(cls_or_instance=fields.String, attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben_id': fields.Integer(attribute='_lernvorlieben_id', description='Lernvorlieben der Person'),
 })
 
@@ -279,6 +282,21 @@ class ProfilByIDOperationen(Resource):
             return '', 200
         else:
             return '', 500
+
+@lernApp.route('/profile-test/<int:profilid>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class ProfilByIDTestOperationen(Resource):
+    @lernApp.marshal_list_with(profil)
+
+    #secured
+    def get(self, profilid):
+        """Auslesen eines bestimmten Profil-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        profil = adm.get_profil_test(profilid)
+        
+        return profil
 
 """Lerngruppenspezifisch"""
 @lernApp.route('/lerngruppen')
@@ -918,6 +936,32 @@ class LernvorliebenByIDOperationen(Resource):
         lernvorlieben_praeferenz = adm.get_praeferenz_by_lernvorlieben_id(id)
         return lernvorlieben_praeferenz
 
+@lernApp.route('/lernvorlieben')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernvorliebenListeOperationen(Resource):
+    @lernApp.marshal_list_with(lernvorlieben)
+    @secured
+    def put(self):
+        """Update des User-Objekts."""
+
+        lernvorliebenId = request.args.get("id")
+        tageszeiten = request.args.get("tageszeiten")
+        tage = request.args.get("tage")
+        frequenz = request.args.get("frequenz")
+        lernart = request.args.get("lernart")
+        gruppengroesse = request.args.get("gruppengroesse")
+        lernort = request.args.get("lernort")
+        
+        adm = AppAdministration()
+        lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
+        lernvorlieben.set_tageszeiten(tageszeiten)
+        lernvorlieben.set_tage(tage)
+        lernvorlieben.set_frequenz(frequenz)
+        lernvorlieben.set_lernart(lernart)
+        lernvorlieben.set_gruppengroesse(gruppengroesse)
+        lernvorlieben.set_lernort(lernort)
+        
+        adm.update_lernvorlieben_by_id(lernvorlieben)
 
 @lernApp.route('/lernvorlieben')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

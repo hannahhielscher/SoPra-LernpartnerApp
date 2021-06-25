@@ -82,13 +82,38 @@ class ProfilMapper(Mapper):
                 profil.set_lernvorlieben_id(lernvorlieben_id)
 
                 result.append(profil)
+                print(result)
+                print(type(result))
             else:
                 pass
-
+        
         self._connection.commit()
         cursor.close()
 
         return result
+
+    def find_profil_test(self, profil_id):
+
+        result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, gruppe, lernvorlieben_id FROM profile WHERE id ='{}'".format(profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+    
+        for (id, gruppe, lernvorlieben_id) in tuples:
+    
+            profil = Profil()
+            profil.set_id(id)
+            profil.set_gruppe(gruppe)
+            profil.set_lernfaecher(self.find_lernfaecher_by_profil_id(profil_id))
+            profil.set_lernvorlieben_id(lernvorlieben_id)
+
+            result = profil
+            print(result)
+        self._connection.commit()
+        cursor.close()
+
+        return result  
 
     def find_lernfaecher_by_profil_id(self, profil_id):
         """Gibt ein Lernfacher + Bezeichnung eines Profiles zurück"""
@@ -96,6 +121,7 @@ class ProfilMapper(Mapper):
         result_key = []
         result_value = []
         result = []
+
         
 
         cursor = self._connection.cursor()
@@ -103,19 +129,20 @@ class ProfilMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (lernfaecher_id) in tuples:
-            result_key.append(lernfaecher_id)
+        for(lernfaecher_id, bezeichnung) in tuples:
+            #result_key.append(str(lernfaecher_id))
+            #result_value.append(bezeichnung)
+            value = str(lernfaecher_id) + " " + bezeichnung
+            result.append(value)
 
-        for (bezeichnung) in tuples:
-            result_value.append(bezeichnung)
-
-        result = dict.fromkeys(result_key, 0)
-        buff = 0
-        for i in result:
-            for j in range(buff, len(result_value)):
-                result[i] = result_value[j]
-                buff += 1
-                break
+        #result = dict.fromkeys(result_key, 0)
+        #buff = 0
+        #for i in result:
+            #for j in range(buff, len(result_value)):
+                #result[i] = result_value[j]
+                #buff += 1
+                #break
+        
         
         self._connection.commit()
         cursor.close()
