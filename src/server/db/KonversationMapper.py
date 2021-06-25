@@ -62,25 +62,19 @@ class KonversationMapper (Mapper):
 
     def find_by_personid(self, personid):
         """Auslesen aller Konversationen einer Person"""
-
+        
         result = []
         cursor = self._connection.cursor()
         command = "SELECT konversationen.id, konversationen.name FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE person_id ={}".format(personid)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name) = tuples[0]
+        for (id, name) in tuples:
             konversation = Konversation()
             konversation.set_id(id)
             konversation.set_name(name)
 
             result.append(konversation)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
 
         self._connection.commit()
         cursor.close()

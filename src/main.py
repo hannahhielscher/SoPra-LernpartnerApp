@@ -56,7 +56,11 @@ person = api.inherit('Person', nbo, {
     'lerngruppe': fields.String(attribute='_lerngruppe', description='Lerngruppe der Person'),
     'google_user_id': fields.String(attribute='_google_user_id', description='Google user ID der Person'),
     'email': fields.String(attribute='_email', description='Email der Person'),
+<<<<<<< Updated upstream
     'profil': fields.Integer(attribute='_profil', description='Profil ID der Person'),
+=======
+    'personenprofil': fields.Integer(attribute='_personenprofil', description='Profil ID der Person'),
+>>>>>>> Stashed changes
 })
 
 profil = api.inherit('Profil', bo, {
@@ -82,9 +86,9 @@ nachricht = api.inherit('Nachricht', bo, {
     'konversation_id': fields.Integer(attribute='_konversation_id', description='ID der Konversation, in der die Nachricht gesendet wurde'),
 })
 
-konversation = api.inherit('Konversation', bo, {
-    'nachrichten': fields.String(attribute='_nachrichten', description='Enthaltene Nachrichten der Konversation'),
-    'teilnehmer': fields.String(attribute='_teilnehmer', description='Enthaltene Teilnehmer der Konversation'),
+konversation = api.inherit('Konversation', nbo, {
+    
+    
 })
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
@@ -259,7 +263,12 @@ class ProfilByIDOperationen(Resource):
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
+<<<<<<< Updated upstream
         profil = adm.get_profil_by_id(id)
+=======
+        profil = adm.get_profil_test(id)
+        
+>>>>>>> Stashed changes
         return profil
 
     @lernApp.marshal_with(profil)
@@ -617,7 +626,7 @@ class KonversationenOperation(Resource):
 class KonversationByIdOperation(Resource):
 
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, id):
         """Auslesen einer bestimmten Konversation."""
         adm = AppAdministration()
@@ -653,21 +662,18 @@ class KonversationByIdOperation(Resource):
         adm.delete_konversation(k)
         return '', 200
 
-@lernApp.route('/konversationen/<int:id>')
+@lernApp.route('/konversationbyperson/<int:personid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByPersonOperation(Resource):
     
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, personid):
         """Auslesen einer bestimmten Konversation."""
+        print('Test')
         adm = AppAdministration()
         konversation = adm.get_konversation_by_personid(personid)
-
-        if konversation is not None:
-            return konversation
-        else:
-            return '', 500 #Wenn es keine Konversation mit der id gibt.
+        return konversation
 
 #notwendig?
 @lernApp.route('/konversationen/<string:name>')

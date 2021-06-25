@@ -90,7 +90,7 @@ export default class LernpartnerAPI {
         //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
-        #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationen/${personid}`;
+        #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationbyperson/${personid}`;
         #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
