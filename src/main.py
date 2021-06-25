@@ -47,9 +47,7 @@ nbo = api.inherit('NamedBusinessObject', bo, {
     'name': fields.String(attribute='_name', description='Name des BOs'),
 })
 
-test = api.inherit('Lernfach', {
-    'lernfach_id': fields.Integer(attribute='_lernfachid', description='ID des Lernfachs'),
-})
+
 
 person = api.inherit('Person', nbo, {
     'vorname': fields.String(attribute='_vorname', description='Vorname der Person'),
@@ -63,13 +61,10 @@ person = api.inherit('Person', nbo, {
     'profil': fields.Integer(attribute='_profil', description='Profil ID der Person'),
 })
 
-lernfaecher = api.inherit('Lernfaecher', test, {
-    'bezeichnung': fields.String(attribute='_bezeichnung', description='Bezeichnung'),
-})
 
 profil = api.inherit('Profil', bo, {
     'gruppe': fields.Boolean(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
-    'lernfaecher': fields.List(fields.Nested(lernfaecher)),
+    'lernfaecher': fields.List(cls_or_instance=fields.String, attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben_id': fields.Integer(attribute='_lernvorlieben_id', description='Lernvorlieben der Person'),
 })
 
@@ -261,7 +256,7 @@ class ProfilListOperationen(Resource):
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
 
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Profil-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.

@@ -20,8 +20,8 @@ class MeinProfil extends Component {
             person: null,
             
             personVorname: null,
-            personName: null,
-            personSemester: 0,
+            personName: this.props.personName,
+            personSemester: null,
             personAlter: null,
             personStudiengang: null,
             lerngruppe: false,
@@ -55,7 +55,13 @@ class MeinProfil extends Component {
             personProfilID: personBO.personenprofil,
             loadingInProgress: false,
             error: null,
-          }))
+          })).then(() => {
+            if (this.state.personName === 'Null'){
+              this.setState({
+                showRegistrierungForm: true
+              })
+            }
+          })
           .catch(e =>
               this.setState({
             person: null,
@@ -75,7 +81,7 @@ class MeinProfil extends Component {
     
 
    getProfil = () => {
-		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getpersonenprofil())
+		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getprofil())
 			.then(profilBO =>
 				this.setState({
             profil: profilBO,
@@ -85,6 +91,7 @@ class MeinProfil extends Component {
             loadingInProgress: false,
           })).then(() => {
             this.getLernvorlieben();
+           
           }).catch(e =>
             this.setState({
               profil: null,
@@ -125,25 +132,6 @@ class MeinProfil extends Component {
     });
   }
   
-  checkPersonName = () => {
-		if (this.state.personName === 'Null') {
-			this.setState({
-				showRegistrierungForm: true
-			})} else {
-        this.setState({
-        showRegistrierungForm: false
-      })
-			.catch(e =>
-				this.setState({
-          showRegistrierungForm: false,
-          error: e
-				}));
-			this.setState({
-				error: null,
-				loadingInProgress: true
-			});
-			}
-		}
   
   //Handles the onClick event of the show profil button
   bearbeitenButtonClicked = (event) => {
@@ -153,16 +141,18 @@ class MeinProfil extends Component {
     });
   }
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
-  userFormClosed = (currentPerson) => {
-    if (currentPerson) {
+  userFormClosed = (person) => {
+    this.getPerson();
+    if (person) {
         this.setState({
-            currentPerson: currentPerson,
+            person: person,
             showRegistrierungForm: false,
         });
     } else {
         this.setState({
           showRegistrierungForm: false
-        });
+        })
+      
     }
   }
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */

@@ -11,7 +11,7 @@ import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-//import MeinProfil from './components/MeinProfil';
+import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
@@ -28,7 +28,7 @@ class App extends React.Component {
 		this.state = {
 			currentUser: null,
 			personName: null,
-			personneu: true,
+			personneu: false,
 			appError: null,
 			authError: null,
 			authLoading: false,
@@ -112,7 +112,8 @@ class App extends React.Component {
 					personName: personBO.getvorname(),
 					error: null,
 					loadingInProgress: false,
-				})).catch(e =>
+				}))
+				.catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -128,23 +129,6 @@ class App extends React.Component {
 		},1000);
 		}
 	
-	checkPersonName = (personName) => {
-		if (personName = 'Null') {
-			this.setState({
-				personneu: true
-			})
-			.catch(e =>
-				this.setState({
-					personneu: false
-				}));
-			this.setState({
-				error: null,
-				loadingInProgress: true
-			});
-			}
-		}
-	
-
 	/**
 	 * Lifecycle method, which is called when the component gets inserted into the browsers DOM.
 	 * Initializes the firebase SDK.
@@ -155,12 +139,14 @@ class App extends React.Component {
 		firebase.initializeApp(firebaseConfig);
 		firebase.auth().languageCode = 'en';
 		firebase.auth().onAuthStateChanged(this.handleAuthStateChange);
+	
 	}
 
 	/** Renders the whole app */
 	render() {
 		const { currentUser, currentPerson, personneu, personName, appError, authError, authLoading} = this.state;
-
+		console.log(personName)
+		console.log(personneu)
 		return (
 			<ThemeProvider theme={Theme}>
 				{/* Global CSS reset and browser normalization. CssBaseline kickstarts an elegant, consistent, and simple baseline to build upon. */}
@@ -174,12 +160,13 @@ class App extends React.Component {
 							currentUser ?
 								<>
 									<Redirect from='/' to='/about'/>
-									<Route path='/meinprofil' >
-										
+									
+									<Route path='/meinprofil' component={MeinProfil}>
+										<MeinProfil currentPerson={currentPerson}/>
 									</Route>
 
 									<Route path='/meinelerngruppen'>
-                                    	<GruppenListe currentPerson={currentPerson}/>
+                                    	
 									</Route>
 										
 									<Route path='/meinevorschlaege'>

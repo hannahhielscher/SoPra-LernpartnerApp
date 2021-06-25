@@ -121,6 +121,7 @@ class ProfilMapper(Mapper):
         result_key = []
         result_value = []
         result = []
+
         
 
         cursor = self._connection.cursor()
@@ -129,18 +130,19 @@ class ProfilMapper(Mapper):
         tuples = cursor.fetchall()
 
         for(lernfaecher_id, bezeichnung) in tuples:
-            result_key.append(lernfaecher_id)
-            result_value.append(bezeichnung)
-        print(result_key)
-        print(result_value)  
+            #result_key.append(str(lernfaecher_id))
+            #result_value.append(bezeichnung)
+            value = str(lernfaecher_id) + " " + bezeichnung
+            result.append(value)
 
-        result = dict.fromkeys(result_key, 0)
-        buff = 0
-        for i in result:
-            for j in range(buff, len(result_value)):
-                result[i] = result_value[j]
-                buff += 1
-                break
+        #result = dict.fromkeys(result_key, 0)
+        #buff = 0
+        #for i in result:
+            #for j in range(buff, len(result_value)):
+                #result[i] = result_value[j]
+                #buff += 1
+                #break
+        
         
         self._connection.commit()
         cursor.close()

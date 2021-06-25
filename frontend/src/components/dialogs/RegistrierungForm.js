@@ -148,7 +148,7 @@ class RegistrierungForm extends Component {
     }
 
     //Setzen des Status, bei schließen des Dialogs
-      handleClose = () => {
+    handleClose = () => {
         this.setState(this.baseState);
         this.props.onClose(null);
     }
