@@ -405,7 +405,7 @@ class ProjektForm extends Component {
                 </Button>
                 {
                     <Button disabled={nameValidationFailed || vornameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
-                          onClick={this.person} color='primary'>
+                          onClick={ () => updatenPerson(person); updatenLernvorlieben(lernvorlieben)} color='primary'>
                           Änderungen abschließen
                     </Button>
                 }
