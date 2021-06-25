@@ -181,7 +181,7 @@ class App extends React.Component {
 									</Route>
 
 									<Route path='/meinelerngruppen'>
-                                    <GruppenListe currentPerson={currentPerson}/>
+                                    	<GruppenListe currentPerson={currentPerson}/>
 									</Route>
 										
 									<Route path='/meinevorschlaege'>
