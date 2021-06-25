@@ -67,6 +67,7 @@ export default class LernpartnerAPI {
         //Lernvorliebenbezogen
         #getLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
+        #getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
         #updateLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
@@ -89,7 +90,7 @@ export default class LernpartnerAPI {
         //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
-        #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationen/${personid}`;
+        #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationbyperson/${personid}`;
         #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
@@ -376,7 +377,8 @@ export default class LernpartnerAPI {
          * @public
           */
          getProfil(profilID) {
-          return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
+          return this.#fetchAdvanced(this.#getProfilURL(profilID,
+          {method: 'GET'})).then((responseJSON) => {
             let profilBO = ProfilBO.fromJSON(responseJSON);
             console.info(profilBO)
             return new Promise(function (resolve) {
@@ -445,6 +447,21 @@ export default class LernpartnerAPI {
             })
           })
         }
+
+
+        getLernvorliebenPraeferenz(lernvorliebenID) {
+          return this.#fetchAdvanced(this.#getLernvorliebenPraeferenzURL(lernvorliebenID)).then((responseJSON) => {
+            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
+            let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
+            console.info(lernvorliebenBO);
+            return new Promise(function (resolve) {
+              resolve(lernvorliebenBO);
+            })
+          })
+        }
+
+
+
         /**
          * Adds a lernvorlieben and returns a Promise, which resolves to a new LernvorliebenBO object
          *  
