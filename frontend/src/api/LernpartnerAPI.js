@@ -87,7 +87,7 @@ export default class LernpartnerAPI {
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
         #deleteNachrichtenByKonversationURL = (konversationID) => `${this.#lernappServerBaseURL}/nachrichten/${konversationID}`;
         #getNachrichtenByPersonURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
-        #getNachrichtenByInhaltURL= (inhalt) => `${this.#lernappServerBaseURL}/nachrichten/${inhalt}`;
+        #getNachrichtenByInhaltURL= (nachricht_inhalt) => `${this.#lernappServerBaseURL}/nachrichten/${nachricht_inhalt}`;
         
         //Konversationbezogen
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
@@ -680,8 +680,8 @@ export default class LernpartnerAPI {
           * @public
           */
     
-        getNachrichtByInhalt(inhalt){
-          return this.#fetchAdvanced(this.#getNachrichtenByInhaltURL(inhalt)).then((responseJSON) => {
+        getNachrichtByInhalt(nachricht_inhalt){
+          return this.#fetchAdvanced(this.#getNachrichtenByInhaltURL(nachricht_inhalt)).then((responseJSON) => {
           let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
           console.info(nachrichtenBOs)
           return new Promise(function (resolve){
