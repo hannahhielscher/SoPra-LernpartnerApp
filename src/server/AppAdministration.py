@@ -7,6 +7,7 @@ from .bo.TeilnahmeChat import TeilnahmeChat
 from .bo.TeilnahmeGruppe import TeilnahmeGruppe
 from .bo.Vorschlag import Vorschlag
 from .bo.Lernvorlieben import Lernvorlieben
+from .bo.Lernfach import Lernfach
 
 
 from .db.KonversationMapper import KonversationMapper
@@ -18,6 +19,7 @@ from .db.TeilnahmeGruppeMapper import TeilnahmeGruppeMapper
 from .db.LerngruppeMapper import LerngruppeMapper
 from .db.VorschlagMapper import VorschlagMapper
 from .db.LernvorliebenMapper import LernvorliebenMapper
+from .db.LernfachMapper import LernfachMapper
 
 
 
@@ -615,3 +617,22 @@ class AppAdministration (object):
                 result.append(mapper.insert(vorschlag))
 
         return result
+
+    """
+    Profil-spezifische Methoden
+    """
+
+    def get_all_lernfaecher(self):
+        """Gibt alle Lernfaecher zurück."""
+        with LernfachMapper() as mapper:
+            return mapper.find_all()
+
+    def get_lernfach_by_id(self, id):
+        """Gibt Lernfach nach ID zurück."""
+        with LernfachMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_lernfaecher_by_profil_id(self, profilid):
+        """Gibt alle Lernfaecher nach ProfilID zurück."""
+        with LernfachMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profilid)

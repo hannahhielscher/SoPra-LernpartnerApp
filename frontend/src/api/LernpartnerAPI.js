@@ -7,6 +7,7 @@ import NachrichtBO from './NachrichtBO';
 import KonversationBO from './KonversationBO'
 import TeilnahmeChatBO from './TeilnahmeChatBO';
 import TeilnahmeGruppeBO from './TeilnahmeGruppeBO';
+import LernfachBO from './LernfachBO';
 
 /**
  * Abstracts the REST interface of the Python backend with convenient access methods.
@@ -112,6 +113,10 @@ export default class LernpartnerAPI {
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
         #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
+        //Lernfachbezogene
+        #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
+        #getLernfachByIDURL = (id) => `${this.#lernappServerBaseURL}/lernfaecher-by-id/${id}`;
+        #getLernfaecherByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lernfaecher-by-profil/${profilid}`;
         //Personenbezogene
         /**
            * Gibt alle Personen als BO zurück
@@ -1016,7 +1021,55 @@ export default class LernpartnerAPI {
         }
 
 
+        //Lernfachspezifische Methoden
+        /**
+           * Gibt alle Lernfaecher als BO zurück
+           * 
+           * @public
+           */
+          getLernfaecher() {
+            return this.#fetchAdvanced(this.#getLernfaecherURL()).then((responseJSON) => {
+              let lernfaecherBOs = LernfachBO.fromJSON(responseJSON);
+              // console.info(lernfaecherBOs);
+              return new Promise(function (resolve) {
+                resolve(lernfaecherBOs);
+              })           
+            })
+          }
+          
+          /**
+           * Gibt eine Person mit einer bestimmten ID als BO zurück
+           * 
+           * @param {Number} id to be retrieved
+           * @public
+           */
+          getLernfach(id) {
+            return this.#fetchAdvanced(this.#getLernfachByIDURL(id)).then((responseJSON) => {
+              // We always get an array of PersonBOs.fromJSON, but only need one object
+              let lernfachBO = LernfachBO.fromJSON(responseJSON)[0];
+              // console.info(lernfachBO);
+              return new Promise(function (resolve) {
+                resolve(lernfachBO);
+              })
+            })
+          }
 
+          /**
+           * Gibt eine Person mit einer bestimmten ID als BO zurück
+           * 
+           * @param {Number} profilid to be retrieved
+           * @public
+           */
+          getLernfaecherByProfil(profilid) {
+            return this.#fetchAdvanced(this.#getLernfaecherByProfilURL(profilid)).then((responseJSON) => {
+              // We always get an array of PersonBOs.fromJSON, but only need one object
+              let lernfaecherBOs = LernfachBO.fromJSON(responseJSON);
+              console.info(lernfaecherBOs);
+              return new Promise(function (resolve) {
+                resolve(lernfaecherBOs);
+              })
+            })
+          }
 
 
 

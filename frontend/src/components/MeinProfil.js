@@ -27,7 +27,8 @@ class MeinProfil extends Component {
             personStudiengang: null,
             lerngruppe: false,
             personProfilID: null,
-            personLernfaecher: null,
+            personLernfaecher: [],
+            lernfaechernamen: [],
             personLernvorliebenID: null,
             profil: null,
             lernvorlieben: null,
@@ -86,7 +87,6 @@ class MeinProfil extends Component {
 			.then(profilBO =>
 				this.setState({
             profil: profilBO,
-            personLernfaecher: profilBO.lernfaecher,
             personLernvorliebenID: profilBO.lernvorlieben_id,
             error: null,
             loadingInProgress: false,
@@ -108,6 +108,29 @@ class MeinProfil extends Component {
       });
     }
 
+    getLernfaecher = () => {
+      LernpartnerAPI.getAPI().getLernfaecherByProfil(this.props.currentPerson.getprofil())
+      .then(lernfaecherBOs =>
+        this.setState({
+              personLernfaecher: lernfaecherBOs,
+              lernfaechernamen: lernfaecherBOs.map(lernfach=> lernfach.bezeichnung + "  "),
+              loadingInProgress: false,
+              error: null
+        }))
+        .catch(e =>
+          this.setState({ // Reset state with error from catch
+            lernfaecher: null,
+            loadingInProgress: false,
+            error: e,
+          })
+        );
+  
+      // set loading to true
+      this.setState({
+        loadingInProgress: true,
+        loadingError: null
+      });
+    }
    
     getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.state.personLernvorliebenID)
@@ -160,6 +183,7 @@ class MeinProfil extends Component {
   componentDidMount(){
     this.getPerson();
     this.getProfil();
+    this.getLernfaecher();
     
   }
 
@@ -186,8 +210,9 @@ class MeinProfil extends Component {
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
-      console.log(showMeinProfilForm)
+      const { lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
+      console.log(personLernfaecher)
+      console.log(lernfaechernamen)
     
       return (
         <div className={classes.root}>
@@ -200,7 +225,7 @@ class MeinProfil extends Component {
                               <b>Alter: </b> {personAlter} <br />
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
-                              <b>Lernfächer: </b>{personLernfaecher}<br />
+                              <b>Lernfächer: </b>{lernfaechernamen}<br />
                               <b>Lernvorlieben-Frequenz: </b>{lernvorliebenfrequenz}<br />
 
         </Typography>

@@ -16,6 +16,7 @@ from server.bo.Nachricht import Nachricht
 from server.bo.Lernvorlieben import Lernvorlieben
 from server.bo.Konversation import Konversation
 from server.bo.Profil import Profil
+from server.bo.Lernfach import Lernfach
 
 #SecurityDecorator
 from SecurityDecorator import secured
@@ -107,6 +108,10 @@ lernvorlieben = api.inherit('Lernvorlieben', bo, {
     'lernart': fields.String(attribute='_lernart', description='Bevorzugte Lernart'),
     'gruppengroesse': fields.String(attribute='_gruppengroesse', description='Bevorzugte Gruppengroesse'),
     'lernort': fields.String(attribute='_lernort', description='Bevorzugter Lernort'),
+})
+
+lernfach = api.inherit('Lernfaecher', bo, {
+    'bezeichnung': fields.String(attribute='_bezeichnung', description='Bezeichnung des Lernfachs'),
 })
 
 @lernApp.route('/personen')
@@ -995,6 +1000,48 @@ class LernvorliebenListOperationen(Resource):
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
             return '', 500
 
+
+"""Lernfachspezifische Methoden"""
+@lernApp.route('/lernfaecher')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernfaecherOperationen(Resource):
+    @lernApp.marshal_list_with(lernfach)
+    @secured
+    def get(self):
+        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernfaecher = adm.get_all_lernfaecher()
+        return lernfaecher
+
+@lernApp.route('/lernfaecher-by-id/<int:id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernfaecherByIDOperationen(Resource):
+    @lernApp.marshal_list_with(lernfach)
+    @secured
+    def get(self, id):
+        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernfach = adm.get_lernfach_by_id(id)
+        return lernfach
+
+@lernApp.route('/lernfaecher-by-profil/<int:profilid>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class LernfaecherByProfilIDOperationen(Resource):
+    @lernApp.marshal_list_with(lernfach)
+    @secured
+    def get(self, profilid):
+        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernfaecher = adm.get_lernfaecher_by_profil_id(profilid)
+        return lernfaecher
+
+
 """Test-Methoden START"""
 @lernApp.route('/profil-by-lernfach/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -1018,6 +1065,8 @@ class ProfilByIDOperationen(Resource):
         id = request.args.get("id")
         adm = AppAdministration()
         adm.create_lernfaecher(id)
+
+
 
 """Test-Methoden STOP"""
 
