@@ -4,20 +4,19 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/Header';
-//import KonversationListe from './components/KonversationListe';
+import KonversationListe from './components/KonversationListe';
 //import VorschlagListe from './components/VorschlagListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
 import SignIn from './components/pages/SignIn';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
-//import MeinProfil from './components/MeinProfil';
-import GruppenForm from './components/dialogs/GruppeForm';
 import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
-//import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import LernfaecherForm from './components/dialogs/LernfaecherForm';
+import Profil from './components/Profil';
 
 class App extends React.Component {
 
@@ -113,7 +112,8 @@ class App extends React.Component {
 					personName: personBO.getvorname(),
 					error: null,
 					loadingInProgress: false,
-				})).catch(e =>
+				}))
+				.catch(e =>
 					this.setState({
 						currentPerson: null,
 						error: e,
@@ -129,23 +129,6 @@ class App extends React.Component {
 		},1000);
 		}
 	
-	checkPersonName = (personName) => {
-		if (personName = 'Null') {
-			this.setState({
-				personneu: true
-			})
-			.catch(e =>
-				this.setState({
-					personneu: false
-				}));
-			this.setState({
-				error: null,
-				loadingInProgress: true
-			});
-			}
-		}
-	
-
 	/**
 	 * Lifecycle method, which is called when the component gets inserted into the browsers DOM.
 	 * Initializes the firebase SDK.
@@ -156,12 +139,14 @@ class App extends React.Component {
 		firebase.initializeApp(firebaseConfig);
 		firebase.auth().languageCode = 'en';
 		firebase.auth().onAuthStateChanged(this.handleAuthStateChange);
+	
 	}
 
 	/** Renders the whole app */
 	render() {
-		const { currentUser, currentPerson, personneu, appError, authError, authLoading } = this.state;
-
+		const { currentUser, currentPerson, personneu, personName, appError, authError, authLoading} = this.state;
+		console.log(personName)
+		console.log(personneu)
 		return (
 			<ThemeProvider theme={Theme}>
 				{/* Global CSS reset and browser normalization. CssBaseline kickstarts an elegant, consistent, and simple baseline to build upon. */}
@@ -174,17 +159,25 @@ class App extends React.Component {
 							// Is a user signed in?
 							currentUser ?
 								<>
-									<Redirect from='/' to='meinprofil'/>
-									<Route path='/meinprofil' >
-									<MeinProfil currentPerson={currentPerson} showRegistrierungForm={personneu}/>
+									<Redirect from='/' to='/about'/>
+									
+									<Route path='/meinprofil' component={MeinProfil}>
+										<MeinProfil currentPerson={currentPerson}/>
 									</Route>
 
+									<Route path='/meinelerngruppen'>
+                                    	
+									</Route>
+										
 									<Route path='/meinevorschlaege'>
-
+										<LernfaecherForm currentPerson={currentPerson}/>
 									</Route>
+
 									<Route path='/meinechats'>
-
+										<KonversationListe currentPerson={currentPerson} />
+										
 									</Route>
+									
 									<Route path='/about' component={About} />
 									
 								</>
@@ -198,7 +191,7 @@ class App extends React.Component {
 						
 								
 						<LoadingProgress show={authLoading} />
-						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sighn in process.`} onReload={this.handleSignIn} />
+						<ContextErrorMessage error={authError} contextErrorMsg={`Something went wrong during sign in process.`} onReload={this.handleSignIn} />
 						<ContextErrorMessage error={appError} contextErrorMsg={`Something went wrong inside the app. Please reload the page.`} />
 					</Container>
 				

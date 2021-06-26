@@ -7,6 +7,7 @@ from .bo.TeilnahmeChat import TeilnahmeChat
 from .bo.TeilnahmeGruppe import TeilnahmeGruppe
 from .bo.Vorschlag import Vorschlag
 from .bo.Lernvorlieben import Lernvorlieben
+from .bo.Lernfach import Lernfach
 
 
 from .db.KonversationMapper import KonversationMapper
@@ -18,6 +19,7 @@ from .db.TeilnahmeGruppeMapper import TeilnahmeGruppeMapper
 from .db.LerngruppeMapper import LerngruppeMapper
 from .db.VorschlagMapper import VorschlagMapper
 from .db.LernvorliebenMapper import LernvorliebenMapper
+from .db.LernfachMapper import LernfachMapper
 
 
 
@@ -82,7 +84,7 @@ class AppAdministration (object):
         person.set_lerngruppe(lerngruppe)
         person.set_google_user_id(google_user_id)
         person.set_email(email)
-        person.set_personenprofil(profil_id)
+        person.set_profil(profil_id)
         
         person.set_id(1)
 
@@ -94,6 +96,11 @@ class AppAdministration (object):
         """Eine Person mit einer bestimmten ID auslesen"""
         with PersonMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_person_by_profilid(self, profilid):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_profilid(profilid)
 
     def get_all_persons(self):
         """Alle Personen auslesen"""
@@ -155,6 +162,15 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_lernfaecher_by_profil_id(self, profil_id):
+        """Lernfaecher mit einer bestimmten ProfilID auslesen"""
+        with ProfilMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profil_id)
+    
+    def get_profil_test(self, profil_id):
+        with ProfilMapper() as mapper:
+            return mapper.find_profil_test(profil_id)
+
     def get_profil_by_lernfach_id(self, lernfach_id):
         """Profil mit einer bestimmten Lernfach ID auslesen"""
         with ProfilMapper() as mapper:
@@ -205,6 +221,39 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_praeferenz_by_lernvorlieben_id(self, id):
+        """Lernvorlieben mit einer bestimmten ID auslesen"""
+
+        with LernvorliebenMapper() as mapper:
+            tageszeiten_id = mapper.find_tageszeiten_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            tage_id = mapper.find_tage_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            frequenzen_id = mapper.find_frequenzen_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            lernarten_id = mapper.find_lernarten_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            gruppengroessen_id = mapper.find_gruppengroessen_by_lernvorlieben_id(id)
+
+        with LernvorliebenMapper() as mapper:
+            lernorte_id = mapper.find_lernorte_by_lernvorlieben_id(id)
+
+        lernvorlieben = Lernvorlieben()
+
+        lernvorlieben.set_id(id)
+        lernvorlieben.set_tageszeiten(tageszeiten_id)
+        lernvorlieben.set_tage(tage_id)
+        lernvorlieben.set_frequenz(frequenzen_id)
+        lernvorlieben.set_lernart(lernarten_id)
+        lernvorlieben.set_gruppengroesse(gruppengroessen_id)
+        lernvorlieben.set_lernort(lernorte_id)
+
+        return lernvorlieben
+
     def save_lernvorlieben(self, lernvorlieben):
         """Lernvorlieben speichern"""
 
@@ -213,7 +262,6 @@ class AppAdministration (object):
 
     def update_lernvorlieben_by_id(self, lernvorlieben):
         """Lernvorlieben speichern"""
-
         with LernvorliebenMapper() as mapper:
             mapper.update_by_id(lernvorlieben)
     
@@ -243,6 +291,11 @@ class AppAdministration (object):
         """Eine Lerngruppe mit einer bestimmten ID auslesen"""
         with LerngruppeMapper() as mapper:
             return mapper.find_by_id(id)
+
+    def get_lerngruppe_by_person_id(self, id):
+        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        with LerngruppeMapper() as mapper:
+            return mapper.find_by_person_id(id)
 
     def get_all_lerngruppen(self):
         """Alle Lerngruppe auslesen"""
@@ -301,16 +354,20 @@ class AppAdministration (object):
     def get_teilnahmegruppe_by_id(self, id):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_id(id)
+    
+    def get_teilnahmegruppe_by_person_by_gruppe(self, person_id, lerngruppe_id):
+        with TeilnahmeGruppeMapper() as mapper:
+            return mapper.find_by_person_and_lerngruppe(person_id, lerngruppe_id)
 
     def update_teilnahmegruppe(self,teilnahme):
         """Speichert die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmegruppe(self, teilnahme):
+    def delete_teilnahmegruppe(self, id):
         """Löscht die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete(id)
     
     
     """
@@ -384,7 +441,7 @@ class AppAdministration (object):
     def get_konversation_by_personid(self, personid):
         """Gibt alle Konversationen einer Person zurück"""
         with KonversationMapper() as mapper:
-            return mapper.find_by_personid(self, personid)
+            return mapper.find_by_personid(personid)
     
     def get_konversation_by_name(self, name):
         """Gibt die Konversation nach Name zurück"""
@@ -463,7 +520,7 @@ class AppAdministration (object):
         vorschlag.set_main_person_id(main_person_id)
         vorschlag.set_match_quote(match_quote)
         vorschlag.set_lernfaecher_id(lernfaecher_id)
-        vorschlag.set_match_match_profil_idd(match_profil_id)
+        vorschlag.set__match_profil_id(match_profil_id)
         vorschlag.set_id(1)
 
         with VorschlagMapper() as mapper:
@@ -506,7 +563,7 @@ class AppAdministration (object):
         #main_personenprofil_id = main_person.get_personenprofil()
 
         with ProfilMapper() as mapper:
-            main_profil_list = mapper.find_by_id(main_person.get_personenprofil())
+            main_profil_list = mapper.find_by_id(main_person.get_profil())
 
         #Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
         for profil in main_profil_list:
@@ -564,3 +621,22 @@ class AppAdministration (object):
                 result.append(mapper.insert(vorschlag))
 
         return result
+
+    """
+    Profil-spezifische Methoden
+    """
+
+    def get_all_lernfaecher(self):
+        """Gibt alle Lernfaecher zurück."""
+        with LernfachMapper() as mapper:
+            return mapper.find_all()
+
+    def get_lernfach_by_id(self, id):
+        """Gibt Lernfach nach ID zurück."""
+        with LernfachMapper() as mapper:
+            return mapper.find_by_id(id)
+
+    def get_lernfaecher_by_profil_id(self, profilid):
+        """Gibt alle Lernfaecher nach ProfilID zurück."""
+        with LernfachMapper() as mapper:
+            return mapper.find_lernfaecher_by_profil_id(profilid)

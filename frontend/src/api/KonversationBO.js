@@ -2,37 +2,25 @@ import BusinessObject from './BusinessObject';
 
 export default class KonversationBO extends BusinessObject{
 
-	constructor(ateilnehmer, anachricht){
-        super();
-        this.teilnehmer = ateilnehmer;
-        this.nachricht = anachricht;
+	constructor(aanfragestatus){
+		super();
+		this.anfragestatus = aanfragestatus
+		
     }
 
+	/*
+	erhalte 
+	*/
+    getanfragestatus(){
+        return this.anfragestatus;
+    }
+    /*
+	setze 
+	*/
+    setanfragestatus(aanfragestatus){
+        this.anfragestatus = aanfragestatus;
+    }
     
-    /*
-	erhalte 
-	*/
-    getteilnehmer(){
-        return this.teilnehmer;
-    }
-    /*
-	setze 
-	*/
-    setteilnehmer(ateilnehmer){
-        this.teilnehmer = ateilnehmer;
-    }
-    /*
-	erhalte 
-	*/
-    getnachricht(){
-        return this.nachricht;
-    }
-    /*
-	setze 
-	*/
-    setnachricht(anachricht){
-        this.nachricht = anachricht;
-    }
 
     static fromJSON(konversationen) {
 		let results = null;

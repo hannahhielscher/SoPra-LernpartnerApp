@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { withStyles, Typography, Button, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
-import ProfilBO from '../api/ProfilBO';
-import PersonBO from '..api/PersonBO';
+
 
 class Profil extends Component {
 
@@ -16,25 +14,31 @@ class Profil extends Component {
 
         // initiiere einen leeren state
         this.state = {
+            user: props.user,
             profil: null,
+            lernvorlieben: null,
             gruppe: false,
-            personVorname = null,
-            personName = null,
-            personSemester = 0,
-            personStudiengang = null,
-            lerngruppe = false
-            personProfilID = None,
-            personLernfaecher = null,
-            personLernvorliebenID = null
+            tageszeiten: null,
+            tage: null,
+            frequenz: null,
+            lernart: null,
+            gruppengroesse: null,
+            lernort: null,
+            gruppe: null,
+            personVorname: null,
+            personName: null,
+            personSemester: 0,
+            personStudiengang: null,
+            lerngruppe: false,
+            personProfilID: null,
+            personLernfaecher: null,
+            personLernvorliebenID: null,
             loadingInProgress: false,
             loadingError: null,
         };
     }
 
-  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-        this.getPerson();
-  }
+
 
 /**   showVorschlagButtonClick = (event) => {
       event.stopPropagation();
@@ -45,7 +49,7 @@ class Profil extends Component {
 
 
 
-
+/**
     // API Anbindung um Profil vom Backend zu bekommen
     getPerson = () => {
       LernpartnerAPI.getAPI().getPerson(this.props.person.getID())
@@ -76,20 +80,23 @@ class Profil extends Component {
         error: null
       });
     }
+*/
 
      getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(personProfilID).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(this.props.user.id).then(profilBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
+            profil: profilBO,
+            gruppe: profilBO.gruppe,
+            //profilLernfaecher: profilBO.lernfaecher,
             profilLernvorliebenID: profilBO.lernvorlieben,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
           profil: null,
-          profilLernfaecher: null,
-          profilLernvorliebenID: false,
+          gruppe: null,
+          //profilLernfaecher: null,
+          profilLernvorliebenID: null,
           loadingInProgress: false,
           error: e,
         })
@@ -104,18 +111,20 @@ class Profil extends Component {
 
 
      getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorlieben(personLernvorliebenID).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorliebenPraeferenz(this.props.user.profil).then(lernvorliebenBO =>
       this.setState({
-            profil: profilBOs,
-            profilLernfaecher: profilBO.lernfaecher,
-            profilLernvorlieben: profilBO.lernvorlieben,
+            lernvorlieben: lernvorliebenBO,
+            tageszeiten: lernvorliebenBO.tageszeiten,
+            tage: lernvorliebenBO.tage,
+            frequenz: lernvorliebenBO.frequenz,
+            lernart: lernvorliebenBO.lernart,
+            gruppengroesse: lernvorliebenBO.gruppengroesse,
+            lernort: lernvorliebenBO.lernort,
             loadingInProgress: false,
             error: null
       })).catch(e =>
         this.setState({ // Reset state with error from catch
-          profil: null,
-          profilLernfaecher: null,
-          profilLernvorlieben: false,
+          lernvorlieben: null,
           loadingInProgress: false,
           error: e,
         })
@@ -128,22 +137,48 @@ class Profil extends Component {
     });
   }
 
+
+  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
+        this.getProfil();
+        this.getLernvorlieben();
+  }
+
+
    /** Renders the component */
   render() {
-    const { classes } = this.props;
+    const { classes, show } = this.props;
     // Use the states customer
-    const { personProfil, personName, personVorname, personSemester, personStudiengang, personLernfaecher, personLernvorlieben, loadingInProgress, error} = this.state;
+    const { user, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
+    console.log(user)
 
     // console.log(this.props);
     return (
       <div className={classes.root}>
-    """  <Button color="primary" onClick= {this.showVorschlagButtonClick}>Zurueck zu den Vorschlaegen</Button>"""
-      <Typography variant='body1' color={'textSecondary'}>
+            {
+            gruppe ?
+                <>
+                    <b> {user.vorname} {user.name} </b> <br />
+                    <b>Semester: </b> {user.semester} <br />
+                    <b>Studiengang: </b> {user.studiengang} <br />
+                    <b>Alter: </b> {user.alter} <br />
+                    <b>Geschlecht: </b> {user.geschlecht} <br />
 
-                            <b>Semester: </b> {personSemester} <br />
-                            <b>Studiengang: </b>{personStudiengang}<br />
-                            <b>Lernfächer: </b>{personLernfaecher}<br />
-                            <b>Lernvorlieben: </b>{personLernvorlieben}<br />
+                </>
+
+                :
+                <>
+                    <b> Profilinformationen: </b> <br /><br />
+                    Tageszeiten: {tageszeiten}<br />
+                    Tage: {tage}<br />
+                    Frequenz: {frequenz}<br />
+                    Lernart: {lernart}<br />
+                    Lernort: {lernort}
+                </>
+           }
+
+
+
 
 
       </div>
@@ -151,7 +186,7 @@ class Profil extends Component {
   }
 }
 
-  const styles = theme => ({
+const styles = theme => ({
   root: {
       width: '100%',
       marginTop: theme.spacing(2),
@@ -176,14 +211,14 @@ class Profil extends Component {
   breite: {
     width: 220
   }
-  });
+});
 
 
 /** PropTypes */
 Profil.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  person: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired
 }
 

@@ -52,7 +52,7 @@ class VorschlagListe extends Component {
 
     // API Anbindung um Vorschläge des Students vom Backend zu bekommen 
     getVorschlaege = () => {
-            LernpartnerAPI.getAPI().getVorschlaege(this.props.currentPerson.id, this.props.lernfach)
+            LernpartnerAPI.getAPI().getVorschlaegeByPersonByLernfach(this.props.currentPerson.id, this.props.lernfach)
             .then(vorschlagBOs =>
                 this.setState({
                     vorschlaege: vorschlagBOs,
@@ -73,7 +73,7 @@ class VorschlagListe extends Component {
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getVorschlaege();
+        
 
     }
     
@@ -100,13 +100,14 @@ class VorschlagListe extends Component {
     }
 
     render() {
-        const { classes, lernfach } = this.props;
+        const { show, classes, lernfach } = this.props;
         const { vorschlaege, expandedVorschlagID, error, loadingInProgress}  = this.state;
-    
+        console.log(lernfach)
         return (
-          
+          show ?
           <div className={classes.root}>
-            <h1>Test: Vorschläge für Lernfach {lernfach}</h1>
+            <h1>Hier sind alle Matches für dein ausgewähltes Lernfach:</h1>
+            <Button color="primary" onClick= {this.getVorschlaege}>Matches generieren</Button>
             { 
               // Show the list of VorschlagListeEintrag components
               // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
@@ -119,6 +120,7 @@ class VorschlagListe extends Component {
             <LoadingProgress show={loadingInProgress} />
             <ContextErrorMessage error={error} contextErrorMsg={`Sorry, deine Vorschläge konnten nicht geladen werden!`} onReload={this.getVorschlaege} />
           </div>
+          : null
         );
       }
     }
@@ -141,6 +143,7 @@ VorschlagListe.propTypes = {
     classes: PropTypes.object.isRequired,
     /** @ignore */
     location: PropTypes.object.isRequired,
+    show: PropTypes.bool.isRequired,
 }
 
 

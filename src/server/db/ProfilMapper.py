@@ -58,13 +58,14 @@ class ProfilMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        result = []
+        result = None
 
         cursor = self._connection.cursor()
         command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
+    
         for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
 
             buff = False
@@ -80,14 +81,38 @@ class ProfilMapper(Mapper):
                 profil.set_lernfaecher(lernfaecher)
                 profil.set_lernvorlieben_id(lernvorlieben_id)
 
-                result.append(profil)
+                result = profil
+
             else:
                 pass
+        
+        self._connection.commit()
+        cursor.close()
+        print(result)
+        return result
 
+    def find_profil_test(self, profil_id):
+
+        result = None
+        cursor = self._connection.cursor()
+        command = "SELECT id, gruppe, lernvorlieben_id FROM profile WHERE id ='{}'".format(profil_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+    
+        for (id, gruppe, lernvorlieben_id) in tuples:
+    
+            profil = Profil()
+            profil.set_id(id)
+            profil.set_gruppe(gruppe)
+            profil.set_lernfaecher(self.find_lernfaecher_by_profil_id(profil_id))
+            profil.set_lernvorlieben_id(lernvorlieben_id)
+
+            result = profil
+            print(result)
         self._connection.commit()
         cursor.close()
 
-        return result
+        return result  
 
     def find_lernfaecher_by_profil_id(self, profil_id):
         """Gibt ein Lernfacher + Bezeichnung eines Profiles zurück"""
@@ -96,25 +121,28 @@ class ProfilMapper(Mapper):
         result_value = []
         result = []
 
+        
+
         cursor = self._connection.cursor()
         command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (lernfaecher_id) in tuples:
-            result_key.append(lernfaecher_id)
+        for(lernfaecher_id, bezeichnung) in tuples:
+            #result_key.append(str(lernfaecher_id))
+            #result_value.append(bezeichnung)
+            value = str(lernfaecher_id) + " " + bezeichnung
+            result.append(value)
 
-        for (bezeichnung) in tuples:
-            result_value.append(bezeichnung)
-
-        result = dict.fromkeys(result_key, 0)
-        buff = 0
-        for i in result:
-            for j in range(buff, len(result_value)):
-                result[i] = result_value[j]
-                buff += 1
-                break
-
+        #result = dict.fromkeys(result_key, 0)
+        #buff = 0
+        #for i in result:
+            #for j in range(buff, len(result_value)):
+                #result[i] = result_value[j]
+                #buff += 1
+                #break
+        
+        
         self._connection.commit()
         cursor.close()
 

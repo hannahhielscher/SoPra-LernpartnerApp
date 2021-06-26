@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import Profil from './Profil';
+//import Profil from './Profil';
 //import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
@@ -64,7 +64,7 @@ class VorschlagListeEintrag extends Component {
 
     // API Anbindung um Profil vom Backend zu bekommen 
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPerson(this.props.vorschlag.getmain_person_id())
+      LernpartnerAPI.getAPI().getPersonByProfil(this.props.vorschlag.getmatch_profil_id())
       .then(personBO =>
           this.setState({
             person: personBO,
@@ -86,26 +86,48 @@ class VorschlagListeEintrag extends Component {
         error: null
       });
     }
-
-
+ 
+    componentDidMount() {
+      // load initial balance
+      this.getPerson();
+    }
+  
+    /** Lifecycle method, which is called when the component was updated */
+    componentDidUpdate(prevProps) {
+      if ((this.props.show) && (this.props.show !== prevProps.show)) {
+        this.getPerson();
+      }
+    }
+  
     render(){
 
           const { classes, expandedState } = this.props;
-          const {vorschlag, profil, profilID, personName, personVorname, showProfil, showAnfrageForm } = this.state;
-
+          const { person, vorschlag, profil, profilID, personName, personVorname, showProfil, showAnfrageForm } = this.state;
+          console.log(person)
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  id={`vorschlag${vorschlag.getId()}accountpanel-header`}
+                  id={`vorschlag${vorschlag.getID()}accountpanel-header`}
                 >
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
                     <Grid item>
-          <Typography variant='body1' className={classes.heading}>{personName}, {personVorname}, {vorschlag.getmatch()}
+                    <Typography variant='body1' className={classes.heading}>{personVorname} {personName}
+                      </Typography>
+                    <Typography variant='body1' className={classes.heading}>Matchquote: {vorschlag.getmatch_quote()}%
                       </Typography>
                     </Grid>
                     <Grid item>
+                    
+                    </Grid>
+                    <Grid item xs />
+                    <Grid item>
+                      <Typography variant='body2' color={'textSecondary'}>Mehr sehen</Typography>
+                    </Grid>
+                  </Grid>
+                </AccordionSummary>
+                <AccordionDetails>
                       <ButtonGroup variant='text' size='small'>
                         <Button color='primary' onClick={this.showProfilButtonClicked}>
                           Profil ansehen
@@ -114,15 +136,7 @@ class VorschlagListeEintrag extends Component {
                           Kontaktanfrage
                         </Button>
                       </ButtonGroup>
-                    </Grid>
-                    <Grid item xs />
-                    <Grid item>
-                      <Typography variant='body2' color={'textSecondary'}>Profil und Kontaktanfrage</Typography>
-                    </Grid>
-                  </Grid>
-                </AccordionSummary>
-                <Profil show={showProfil} profil={profil}/>
-                <AnfrageForm show={showAnfrageForm} profil={profil}/>
+                    </AccordionDetails>
               </Accordion>
             </div>
           );

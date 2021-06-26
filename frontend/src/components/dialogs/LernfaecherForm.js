@@ -8,8 +8,9 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { LernpartnerAPI } from '../../api';
 import VorschlagListe from '../VorschlagListe';
-import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import LoadingProgress from './dialogs/LoadingProgress';
+import ContextErrorMessage from './ContextErrorMessage';
+import LoadingProgress from './LoadingProgress';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
   
-class LernfaecherForm extends component {
+class LernfaecherForm extends Component {
   
   constructor(props){
     super(props);
@@ -31,21 +32,19 @@ class LernfaecherForm extends component {
         profil: null,
         lernfaecher: [],
         lernfach: null,
+        showVorschlagListe: false,
         loadingInProgress: false,
         error: null
     };
   }
 
   handleChange = (event) => {
-    const lernfach = event.target.lernfach;
-    setState({
-      ...state,
-      [lernfach]: event.target.value,
-    });
+    this.setState({lernfach: event.target.value});
+    
   }
 
   getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getpersonenprofil())
+    LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getprofil())
     .then(profilBO =>
         this.setState({
           profil: profilBO,
@@ -65,10 +64,48 @@ class LernfaecherForm extends component {
           error: null
         });
   }
-  
+
+  getLernfaecher = () => {
+    LernpartnerAPI.getAPI().getLernfaecherByProfil(this.props.currentPerson.getprofil())
+    .then(lernfaecherBOs =>
+      this.setState({
+            lernfaecher: lernfaecherBOs,
+            lernfaechernamen: lernfaecherBOs.map(lernfach=> lernfach.bezeichnung),
+            loadingInProgress: false,
+            error: null
+      }))
+      .catch(e =>
+        this.setState({ // Reset state with error from catch
+          lernfaecher: null,
+          loadingInProgress: false,
+          error: e,
+        })
+      );
+
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+
+  //Handles the onClick event of the show profil button
+  bestaetigenButtonClicked = (event) => {
+    this.setState({
+      showVorschlagListe: true
+    });
+  }
+
+  componentDidMount() {
+    this.getLernfaecher();
+  }
+
   render() {
-    const { currentPerson } = this.props;
-    const { lernfaecher, lernfach, loadingInProgress, error } = this.state;
+    const { classes, currentPerson } = this.props;
+    const { profil, lernfaecher, lernfach, showVorschlagListe, loadingInProgress, error } = this.state;
+    
+    console.log(profil)
+    console.log(showVorschlagListe)
     return (
       <div>
         <FormControl className={classes.formControl}>
@@ -76,20 +113,16 @@ class LernfaecherForm extends component {
           <Select
             native
             value= {lernfach}
-            onChange={handleChange}
-            inputProps={{
-              name: 'age',
-              id: 'age-native-simple',
-            }}
+            onChange={this.handleChange}
           >
-            {lernfaecher.map(lernfach => (
-            <option key={lernfach} value={lernfach}>
-              {lernfach}
-            </option>
-            ))}
+           {lernfaecher.map(lernfach =>
+            <option key={lernfach.id} value={lernfach.id}>{lernfach.bezeichnung}</option>
+          )};
+           
           </Select>
         </FormControl>
-        <VorschlagListe currentPerson = {currentPerson} lernfach={lernfach}/>
+        <Button color="primary" onClick= {this.bestaetigenButtonClicked}>Bestätigen</Button>
+        <VorschlagListe show={showVorschlagListe} currentPerson={currentPerson} lernfach={lernfach} />
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
       </div>

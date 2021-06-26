@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
-import Nachricht from './Nachricht';
-import KonversationListe from './KonversationListe';
-import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import LoadingProgress from './dialogs/LoadingProgress';
+//import Nachricht from './Nachricht';
+//import KonversationListe from './KonversationListe';
+
 
 /** 
  * 
@@ -24,9 +23,7 @@ class KonversationListeEintrag extends Component {
         this.state = {
             konversation: null,
             showKonversation: false,
-            showProfil: false,
-            loadingInProgress: false,
-            error: null
+            //showProfil: false,
         };
     }
 
@@ -64,8 +61,9 @@ render() {
               </ButtonGroup>
             </Grid>
       </Grid>
-      <Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
+      
     </div>
+    //<Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
   )
 
 }

@@ -73,7 +73,183 @@ class LernvorliebenMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
+        
         return result
+
+    def find_tageszeiten_by_lernvorlieben_id(self, id):
+        """Suchen der Lernvorlieben nach der übergebenen ID.
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+
+        command = "SELECT tageszeiten.praeferenz FROM lernvorlieben INNER JOIN tageszeiten ON lernvorlieben.tageszeiten_id = tageszeiten.id WHERE lernvorlieben.id ='{}'".format(id)
+        cursor.execute(command)
+
+        tuples = cursor.fetchall()
+
+        try:
+            (praeferenz) = tuples[0]
+
+            result = ''.join(praeferenz)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_tage_by_lernvorlieben_id(self, id):
+        """Suchen der Lernvorlieben nach der übergebenen ID.
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+
+        command = "SELECT tage.praeferenz FROM lernvorlieben INNER JOIN tage ON lernvorlieben.tage_id = tage.id WHERE lernvorlieben.id ='{}'".format(id)
+        cursor.execute(command)
+
+        tuples = cursor.fetchall()
+
+        try:
+            (praeferenz) = tuples[0]
+
+            result = ''.join(praeferenz)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_frequenzen_by_lernvorlieben_id(self, id):
+        """Suchen der Lernvorlieben nach der übergebenen ID.
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+
+        command = "SELECT frequenzen.praeferenz FROM lernvorlieben INNER JOIN frequenzen ON lernvorlieben.frequenzen_id = frequenzen.id WHERE lernvorlieben.id ='{}'".format(id)
+        cursor.execute(command)
+
+        tuples = cursor.fetchall()
+
+        try:
+            (praeferenz) = tuples[0]
+
+            result = ''.join(praeferenz)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_lernarten_by_lernvorlieben_id(self, id):
+        """Suchen der Lernvorlieben nach der übergebenen ID.
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+
+        command = "SELECT lernarten.praeferenz FROM lernvorlieben INNER JOIN lernarten ON lernvorlieben.lernarten_id = lernarten.id WHERE lernvorlieben.id ='{}'".format(id)
+        cursor.execute(command)
+
+        tuples = cursor.fetchall()
+
+        try:
+            (praeferenz) = tuples[0]
+
+            result = ''.join(praeferenz)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_gruppengroessen_by_lernvorlieben_id(self, id):
+        """Suchen der Lernvorlieben nach der übergebenen ID.
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+
+        command = "SELECT gruppengroessen.praeferenz FROM lernvorlieben INNER JOIN gruppengroessen ON lernvorlieben.gruppengroessen_id = gruppengroessen.id WHERE lernvorlieben.id ='{}'".format(id)
+        cursor.execute(command)
+
+        tuples = cursor.fetchall()
+
+        try:
+            (praeferenz) = tuples[0]
+
+            result = ''.join(praeferenz)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_lernorte_by_lernvorlieben_id(self, id):
+        """Suchen der Lernvorlieben nach der übergebenen ID.
+        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        result = None
+        cursor = self._connection.cursor()
+
+        command = "SELECT lernorte.praeferenz FROM lernvorlieben INNER JOIN lernorte ON lernvorlieben.lernorte_id = lernorte.id WHERE lernvorlieben.id ='{}'".format(id)
+        cursor.execute(command)
+
+        tuples = cursor.fetchall()
+
+        try:
+            (praeferenz) = tuples[0]
+
+            result = ''.join(praeferenz)
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
 
     def insert(self, lernvorlieben):
         """Einfügen eines Lernvorlieben Objekts in die DB
@@ -103,8 +279,11 @@ class LernvorliebenMapper(Mapper):
         cursor.close()
 
         return lernvorlieben
+    
+    def update(self):
+        pass
 
-    def update(self, lernvorlieben):
+    def update_by_id(self, lernvorlieben):
         """Überschreiben / Aktualisieren eines Lernvorlieben-Objekts in der DB
         :param lernvorlieben -> Lernvorlieben-Objekt
         :return aktualisiertes Lernvorlieben-Objekt
@@ -112,7 +291,7 @@ class LernvorliebenMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE lernvorlieben " + "SET tageszeiten_id=%s, tage_id=%s, frequenzen_id=%s, lernarten_id=%s, gruppengroessen_id=%s, lernorte_id=%s WHERE id=%s"
-        data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
+        data = (lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort(), lernvorlieben.get_id())
 
         cursor.execute(command, data)
 

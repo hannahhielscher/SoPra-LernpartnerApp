@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
 //import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
-import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
-import { Button, ButtonGroup } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import TextField from "@material-ui/core/TextField";
-//import TableCell from '@material-ui/core/TableCell';
-//import TableRow from '@material-ui/core/TableRow';
+import { withStyles } from '@material-ui/core';
+//import { Button, ButtonGroup } from '@material-ui/core';
+//import TextField from "@material-ui/core/TextField";
 
 //import InputLabel from '@material-ui/core/InputLabel';
 //import MenuItem from '@material-ui/core/MenuItem';
@@ -18,8 +15,8 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
 import Nachricht from './Nachricht'
-import NachrichtForm from './NachrichtForm'
-import GruppeForm from './GruppeForm'
+//import NachrichtForm from './NachrichtForm'
+//import GruppeForm from './GruppeForm'
 
 /**
  * Es wird eine einzelne Nachricht von einer Person  dargestellt
@@ -35,12 +32,12 @@ class NachrichtenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            nachricht: [], //Liste mit den IDs aller Nachrichten 
+            nachrichten: [], //Liste mit den IDs aller Nachrichten 
             konversation_ID: null,  
             inhalt: null, 
             person_id: null,
-            //showNachrichtForm: false,
-            //showGruppeForm: false, 
+            personName: null,
+            personVorname: null,
             loadingInProgress: false,
             error: null
         };
@@ -63,12 +60,11 @@ class NachrichtenListeEintrag extends Component {
 
       // API Anbindung um Nachricht vom Backend zu bekommen 
     getNachrichten = () => {
-        LernpartnerAPI.getAPI().getNachrichten(this.props.nachricht)
+        LernpartnerAPI.getAPI().getNachrichten(this.props.nachrichten)
         .then(nachrichtBO =>
             this.setState({
-              nachricht: nachrichtBO,
+              nachrichten: nachrichtBO,
               inhalt: nachrichtBO.inhalt,
-              person_id: nachrichtBO.person_id,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
@@ -76,7 +72,7 @@ class NachrichtenListeEintrag extends Component {
             })
             .catch(e =>
                 this.setState({
-                  nachricht: null,
+                  nachrichten: null,
                   inhalt: null,
                   loadingInProgress: false,
                   error: e,
@@ -86,6 +82,31 @@ class NachrichtenListeEintrag extends Component {
           error: null
         });
       }
+
+      // API Anbindung um Person vom Backend zu bekommen 
+    getPerson = () => {
+      LernpartnerAPI.getAPI().getPerson(this.props.nachricht.getmain_person_id())
+      .then(personBO =>
+          this.setState({
+            person: personBO,
+            personName: personBO.name,
+            personVorname: personBO.vorname,
+            loadingInProgress: false,
+            error: null,
+          }))
+          .catch(e =>
+              this.setState({
+                person: null,
+                personName: null,
+                personVorname: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
    
 
 
@@ -97,33 +118,16 @@ class NachrichtenListeEintrag extends Component {
 
       render() {
         const { classes, currentperson } = this.props;
-        const {nachrichten, inhalt, konversation_ID, person_id}
+        const {nachrichten, inhalt, konversation_ID, personName, personVorname, expandedNachrichtID, loadingInProgress, error} = this.state;
 
         return(
           <div>
-          <Grid container className={classes.header} justify="flex-end" alignItems="center" spacing={2}>
-          <Grid item>
-              <Button color='primary' onClick={this.showNachrichtButtonClicked}>
-                Alle Nachrichten anzeigen 
-              </Button>
-          </Grid>
-          </Grid>
-          
-          <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="nachrichten tabelle">
-              <TableHead>
-                  <StyledTableRow>
-                      <StyledTableCell>Nachrichten</StyledTableCell>
-                      <StyledTableCell align="center"> {inhalt} </StyledTableCell>
-                  </StyledTableRow>
-              </TableHead>
-              <TableBody>
                   {
                       nachrichten ?
                       <>
                       {
                           nachrichten.map(nachricht =>
-                            <Nachricht key={nachricht.getID()} nachricht={nachricht} username={nachricht.getPersonID()} inhalt={nachricht.getInhalt()} expandedState={expandedNachrichtID === nachricht.getID()}
+                            <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachrichten} personName={personVorname + " " +personVorname} inhalt={inhalt} expandedState={expandedNachrichtID === nachricht.getID()}
                               onExpandedStateChange={this.onExpandedStateChange}
                             />)
                       }
@@ -131,11 +135,10 @@ class NachrichtenListeEintrag extends Component {
                       :
                       <></>
                   }
-              </TableBody>
-          </Table>
+         
           <LoadingProgress show={loadingInProgress} />
           <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachricht konnte nicht geladen werden'} onReload={this.getNachrichten} /> 
-          </TableContainer>
+          
         </div>
         )
       }
@@ -150,7 +153,7 @@ const styles = (theme) => ({
 });
   
   /** PropTypes */
-  NachrichtListeEintrag.propTypes = {
+  NachrichtenListeEintrag.propTypes = {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     NachrichtListeEintrag: PropTypes.object.isRequired,
@@ -158,4 +161,4 @@ const styles = (theme) => ({
   }
   
   
-  export default withStyles(styles)(NachrichtListeEintrag);
+  export default withStyles(styles)(NachrichtenListeEintrag);
