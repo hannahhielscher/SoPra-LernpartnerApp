@@ -92,6 +92,48 @@ class PersonMapper(Mapper):
         
         return result
 
+    def find_by_profilid(self, profilid):
+        """Suchen einer Person nach der übergebenen ID. 
+        :param id Primärschlüsselattribut einer Person aus der Datenbank
+        :return Person-Objekt, welche mit der ID übereinstimmt,
+                None wenn kein Eintrag gefunden wurde
+        """
+        
+        cursor = self._connection.cursor()
+        command = "SELECT id, name, vorname, semester, studiengang, `alter`, geschlecht, lerngruppe, google_user_id, email, profil_id FROM personen WHERE profil_id='{}'".format(profilid)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+        
+        try:
+            (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe, google_user_id, email,  profil_id) = tuples[0]
+            person = Person()
+            person.set_id(id)
+            person.set_name(name)
+            person.set_vorname(vorname)
+            person.set_semester(semester)
+            person.set_studiengang(studiengang)
+            person.set_alter(alter)
+            person.set_geschlecht(geschlecht)
+            person.set_lerngruppe(lerngruppe)
+            person.set_google_user_id(google_user_id)
+            person.set_email(email)
+            person.set_profil(profil_id)
+            
+            result = person
+
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+			keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+            
+
+        self._connection.commit()
+        cursor.close()
+
+        
+        return result
+
     def find_by_google_user_id(self, google_user_id):
         """Suchen einer Person nach der übergebenen Google User ID. 
         :param google_user_id Google User ID einer Person aus der Datenbank

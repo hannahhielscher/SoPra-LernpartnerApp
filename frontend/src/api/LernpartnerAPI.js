@@ -45,6 +45,7 @@ export default class LernpartnerAPI {
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
         #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
+        #getPersonByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/personen-by-profil/${profilid}`;
         #updatePersonURL = (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe) => `${this.#lernappServerBaseURL}/personen?id=${id}&name=${name}&vorname=${vorname}&semester=${semester}&studiengang=${studiengang}&alter=${alter}&geschlecht=${geschlecht}&lerngruppe=${lerngruppe}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
         #searchPersonURL = (personName) => `${this.#lernappServerBaseURL}/personen-by-name/${personName}`;
@@ -76,7 +77,7 @@ export default class LernpartnerAPI {
         //Vorschlagbezogen
         #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
         //#getSelectedLernfach = () => `${this.#lernappServerBaseURL}`
-        #getVorschlaegeByPersonByLernfachURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}/${lernfachID}`;
+        #getVorschlaegeByPersonByLernfachURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege-by-person-by-lernfach/${mainpersonID}/${lernfachID}`;
 
         //Nachrichtenbezogen
         #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
@@ -165,10 +166,27 @@ export default class LernpartnerAPI {
         getPerson(personID) {
           return this.#fetchAdvanced(this.#getPersonURL(personID)).then((responseJSON) => {
             // We always get an array of PersonBOs.fromJSON, but only need one object
-            let responsePersonBO = PersonBO.fromJSON(responseJSON)[0];
-            // console.info(responsePersonBO);
+            let personBO = PersonBO.fromJSON(responseJSON);
+            console.info(personBO);
             return new Promise(function (resolve) {
-              resolve(responsePersonBO);
+              resolve(personBO);
+            })
+          })
+        }
+
+        /**
+         * Gibt eine Person mit einer bestimmten ID als BO zurück
+         * 
+         * @param {Number} profilID to be retrieved
+         * @public
+         */
+        getPersonByProfil(profilID) {
+          return this.#fetchAdvanced(this.#getPersonByProfilURL(profilID)).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON, but only need one object
+            let personBO = PersonBO.fromJSON(responseJSON);
+            console.info(personBO);
+            return new Promise(function (resolve) {
+              resolve(personBO);
             })
           })
         }

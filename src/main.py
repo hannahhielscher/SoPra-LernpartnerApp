@@ -118,7 +118,7 @@ lernfach = api.inherit('Lernfaecher', bo, {
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonenOperationen(Resource):
     @lernApp.marshal_list_with(person)
-    #@secured
+    @secured
     def get(self):
         """Auslesen aller Personen-Objekte.
         Sollten keine Personen-Objekte verfügbar sein,
@@ -198,6 +198,20 @@ class PersonOperationen(Resource):
         pers = adm.get_person_by_id(id)
         adm.delete_person(pers)
         return '', 200
+
+@lernApp.route('/personen-by-profil/<int:profilid>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonByProfilOperationen(Resource):
+    @lernApp.marshal_list_with(person)
+   
+    @secured
+    def get(self, profilid):
+        """Auslesen eines bestimmten Person-Objekts.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        person = adm.get_person_by_profilid(profilid)
+        return person
 
 @lernApp.route('/personbygoogle/<string:google_user_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -450,7 +464,7 @@ class VorschlagByIDOperationen(Resource):
         adm = AppAdministration()
         adm.delete_vorschlag_by_id(id)
 
-@lernApp.route('/vorschlaege/<int:mainpersonid>/<int:lernfachid>')
+@lernApp.route('/vorschlaege-by-person-by-lernfach/<int:mainpersonid>/<int:lernfachid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeByPersonByLernfachOperations(Resource):
     @lernApp.marshal_list_with(vorschlag)

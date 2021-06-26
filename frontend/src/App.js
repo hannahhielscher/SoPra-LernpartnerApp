@@ -170,6 +170,7 @@ class App extends React.Component {
 									</Route>
 										
 									<Route path='/meinevorschlaege'>
+										<LernfaecherForm currentPerson={currentPerson}/>
 									</Route>
 
 									<Route path='/meinechats'>
