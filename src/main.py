@@ -87,7 +87,7 @@ nachricht = api.inherit('Nachricht', bo, {
 })
 
 konversation = api.inherit('Konversation', nbo, {
-    
+    'anfragestatus': fields.Integer(attribute='_anfragestatus', description='Anfragestatus der Konversation'),
     
 })
 
@@ -242,7 +242,7 @@ class ProfilListOperationen(Resource):
         profile = adm.get_all_profil()
         return profile
 
-    #@secured
+    @secured
     def post(self):
         """Anlegen eines neuen Profil-Objekts."""
         id = request.args.get("id")
@@ -250,7 +250,28 @@ class ProfilListOperationen(Resource):
         lernfaecher = request.args.get("lernfaecher")
         lernvorlieben_id = request.args.get("lernvorlieben_id")
         adm = AppAdministration()
-        adm.create_profil( gruppe, lernfaecher, lernvorlieben_id)
+        profil = adm.get_profil_by_id(id)
+        print(type(profil))
+        profil.set_gruppe(gruppe)
+        profil.set_lernfaecher(lernfaecher)
+        profil.set_lernvorlieben_id(lernvorlieben_id)
+        adm.create_profil(profil)
+
+    @secured
+    def put(self):
+        """Update des User-Objekts."""
+
+        profilid = request.args.get("id")
+        gruppe = request.args.get("gruppe")
+        lernfaecher = request.args.get("lernfaecher")
+        lernvorlieben_id = request.args.get("lernvorlieben_id")
+        adm = AppAdministration()
+
+        profil = adm.get_profil_by_id(profilid)
+        profil.set_gruppe(gruppe)
+        profil.set_lernfaecher(lernfaecher)
+        profil.set_lernvorlieben_id(lernvorlieben_id)
+        adm.update_profil_by_id(profil)
 
     #@secured
     #def put(self):
@@ -630,6 +651,7 @@ class NachrichtByKonversationByPersonOperation(Resource):
 class KonversationenOperation(Resource):
 
     @lernApp.marshal_list_with(konversation)
+    @secured
     def get(self):
         """Auslesen aller Konversations-Objekte.
 
@@ -639,6 +661,7 @@ class KonversationenOperation(Resource):
         return konversationen
     
     @lernApp.marshal_with(konversation)
+    @secured
     def post(self, id):
         """Anlegen einer Konversation."""
         adm = AppAdministration()
@@ -655,7 +678,7 @@ class KonversationenOperation(Resource):
 class KonversationByIdOperation(Resource):
 
     @lernApp.marshal_with(konversation)
-    #@secured
+    @secured
     def get (self, id):
         """Auslesen einer bestimmten Konversation."""
         adm = AppAdministration()
@@ -684,6 +707,7 @@ class KonversationByIdOperation(Resource):
 
 
     @lernApp.marshal_with(konversation)
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten Konversationobjekts."""
         adm = AppAdministration()

@@ -206,6 +206,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`konversationen` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`konversationen` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NULL,
+  `anfragestatus` TINYINT NULL, 
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -215,7 +216,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`konversationen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys Chat'), (2, 'Girl Power Chat'), (3, 'Programmier-Pros');
+INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys Chat', true), (2, 'Girl Power Chat', true), (3, 'Programmier-Pros', true);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` ENABLE KEYS */;
 UNLOCK TABLES;
 

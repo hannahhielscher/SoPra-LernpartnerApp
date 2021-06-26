@@ -262,7 +262,6 @@ class AppAdministration (object):
 
     def update_lernvorlieben_by_id(self, lernvorlieben):
         """Lernvorlieben speichern"""
-
         with LernvorliebenMapper() as mapper:
             mapper.update_by_id(lernvorlieben)
     

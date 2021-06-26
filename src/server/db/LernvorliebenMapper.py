@@ -279,8 +279,11 @@ class LernvorliebenMapper(Mapper):
         cursor.close()
 
         return lernvorlieben
+    
+    def update(self):
+        pass
 
-    def update(self, lernvorlieben):
+    def update_by_id(self, lernvorlieben):
         """Überschreiben / Aktualisieren eines Lernvorlieben-Objekts in der DB
         :param lernvorlieben -> Lernvorlieben-Objekt
         :return aktualisiertes Lernvorlieben-Objekt
