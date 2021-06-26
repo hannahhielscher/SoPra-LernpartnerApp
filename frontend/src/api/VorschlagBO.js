@@ -2,12 +2,13 @@ import BusinessObject from './BusinessObject';
 
 export default class VorschlagBO extends BusinessObject{
 
-	constructor(amain_person_id, amatch_quote, alernfach, aperson_id){
+	constructor(amain_person_id, amatch_quote, alernfaecher_id, amatch_profil_id){
 		super();
 		this.main_person_id = amain_person_id;
 		this.match_quote = amatch_quote;
-		this.lernfach = alernfach;
-        this.person_id = aperson_id;
+		this.lernfaecher_id = alernfaecher_id;
+		this.match_profil_id = amatch_profil_id;
+		
 	}
 
 	/*
@@ -37,26 +38,26 @@ export default class VorschlagBO extends BusinessObject{
 	/*
 	erhalte 
 	*/
-	getlernfach(){
-		return this.lernfach;
+	getlernfaecher_id(){
+		return this.lernfaecher_id;
 	}
 	/*
 	setze 
 	*/
-	setlernfach(alernfach){
-		this.mernfach = alernfach;
+	setlernfaecher_id(alernfaecher_id){
+		this.lernfaecher_id = alernfaecher_id;
 	}
     /*
 	erhalte 
 	*/
-    getperson_id(){
-        return this.person_id;
+    getmatch_profil_id(){
+        return this.match_profil_id;
     }
     /*
 	setze 
 	*/
-    setperson_id(aperson_id){
-        this.person_id = aperson_id;
+    setperson_id(amatch_profil_id){
+        this.match_profil_id = amatch_profil_id;
     }
     
 

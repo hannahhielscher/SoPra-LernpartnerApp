@@ -97,6 +97,11 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_person_by_profilid(self, profilid):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_profilid(profilid)
+
     def get_all_persons(self):
         """Alle Personen auslesen"""
         with PersonMapper() as mapper:
@@ -516,7 +521,7 @@ class AppAdministration (object):
         vorschlag.set_main_person_id(main_person_id)
         vorschlag.set_match_quote(match_quote)
         vorschlag.set_lernfaecher_id(lernfaecher_id)
-        vorschlag.set_match_match_profil_idd(match_profil_id)
+        vorschlag.set__match_profil_id(match_profil_id)
         vorschlag.set_id(1)
 
         with VorschlagMapper() as mapper:
@@ -559,7 +564,7 @@ class AppAdministration (object):
         #main_personenprofil_id = main_person.get_personenprofil()
 
         with ProfilMapper() as mapper:
-            main_profil_list = mapper.find_by_id(main_person.get_personenprofil())
+            main_profil_list = mapper.find_by_id(main_person.get_profil())
 
         #Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
         for profil in main_profil_list:

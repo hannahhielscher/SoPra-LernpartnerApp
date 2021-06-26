@@ -119,7 +119,7 @@ class MeinProfil extends Component {
         }))
         .catch(e =>
           this.setState({ // Reset state with error from catch
-            lernfaecher: null,
+            personLernfaecher: null,
             loadingInProgress: false,
             error: e,
           })
@@ -188,21 +188,6 @@ class MeinProfil extends Component {
   }
 
 
-    //wird aufgerufen, wenn Dialog Fenster geschloßen wird
-    MeinProfilFormClosed = projekt => {
-        if (projekt) {
-            const newProjektList = [...this.state.projekte, projekt];
-            this.setState({
-                projekte: newProjektList,
-                filteredProjekte: [...newProjektList],
-                showProjekteForm: false
-            });
-        } else {
-            this.setState({
-                showProjekteForm: false
-            });
-        }
-    }
 
 
 
