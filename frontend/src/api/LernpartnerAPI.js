@@ -747,7 +747,7 @@ export default class LernpartnerAPI {
             })
           }
           /** 
-          * Adds a KOnversation and returns a Promise, which resolves to a new KonversationBO object
+          * Adds a Konversation and returns a Promise, which resolves to a new KonversationBO object
           *  
           * @param {KonversationBO} konversationBO to be added. The ID of the new nachricht is set by the backend
           * @public

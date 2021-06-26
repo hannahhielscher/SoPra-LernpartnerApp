@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles} from '@material-ui/core';
+import { withStyles, Grid, Typography} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -21,27 +21,26 @@ class KonversationListe extends Component {
     constructor(props){
         super(props);
 
-        /**  console.log(props);
         let expandedID = null;
 
         if (this.props.location.expandKonversation) {
         expandedID = this.props.location.expandKonversation.getID();
         }
-        */
+        
        
         // initiiere einen leeren state
         this.state = {
             konversationen : [],
             error: null,
             loadingInProgress: false, 
-            //expandedKonversationID: expandedID,
+            expandedKonversationID: expandedID,
         };
 
       }
 
       // API Anbindung um Konversationen des Students vom Backend zu bekommen 
     getKonversation = () => {
-      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getID())
+      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.id)
       .then(konversationenBOs =>
           this.setState({
               konversationen: konversationenBOs,
@@ -64,7 +63,7 @@ class KonversationListe extends Component {
  
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
-  this.getKonversation();
+ 
 }
 
 
@@ -73,6 +72,7 @@ componentDidMount() {
      * the VorschlagListeEintrag of the given VorschlagBO.
      * 
      * @param {konversation} KonversationBO of the KonversationListeEintrag to be toggeled
+   */
      
   onExpandedStateChange = konversation => {
     // console.log(konversationID);
@@ -89,21 +89,22 @@ componentDidMount() {
     expandedKonversastionID: newID,
     });
 }
-*/
+ 
 
 render() {
   const { classes, currentPerson } = this.props;
-        const { konversationen, error, loadingInProgress}  = this.state; 
+        const { konversationen, expandedKonversationID, error, loadingInProgress}  = this.state; 
 
         return(
           <div className={classes.root}>
-
+           
             { 
               // Show the list of KonversationListeEintrag components
               // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
   
               konversationen.map(konversation =>
-                <KonversationListeEintrag key={konversation.getID()} currentPerson= {currentPerson} konversation={konversation}
+                <KonversationListeEintrag key={konversation.getID()} currentPerson= {currentPerson} konversation={konversation} expandedState={expandedKonversationID === konversation.getID()}
+                onExpandedStateChange={this.onExpandedStateChange}
                 />)
             }
             <LoadingProgress show={loadingInProgress} />
