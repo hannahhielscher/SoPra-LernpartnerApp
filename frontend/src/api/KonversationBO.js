@@ -2,11 +2,24 @@ import BusinessObject from './BusinessObject';
 
 export default class KonversationBO extends BusinessObject{
 
-	constructor(){
-        super();
-        
+	constructor(aanfragestatus){
+		super();
+		this.anfragestatus = aanfragestatus
+		
     }
 
+	/*
+	erhalte 
+	*/
+    getanfragestatus(){
+        return this.anfragestatus;
+    }
+    /*
+	setze 
+	*/
+    setanfragestatus(aanfragestatus){
+        this.anfragestatus = aanfragestatus;
+    }
     
 
     static fromJSON(konversationen) {

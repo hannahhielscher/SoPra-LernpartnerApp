@@ -62,7 +62,7 @@ export default class LernpartnerAPI {
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
         #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
         #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
-        #updateProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
+        #updateProfilURL = (id, gruppe, lernfaecher, lernvorlieben) => `${this.#lernappServerBaseURL}/profile?id=${id}&gruppe=${gruppe}&lernfaecher=${lernfaecher}&lernvorlieben=${lernvorlieben}`;
         //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
@@ -412,25 +412,16 @@ export default class LernpartnerAPI {
         /**
          * Updated ein Profil und gibt Promise zurück, resolves as ProfilBO.
          * 
-         * @param {ProfilBO} profilBO to be updated
          * @public
          */
-        updateProfil(profilBO) {
-          return this.#fetchAdvanced(this.#updateProfilURL(profilBO.getID()), {
+        updateProfil(id, gruppe, lernfaecher, lernvorlieben) {
+          return this.#fetchAdvanced(this.#updateProfilURL(id, gruppe, lernfaecher, lernvorlieben), {
             method: 'PUT',
             headers: {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
-            },
-            body: JSON.stringify(profilBO)
-          }).then((responseJSON) => {
-            // We always get an array of ProfilBOs.fromJSON
-            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
-            // console.info(ProfilBOs);
-            return new Promise(function (resolve) {
-              resolve(responseProfilBO);
-            })
-          })
+            }
+          }) 
         }
         /**
          * Gibt Promise zurück

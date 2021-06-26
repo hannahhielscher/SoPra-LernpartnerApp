@@ -19,13 +19,14 @@ class KonversationMapper (Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT id, name FROM konversationen")
+        cursor.execute("SELECT id, name, anfragestatus FROM konversationen")
         tuples = cursor.fetchall()
 
-        for (id, name) in tuples:
+        for (id, name, anfragestatus) in tuples:
             konversation = Konversation()
             konversation.set_id(id)
             konversation.set_name(name)
+            konversation.set_anfragestatus(anfragestatus)
             result.append(konversation)
 
         self._connection.commit()
@@ -38,15 +39,16 @@ class KonversationMapper (Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name FROM konversationen WHERE id={}".format(id)
+        command = "SELECT id, name, anfragestatus FROM konversationen WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name) = tuples[0]
+            (id, name, anfragestatus) = tuples[0]
             konversation = Konversation()
             konversation.set_id(id)
             konversation.set_name(name)
+            konversation.set_anfragestatus(anfragestatus)
 
             result = konversation
 
@@ -65,14 +67,15 @@ class KonversationMapper (Mapper):
         
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT konversationen.id, konversationen.name FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE person_id ={}".format(personid)
+        command = "SELECT konversationen.id, konversationen.name konversation.anfragestatus FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE person_id ={}".format(personid)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name) in tuples:
+        for (id, name, anfragestatus) in tuples:
             konversation = Konversation()
             konversation.set_id(id)
             konversation.set_name(name)
+            konversation.set_anfragestatus(anfragestatus)
 
             result.append(konversation)
 
@@ -85,15 +88,16 @@ class KonversationMapper (Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name FROM konversationen WHERE name={}".format(name)
+        command = "SELECT id, name, anfragestatus FROM konversationen WHERE name={}".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name) = tuples[0]
+            (id, name, anfragestatus) = tuples[0]
             konversation = Konversation()
             konversation.set_id(id)
             konversation.set_name(name)
+            konversation.set_anfragestatus(anfragestatus)
 
             result = konversation
         
@@ -130,8 +134,8 @@ class KonversationMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 konversation.set_id(1)
 
-        command = "INSERT INTO konversationen (id, name) VALUES (%s,%s)"
-        data = (konversation.get_id(), konversation.get_name())
+        command = "INSERT INTO konversationen (id, name, anfragestatus) VALUES (%s,%s)"
+        data = (konversation.get_id(), konversation.get_name(), konversation.get_anfragestatus())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -146,8 +150,8 @@ class KonversationMapper (Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE konversationen " + "SET name=%s WHERE id=%s"
-        data = (konversation.get_name(), konversation.get_id())
+        command = "UPDATE konversationen " + "SET name=%s, anfragestatus=%s WHERE id=%s"
+        data = (konversation.get_name(), konversation.get_anfragestatus(), konversation.get_id())
         cursor.execute(command, data)
 
         self._connection.commit() 

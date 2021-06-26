@@ -179,6 +179,23 @@ class MeinProfil extends Component {
       
     }
   }
+
+  //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
+  bearbeitenFormClosed = (person) => {
+    this.getPerson();
+    if (person) {
+        this.setState({
+            person: person,
+            showMeinProfilForm: false,
+        });
+    } else {
+        this.setState({
+          showMeinProfilForm: false
+        })
+      
+    }
+  }
+
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
   componentDidMount(){
     this.getPerson();
@@ -196,12 +213,12 @@ class MeinProfil extends Component {
       const { classes , currentPerson } = this.props;
       // Use the states customer
       const { lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
-      console.log(personLernfaecher)
-      console.log(lernfaechernamen)
+      console.log(profil)
+      
     
       return (
         <div className={classes.root}>
-        <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.MeinProfilFormClosed}/>
+        <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
         
         <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
@@ -211,10 +228,10 @@ class MeinProfil extends Component {
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
                               <b>Lernfächer: </b>{lernfaechernamen}<br />
-                              <b>Lernvorlieben-Frequenz: </b>{lernvorliebenfrequenz}<br />
+                              <b>Lernvorlieben-Frequenz Test: </b>{lernvorliebenfrequenz}<br />
 
         </Typography>
-        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} lernvorlieben={lernvorlieben} onClose={this.userFormClosed} />
+        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil= {profil} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
         </div>
       );
     }
