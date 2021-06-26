@@ -29,6 +29,7 @@ class MeinProfil extends Component {
             personProfilID: null,
             personLernfaecher: [],
             lernfaechernamen: [],
+            lernfaechergesamt: [],
             personLernvorliebenID: null,
             profil: null,
             lernvorlieben: null,
@@ -131,6 +132,29 @@ class MeinProfil extends Component {
         loadingError: null
       });
     }
+
+    getalleLernfaecher = () => {
+      LernpartnerAPI.getAPI().getLernfaecher()
+      .then(lernfaecherBOs =>
+        this.setState({
+              lernfaechergesamt: lernfaecherBOs,
+              loadingInProgress: false,
+              error: null
+        }))
+        .catch(e =>
+          this.setState({ // Reset state with error from catch
+            lernfaechergesamt: null,
+            loadingInProgress: false,
+            error: e,
+          })
+        );
+  
+      // set loading to true
+      this.setState({
+        loadingInProgress: true,
+        loadingError: null
+      });
+    }
    
     getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.state.personLernvorliebenID)
@@ -201,19 +225,17 @@ class MeinProfil extends Component {
     this.getPerson();
     this.getProfil();
     this.getLernfaecher();
+    this.getalleLernfaecher();
     
   }
-
-
-
 
 
    /** Renders the component */
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
-      console.log(profil)
+      const { lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
+      console.log(lernfaechergesamt)
       
     
       return (
@@ -231,7 +253,7 @@ class MeinProfil extends Component {
                               <b>Lernvorlieben-Frequenz Test: </b>{lernvorliebenfrequenz}<br />
 
         </Typography>
-        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil= {profil} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
+        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernvorlieben={lernvorlieben} lernfaechergesamt={lernfaechergesamt} onClose={this.bearbeitenFormClosed}/>
         </div>
       );
     }

@@ -202,8 +202,22 @@ class RegistrierungForm extends Component {
                   <FormControl className={classes.formControl}>
                             <InputLabel>Studiengang</InputLabel>
                              <Select required error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
-                                <MenuItem value='WI'>Wirtschaftsinformatik</MenuItem>
-                                <MenuItem value='MW'>Medienwirtschaft</MenuItem>
+                                <MenuItem value='Audiovisuelle Medien'>Audiovisuelle Medien</MenuItem>
+                                <MenuItem value='Crossmedia-Redaktion/Public Relations'>Crossmedia-Redaktion/Public Relations</MenuItem>
+                                <MenuItem value='Deutsch-chinesischer Studiengang Medien und Technologie'>Deutsch-chinesischer Studiengang Medien und Technologie</MenuItem>
+                                <MenuItem value='Informationsdesign'>Informationsdesign</MenuItem>
+                                <MenuItem value='Infomationswissenschaften'>Infomationswissenschaften</MenuItem>
+                                <MenuItem value='Integriertes Produktdesign'>Integriertes Produktdesign</MenuItem>
+                                <MenuItem value='Mediapublishing'>Mediapublishing</MenuItem>
+                                <MenuItem value='Medieninformatik'>Medieninformatik</MenuItem>
+                                <MenuItem value='Medienwirtschaft'>Medienwirtschaft</MenuItem>
+                                <MenuItem value='Mobile Medien'>Mobile Medien</MenuItem>
+                                <MenuItem value='Online-Medien-Management'>Online-Medien-Management</MenuItem>
+                                <MenuItem value='Print Media Technologies'>Print Media Technologies</MenuItem>
+                                <MenuItem value='Verpackungstechnik'>Verpackungstechnik</MenuItem>
+                                <MenuItem value='Werbung & Marktkommunikation'>Werbung & Marktkommunikation</MenuItem>
+                                <MenuItem value='Wirtschaftsinformatik und digitale Medien'>Wirtschaftsinformatik und digitale Medien</MenuItem>
+                                <MenuItem value='Wirtschaftsingenieurwesen Medien'>Wirtschaftsingenieurwesen Medien</MenuItem>
                             </Select>
                    </FormControl>
                    

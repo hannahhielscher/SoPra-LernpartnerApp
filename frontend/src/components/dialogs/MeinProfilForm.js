@@ -81,7 +81,7 @@ class MeinProfilForm extends Component {
             lernortValidationFailed: false,
             lernortEdited: false,
 
-            lernfaecher: null,
+            lernfach: null,
             lernfaecherValidationFailed: false,
             lernfaecherEdited: false,
 
@@ -89,6 +89,7 @@ class MeinProfilForm extends Component {
             updatingInProgress: false,
 
             profil: this.props.currentProfil,
+            test: this.props.lernfaechergesamt,
             gruppe: 0,
 
         };
@@ -278,7 +279,7 @@ class MeinProfilForm extends Component {
     }
 
     handleChangeLernfaecher(event) {
-      this.setState({lernfaecher: event.target.value});
+      this.setState({lernfach: event.target.value});
     }
 
 
@@ -290,9 +291,10 @@ class MeinProfilForm extends Component {
         const { profil, name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
           alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, tageszeiten,
           tageszeitenValidationFailed, tage, tageValidationFailed, frequenz, frequenzValidationFailed, lernart, lernartValidationFailed, gruppengroesse, gruppengroesseValidationFailed,
-          lernort, lernortValidationFailed, lernfaecher, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
+          lernort, lernortValidationFailed, lernfach, test, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
 
-
+        console.log(test)
+        
         let title = 'Profil bearbeiten';
         let header = 'Bitte gib deine neuen Daten ein:';
 
@@ -325,8 +327,22 @@ class MeinProfilForm extends Component {
                   <FormControl className={classes.formControl}>
                             <InputLabel>Studiengang</InputLabel>
                              <Select required error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
-                                <MenuItem value='WI'>Wirtschaftsinformatik</MenuItem>
-                                <MenuItem value='MW'>Medienwirtschaft</MenuItem>
+                             <MenuItem value='Audiovisuelle Medien'>Audiovisuelle Medien</MenuItem>
+                                <MenuItem value='Crossmedia-Redaktion/Public Relations'>Crossmedia-Redaktion/Public Relations</MenuItem>
+                                <MenuItem value='Deutsch-chinesischer Studiengang Medien und Technologie'>Deutsch-chinesischer Studiengang Medien und Technologie</MenuItem>
+                                <MenuItem value='Informationsdesign'>Informationsdesign</MenuItem>
+                                <MenuItem value='Infomationswissenschaften'>Infomationswissenschaften</MenuItem>
+                                <MenuItem value='Integriertes Produktdesign'>Integriertes Produktdesign</MenuItem>
+                                <MenuItem value='Mediapublishing'>Mediapublishing</MenuItem>
+                                <MenuItem value='Medieninformatik'>Medieninformatik</MenuItem>
+                                <MenuItem value='Medienwirtschaft'>Medienwirtschaft</MenuItem>
+                                <MenuItem value='Mobile Medien'>Mobile Medien</MenuItem>
+                                <MenuItem value='Online-Medien-Management'>Online-Medien-Management</MenuItem>
+                                <MenuItem value='Print Media Technologies'>Print Media Technologies</MenuItem>
+                                <MenuItem value='Verpackungstechnik'>Verpackungstechnik</MenuItem>
+                                <MenuItem value='Werbung & Marktkommunikation'>Werbung & Marktkommunikation</MenuItem>
+                                <MenuItem value='Wirtschaftsinformatik und digitale Medien'>Wirtschaftsinformatik und digitale Medien</MenuItem>
+                                <MenuItem value='Wirtschaftsingenieurwesen Medien'>Wirtschaftsingenieurwesen Medien</MenuItem>
                             </Select>
                    </FormControl>
 
@@ -404,15 +420,15 @@ class MeinProfilForm extends Component {
                    <br/>
                    <FormControl className={classes.formControl}>
                             <InputLabel>Was willst du lernen?</InputLabel>
-                             <Select required error={lernfaecherValidationFailed} value={lernfaecher} onChange={this.handleChangeLernfaecher}>
-                                <MenuItem value='1'>Software Entwicklung</MenuItem>
-                                <MenuItem value='2'>Data Science</MenuItem>
-                                <MenuItem value='3'>Führungsorientiertes Rechnungswesen</MenuItem>
-                                <MenuItem value='4'>Medienrecht</MenuItem>
-                                <MenuItem value='5'>Crossmedia-Konzeption</MenuItem>
-                                <MenuItem value='6'>Web-Technologie</MenuItem>
-                                <MenuItem value='7'>Datenbanken</MenuItem>
-                                <MenuItem value='8'>IT-Security</MenuItem>
+                             
+                            <Select
+                              native
+                              value= {lernfach}
+                              onChange={this.handleChangeLernfaecher}
+                            >
+                            {test.map(lernfach =>
+                              <option key={lernfach.id} value={lernfach.id}>{lernfach.bezeichnung}</option>
+                            )};
                             </Select>
                    </FormControl>
 

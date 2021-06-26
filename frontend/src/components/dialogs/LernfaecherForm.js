@@ -97,7 +97,6 @@ class LernfaecherForm extends Component {
   }
 
   componentDidMount() {
-    
     this.getLernfaecher();
   }
 
