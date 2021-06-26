@@ -43,7 +43,7 @@ class Nachricht extends Component {
    // Init an empty state
    this.state = {
      nachrichten: '',
-     inhalt: null,
+     nachricht_inhalt: null,
      konversation_id: null, 
      error: null,
      loadingInProgress: false,
@@ -74,7 +74,7 @@ class Nachricht extends Component {
     .then((nachrichtBO) =>
       this.setState({
         nachricht: nachrichtBO,
-        inhalt: nachrichtBO.inhalt,
+        nachricht_inhalt: nachrichtBO.nachricht_inhalt,
         konversation_id: nachrichtBO.konversation_id,
         loadingInProgress: false,
         error: null,
@@ -95,7 +95,7 @@ class Nachricht extends Component {
 
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
-      this.state.inhalt,
+      this.state.nachricht_inhalt,
       this.props.currentPerson.getID(),
       this.props.konversation_id.getID()
     );
@@ -104,7 +104,7 @@ addNachricht = () => {
       .addNachricht(newNachricht)
       .then((nachricht) => {
         this.state.nachricht.push(nachricht);
-        this.setState({ inhalt: "" });
+        this.setState({ nachricht_inhalt: "" });
         // Backend call sucessfull
         // reinit the dialogs state for a new empty nachricht
       })
@@ -163,7 +163,7 @@ nachrichtFormClosed = nachrichten => {
  // Rendert die Componente 
     render() {
       const { classes, currentPerson } = this.props;
-      const { nachrichten, inhalt, konversation_id, loadingInProgress, error } = this.state;
+      const { nachrichten, nachricht_inhalt, konversation_id, loadingInProgress, error } = this.state;
       if (nachrichten) {
         nachrichten.sort((a, b) => {
           return a.getID() - b.getID();
@@ -186,7 +186,7 @@ nachrichtFormClosed = nachrichten => {
                           className={classes.outerColumn}
                           style={{ display: "flex", alignItems: "center", position: "rigth" }}
                         >
-                          <Typography>{nachricht.getInhalt()}</Typography>
+                          <Typography>{nachricht.getNachricht_Inhalt()}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -205,7 +205,7 @@ nachrichtFormClosed = nachrichten => {
                           justify="flex-end"
                           position= "left"
                         >
-                          <Typography>{nachricht.getInhalt()}</Typography>
+                          <Typography>{nachricht.getNachricht_Inhalt()}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -219,7 +219,7 @@ nachrichtFormClosed = nachrichten => {
             <TextField
               id="standard-basic"
               label="schreibe eine Nachricht"
-              value={inhalt}
+              value={nachricht_inhalt}
               onChange={this.handleChange}
             />
           </form>
