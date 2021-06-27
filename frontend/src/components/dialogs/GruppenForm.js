@@ -289,7 +289,7 @@ class GruppenForm extends Component {
                 onChange={this.textFieldValueChange} error={gruppenNameValidationFailed}
                 helperText={gruppenNameValidationFailed ? 'Der Gruppenname muss mindestens ein Zeichen enthalten' : ' '} />
 
-              Bitte fülle für deine neue Lerngruppe folgende Profilinformationen vollständig aus:
+              Bitte fülle für deine neue Lerngruppe folgende Profilinformationen mit euren Präferenzen vollständig aus.
               <br/>
               <FormControl required className={classes.formControl}>
                 <InputLabel>Lernfach:</InputLabel>
@@ -328,8 +328,8 @@ class GruppenForm extends Component {
               <FormControl required className={classes.formControl}>
                 <InputLabel>Frequenz:</InputLabel>
                 <Select error={frequenzValidationFailed} value={frequenz} onChange={this.frequenzSelectionChange}>
-                <MenuItem value={1}>Wöchentlich</MenuItem>
-                <MenuItem value={2}>Mehrmals die Woche</MenuItem>
+                <MenuItem value={1}>Mehrmals die Woche</MenuItem>
+                <MenuItem value={2}>Wöchentlich</MenuItem>
                 <MenuItem value={3}>Alle zwei Wochen</MenuItem>
                 </Select>
               </FormControl>

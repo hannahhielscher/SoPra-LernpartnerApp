@@ -306,7 +306,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`frequenzen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`frequenzen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`frequenzen` VALUES (1, 'Wöchentlich'), (2, 'Mehrmals die Woche'), (3, 'Alle zwei Wochen');
+INSERT INTO `lernapp_SWPra`.`frequenzen` VALUES (1, 'Mehrmals die Woche'), (2, 'Wöchentlich'), (3, 'Alle zwei Wochen');
 /*!40000 ALTER TABLE `lernapp_SWPra`.`frequenzen` ENABLE KEYS */;
 UNLOCK TABLES;
 
