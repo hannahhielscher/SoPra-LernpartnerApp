@@ -107,15 +107,9 @@ class NachrichtenListeEintrag extends Component {
         error: null
       });
     }
+
+
    
-
-
-    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-    componentDidMount() {
-      this.getNachrichten();
-    }
-
-
       /** Handles onChange events of the underlying ExpansionPanel */
     expansionPanelStateChanged = () => {
       this.props.onExpandedStateChange(this.props.nachricht);
