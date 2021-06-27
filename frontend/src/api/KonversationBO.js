@@ -1,6 +1,6 @@
-import BusinessObject from './BusinessObject';
+import NamedBusinessObject from './NamedBusinessObject';
 
-export default class KonversationBO extends BusinessObject{
+export default class KonversationBO extends NamedBusinessObject{
 
 	constructor(aanfragestatus){
 		super();
@@ -27,7 +27,7 @@ export default class KonversationBO extends BusinessObject{
 		if (Array.isArray(konversationen)) {
 			results = [];
 			konversationen.forEach((x) => {
-				Object.setPrototypeOf(x, konversationen.prototype);
+				Object.setPrototypeOf(x, KonversationBO.prototype);
 				results.push(x);
 			})
 		} else {

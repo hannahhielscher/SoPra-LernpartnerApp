@@ -67,7 +67,7 @@ class KonversationMapper (Mapper):
         
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT konversationen.id, konversationen.name konversation.anfragestatus FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE person_id ={}".format(personid)
+        command = "SELECT konversationen.id, konversationen.name, konversationen.anfragestatus FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE person_id ={}".format(personid)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

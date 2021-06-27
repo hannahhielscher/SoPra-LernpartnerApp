@@ -731,9 +731,10 @@ export default class LernpartnerAPI {
 
           getKonversationenByPerson(personid) {
             return this.#fetchAdvanced(this.#getKonversationenByPersonURL(personid)).then((responseJSON) => {
-              let konversationenBOs = KonversationBO.fromJSON(responseJSON);
+              let konversationBO = KonversationBO.fromJSON(responseJSON);
+              console.log(konversationBO)
               return new Promise(function (resolve) {
-                resolve(konversationenBOs);
+                resolve(konversationBO);
               })           
             })
           }
