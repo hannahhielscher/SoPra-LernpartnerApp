@@ -40,7 +40,7 @@ class KonversationListe extends Component {
 
       // API Anbindung um Konversationen des Students vom Backend zu bekommen 
     getKonversation = () => {
-      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.id)
+      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getID())
       .then(konversationenBOs =>
           this.setState({
               konversationen: konversationenBOs,
@@ -63,7 +63,7 @@ class KonversationListe extends Component {
  
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
- 
+  this.getKonversation();
 }
 
 
@@ -86,9 +86,10 @@ componentDidMount() {
     }
     // console.log(newID);
     this.setState({
-    expandedKonversastionID: newID,
+    expandedKonversationID: newID,
     });
 }
+
  
 
 render() {

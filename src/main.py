@@ -386,13 +386,14 @@ class LerngruppeListOperationen(Resource):
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
    
-    #@secured
+    @secured
     def get(self, id):
         """Auslesen aller Lerngruppen-Objekte einer Person.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
         lerngruppe = adm.get_lerngruppe_by_person_id(id)
+        
         return lerngruppe
         
     @lernApp.marshal_with(lerngruppe)
@@ -722,9 +723,10 @@ class KonversationByPersonOperation(Resource):
     @lernApp.marshal_with(konversation)
     @secured
     def get(self, personid):
-        """Auslesen einer bestimmten Konversation."""
+        """Auslesen aller Konversationen einer Person."""
         adm = AppAdministration()
         konversation = adm.get_konversation_by_personid(personid)
+        
         return konversation
 
 #notwendig?

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, Grid } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
-//import Nachricht from './Nachricht';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
+import Nachricht from './Nachricht';
 //import KonversationListe from './KonversationListe';
 
 
@@ -21,8 +22,9 @@ class KonversationListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            konversation: null,
+            konversation: this.props.konversation,
             showKonversation: false,
+            showChatVerlassenForm: false, 
             //showProfil: false,
         };
     }
@@ -31,41 +33,64 @@ class KonversationListeEintrag extends Component {
     
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
-  this.getKonversation();
+  
 }
+
+/** Handles onChange events of the underlying ExpansionPanel */
+expansionPanelStateChanged = () => {
+  this.props.onExpandedStateChange(this.props.konversation);
+  }
 
 //Handles the onClick event of the show Konversation button
 showKonversationButtonClicked = (event) => {
-  event.stopPropagation();
   this.setState({
     showKonversation: true
   });
 }
 
-render() {
-  const { classes } = this.props;
-  const { konversation } = this.state;
+//Handles the onClick event of the show Konversation button
+verlassenButtonClicked = (event) => {
+  this.setState({
+    showChatVerlassenForm: true
+  });
+}
 
+render() {
+  const { classes, expandedState, currentPerson} = this.props;
+  const { konversation, showKonversation, showChatVerlassenForm } = this.state;
+  console.log(konversation)
   return(
     <div>
-      <Grid container spacing={1} justify='flex-start' alignItems='center'>
-            <Grid item>
-              <Typography variant='body1' className={classes.heading}>{konversation.getname()}
-                </Typography>
-            </Grid>  
-            <Grid item>
-              <ButtonGroup variant='text' size='small'>
-                <Button color='primary' onClick={this.showKonversationButtonClicked}>
-                    Konversation ansehen
-                </Button>
-              </ButtonGroup>
+        <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            id={`konversation${konversation.getID()}accountpanel-header`}
+          >
+            <Grid container spacing={1} justify='flex-start' alignItems='center'>
+              <Typography variant='body1'>
+                  {konversation.getname()}
+              </Typography>
             </Grid>
-      </Grid>
-      
-    </div>
-    //<Nachricht show={showKonversation} konversationid = {konversation.getid()}/> 
+              <Typography variant='body1'>
+                  Optionen
+              </Typography>
+              </AccordionSummary>
+                <AccordionDetails>
+                <ButtonGroup variant='text' size='small'>
+                        <Button color='primary' onClick={this.showProfilButtonClicked}>
+                          Chat ansehen
+                        </Button>
+                        <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
+                          Chat verlassen
+                        </Button>
+                      </ButtonGroup>
+              </AccordionDetails>
+              </Accordion>
+              
+            </div>
+    
   )
-
+  //<Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
 }
   
     

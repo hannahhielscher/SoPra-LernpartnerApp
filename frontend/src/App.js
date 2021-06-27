@@ -17,6 +17,7 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import firebaseConfig from './firebaseconfig';
 import LernfaecherForm from './components/dialogs/LernfaecherForm';
 import Profil from './components/Profil';
+import GruppenListe from './components/GruppenListe';
 
 class App extends React.Component {
 
@@ -166,7 +167,7 @@ class App extends React.Component {
 									</Route>
 
 									<Route path='/meinelerngruppen'>
-                                    	
+                                    	<GruppenListe currentPerson={currentPerson}/>
 									</Route>
 										
 									<Route path='/meinevorschlaege'>
@@ -175,7 +176,6 @@ class App extends React.Component {
 
 									<Route path='/meinechats'>
 										<KonversationListe currentPerson={currentPerson} />
-										
 									</Route>
 									
 									<Route path='/about' component={About} />
