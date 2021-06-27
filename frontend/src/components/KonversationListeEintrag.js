@@ -30,11 +30,6 @@ class KonversationListeEintrag extends Component {
     }
 
 
-    
-// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-componentDidMount() {
-  
-}
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {
@@ -54,6 +49,46 @@ verlassenButtonClicked = (event) => {
     showChatVerlassenForm: true
   });
 }
+
+       /** Konversation holen fürs Löschen */
+  getKonversation = () => {
+    LernpartnerAPI.getAPI().getKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation.id)
+    .then(konversationNBO => {
+      this.setState({
+        konversation: konversationNBO,
+      });
+    }).catch(e =>
+      this.setState({
+        konversation: null,
+      })
+    );
+  }
+
+    /** Handles the onClick event of the delete konversation button */
+    loescheKonversationButtonClicked = (event) => {
+        event.stopPropagation();
+        this.setState({
+            showKonversationLoeschenDialog: true
+        });
+    }
+
+    /** Handles the onClose event of the KonversationGeloeschtDialog */
+    loescheKonversationDialogClosed = (konversation) => {
+      // if konversation is not null, delete it
+      if (konversation) {
+        this.props.onKonversationDeleted(konversation);
+    };
+
+    // Don´t show the dialog
+        this.setState({
+          showCustomerKonversationLoeschenDialog: false
+    });
+  }
+
+      // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+    componentDidMount() {
+        this.getNachrichten();
+    }
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
@@ -83,7 +118,10 @@ render() {
                         <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
                           Chat verlassen
                         </Button>
-                      </ButtonGroup>
+                        <Button color='secondary' onClick={this.loescheKonversationButtonClicked}>
+                          Chat loeschen
+                        </Button>
+                </ButtonGroup>
               </AccordionDetails>
               </Accordion>
               <Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
