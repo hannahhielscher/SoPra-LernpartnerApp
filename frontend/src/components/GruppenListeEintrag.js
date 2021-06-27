@@ -155,7 +155,7 @@ class GruppenListeEintrag extends Component {
                   <Profil user={lerngruppe}/>
                 </AccordionDetails>
               </Accordion>
-              <GruppenForm show={showLerngruppeForm} onClose={this.lerngruppeFormClosed} />
+              <GruppenForm show={showLerngruppeForm} currentPerson={currentPerson} onClose={this.lerngruppeFormClosed} />
               <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} currentPerson={currentPerson} onClose={this.verlasseLerngruppeDialogClosed}/>
             </div>
           );

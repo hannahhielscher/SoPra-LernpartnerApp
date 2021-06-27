@@ -3,8 +3,8 @@ import NamedBusinessObject from './NamedBusinessObject';
 
 export default class LerngruppeBO extends NamedBusinessObject{
 
-	constructor(aprofil){
-        super();
+	constructor(aname, aprofil){
+        super(aname);
         this.profil = aprofil;
     }
     /*

@@ -2,7 +2,7 @@ import BusinessObject from './BusinessObject';
 
 export default class TeilnahmeGruppeBO extends BusinessObject{
 
-	constructor(astatus, ateilnehmer, alerngruppe){
+	constructor(ateilnehmer, alerngruppe){
         super();
         this.teilnehmer = ateilnehmer;
         this.lerngruppe = alerngruppe;

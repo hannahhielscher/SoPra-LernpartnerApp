@@ -20,19 +20,31 @@ class LernvorliebenMapper(Mapper):
 
         command = "SELECT lernvorlieben.id, lernvorlieben.tageszeiten_id, lernvorlieben.tage_id, lernvorlieben.frequenzen_id, lernvorlieben.lernarten_id, lernvorlieben.gruppengroessen_id, lernvorlieben.lernorte_id FROM lernvorlieben"
 
+        comman2 = "SELECT lernvorlieben.tageszeiten_id, tageszeiten.praeferenz FROM lernvorlieben INNER JOIN tageszeiten ON lernvorlieben.tageszeiten_id = tageszeiten.id"
+        comman3 = "SELECT lernvorlieben.tage_id, tage.praeferenz FROM lernvorlieben INNER JOIN tage ON lernvorlieben.tage_id = tage.id"
+        comman4 = "SELECT lernvorlieben.frequenzen_id, frequenzen.praeferenz FROM lernvorlieben INNER JOIN frequenzen ON lernvorlieben.frequenzen_id = frequenzen.id"
+        comman5 = "SELECT lernvorlieben.lernarten_id, lernarten.praeferenz FROM lernvorlieben INNER JOIN lernarten ON lernvorlieben.lernarten_id = lernarten.id"
+        comman6 = "SELECT lernvorlieben.gruppengroessen_id, gruppengroesse.praeferenz FROM lernvorlieben INNER JOIN gruppengroesse ON lernvorlieben.gruppengroessen_id = gruppengroesse.id"
+        comman7 = "SELECT lernvorlieben.lernorte_id, lernorte.praeferenz FROM lernvorlieben INNER JOIN lernorte ON lernvorlieben.lernorte_id = lernorte.id"
+
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) in tuples:
+        for (id, tageszeiten_id, tageszeiten_bez, tage_id, tage_bez, frequenz_id, frequenz_bez, lernart_id, lernart_bez, gruppengroesse_id, gruppengroesse_bez, lernort_id, lernort_bez) in tuples:
             lernvorlieben = Lernvorlieben()
             lernvorlieben.set_id(id)
-            lernvorlieben.set_tageszeiten(tageszeiten)
-            lernvorlieben.set_tage(tage)
-            lernvorlieben.set_frequenz(frequenz)
-            lernvorlieben.set_lernart(lernart)
-            lernvorlieben.set_gruppengroesse(gruppengroesse)
-            lernvorlieben.set_lernort(lernort)
-            
+            lernvorlieben.set_tageszeiten_id(tageszeiten_id)
+            lernvorlieben.set_tageszeiten_bez(tageszeiten_bez)
+            lernvorlieben.set_tage_id(tage_id)
+            lernvorlieben.set_tage_bez(tage_bez)
+            lernvorlieben.set_frequenz_id(frequenz_id)
+            lernvorlieben.set_frequenz_bez(frequenz_bez)
+            lernvorlieben.set_lernart_id(lernart_id)
+            lernvorlieben.set_lernart_bez(lernart_bez)
+            lernvorlieben.set_gruppengroesse_id(gruppengroesse_id)
+            lernvorlieben.set_gruppengroesse_bez(gruppengroesse_bez)
+            lernvorlieben.set_lernort_id(lernort_id)
+            lernvorlieben.set_lernort_bez(lernort_bez)
             
             result.append(lernvorlieben)
 
@@ -47,23 +59,67 @@ class LernvorliebenMapper(Mapper):
         :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde
         """
-        result = None
         cursor = self._connection.cursor()
-        command = "SELECT lernvorlieben.id, lernvorlieben.tageszeiten_id, lernvorlieben.tage_id, lernvorlieben.frequenzen_id, lernvorlieben.lernarten_id, lernvorlieben.gruppengroessen_id, lernvorlieben.lernorte_id FROM lernvorlieben WHERE id='{}'".format(id)
+        #command = "SELECT lernvorlieben.id, lernvorlieben.tageszeiten_id, lernvorlieben.tage_id, lernvorlieben.frequenzen_id, lernvorlieben.lernarten_id, lernvorlieben.gruppengroessen_id, lernvorlieben.lernorte_id FROM lernvorlieben WHERE id='{}'".format(id)
+
+        command = "SELECT lernvorlieben.tageszeiten_id, tageszeiten.praeferenz FROM lernvorlieben INNER JOIN tageszeiten ON lernvorlieben.tageszeiten_id = tageszeiten.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
+        (tageszeiten_id, tageszeiten_bez) = tuples[0]
+        tageszeiten_id = tageszeiten_id
+        tageszeiten_bez = tageszeiten_bez
+        command2 = "SELECT lernvorlieben.tage_id, tage.praeferenz FROM lernvorlieben INNER JOIN tage ON lernvorlieben.tage_id = tage.id WHERE lernvorlieben.id = '{}'".format(id)
+        cursor.execute(command2)
+        tuples = cursor.fetchall()
+        (tage_id, tage_bez) = tuples[0]
+        tage_id = tage_id
+        tage_bez = tage_bez
+        command3 = "SELECT lernvorlieben.frequenzen_id, frequenzen.praeferenz FROM lernvorlieben INNER JOIN frequenzen ON lernvorlieben.frequenzen_id = frequenzen.id WHERE lernvorlieben.id = '{}'".format(id)
+        cursor.execute(command3)
+        tuples = cursor.fetchall()
+        (frequenzen_id, frequenzen_bez) = tuples[0]
+        frequenzen_id = frequenzen_id
+        frequenzen_bez = frequenzen_bez
+        command4 = "SELECT lernvorlieben.lernarten_id, lernarten.praeferenz FROM lernvorlieben INNER JOIN lernarten ON lernvorlieben.lernarten_id = lernarten.id WHERE lernvorlieben.id = '{}'".format(id)
+        cursor.execute(command4)
+        tuples = cursor.fetchall()
+        (lernarten_id, lernarten_bez) = tuples[0]
+        lernarten_id = lernarten_id
+        lernarten_bez = lernarten_bez
+        command5 = "SELECT lernvorlieben.gruppengroessen_id, gruppengroessen.praeferenz FROM lernvorlieben INNER JOIN gruppengroessen ON lernvorlieben.gruppengroessen_id = gruppengroessen.id WHERE lernvorlieben.id = '{}'".format(id)
+        cursor.execute(command5)
+        tuples = cursor.fetchall()
+        (gruppengroessen_id, gruppengroessen_bez) = tuples[0]
+        gruppengroessen_id = gruppengroessen_id
+        gruppengroessen_bez = gruppengroessen_bez
+        command6 = "SELECT lernvorlieben.lernorte_id, lernorte.praeferenz FROM lernvorlieben INNER JOIN lernorte ON lernvorlieben.lernorte_id = lernorte.id WHERE lernvorlieben.id = '{}'".format(id)
+        cursor.execute(command6)
+        tuples = cursor.fetchall()
+        (lernorte_id, lernorte_bez) = tuples[0]
+        lernorte_id = lernorte_id
+        lernorte_bez = lernorte_bez
+
+        tuples = cursor.fetchall()
+        print(tuples)
 
         try:
-            (id, tageszeiten_id, tage_id, frequenzen_id, lernarten_id, gruppengroessen_id, lernorte_id) = tuples[0]
+
             lernvorlieben = Lernvorlieben()
+
             lernvorlieben.set_id(id)
-            lernvorlieben.set_tageszeiten(tageszeiten_id)
-            lernvorlieben.set_tage(tage_id)
-            lernvorlieben.set_frequenz(frequenzen_id)
-            lernvorlieben.set_lernart(lernarten_id)
-            lernvorlieben.set_gruppengroesse(gruppengroessen_id)
-            lernvorlieben.set_lernort(lernorte_id)
-            
+            lernvorlieben.set_tageszeiten_id(tageszeiten_id)
+            lernvorlieben.set_tageszeiten_bez(tageszeiten_bez)
+            lernvorlieben.set_tage_id(tage_id)
+            lernvorlieben.set_tage_bez(tage_bez)
+            lernvorlieben.set_frequenz_id(frequenzen_id)
+            lernvorlieben.set_frequenz_bez(frequenzen_bez)
+            lernvorlieben.set_lernart_id(lernarten_id)
+            lernvorlieben.set_lernart_bez(lernarten_bez)
+            lernvorlieben.set_gruppengroesse_id(gruppengroessen_id)
+            lernvorlieben.set_gruppengroesse_bez(gruppengroessen_bez)
+            lernvorlieben.set_lernort_id(lernorte_id)
+            lernvorlieben.set_lernort_bez(lernorte_bez)
+
             result = lernvorlieben
 
         except IndexError:
@@ -76,181 +132,6 @@ class LernvorliebenMapper(Mapper):
         
         return result
 
-    def find_tageszeiten_by_lernvorlieben_id(self, id):
-        """Suchen der Lernvorlieben nach der übergebenen ID.
-        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-
-        command = "SELECT tageszeiten.praeferenz FROM lernvorlieben INNER JOIN tageszeiten ON lernvorlieben.tageszeiten_id = tageszeiten.id WHERE lernvorlieben.id ='{}'".format(id)
-        cursor.execute(command)
-
-        tuples = cursor.fetchall()
-
-        try:
-            (praeferenz) = tuples[0]
-
-            result = ''.join(praeferenz)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_tage_by_lernvorlieben_id(self, id):
-        """Suchen der Lernvorlieben nach der übergebenen ID.
-        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-
-        command = "SELECT tage.praeferenz FROM lernvorlieben INNER JOIN tage ON lernvorlieben.tage_id = tage.id WHERE lernvorlieben.id ='{}'".format(id)
-        cursor.execute(command)
-
-        tuples = cursor.fetchall()
-
-        try:
-            (praeferenz) = tuples[0]
-
-            result = ''.join(praeferenz)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_frequenzen_by_lernvorlieben_id(self, id):
-        """Suchen der Lernvorlieben nach der übergebenen ID.
-        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-
-        command = "SELECT frequenzen.praeferenz FROM lernvorlieben INNER JOIN frequenzen ON lernvorlieben.frequenzen_id = frequenzen.id WHERE lernvorlieben.id ='{}'".format(id)
-        cursor.execute(command)
-
-        tuples = cursor.fetchall()
-
-        try:
-            (praeferenz) = tuples[0]
-
-            result = ''.join(praeferenz)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_lernarten_by_lernvorlieben_id(self, id):
-        """Suchen der Lernvorlieben nach der übergebenen ID.
-        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-
-        command = "SELECT lernarten.praeferenz FROM lernvorlieben INNER JOIN lernarten ON lernvorlieben.lernarten_id = lernarten.id WHERE lernvorlieben.id ='{}'".format(id)
-        cursor.execute(command)
-
-        tuples = cursor.fetchall()
-
-        try:
-            (praeferenz) = tuples[0]
-
-            result = ''.join(praeferenz)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_gruppengroessen_by_lernvorlieben_id(self, id):
-        """Suchen der Lernvorlieben nach der übergebenen ID.
-        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-
-        command = "SELECT gruppengroessen.praeferenz FROM lernvorlieben INNER JOIN gruppengroessen ON lernvorlieben.gruppengroessen_id = gruppengroessen.id WHERE lernvorlieben.id ='{}'".format(id)
-        cursor.execute(command)
-
-        tuples = cursor.fetchall()
-
-        try:
-            (praeferenz) = tuples[0]
-
-            result = ''.join(praeferenz)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_lernorte_by_lernvorlieben_id(self, id):
-        """Suchen der Lernvorlieben nach der übergebenen ID.
-        :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
-        """
-        result = None
-        cursor = self._connection.cursor()
-
-        command = "SELECT lernorte.praeferenz FROM lernvorlieben INNER JOIN lernorte ON lernvorlieben.lernorte_id = lernorte.id WHERE lernvorlieben.id ='{}'".format(id)
-        cursor.execute(command)
-
-        tuples = cursor.fetchall()
-
-        try:
-            (praeferenz) = tuples[0]
-
-            result = ''.join(praeferenz)
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-
     def insert(self, lernvorlieben):
         """Einfügen eines Lernvorlieben Objekts in die DB
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft 
@@ -260,7 +141,6 @@ class LernvorliebenMapper(Mapper):
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM lernvorlieben ")
         tuples = cursor.fetchall()
-
         for (maxid) in tuples:
             if maxid[0] is not None:
                 """Wenn wir eine maximale ID festellen konnten, zählen wir diese
@@ -272,12 +152,18 @@ class LernvorliebenMapper(Mapper):
                 lernvorlieben.set_id(1)
 
         command = "INSERT INTO lernvorlieben (id, tageszeiten_id, tage_id, frequenzen_id, lernarten_id, gruppengroessen_id, lernorte_id) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
+        data = (
+            lernvorlieben.get_id(),
+            lernvorlieben.get_tageszeiten_id(),
+            lernvorlieben.get_tage_id(),
+            lernvorlieben.get_frequenz_id(),
+            lernvorlieben.get_lernart_id(),
+            lernvorlieben.get_gruppengroesse_id(),
+            lernvorlieben.get_lernort_id())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
-        print(lernvorlieben)
         return lernvorlieben
 
     def update(self, lernvorlieben):
@@ -288,7 +174,7 @@ class LernvorliebenMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE lernvorlieben " + "SET tageszeiten_id=%s, tage_id=%s, frequenzen_id=%s, lernarten_id=%s, gruppengroessen_id=%s, lernorte_id=%s WHERE id=%s"
-        data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort())
+        data = (lernvorlieben.get_id(), lernvorlieben.get_tageszeiten_id(), lernvorlieben.get_tage_id(), lernvorlieben.get_frequenz_id(), lernvorlieben.get_lernart_id(), lernvorlieben.get_gruppengroesse_id(), lernvorlieben.get_lernort_id())
 
         cursor.execute(command, data)
 

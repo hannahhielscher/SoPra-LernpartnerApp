@@ -132,8 +132,9 @@ class LerngruppeMapper(Mapper):
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
         berichtigt.
         """
+        print(lerngruppe)
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM lerngruppen ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM lerngruppen")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
@@ -147,7 +148,8 @@ class LerngruppeMapper(Mapper):
                 lerngruppe.set_id(1)
 
         command = "INSERT INTO lerngruppen (id, name, profil_id) VALUES (%s,%s,%s)"
-        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil)
+        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil())
+
         cursor.execute(command, data)
 
         self._connection.commit()

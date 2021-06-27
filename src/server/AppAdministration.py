@@ -140,10 +140,10 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             return mapper.insert(profil)
 
-    """def insert_lernfaecher(self, profil_id, lernfach):
+   # """def insert_lernfaecher(self, profil_id, lernfach):
 
-        with ProfilMapper as mapper:
-            return mapper.insert_lernfaecher(profil_id, lernfach)"""
+    #    with ProfilMapper as mapper:
+     #       return mapper.insert_lernfaecher(profil_id, lernfach)"""
 
     def get_all_profil(self):
         """Auslesen aller Profile"""
@@ -185,18 +185,26 @@ class AppAdministration (object):
     Lernvorlieben-spezifische Methoden
     """
     #def create_lernvorlieben(self, lernvorlieben):
-    def create_lernvorlieben(self, tageszeiten, tage, frequenzen, gruppengroesse, lernarten, lernorte):
+    def create_lernvorlieben(self, tageszeiten_id, tageszeiten_bez, tage_id, tage_bez, frequenz_id, frequenz_bez, lernart_id, lernart_bez, gruppengroesse_id, gruppengroesse_bez, lernort_id, lernort_bez):
         """Lernvorlieben anlegen"""
 
         lernvorlieben = Lernvorlieben()
 
-        lernvorlieben.set_tageszeiten(tageszeiten)
-        lernvorlieben.set_tage(tage)
-        lernvorlieben.set_frequenz(frequenzen)
-        lernvorlieben.set_gruppengroesse(gruppengroesse)
-        lernvorlieben.set_lernart(lernarten)
-        lernvorlieben.set_lernort(lernorte)
+        lernvorlieben.set_tageszeiten_id(tageszeiten_id)
+        lernvorlieben.set_tageszeiten_bez(tageszeiten_bez)
+        lernvorlieben.set_tage_id(tage_id)
+        lernvorlieben.set_tage_bez(tage_bez)
+        lernvorlieben.set_frequenz_id(frequenz_id)
+        lernvorlieben.set_frequenz_bez(frequenz_bez)
+        lernvorlieben.set_lernart_id(lernart_id)
+        lernvorlieben.set_lernart_bez(lernart_bez)
+        lernvorlieben.set_gruppengroesse_id(gruppengroesse_id)
+        lernvorlieben.set_gruppengroesse_bez(gruppengroesse_bez)
+        lernvorlieben.set_lernort_id(lernort_id)
+        lernvorlieben.set_lernort_bez(lernort_bez)
         lernvorlieben.set_id(1)
+
+        print(lernvorlieben)
 
         with LernvorliebenMapper() as mapper:
             return mapper.insert(lernvorlieben)
@@ -206,38 +214,43 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             return mapper.find_by_id(id)
 
-    def get_praeferenz_by_lernvorlieben_id(self, id):
-        """Lernvorlieben mit einer bestimmten ID auslesen"""
+    #def get_praeferenz_by_lernvorlieben_id(self, id):
+     #   """Lernvorlieben mit einer bestimmten ID auslesen"""
 
-        with LernvorliebenMapper() as mapper:
-            tageszeiten_id = mapper.find_tageszeiten_by_lernvorlieben_id(id)
+        #with LernvorliebenMapper() as mapper:
+         #   tageszeiten_id = mapper.find_tageszeiten_by_lernvorlieben_id(id)
 
-        with LernvorliebenMapper() as mapper:
-            tage_id = mapper.find_tage_by_lernvorlieben_id(id)
+        #with LernvorliebenMapper() as mapper:
+         #   tage_id = mapper.find_tage_by_lernvorlieben_id(id)
 
-        with LernvorliebenMapper() as mapper:
-            frequenzen_id = mapper.find_frequenzen_by_lernvorlieben_id(id)
+        #with LernvorliebenMapper() as mapper:
+         #   frequenzen_id = mapper.find_frequenzen_by_lernvorlieben_id(id)
 
-        with LernvorliebenMapper() as mapper:
-            lernarten_id = mapper.find_lernarten_by_lernvorlieben_id(id)
+        #with LernvorliebenMapper() as mapper:
+         #   lernarten_id = mapper.find_lernarten_by_lernvorlieben_id(id)
 
-        with LernvorliebenMapper() as mapper:
-            gruppengroessen_id = mapper.find_gruppengroessen_by_lernvorlieben_id(id)
+        #with LernvorliebenMapper() as mapper:
+         #   gruppengroessen_id = mapper.find_gruppengroessen_by_lernvorlieben_id(id)
 
-        with LernvorliebenMapper() as mapper:
-            lernorte_id = mapper.find_lernorte_by_lernvorlieben_id(id)
+        #with LernvorliebenMapper() as mapper:
+         #   lernorte_id = mapper.find_lernorte_by_lernvorlieben_id(id)
 
-        lernvorlieben = Lernvorlieben()
+        #lernvorlieben = Lernvorlieben()
 
-        lernvorlieben.set_id(id)
-        lernvorlieben.set_tageszeiten(tageszeiten_id)
-        lernvorlieben.set_tage(tage_id)
-        lernvorlieben.set_frequenz(frequenzen_id)
-        lernvorlieben.set_lernart(lernarten_id)
-        lernvorlieben.set_gruppengroesse(gruppengroessen_id)
-        lernvorlieben.set_lernort(lernorte_id)
+        #lernvorlieben.set_tageszeiten_id(tageszeiten_id)
+        #lernvorlieben.set_tageszeiten_bez(tageszeiten_bez)
+        #lernvorlieben.set_tage_id(tage_id)
+        #lernvorlieben.set_tage_bez(tage_bez)
+        #lernvorlieben.set_frequenz_id(frequenz_id)
+        #lernvorlieben.set_frequenz_bez(frequenz_bez)
+        #lernvorlieben.set_lernart_id(lernart_id)
+        #lernvorlieben.set_lernart_bez(lernart_bez)
+        #lernvorlieben.set_gruppengroesse_id(gruppengroesse_id)
+        #lernvorlieben.set_gruppengroesse_bez(gruppengroesse_bez)
+        #lernvorlieben.set_lernort_id(lernort_id)
+        #lernvorlieben.set_lernort_bez(lernort_bez)
 
-        return lernvorlieben
+        #return lernvorlieben
 
     def save_lernvorlieben(self, lernvorlieben):
         """Lernvorlieben speichern"""
@@ -261,13 +274,13 @@ class AppAdministration (object):
     Lerngruppen-spezifische Methoden
     """
 
-    def create_lerngruppe(self, name, profil_id):
+    def create_lerngruppe(self, name, profil):
         """Eine Lerngruppe anlegen"""
 
         lerngruppe = Lerngruppe()
 
         lerngruppe.set_name(name)
-        lerngruppe.set_profil(profil_id)
+        lerngruppe.set_profil(profil)
         lerngruppe.set_id(1)
 
         with LerngruppeMapper() as mapper:
@@ -309,12 +322,11 @@ class AppAdministration (object):
     """
     TeilnahmeGruppe-spezifische Methoden
     """
-    def create_teilnahmegruppe(self, status, teilnehmer, lerngruppe):
+    def create_teilnahmegruppe(self, teilnehmer, lerngruppe):
         """Eine Teilnahme an einer Gruppe anlegen"""
 
         teilnahme = TeilnahmeGruppe()
-            
-        teilnahme.set_status(status)
+
         teilnahme.set_teilnehmer(teilnehmer)
         teilnahme.set_lerngruppe(lerngruppe)           
         teilnahme.set_id(1)

@@ -21,7 +21,7 @@ class Lernvorlieben(BusinessObject):
 
     def get_tageszeiten_id(self):
         """Auslesen der präferierten Uhrzeit"""
-        return self._tageszeiten_id
+        return int(self._tageszeiten_id)
     
     def set_tageszeiten_id(self, value):
         """Setzen der präferierten Tageszeit"""
@@ -37,7 +37,7 @@ class Lernvorlieben(BusinessObject):
 
     def get_tage_id(self):
         """Auslesen der präferierten Tage"""
-        return self._tage_id
+        return int(self._tage_id)
 
     def set_tage_id(self, value):
         """Setzen der präferierten Tage"""
@@ -53,7 +53,7 @@ class Lernvorlieben(BusinessObject):
 
     def get_frequenz_id(self):
         """Auslesen der Frequenz/Häufigkeit der Treffen"""
-        return self._frequenz_id
+        return int(self._frequenz_id)
 
     def set_frequenz_id(self, value):
         """Setzen der Frequenz/Häufigkeit der Treffen"""
@@ -65,9 +65,11 @@ class Lernvorlieben(BusinessObject):
 
     def set_frequenz_bez(self, value):
         """Setzen der Frequenz/Häufigkeit der Treffen"""
-        self._frequenz_bez(self):
-        """Auslesen der präferierten Lernart"""
-        return self._lernart_id
+        self._frequenz_bez = value
+
+    def get_lernart_id(self):
+        """Setzen der präferierten Lernart"""
+        return int(self._lernart_id)
 
     def set_lernart_id(self, value):
         """Setzen der präferierten Lernart"""
@@ -83,7 +85,7 @@ class Lernvorlieben(BusinessObject):
 
     def get_gruppengroesse_id(self):
         """Auslesen der präferierten Gruppengroesse"""
-        return self._gruppengroesse_id
+        return int(self._gruppengroesse_id)
 
     def set_gruppengroesse_id(self, value):
         """Setzen der präferierten Gruppengroesse"""
@@ -99,7 +101,7 @@ class Lernvorlieben(BusinessObject):
 
     def get_lernort_id(self):
         """Auslesen des präferierten Lernorts"""
-        return self._lernort_id
+        return int(self._lernort_id)
 
     def set_lernort_id(self, value):
         """Setzen des präferierten Lernorts"""
@@ -113,13 +115,13 @@ class Lernvorlieben(BusinessObject):
         """Setzen des präferierten Lernorts"""
         self._lernort_bez = value
 
-    def get_all(self):
-        inhalt = [self.id, self._tageszeiten_id, self._tage_id, self._frequenz_id, self._lernart_id, self._gruppengroesse_id, self._lernort_id]
-        return inhalt
+    #def get_all(self):
+     #   inhalt = [self.id, self._tageszeiten_id, self._tage_id, self._frequenz_id, self._lernart_id, self._gruppengroesse_id, self._lernort_id]
+      #  return inhalt
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "Lernvorlieben: {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._tageszeiten_id, self._tage_id, self._frequenz_id, self._lernart_id, self._gruppengroesse_id, self._lernort_id)
+        return "Lernvorlieben: {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}".format(self.get_id(), self._tageszeiten_id, type(self._tageszeiten_id), self._tageszeiten_bez,  type(self._tageszeiten_bez), self._tage_id, self._tage_bez, self._frequenz_id, self._frequenz_bez, self._lernart_id, self._lernart_bez, self._gruppengroesse_id, self._gruppengroesse_bez, self._lernort_id, self._lernort_bez)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -127,9 +129,15 @@ class Lernvorlieben(BusinessObject):
         obj = Lernvorlieben()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_tageszeiten_id(dictionary["tageszeiten_id"])
+        obj.set_tageszeiten_bez(dictionary["tageszeiten_bez"])
         obj.set_tage_id(dictionary["tage_id"])
+        obj.set_tage_bez(dictionary["tage_bez"])
         obj.set_frequenz_id(dictionary["frequenz_id"])
+        obj.set_frequenz_bez(dictionary["frequenz_bez"])
         obj.set_lernart_id(dictionary["lernart_id"])
+        obj.set_lernart_bez(dictionary["lernart_bez"])
         obj.set_gruppengroesse_id(dictionary["gruppengroesse_id"])
+        obj.set_gruppengroesse_bez(dictionary["gruppengroesse_bez"])
         obj.set_lernort_id(dictionary["lernort_id"])
+        obj.set_lernort_bez(dictionary["lernort_bez"])
         return obj

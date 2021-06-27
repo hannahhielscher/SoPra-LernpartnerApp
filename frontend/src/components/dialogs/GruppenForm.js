@@ -9,15 +9,12 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
     } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { TeachingbeeAPI, GroupBO } from '../../api';
-
-//import {LernpartnerAPI} from '../../api';
-
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
-//import ProfilBO from '../../api/ProfilBO';
 import LerngruppeBO from '../../api/LerngruppeBO';
 import LernvorliebenBO from '../../api/LernvorliebenBO';
+import TeilnahmeGruppeBO from '../../api/TeilnahmeGruppeBO';
 import ProfilBO from '../../api/ProfilBO';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
 import GruppenListeEintrag from '../GruppenListeEintrag';
@@ -37,33 +34,34 @@ class GruppenForm extends Component {
             gruppenNameValidationFailed: null,
             gruppenNameEdited: null,
 
-            gruppe: true,
+            gruppe: 1,
 
             lernfaecher: null,
-            lernfaecherValidationFailed: false,
-            gruppenNameEdited: null,
+            lernfachListe: [],
+            lernfaecherValidationFailed: null,
+            lernfaecherNameEdited: null,
 
             tageszeiten: null,
-            tageszeitenValidationFailed: false,
+            tageszeitenValidationFailed: null,
             tageszeitenEdited: null,
 
             tage: null,
             tageValidationFailed: false,
             tageEdited: null,
 
-            frequenzen: null,
-            frequenzenalidationFailed: false,
-            frequenzenEdited: null,
+            frequenz: null,
+            frequenzValidationFailed: null,
+            frequenzEdited: null,
 
             gruppengroesse: 4,
 
-            lernarten: null,
-            lernartenValidationFailed: false,
-            lernartenEdited: null,
+            lernart: null,
+            lernartValidationFailed: null,
+            lernartEdited: null,
 
-            lernorte: null,
-            lernorteValidationFailed: false,
-            lernorteEdited: null,
+            lernort: null,
+            lernortValidationFailed: null,
+            lernortEdited: null,
 
             addingInProgress: false,
             updatingInProgress: false,
@@ -77,21 +75,24 @@ class GruppenForm extends Component {
         this.lernfaecherSelectionChange = this.lernfaecherSelectionChange.bind(this);
         this.tageszeitenSelectionChange = this.tageszeitenSelectionChange.bind(this);
         this.tageSelectionChange = this.tageSelectionChange.bind(this);
-        this.frequenzenSelectionChange = this.frequenzenSelectionChange.bind(this);
-        this.lernartenSelectionChange = this.lernartenSelectionChange.bind(this);
-        this.lernorteSelectionChange = this.lernorteSelectionChange.bind(this);
+        this.frequenzSelectionChange = this.frequenzSelectionChange.bind(this);
+        this.lernartSelectionChange = this.lernartSelectionChange.bind(this);
+        this.lernortSelectionChange = this.lernortSelectionChange.bind(this);
     }
 
   /** Add Lerngruppe */
   addLernvorlieben = () => {
-    let newLernvorlieben = new LernvorliebenBO(this.state.tageszeiten, this.state.tage, this.state.frequenzen, this.state.gruppengroesse, this.state.lernarten, this.state.lernorte);
+    let newLernvorlieben = new LernvorliebenBO(this.state.tageszeiten, 'null', this.state.tage, 'null', this.state.frequenz, 'null', this.state.lernart, 'null', this.state.gruppengroesse, 'null', this.state.lernort, 'null');
     LernpartnerAPI.getAPI().addLernvorlieben(newLernvorlieben)
-    .then(lernvorliebenBO => {
+    .then(lernvorliebenBO =>
       // Backend call sucessfull
       // reinit the dialogs state for a new empty customer
         this.setState({
-            lernvorlieben: lernvorliebenBO
-        });
+            lernvorlieben: lernvorliebenBO,
+            lernfachListe: [this.state.lernfaecher]
+        })).then(() => {
+            this.addProfil();
+
     }).catch(e =>
       this.setState({
         updatingInProgress: false,    // disable loading indicator
@@ -108,13 +109,22 @@ class GruppenForm extends Component {
 
   /** Add Lerngruppe */
   addProfil = () => {
-    LernpartnerAPI.getAPI().addProfil(this.state.gruppe, this.state.lernfaecher, this.state.lernvorlieben.getID())
-    .then(profilBO => {
+    let newProfil = new ProfilBO(this.state.gruppe, this.state.lernfachListe, this.state.lernvorlieben.id)
+    console.log(this.state.gruppe)
+    console.log(this.state.lernfachListe)
+    console.log(this.state.lernvorlieben.id)
+    console.log(typeof(this.state.gruppe))
+    console.log(typeof(this.state.lernfachListe))
+    console.log(typeof(this.state.lernvorlieben.id))
+    LernpartnerAPI.getAPI().addProfil(newProfil)
+    .then(profilBO =>
       // Backend call sucessfull
       // reinit the dialogs state for a new empty customer
       this.setState({
         profil: profilBO
-      });
+      })).then(() => {
+            this.addLerngruppe();
+            //console.log(this.state.profil.id)
     }).catch(e =>
       this.setState({
         updatingInProgress: false,    // disable loading indicator
@@ -131,13 +141,43 @@ class GruppenForm extends Component {
 
   /** Add Lerngruppe */
   addLerngruppe = () => {
-    let newLerngruppe = new LerngruppeBO(this.state.gruppenName, this.state.profil.getID());
-    LernpartnerAPI.getAPI().addLerngruppe(this.state.gruppenName, this.state.profil.getID())
-    .then(lerngruppe => {
+    let newLerngruppe = new LerngruppeBO();
+    newLerngruppe.setID(0)
+    newLerngruppe.setname(this.state.gruppenName)
+    newLerngruppe.setprofil(this.state.profil.id)
+    LernpartnerAPI.getAPI().addLerngruppe(newLerngruppe)
+    .then(lerngruppeBO =>
+      // Backend call sucessfull
+      // reinit the dialogs state for a new empty customer
+      this.setState({
+        lerngruppe: lerngruppeBO
+      })).then(() => {
+            this.addTeilnahmeGruppe();
+            //console.log(this.state.profil.id)
+    }).catch(e =>
+      this.setState({
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
+
+    // set loading to true
+    this.setState({
+      updatingInProgress: true,       // show loading indicator
+      updatingError: null             // disable error message
+    });
+  }
+
+
+  /** Add Teilnahme an Lerngruppe */
+  addTeilnahmeGruppe = () => {
+    let newTeilnahmeGruppe = new TeilnahmeGruppeBO(this.props.currentPerson.id, this.state.lerngruppe.id);
+    LernpartnerAPI.getAPI().addTeilnahmeGruppe(newTeilnahmeGruppe)
+    .then(teilnahmeGruppeBO => {
       // Backend call sucessfull
       // reinit the dialogs state for a new empty customer
       this.setState(this.baseState);
-      this.props.onClose(lerngruppe); // call the parent with the lerngruppe object from backend
+      this.props.onClose(teilnahmeGruppeBO); // call the parent with the lerngruppe object from backend
     }).catch(e =>
       this.setState({
         updatingInProgress: false,    // disable loading indicator
@@ -205,117 +245,118 @@ class GruppenForm extends Component {
   }
 
     /** Handles value changes of the customer select textfield */
-  frequenzenSelectionChange = (event) => {
-      this.setState({frequenzen: event.target.value});
+  frequenzSelectionChange = (event) => {
+      this.setState({frequenz: event.target.value});
   }
 
     /** Handles value changes of the customer select textfield */
-  lernartenSelectionChange = (event) => {
-      this.setState({lernarten: event.target.value});
+  lernartSelectionChange = (event) => {
+      this.setState({lernart: event.target.value});
   }
 
     /** Handles value changes of the customer select textfield */
-  lernorteSelectionChange = (event) => {
-      this.setState({lernorte: event.target.value});
-  }
-
-  getAll = () => {
-    this.addLernvorlieben();
-    this.addProfil();
-    this.addLerngruppe();
+  lernortSelectionChange = (event) => {
+      this.setState({lernort: event.target.value});
   }
 
 
   /** Renders the component */
   render() {
     const { classes, show } = this.props;
-    const { lernvorlieben, profil, lerngruppe, gruppenName, gruppenNameValidationFailed, gruppenNameEdited, lernfaecher, lernfaecherValidationFailed, tageszeiten, tageszeitenValidationFailed, tage, tageValidationFailed,
-    frequenzen, frequenzenalidationFailed, lernarten, lernartenValidationFailed, lernorte, lernorteValidationFailed, addingInProgress, addingError,
+    const { lernvorlieben, profil, lerngruppe, gruppenName, gruppenNameValidationFailed, gruppenNameEdited, lernfaecher, lernfachListe, lernfaecherValidationFailed, lernfaecherNameEdited, tageszeiten, tageszeitenValidationFailed, tageszeitenEdited, tage, tageValidationFailed, tageEdited,
+    frequenz, frequenzValidationFailed, frequenzEdited, lernart, lernartValidationFailed, lernartEdited, lernort, lernortValidationFailed, lernortEdited, addingInProgress, addingError,
     updatingInProgress, updatingError } = this.state;
-    console.log(lernvorlieben)
+    //console.log(lernfaecher)
+    //console.log(typeof(lernfaecher))
+    //parseInt(lernfaecher, 10)
+    //console.log(parseInt("lernfaecher", 10))
+    //console.log(typeof(lernfaecher))
+    //console.log(profil)
+    //console.log(lernvorlieben.getID())
+    console.log(lernfachListe)
 
     return (
       show ?
         <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
-          <Typography> Neue Lerngruppe anlegen
+          <DialogTitle>Neue Lerngruppe anlegen
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />
             </IconButton>
-          </Typography>
+          </DialogTitle>
           <DialogContent>
             <form className={classes.root} noValidate autoComplete='off'>
               <TextField autoFocus type='text' required fullWidth margin='normal' id='gruppenName' label='Gruppenname:' value={gruppenName}
                 onChange={this.textFieldValueChange} error={gruppenNameValidationFailed}
                 helperText={gruppenNameValidationFailed ? 'Der Gruppenname muss mindestens ein Zeichen enthalten' : ' '} />
 
-              <FormControl className={classes.formControl}>
+              Bitte fülle für deine neue Lerngruppe folgende Profilinformationen vollständig aus:
+              <br/>
+              <FormControl required className={classes.formControl}>
                 <InputLabel>Lernfach:</InputLabel>
-                <Select required error={lernfaecherValidationFailed} value={lernfaecher} onChange={this.lernfaecherSelectionChange}>
-                <MenuItem value='1'>Software Entwicklung</MenuItem>
-                <MenuItem value='2'>Data Science</MenuItem>
-                <MenuItem value='3'>Führungsorientiertes Rechnungswesen</MenuItem>
-                <MenuItem value='4'>Medienrecht</MenuItem>
-                <MenuItem value='5'>Crossmedia-Konzeption</MenuItem>
-                <MenuItem value='6'>Web-Technologie</MenuItem>
-                <MenuItem value='7'>Datenbanken</MenuItem>
-                <MenuItem value='8'>IT-Security</MenuItem>
+                <Select error={lernfaecherValidationFailed} value={lernfaecher} onChange={this.lernfaecherSelectionChange}>
+                <MenuItem value={1}>Software Entwicklung</MenuItem>
+                <MenuItem value={2}>Data Science</MenuItem>
+                <MenuItem value={3}>Führungsorientiertes Rechnungswesen</MenuItem>
+                <MenuItem value={4}>Medienrecht</MenuItem>
+                <MenuItem value={5}>Crossmedia-Konzeption</MenuItem>
+                <MenuItem value={6}>Web-Technologie</MenuItem>
+                <MenuItem value={7}>Datenbanken</MenuItem>
+                <MenuItem value={8}>IT-Security</MenuItem>
                 </Select>
               </FormControl>
               <br/>
 
-              <FormControl className={classes.formControl}>
+              <FormControl required className={classes.formControl}>
                 <InputLabel>Tageszeiten:</InputLabel>
-                <Select required error={tageszeitenValidationFailed} value={tageszeiten} onChange={this.tageszeitenSelectionChange}>
-                <MenuItem value='1'>Morgens</MenuItem>
-                <MenuItem value='2'>Mittags</MenuItem>
-                <MenuItem value='3'>Abends</MenuItem>
+                <Select error={tageszeitenValidationFailed} value={tageszeiten} onChange={this.tageszeitenSelectionChange}>
+                <MenuItem value={1}>Morgens</MenuItem>
+                <MenuItem value={2}>Mittags</MenuItem>
+                <MenuItem value={3}>Abends</MenuItem>
                 </Select>
               </FormControl>
               <br/>
 
-              <FormControl className={classes.formControl}>
+              <FormControl required className={classes.formControl}>
                 <InputLabel>Tage:</InputLabel>
-                <Select required error={tageValidationFailed} value={tage} onChange={this.tageSelectionChange}>
-                <MenuItem value='1'>Unter der Woche</MenuItem>
-                <MenuItem value='2'>Am Wochenende</MenuItem>
+                <Select error={tageValidationFailed} value={tage} onChange={this.tageSelectionChange}>
+                <MenuItem value={1}>Unter der Woche</MenuItem>
+                <MenuItem value={2}>Am Wochenende</MenuItem>
                 </Select>
               </FormControl>
               <br/>
 
-              <FormControl className={classes.formControl}>
-                <InputLabel>Frequenzen:</InputLabel>
-                <Select required error={frequenzenalidationFailed} value={frequenzen} onChange={this.frequenzenSelectionChange}>
-                <MenuItem value='1'>Wöchentlich</MenuItem>
-                <MenuItem value='2'>Mehrmals die Woche</MenuItem>
-                <MenuItem value='3'>Alle zwei Wochen</MenuItem>
+              <FormControl required className={classes.formControl}>
+                <InputLabel>Frequenz:</InputLabel>
+                <Select error={frequenzValidationFailed} value={frequenz} onChange={this.frequenzSelectionChange}>
+                <MenuItem value={1}>Wöchentlich</MenuItem>
+                <MenuItem value={2}>Mehrmals die Woche</MenuItem>
+                <MenuItem value={3}>Alle zwei Wochen</MenuItem>
                 </Select>
               </FormControl>
               <br/>
 
-              <FormControl className={classes.formControl}>
-                <InputLabel>Lernarten:</InputLabel>
-                <Select required error={lernartenValidationFailed} value={lernarten} onChange={this.lernartenSelectionChange}>
-                <MenuItem value='1'>Visuell</MenuItem>
-                <MenuItem value='2'>Auditiv</MenuItem>
-                <MenuItem value='3'>Motorisch</MenuItem>
-                <MenuItem value='4'>Kommunikativ</MenuItem>
+              <FormControl required className={classes.formControl}>
+                <InputLabel>Lernart:</InputLabel>
+                <Select error={lernartValidationFailed} value={lernart} onChange={this.lernartSelectionChange}>
+                <MenuItem value={1}>Visuell</MenuItem>
+                <MenuItem value={2}>Auditiv</MenuItem>
+                <MenuItem value={3}>Motorisch</MenuItem>
+                <MenuItem value={4}>Kommunikativ</MenuItem>
                 </Select>
               </FormControl>
               <br/>
 
-              <FormControl className={classes.formControl}>
-                <InputLabel>Lernorte:</InputLabel>
-                <Select required error={lernorteValidationFailed} value={lernorte} onChange={this.lernorteSelectionChange}>
-                <MenuItem value='1'>Remote</MenuItem>
-                <MenuItem value='2'>Hochschule</MenuItem>
-                <MenuItem value='3'>Bibliothek</MenuItem>
-                <MenuItem value='3'>Cafe</MenuItem>
+              <FormControl required className={classes.formControl}>
+                <InputLabel >Lernort:</InputLabel>
+                <Select error={lernortValidationFailed} value={lernort} onChange={this.lernortSelectionChange}>
+                <MenuItem value={1}>Remote</MenuItem>
+                <MenuItem value={2}>Hochschule</MenuItem>
+                <MenuItem value={3}>Bibliothek</MenuItem>
+                <MenuItem value={4}>Cafe</MenuItem>
                 </Select>
               </FormControl>
             </form>
             <LoadingProgress show={addingInProgress} />
-
-              // Show error message in dependency of customer prop
 
                 <ContextErrorMessage error={addingError} contextErrorMsg={`Die Gruppe konnte nicht angelegt werden.`} onReload={this.addLerngruppe} />
 
@@ -325,7 +366,7 @@ class GruppenForm extends Component {
               Cancel
             </Button>
 
-                <Button disabled={gruppenNameValidationFailed || !gruppenNameEdited} variant='contained' onClick={this.getAll} color='primary'>
+                <Button disabled={gruppenNameValidationFailed || !gruppenNameEdited || !lernfaecher || !tageszeiten || !tage || !frequenz || !lernart || !lernort} variant='contained' onClick={this.addLernvorlieben} color='primary'>
                   Gruppe erstellen
              </Button>
 
@@ -350,7 +391,10 @@ const styles = theme => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
-
+  formControl: {
+    marginBottom: theme.spacing(1),
+    minWidth: 120,
+  },
   content: {
     margin: theme.spacing(1),
     }
