@@ -30,11 +30,6 @@ class KonversationListeEintrag extends Component {
     }
 
 
-    
-// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-componentDidMount() {
-  
-}
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {
