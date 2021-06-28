@@ -66,7 +66,7 @@ class Nachricht extends Component {
   LernpartnerAPI.getAPI().getNachrichtenByKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation_id.getID())
     .then((nachrichtenBOs) =>
       this.setState({
-        nachricht: nachrichtenBOs,
+        nachrichten: nachrichtenBOs,
         nachricht_inhalt: nachrichtenBOs.nachricht_inhalt,
         personID: nachrichtenBOs.personID,
         konversation_id: nachrichtenBOs.konversation_id,
@@ -118,7 +118,7 @@ this.setState({
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
-  this.getNachrichten();
+ 
 }
 
 //Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird
