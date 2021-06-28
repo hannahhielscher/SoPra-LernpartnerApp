@@ -50,42 +50,9 @@ verlassenButtonClicked = (event) => {
   });
 }
 
-      /** Konversation holen fürs Löschen */
-  getKonversation = () => {
-    LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getID(), this.props.konversation_id)
-    .then(konversationenBOs => {
-      this.setState({
-        konversation: konversationenBOs,
-      });
-    }).catch(e =>
-      this.setState({
-        konversation: null,
-      })
-    );
-  }
+    
 
-    /** Handles the onClick event of the delete konversation button */
-    loescheKonversationButtonClicked = (event) => {
-        event.stopPropagation();
-        this.setState({
-            showKonversationLoeschenDialog: true
-        });
-    }
-
-    /** Handles the onClose event of the KonversationGeloeschtDialog */
-    loescheKonversationDialogClosed = (konversation) => {
-      // if konversation is not null, delete it
-      if (konversation) {
-        this.props.onKonversationDeleted(konversation);
-    };
-
-    // Don´t show the dialog
-        this.setState({
-          showCustomerKonversationLoeschenDialog: false
-    });
-  }
-
-      // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getKonversation();
     }
@@ -122,13 +89,12 @@ render() {
                           Chat löschen
                         </Button>
                 </ButtonGroup>
-                </ButtonGroup>
               </AccordionDetails>
               </Accordion>
               <Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
             </div>
-    
-  )
+            
+        );
   
 }
   
