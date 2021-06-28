@@ -124,11 +124,11 @@ render() {
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-              
+              <Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
             </div>
     
   )
-  //<Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
+  
 }
   
     

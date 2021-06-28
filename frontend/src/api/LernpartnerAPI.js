@@ -85,7 +85,7 @@ export default class LernpartnerAPI {
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
-        #deleteNachrichtenByKonversationURL = (konversationID) => `${this.#lernappServerBaseURL}/nachrichten/${konversationID}`;
+        #deleteNachrichtenByKonversationURL = (konversation_id) => `${this.#lernappServerBaseURL}/nachrichten/${konversation_id}`;
         #getNachrichtenByPersonURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
         #getNachrichtenByInhaltURL= (nachricht_inhalt) => `${this.#lernappServerBaseURL}/nachrichten/${nachricht_inhalt}`;
         
@@ -608,8 +608,8 @@ export default class LernpartnerAPI {
          * @public
           */
     
-        getNachrichtenByKonversation(konversationID){
-		      return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversationID)).then((responseJSON) => {
+        getNachrichtenByKonversation(konversation_id){
+		      return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversation_id)).then((responseJSON) => {
 			      let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
 			      //console.info(nachrichtenBOs)
 			      return new Promise(function (resolve){
@@ -642,13 +642,13 @@ export default class LernpartnerAPI {
 
          /** 
          * gibt die Nachrichten mit der bestimmten konversationsID und PersonID als BO zurück
-         * @param {Number} konversationId to be retrieved
+         * @param {Number} konversation_id to be retrieved
          * @param {Number} personID 
          * @public
          */
     
-          getNachrichtenByKonversationByPerson(konversationID, personID) {
-            return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversationID, personID, {method: 'GET'})).then((responseJSON) => {
+          getNachrichtenByKonversationByPerson(konversation_id, personID) {
+            return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversation_id, personID, {method: 'GET'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
               //console.info(nachrichtenBOs)
               return new Promise(function (resolve) {
@@ -659,13 +659,13 @@ export default class LernpartnerAPI {
  
           /** 
            * löscht Nachrichten einer konversation
-           * @param {Number} konversationId to be retrieved
+           * @param {Number} konversation_id to be retrieved
            * @param {Number} personID 
            * @public
            */
       
-          deleteNachrichtenByKonversation(konversationID) {
-            return this.#fetchAdvanced(this.#deleteNachrichtenByKonversationURL(konversationID, {method: 'DELETE'})).then((responseJSON) => {
+          deleteNachrichtenByKonversation(konversation_id) {
+            return this.#fetchAdvanced(this.#deleteNachrichtenByKonversationURL(konversation_id, {method: 'DELETE'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
               //console.info(nachrichtenBOs)
               return new Promise(function (resolve) {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-//import { withStyles } from '@material-ui/core';
+import { withStyles, Grid, Typography,  } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';
 //import { Button, ButtonGroup } from '@material-ui/core';
@@ -11,10 +11,8 @@ import { withStyles } from '@material-ui/core';
 //import MenuItem from '@material-ui/core/MenuItem';
 //import FormControl from '@material-ui/core/FormControl';
 //import Select from '@material-ui/core/Select';
-import ContextErrorMessage from './dialogs/ContextErrorMessage';
-import LoadingProgress from './dialogs/LoadingProgress';
 
-import Nachricht from './Nachricht'
+//import Nachricht from './Nachricht'
 //import NachrichtForm from './NachrichtForm'
 //import GruppeForm from './GruppeForm'
 
@@ -33,8 +31,8 @@ class NachrichtenListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             nachrichten: [], //Liste mit den IDs aller Nachrichten 
-            konversation_ID: null,  
-            inhalt: null, 
+            //konversation_ID: null,  
+            nachricht_inhalt: null, 
             person_id: null,
             personName: null,
             personVorname: null,
@@ -64,7 +62,7 @@ class NachrichtenListeEintrag extends Component {
         .then(nachrichtBO =>
             this.setState({
               nachrichten: nachrichtBO,
-              inhalt: nachrichtBO.inhalt,
+              nachricht_inhalt: nachrichtBO.nachricht_inhalt,
               loadingInProgress: false,
               error: null,
             })).then(()=>{
@@ -143,16 +141,26 @@ class NachrichtenListeEintrag extends Component {
 
       render() {
         const { classes, currentperson } = this.props;
-        const {nachrichten, inhalt, konversation_ID, personName, personVorname, expandedNachrichtID, loadingInProgress, error} = this.state;
+        const {nachrichten, nachricht_inhalt, personName, personVorname, expandedNachrichtID} = this.state;
 
         return(
           <div>
+            <Grid container spacing={3} justify="flex-end" alignItems="felx-end">
+            <Grid item xs={6} sm={3}>
+             <Typography variant="body1" className={classes.heading}>
+               {Person.getPersonVorname() + ""+ Person.getPersonName()}
+               <br/>
+               {Nachricht.getNachricht_Inhalt()}
+               <br/>
+             </Typography>
+            </Grid>
+            </Grid>
                   {
                       nachrichten ?
                       <>
                       {
                           nachrichten.map(nachricht =>
-                            <NachrichtenListeEintrag key={nachricht.getID()} nachricht={nachrichten} personName={personVorname + " " +personVorname} inhalt={inhalt} expandedState={expandedNachrichtID === nachricht.getID()}
+                            <NachrichtenListeEintrag key={nachricht.getID()} currentperson={currentperson} nachricht={nachrichten} personName={personVorname + " " +personName} inhalt={nachricht_inhalt} expandedState={expandedNachrichtID === nachricht.getID()}
                               onExpandedStateChange={this.onExpandedStateChange}
                             />)
                       }
@@ -160,10 +168,7 @@ class NachrichtenListeEintrag extends Component {
                       :
                       <></>
                   }
-         
-          <LoadingProgress show={loadingInProgress} />
-          <ContextErrorMessage error={error} contextErrorMsg = {'Deine Nachricht konnte nicht geladen werden'} onReload={this.getNachrichten} /> 
-          
+        
         </div>
         )
       }
