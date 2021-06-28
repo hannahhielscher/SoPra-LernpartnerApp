@@ -109,7 +109,7 @@ class NachrichtenListeEintrag extends Component {
     }
 
 
-   
+
       /** Handles onChange events of the underlying ExpansionPanel */
     expansionPanelStateChanged = () => {
       this.props.onExpandedStateChange(this.props.nachricht);
