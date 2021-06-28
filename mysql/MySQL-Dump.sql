@@ -245,6 +245,15 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`nachrichten` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `konversationen`
+--
+
+LOCK TABLES `lernapp_SWPra`.`nachrichten` WRITE;
+/*!40000 ALTER TABLE `lernapp_SWPra`.`nachrichten` DISABLE KEYS */;
+INSERT INTO `lernapp_SWPra`.`nachrichten` VALUES (1, 'Hi', 1, 1), (2, 'Ho', 2, 1), (3, 'Ha', 1, 1);
+/*!40000 ALTER TABLE `lernapp_SWPra`.`nachrichten` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`tageszeiten`
