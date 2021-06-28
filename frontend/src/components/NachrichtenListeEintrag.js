@@ -106,34 +106,7 @@ class NachrichtenListeEintrag extends Component {
       });
     }
 
-
-
-      /** Handles onChange events of the underlying ExpansionPanel */
-    expansionPanelStateChanged = () => {
-      this.props.onExpandedStateChange(this.props.nachricht);
-    }
-
-      /** Handles the onClick event of the delete nachricht button */
-    loescheNachrichtButtonClicked = (event) => {
-      event.stopPropagation();
-      this.setState({
-          showNachrichtLoeschenDialog: true
-      });
-    }
-
-     /** Handles the onClose event of the LoescheNachrichtDialog */
-    loescheNachrichtDialogClosed = (nachricht) => {
-    // if nachricht is not null, delete it
-      if (nachricht) {
-        this.props.onNachrichtDeleted(nachricht);
-    };
-
-     // Don´t show the dialog
-    this.setState({
-      showNachrichtLoeschenDialog: false
-    });
-    }
-
+   
        // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getNachrichten();

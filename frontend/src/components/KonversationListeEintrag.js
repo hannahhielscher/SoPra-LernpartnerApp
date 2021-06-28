@@ -50,12 +50,12 @@ verlassenButtonClicked = (event) => {
   });
 }
 
-       /** Konversation holen fürs Löschen */
+      /** Konversation holen fürs Löschen */
   getKonversation = () => {
-    LernpartnerAPI.getAPI().getKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation.id)
-    .then(konversationNBO => {
+    LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getID(), this.props.konversation_id)
+    .then(konversationenBOs => {
       this.setState({
-        konversation: konversationNBO,
+        konversation: konversationenBOs,
       });
     }).catch(e =>
       this.setState({
@@ -87,7 +87,7 @@ verlassenButtonClicked = (event) => {
 
       // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getNachrichten();
+        this.getKonversation();
     }
 
 render() {
@@ -119,8 +119,9 @@ render() {
                           Chat verlassen
                         </Button>
                         <Button color='secondary' onClick={this.loescheKonversationButtonClicked}>
-                          Chat loeschen
+                          Chat löschen
                         </Button>
+                </ButtonGroup>
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
