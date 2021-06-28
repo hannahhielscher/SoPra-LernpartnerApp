@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import Nachricht from './Nachricht';
 //import KonversationListe from './KonversationListe';
+import LernpartnerAPI from '../api/LernpartnerAPI'
 
 
 /** 
