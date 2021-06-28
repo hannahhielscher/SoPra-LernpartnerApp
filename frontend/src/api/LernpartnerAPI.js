@@ -55,7 +55,7 @@ export default class LernpartnerAPI {
         #getLerngruppenURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #updateLerngruppeURL = (id, name, profil)  => `${this.#lernappServerBaseURL}/lerngruppe?id=${id}&name=${name}&profil=${profil}`;
         #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         
         //Profilbezogen
@@ -318,23 +318,15 @@ export default class LernpartnerAPI {
            * @param {LerngruppeBO} lerngruppeBO to be updated
            * @public
            */
-          updateLerngruppe(lerngruppeBO) {
-            return this.#fetchAdvanced(this.#updateLerngruppeURL(lerngruppeBO.getID()), {
-              method: 'PUT',
-              headers: {
-                'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
-              },
-              body: JSON.stringify(lerngruppeBO)
-            }).then((responseJSON) => {
-              // We always get an array of LerngruppeBOs.fromJSON
-              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
-              // console.info(LerngruppeBOs);
-              return new Promise(function (resolve) {
-                resolve(responseLerngruppeBO);
-              })
-            })
-          }
+          updateLerngruppe(id, name, profil) {
+            return this.#fetchAdvanced(this.#updateLerngruppeURL(id, name, profil), {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            }
+          })
+        }
    
           /**
            * Gibt Promise zurück

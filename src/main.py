@@ -399,25 +399,21 @@ class LerngruppeOperationen(Resource):
     @lernApp.marshal_with(lerngruppe)
     @lernApp.expect(lerngruppe, validate=True)
     @secured
-    def put(self, id):
+    def put(self):
         """Update eines bestimmten Lerngruppen-Objekts.
 
         **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
         verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
         Person-Objekts.
         """
+        lerngruppeId = request.args.get("id")
+        name = request.args.get("name")
+        profil = request.args.get("profil")
         adm = AppAdministration()
-        c = Lerngruppe.from_dict(api.payload)
-
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Lerngruppe-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
-            c.set_id(id)
-            adm.save_lerngruppe(c)
-            return '', 200
-        else:
-            return '', 500
+        lerngruppe = adm.get_person_by_id(lerngruppeId)
+        lerngruppe.set_name(name)
+        lerngruppe.set_profil(profil)
+        adm.update_lerngruppe_by_id(lerngruppe)
 
     #@secured
     def delete(self, id):
