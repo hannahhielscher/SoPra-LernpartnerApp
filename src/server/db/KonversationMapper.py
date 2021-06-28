@@ -134,7 +134,7 @@ class KonversationMapper (Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 konversation.set_id(1)
 
-        command = "INSERT INTO konversationen (id, name, anfragestatus) VALUES (%s,%s)"
+        command = "INSERT INTO konversationen (id, name, anfragestatus) VALUES (%s,%s,%s)"
         data = (konversation.get_id(), konversation.get_name(), konversation.get_anfragestatus())
         cursor.execute(command, data)
 

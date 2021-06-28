@@ -4,11 +4,12 @@ import BusinessObject from './BusinessObject';
  * Repräsentiert ein Profil Objekt einer Person .
  */
 export default class ProfilBO extends BusinessObject {
-    constructor(gruppe_neu, lernfaecher_neu, lernvorlieben_neu){
+    constructor(gruppe_neu, lernfaecher_neu, lernvorlieben_id_neu){
         super();
         this.gruppe = gruppe_neu
         this.lernfaecher = lernfaecher_neu
-        this.lernvorlieben = lernvorlieben_neu;
+        //this.lernfaecher.push(lernfaecher_neu)
+        this.lernvorlieben_id = lernvorlieben_id_neu;
     }
 
     get_gruppe(){
@@ -24,15 +25,16 @@ export default class ProfilBO extends BusinessObject {
     }
 
     set_lernfaecher(lernfaecher_neu){
-        this.lernfaecher = lernfaecher_neu;
+        //this.lernfaecher.push(lernfaecher_neu);
+        this.lernfaecher = lernfaecher_neu
     }
 
-    get_lernvorlieben(){
-        return this.lernvorlieben;
+    get_lernvorlieben_id(){
+        return this.lernvorlieben_id;
     }
 
-    set_lernvorlieben(lernvorlieben_neu){
-        this.lernvorlieben = lernvorlieben_neu;
+    set_lernvorlieben(lernvorlieben_id_neu){
+        this.lernvorlieben_id = lernvorlieben_id_neu;
     }
 
     	/**

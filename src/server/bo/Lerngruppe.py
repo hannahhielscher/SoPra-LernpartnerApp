@@ -14,6 +14,10 @@ class Lerngruppe(NamedBusinessObject):
         """Setzen eines Gruppenprofils"""
         self._profil = profil
 
+    def __str__(self):
+        """ Umwandlung der Attributwerte des Objekts in einen String"""
+        return "Lerngruppe: {}, {}".format(self._name, self._profil)
+
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = Lerngruppe()
