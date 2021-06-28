@@ -307,7 +307,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`frequenzen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`frequenzen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`frequenzen` VALUES (1, 'Wöchentlich'), (2, 'Mehrmals die Woche'), (3, 'Alle zwei Wochen');
+INSERT INTO `lernapp_SWPra`.`frequenzen` VALUES (1, 'Mehrmals die Woche'), (2, 'Wöchentlich'), (3, 'Alle zwei Wochen');
 /*!40000 ALTER TABLE `lernapp_SWPra`.`frequenzen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -351,7 +351,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`gruppengroessen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`gruppengroessen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`gruppengroessen` VALUES (1, 'Bis zu 3 Personen'), (2, '3-5 Personen'), (3, 'Über 5 Personen');
+INSERT INTO `lernapp_SWPra`.`gruppengroessen` VALUES (1, 'Bis zu 3 Personen'), (2, '3-5 Personen'), (3, 'Über 5 Personen'), (4, 'Default Gruppe');
 /*!40000 ALTER TABLE `lernapp_SWPra`.`gruppengroessen` ENABLE KEYS */;
 UNLOCK TABLES;
 

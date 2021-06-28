@@ -102,16 +102,23 @@ class TeilnahmeGruppeMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            teilnahme.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                """Wenn wir eine maximale ID festellen konnten, zählen wir diese
+                um 1 hoch und weisen diesen Wert als ID dem User-Objekt zu."""
+                teilnahme.set_id(maxid[0] + 1)
+            else:
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                teilnahme.set_id(1)
 
-            command = "INSERT INTO teilnahmen_gruppe (id, person_id, lerngruppe_id) VALUES (%s,%s,%s)"
-            data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe())
-            cursor.execute(command, data)
+        command = "INSERT INTO teilnahmen_gruppe (id, person_id, lerngruppe_id) VALUES (%s,%s,%s)"
+        data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_lerngruppe())
+        cursor.execute(command, data)
 
-            self._cnx.commit()
-            cursor.close()
+        self._connection.commit()
+        cursor.close()
 
-            return teilnahme
+        return teilnahme
 
     def update(self, teilnahme):
         """Überschreiben / Aktualisieren eines Teilnahme-Objekts in der DB

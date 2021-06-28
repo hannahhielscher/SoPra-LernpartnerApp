@@ -60,7 +60,7 @@ export default class LernpartnerAPI {
         
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
+        #addProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
         #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
         #updateProfilURL = (id, gruppe, lernfaecher, lernvorlieben) => `${this.#lernappServerBaseURL}/profile?id=${id}&gruppe=${gruppe}&lernfaecher=${lernfaecher}&lernvorlieben=${lernvorlieben}`;
         //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
@@ -69,11 +69,10 @@ export default class LernpartnerAPI {
         //Lernvorliebenbezogen
         #getLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
         //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
-        #getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
+        //#getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
         #updateLernvorliebenURL = (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) => `${this.#lernappServerBaseURL}/lernvorlieben?id=${id}&tageszeiten=${tageszeiten}&tage=${tage}&frequenz=${frequenz}&lernart=${lernart}&gruppengroesse=${gruppengroesse}&lernort=${lernort}`;
         #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
-
         //Vorschlagbezogen
         #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
         //#getSelectedLernfach = () => `${this.#lernappServerBaseURL}`
@@ -278,22 +277,22 @@ export default class LernpartnerAPI {
            * @public
            */
           addLerngruppe(lerngruppeBO) {
+          console.log(lerngruppeBO)
             return this.#fetchAdvanced(this.#addLerngruppeURL(), {
               method: 'POST',
               headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
-              },
-              body: JSON.stringify(lerngruppeBO)
-            }).then((responseJSON) => {
-              // We always get an array of LerngruppeBOs.fromJSON, but only need one object
-              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
-              // console.info(LerngruppeBOs);
-              return new Promise(function (resolve) {
-                resolve(responseLerngruppeBO);
-              })
-            })
-          }
+            },
+             body: JSON.stringify(lerngruppeBO)
+           }).then((responseJSON) => {
+             // We always get an array of LerngruppeBO.fromJSON, but only need one object
+             let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON);
+             return new Promise(function (resolve) {
+               resolve(responseLerngruppeBO);
+             })
+           })
+         }
   
           /**
            * Gibt eine Lerngruppe mit einer bestimmten personenID als BO zurück
@@ -378,22 +377,23 @@ export default class LernpartnerAPI {
          * @public
          */
         addProfil(profilBO) {
-          return this.#fetchAdvanced(this.#addProfilURL(), {
+        console.log(profilBO)
+          return this.#fetchAdvanced(this.#addProfileURL(), {
             method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
             },
-            body: JSON.stringify(profilBO)
-          }).then((responseJSON) => {
-            // We always get an array of ProfilBOs.fromJSON, but only need one object
-            let responseProfilBO = ProfilBO.fromJSON(responseJSON)[0];
-            // console.info(accountBOs);
-            return new Promise(function (resolve) {
-              resolve(responseProfilBO);
-            })
-          })
-        }
+             body: JSON.stringify(profilBO)
+           }).then((responseJSON) => {
+             // We always get an array of LernvorliebenBO.fromJSON, but only need one object
+             let responseProfilBO = ProfilBO.fromJSON(responseJSON);
+             return new Promise(function (resolve) {
+               resolve(responseProfilBO);
+             })
+           })
+         }
+
         /**
          * Gibt ein Profil-Objekt zurück
          * @param {Number} profilID to be retrieved
@@ -462,16 +462,16 @@ export default class LernpartnerAPI {
         }
 
 
-        getLernvorliebenPraeferenz(lernvorliebenID) {
-          return this.#fetchAdvanced(this.#getLernvorliebenPraeferenzURL(lernvorliebenID)).then((responseJSON) => {
+        //getLernvorliebenPraeferenz(lernvorliebenID) {
+          //return this.#fetchAdvanced(this.#getLernvorliebenPraeferenzURL(lernvorliebenID)).then((responseJSON) => {
             // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
-            let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
-            console.info(lernvorliebenBO);
-            return new Promise(function (resolve) {
-              resolve(lernvorliebenBO);
-            })
-          })
-        }
+            //let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
+            //console.info(lernvorliebenBO);
+            //return new Promise(function (resolve) {
+              //resolve(lernvorliebenBO);
+            //})
+          //})
+        //}
 
 
 
@@ -488,16 +488,16 @@ export default class LernpartnerAPI {
               'Accept': 'application/json, text/plain',
               'Content-type': 'application/json',
             },
-            body: JSON.stringify(lernvorliebenBO)
-          }).then((responseJSON) => {
-            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
-            let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON)[0];
-            // console.info(LernvorliebenBOs);
-            return new Promise(function (resolve) {
-              resolve(responseLernvorliebenBO);
-            })
-          })
-        }
+             body: JSON.stringify(lernvorliebenBO)
+           }).then((responseJSON) => {
+             // We always get an array of LernvorliebenBO.fromJSON, but only need one object
+             let responseLernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
+             return new Promise(function (resolve) {
+               resolve(responseLernvorliebenBO);
+             })
+           })
+         }
+
         /**
          * Gibt Promise zurück
          * 
