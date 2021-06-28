@@ -241,7 +241,9 @@ class MeinProfil extends Component {
       return (
         <div className={classes.root}>
         <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
-        
+        <Typography>
+            <h1>Dein Profil</h1>
+        </Typography>
         <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
 
