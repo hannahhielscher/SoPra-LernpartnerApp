@@ -211,9 +211,9 @@ class GruppenListeEintrag extends Component {
     render(){
 
           const { classes, expandedState, currentPerson } = this.props;
-          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
+          //const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
 
-          const { lerngruppe, lernvorlieben, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm } = this.state;
+          const { lerngruppe, lernvorlieben, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm , showLerngruppeForm } = this.state;
             console.log(lerngruppe)
           return (
             <div>

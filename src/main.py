@@ -1044,12 +1044,12 @@ class LernvorliebenListeOperationen(Resource):
         
         adm = AppAdministration()
         lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
-        lernvorlieben.set_tageszeiten(tageszeiten)
-        lernvorlieben.set_tage(tage)
-        lernvorlieben.set_frequenz(frequenz)
-        lernvorlieben.set_lernart(lernart)
-        lernvorlieben.set_gruppengroesse(gruppengroesse)
-        lernvorlieben.set_lernort(lernort)
+        lernvorlieben.set_tageszeiten_id(tageszeiten)
+        lernvorlieben.set_tage_id(tage)
+        lernvorlieben.set_frequenz_id(frequenz)
+        lernvorlieben.set_lernart_id(lernart)
+        lernvorlieben.set_gruppengroesse_id(gruppengroesse)
+        lernvorlieben.set_lernort_id(lernort)
         
         adm.update_lernvorlieben_by_id(lernvorlieben)
 

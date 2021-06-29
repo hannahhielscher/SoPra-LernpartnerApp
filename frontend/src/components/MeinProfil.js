@@ -33,7 +33,14 @@ class MeinProfil extends Component {
             personLernvorliebenID: null,
             profil: null,
             lernvorlieben: null,
+
+            lernvorliebentageszeiten: null,
+            lernvorliebentage: null,
             lernvorliebenfrequenz: null,
+            lernvorliebenlernart: null,
+            lernvorliebengruppengroesse: null,
+            lernvorliebenlernort: null,
+
             gruppe: false,
             showMeinProfilForm: false,
             showRegistrierungForm: false,
@@ -164,7 +171,12 @@ class MeinProfil extends Component {
     .then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
-            lernvorliebenfrequenz: lernvorliebenBO.frequenz,
+            lernvorliebentageszeiten: lernvorliebenBO.tageszeiten_bez,
+            lernvorliebentage: lernvorliebenBO.tage_bez,
+            lernvorliebenfrequenz: lernvorliebenBO.frequenz_bez,
+            lernvorliebenlernart: lernvorliebenBO.lernart_bez,
+            lernvorliebengruppengroesse: lernvorliebenBO.gruppengroesse_bez,
+            lernvorliebenlernort: lernvorliebenBO.lernort_bez,
             loadingInProgress: false,
             error: null
       }))
@@ -238,7 +250,7 @@ class MeinProfil extends Component {
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { lernfaechertest, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
+      const { lernfaechertest, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
       console.log(lernfaechergesamt)
       console.log(lernfaechertest)
       console.log(profil)
@@ -258,12 +270,12 @@ class MeinProfil extends Component {
                               <b>Studiengang: </b>{personStudiengang}<br />
                               <b>Lernfächer: </b>{lernfaechernamen}<br />
                               <b>Lernvorlieben: </b><br />
-                              <b>Tageszeit: </b><br />
-                              <b>Tage: </b><br />
+                              <b>Tageszeit: </b>{lernvorliebentageszeiten}<br />
+                              <b>Tage: </b>{lernvorliebentage}<br />
                               <b>Frequenz: </b>{lernvorliebenfrequenz}<br />
-                              <b>Lernart: </b><br />
-                              <b>Gruppengröße: </b><br />
-                              <b>Lernort: </b><br />
+                              <b>Lernart: </b>{lernvorliebenlernart}<br />
+                              <b>Gruppengröße: </b>{lernvorliebengruppengroesse}<br />
+                              <b>Lernort: </b>{lernvorliebenlernort}<br />
         
         </Typography>
         </Paper>
