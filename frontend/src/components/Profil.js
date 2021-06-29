@@ -111,15 +111,15 @@ class Profil extends Component {
 
 
      getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorliebenPraeferenz(this.props.user.profil).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorlieben(this.props.user.profil).then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
-            tageszeiten: lernvorliebenBO.tageszeiten,
-            tage: lernvorliebenBO.tage,
-            frequenz: lernvorliebenBO.frequenz,
-            lernart: lernvorliebenBO.lernart,
-            gruppengroesse: lernvorliebenBO.gruppengroesse,
-            lernort: lernvorliebenBO.lernort,
+            tageszeiten: lernvorliebenBO.tageszeiten_bez,
+            tage: lernvorliebenBO.tage_bez,
+            frequenz: lernvorliebenBO.frequenz_bez,
+            lernart: lernvorliebenBO.lernart_bez,
+            gruppengroesse: lernvorliebenBO.gruppengroesse_bez,
+            lernort: lernvorliebenBO.lernort_bez,
             loadingInProgress: false,
             error: null
       })).catch(e =>

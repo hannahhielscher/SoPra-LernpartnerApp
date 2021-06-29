@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, TextField, IconButton, Grid, Typography, Divider } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+import { withStyles, Button, TextField, Grid, Typography, Divider } from '@material-ui/core';
+//import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtBO from '../api/NachrichtBO';
-import NachrichtenListeEintrag from './NachrichtenListeEintrag';
+//import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 //import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 //import SaveIcon from '@material-ui/icons/Save';
@@ -33,21 +33,15 @@ class Nachricht extends Component {
   constructor(props) {
     super(props);
 
-   // console.log(props);
-   let expandedID = null;
-
-   if (this.props.location.expandNachricht) {
-     expandedID = this.props.location.expandNachricht.getID();
-   }
-
    // Init an empty state
    this.state = {
-     nachrichten: '',
+     nachrichten: [], 
      nachricht_inhalt: null,
-     konversation_id: null, 
+     konversation_id: null,
+     personid: null,  
      error: null,
      loadingInProgress: false,
-     expandedNachrichtID: expandedID,
+     
    };
  }
 
@@ -69,13 +63,13 @@ class Nachricht extends Component {
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
-  LernpartnerAPI.getAPI()
-    .getNachrichten(this.props.currentPerson.getID(), this.props.konversation_id.getID())
-    .then((nachrichtBO) =>
+  LernpartnerAPI.getAPI().getNachrichtenByKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation_id.getID())
+    .then((nachrichtenBOs) =>
       this.setState({
-        nachricht: nachrichtBO,
-        nachricht_inhalt: nachrichtBO.nachricht_inhalt,
-        konversation_id: nachrichtBO.konversation_id,
+        nachrichten: nachrichtenBOs,
+        nachricht_inhalt: nachrichtenBOs.nachricht_inhalt,
+        personID: nachrichtenBOs.personID,
+        konversation_id: nachrichtenBOs.konversation_id,
         loadingInProgress: false,
         error: null,
       })
@@ -97,6 +91,7 @@ addNachricht = () => {
     let newNachricht = new NachrichtBO(
       this.state.nachricht_inhalt,
       this.props.currentPerson.getID(),
+      this.props.personID.getID(),
       this.props.konversation_id.getID()
     );
 
@@ -123,7 +118,7 @@ this.setState({
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
-  this.getNachrichten();
+ 
 }
 
 //Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird
@@ -163,20 +158,14 @@ nachrichtFormClosed = nachrichten => {
  // Rendert die Componente 
     render() {
       const { classes, currentPerson } = this.props;
-      const { nachrichten, nachricht_inhalt, konversation_id, loadingInProgress, error } = this.state;
-      if (nachrichten) {
-        nachrichten.sort((a, b) => {
-          return a.getID() - b.getID();
-        });
-      }
-  
+      const { nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
+      
       return (
         <div>
-          <h1 class="Chatname">
-            {konversation_id.getName() + " " + konversation_id.getVorname()}
-          </h1>
-          {nachrichten
-            ? nachrichten.map((nachricht) => {
+
+          {nachrichten? 
+          
+          nachrichten.map((nachricht) => {
                 {
                   if (nachricht.getCurrentPerson() !== currentPerson.getID()) {
                     return (
@@ -238,7 +227,7 @@ nachrichtFormClosed = nachrichten => {
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
       
       </div>
-      //<NachrichtForm show={NachrichtForm}></NachrichtForm>
+      
     );
 
 }}

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
+import { LernpartnerAPI } from '../../api';
 import Nachricht from './Nachricht';
 //import KonversationListe from './KonversationListe';
+import LernpartnerAPI from '../api/LernpartnerAPI'
 
 
 /** 
@@ -30,11 +32,6 @@ class KonversationListeEintrag extends Component {
     }
 
 
-    
-// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-componentDidMount() {
-  
-}
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {
@@ -54,6 +51,14 @@ verlassenButtonClicked = (event) => {
     showChatVerlassenForm: true
   });
 }
+
+    
+/** 
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+    componentDidMount() {
+        this.getKonversation();
+    }
+*/
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
@@ -83,14 +88,14 @@ render() {
                         <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
                           Chat verlassen
                         </Button>
-                      </ButtonGroup>
+                </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-              
+              <Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
             </div>
-    
-  )
-  //<Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
+            
+        );
+  
 }
   
     

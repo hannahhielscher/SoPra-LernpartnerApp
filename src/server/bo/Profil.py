@@ -43,7 +43,7 @@ class Profil (BusinessObject):
     def from_dict(dictionary=dict()):
         """ Umwandeln eines Python dict() in ein Python Objekt Profil() """
         obj = Profil()
-        obj.set_id(dictionary["id"])  # part of the Business object mother class
+        obj.set_id(dictionary["id"]) # part of the Business object mother class
         obj.set_gruppe(dictionary["gruppe"])
         obj.set_lernfaecher(dictionary["lernfaecher"])
         obj.set_lernvorlieben_id(dictionary["lernvorlieben_id"])

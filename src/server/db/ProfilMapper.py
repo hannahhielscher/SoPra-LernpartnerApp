@@ -202,6 +202,7 @@ class ProfilMapper(Mapper):
         :param profil das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
+        print(profil)
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM profile ")
         tuples = cursor.fetchall()
@@ -222,14 +223,18 @@ class ProfilMapper(Mapper):
 
         lernfaecher = profil.get_lernfaecher()
         command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+        #data2 = (profil.get_id(), profil.get_lernfaecher())
+        #cursor.execute(command2, data2)
 
         for lernfach in lernfaecher:
-            for i in lernfach:
-                data2 = (profil.get_id(), i)
-                #print(lernfaecher)
-                #print(lernfach)
-                #print(i)
-                cursor.execute(command2, data2)
+            #for i in lernfach:
+                #for k in i:
+            print(lernfach)
+            data2 = (profil.get_id(), lernfach)
+                    #print(lernfaecher)
+                    #print(lernfach)
+                    #print(i)
+            cursor.execute(command2, data2)
 
         self._connection.commit()
         cursor.close()
