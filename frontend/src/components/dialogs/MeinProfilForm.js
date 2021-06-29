@@ -84,13 +84,15 @@ class MeinProfilForm extends Component {
             lernfach: null,
             lernfaecherValidationFailed: false,
             lernfaecherEdited: false,
-
+            
             updatingError: null,
             updatingInProgress: false,
 
-            profil: this.props.currentProfil,
-            test: this.props.lernfaechergesamt,
             gruppe: 0,
+
+            selectedValue: null,
+            setSelectedValue: null,
+
 
         };
         // State speichern falls cancel
@@ -106,7 +108,6 @@ class MeinProfilForm extends Component {
         this.handleChangeLernfaecher = this.handleChangeLernfaecher.bind(this);
 
     }
-
 
 
     /** Updates the person */
@@ -141,8 +142,8 @@ class MeinProfilForm extends Component {
 
   /** Updates the person */
   updatenProfil = () => {
-    let profil = this.state.profil;
-    LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
+    let profil = this.props.currentProfil;
+    LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfach, profil.lernvorlieben_id
     ).then(profil => {
         // Backend call sucessfull
         // reinit the dialogs state for a new empty customer
@@ -176,8 +177,9 @@ class MeinProfilForm extends Component {
         .then(lernvorlieben => {
             // Backend call sucessfull
             // reinit the dialogs state for a new empty customer
+            // call the parent with the customer object from backend
             this.setState(this.baseState);
-            this.props.onClose(lernvorlieben); // call the parent with the customer object from backend
+            this.props.onClose(lernvorlieben);
         }).catch(e =>
             this.setState({
                 updatingInProgress: false,    // disable loading indicator
@@ -243,8 +245,9 @@ class MeinProfilForm extends Component {
     //Setzen des Status, bei schließen des Dialogs
       handleClose = () => {
         this.setState(this.baseState);
-        this.props.onClose();
+        this.props.onClose(null);
     }
+
 
     handleChangeStudiengang(event) {
       this.setState({studiengang: event.target.value});
@@ -280,20 +283,25 @@ class MeinProfilForm extends Component {
 
     handleChangeLernfaecher(event) {
       this.setState({lernfach: event.target.value});
+      
     }
 
-
+    
 
 	/** Renders the sign in page, if user objext is null */
 	/** Renders the component */
     render() {
-        const { classes, show, currentPerson, lernvorlieben} = this.props;
-        const { profil, name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
+        const { classes, show, currentPerson, currentProfil, lernvorlieben, lernfaechergesamt } = this.props;
+        const { lernfaecherauswahl, profil, name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
           alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, tageszeiten,
           tageszeitenValidationFailed, tage, tageValidationFailed, frequenz, frequenzValidationFailed, lernart, lernartValidationFailed, gruppengroesse, gruppengroesseValidationFailed,
           lernort, lernortValidationFailed, lernfach, test, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
 
-        console.log(test)
+        console.log(currentProfil)
+        console.log(currentPerson)
+        console.log(lernfaechergesamt)
+        console.log(show)
+        console.log('Test2')
         
         let title = 'Profil bearbeiten';
         let header = 'Bitte gib deine neuen Daten ein:';
@@ -324,9 +332,9 @@ class MeinProfilForm extends Component {
                     onChange={this.numberValueChange} error={semesterValidationFailed}
                     helperText={geschlechtValidationFailed ? 'The semester must contain at least one character' : ' '} />
 
-                  <FormControl className={classes.formControl}>
+                  <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Studiengang</InputLabel>
-                             <Select required error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
+                             <Select error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
                              <MenuItem value='Audiovisuelle Medien'>Audiovisuelle Medien</MenuItem>
                                 <MenuItem value='Crossmedia-Redaktion/Public Relations'>Crossmedia-Redaktion/Public Relations</MenuItem>
                                 <MenuItem value='Deutsch-chinesischer Studiengang Medien und Technologie'>Deutsch-chinesischer Studiengang Medien und Technologie</MenuItem>
@@ -354,17 +362,17 @@ class MeinProfilForm extends Component {
                     onChange={this.textFieldValueChange} error={geschlechtValidationFailed}
                     helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} />
 
-                  <FormControl className={classes.formControl}>
+                  <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
-                             <Select required error={lerngruppeValidationFailed} value={lerngruppe} onChange={this.handleChangeLerngruppe}>
+                             <Select  error={lerngruppeValidationFailed} value={lerngruppe} onChange={this.handleChangeLerngruppe}>
                                 <MenuItem value='1'>Ja!</MenuItem>
                                 <MenuItem value='0'>Nein!</MenuItem>
                             </Select>
                    </FormControl>
                   <br/>
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal'className={classes.formControl}>
                             <InputLabel >Welche Tageszeit präferierst du? </InputLabel>
-                             <Select required error={tageszeitenValidationFailed} value={tageszeiten}
+                             <Select error={tageszeitenValidationFailed} value={tageszeiten}
                              onChange={this.handleChangeTageszeiten}>
                                 <MenuItem value='1'>Morgens</MenuItem>
                                 <MenuItem value='2'>Mittags</MenuItem>
@@ -372,26 +380,26 @@ class MeinProfilForm extends Component {
                             </Select>
                    </FormControl>
                    <br/>
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Tage präferierst du?</InputLabel>
-                             <Select required error={tageValidationFailed} value={tage} onChange={this.handleChangeTage}>
+                             <Select error={tageValidationFailed} value={tage} onChange={this.handleChangeTage}>
                                 <MenuItem value='1'>Unter der Woche</MenuItem>
                                 <MenuItem value='2'>Am Wochenende</MenuItem>
                             </Select>
                    </FormControl>
                    <br/>
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Frequenz präferierst du?</InputLabel>
-                             <Select required error={frequenzValidationFailed} value={frequenz} onChange={this.handleChangeFrequenz}>
+                             <Select error={frequenzValidationFailed} value={frequenz} onChange={this.handleChangeFrequenz}>
                                 <MenuItem value='1'>Wöchentlich</MenuItem>
                                 <MenuItem value='2'>Mehrmals die Woche</MenuItem>
                                 <MenuItem value='3'>Alle zwei Wochen</MenuItem>
                             </Select>
                    </FormControl>
                    <br/> 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Lernart präferierst du?</InputLabel>
-                             <Select required error={lernartValidationFailed} value={lernart} onChange={this.handleChangeLernart}>
+                             <Select error={lernartValidationFailed} value={lernart} onChange={this.handleChangeLernart}>
                                 <MenuItem value='1'>Visuell</MenuItem>
                                 <MenuItem value='2'>Auditiv</MenuItem>
                                 <MenuItem value='3'>Motorisch</MenuItem>
@@ -399,18 +407,18 @@ class MeinProfilForm extends Component {
                             </Select>
                    </FormControl>
                    <br/>
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Gruppengroesse präferierst du?</InputLabel>
-                             <Select required error={gruppengroesseValidationFailed} value={gruppengroesse} onChange={this.handleChangeGruppengroesse}>
+                             <Select error={gruppengroesseValidationFailed} value={gruppengroesse} onChange={this.handleChangeGruppengroesse}>
                                 <MenuItem value='1'>Bis zu 3 Personen</MenuItem>
                                 <MenuItem value='2'>3-5 Personen</MenuItem>
                                 <MenuItem value='3'>Über 5 Personen</MenuItem>
                             </Select>
                    </FormControl>
                    <br/>
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welchen Lernort präferierst du?</InputLabel>
-                             <Select required error={lernortValidationFailed} value={lernort} onChange={this.handleChangeLernort}>
+                             <Select error={lernortValidationFailed} value={lernort} onChange={this.handleChangeLernort}>
                                 <MenuItem value='1'>Remote</MenuItem>
                                 <MenuItem value='2'>Hochschule</MenuItem>
                                 <MenuItem value='3'>Bibliothek</MenuItem>
@@ -418,22 +426,19 @@ class MeinProfilForm extends Component {
                             </Select>
                    </FormControl>
                    <br/>
-                   <FormControl className={classes.formControl}>
-                            <InputLabel>Was willst du lernen?</InputLabel>
-                             
-                            <Select
-                              native
-                              value= {lernfach}
-                              onChange={this.handleChangeLernfaecher}
-                            >
-                            {test.map(lernfach =>
-                              <option key={lernfach.id} value={lernfach.id}>{lernfach.bezeichnung}</option>
-                            )};
-                            </Select>
-                   </FormControl>
-
-
-
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                        <InputLabel>Was möchtest du lernen?</InputLabel>
+                   <Select
+                      native
+                      error={lernfaecherValidationFailed}
+                      value= {lernfach}
+                      onChange={this.handleChangeLernfaecher}
+                    >
+                    {lernfaechergesamt.map(lernfach =>
+                      <option key={lernfach.id} value={lernfach.id}>{lernfach.bezeichnung}</option>
+                    )};
+                    </Select>
+                    </FormControl>
                 </form>
                 <LoadingProgress show={addingInProgress || updatingInProgress} />
                 {
@@ -450,7 +455,7 @@ class MeinProfilForm extends Component {
                 </Button>
                 {
                     <Button disabled={nameValidationFailed || vornameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
-                          onClick={ () => {this.updatenPerson(); this.updatenLernvorlieben();}} color='primary'>
+                          onClick={ () => {this.updatenPerson(); this.updatenProfil(); this.updatenLernvorlieben();}} color='primary'>
                           Änderungen abschließen
                     </Button>
                 }

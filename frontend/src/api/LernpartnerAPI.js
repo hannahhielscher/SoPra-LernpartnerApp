@@ -61,7 +61,7 @@ export default class LernpartnerAPI {
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
         #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
+        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile-by-id/${id}`;
         #updateProfilURL = (id, gruppe, lernfaecher, lernvorlieben) => `${this.#lernappServerBaseURL}/profile?id=${id}&gruppe=${gruppe}&lernfaecher=${lernfaecher}&lernvorlieben=${lernvorlieben}`;
         //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
