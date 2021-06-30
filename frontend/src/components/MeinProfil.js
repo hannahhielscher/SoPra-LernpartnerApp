@@ -46,7 +46,9 @@ class MeinProfil extends Component {
             showRegistrierungForm: false,
             loadingInProgress: false,
             loadingError: null,
-            lernfaechertest: []
+            lernfaecher_id: [],
+            lernfaecher_bez: [],
+            test: []
             
         };
     }
@@ -146,10 +148,20 @@ class MeinProfil extends Component {
       .then(lernfaecherBOs =>
         this.setState({
               lernfaechergesamt: lernfaecherBOs,
-              lernfaechertest: lernfaecherBOs.map(lernfach => lernfach.id),
+              lernfaecher_id: lernfaecherBOs.map(lernfach => lernfach.id),
+              lernfaecher_bez: lernfaecherBOs.map(lernfach => lernfach.bezeichnung),
               loadingInProgress: false,
               error: null
-        }))
+        })).then(() => {
+  
+          this.setState({
+            
+            
+            
+          
+        })
+        }
+        )
         .catch(e =>
           this.setState({ // Reset state with error from catch
             lernfaechergesamt: null,
@@ -236,6 +248,12 @@ class MeinProfil extends Component {
     }
   }
 
+  lernfaecherOptions = (arr1, arr2, sep) => {
+    arr1.map(function (num, idx) {
+      return num.toString().concat(sep, (arr2[idx]).toString())
+    })
+  }
+
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
   componentDidMount(){
     this.getPerson();
@@ -250,12 +268,14 @@ class MeinProfil extends Component {
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { lernfaechertest, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
+      const { test, lernfaecher_id, lernfaecher_bez, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
       console.log(lernfaechergesamt)
-      console.log(lernfaechertest)
+      console.log(lernfaecher_id)
+      console.log(lernfaecher_bez)
       console.log(profil)
       console.log(showMeinProfilForm)
-      console.log('Test1')
+      console.log(test)
+      
       
       return (
         <div className={classes.root}>
