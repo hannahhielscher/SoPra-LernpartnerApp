@@ -21,7 +21,6 @@ class Profil (BusinessObject):
 
     def set_lernfaecher(self, lernfach_neu):
         """Setzen der Lernfächer"""
-        #self._lernfaecher.append(lernfach_neu)
         self._lernfaecher = lernfach_neu
 
     def get_lernvorlieben_id(self):
@@ -47,7 +46,5 @@ class Profil (BusinessObject):
         obj.set_id(dictionary["id"]) # part of the Business object mother class
         obj.set_gruppe(dictionary["gruppe"])
         obj.set_lernfaecher(dictionary["lernfaecher"])
-        print(obj.get_lernfaecher())
         obj.set_lernvorlieben_id(dictionary["lernvorlieben_id"])
-        print(obj.get_lernvorlieben_id())
         return obj

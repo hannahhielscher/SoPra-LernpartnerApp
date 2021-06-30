@@ -16,13 +16,7 @@ import { withStyles } from '@material-ui/core';
 //import NachrichtForm from './NachrichtForm'
 //import GruppeForm from './GruppeForm'
 
-/**
- * Es wird eine einzelne Nachricht von einer Person  dargestellt
- *
- * 
- * Hierfür wird der Inhalt der Nachricht angezeigt 
- * 
- */
+
 
 class NachrichtenListeEintrag extends Component {
     constructor(props){

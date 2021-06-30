@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-//import Profil from './Profil';
+import Profil from './Profil';
 //import { withStyles } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import Select from '@material-ui/core/Select';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
+import AnfrageForm from './dialogs/AnfrageForm';
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -28,14 +29,26 @@ class VorschlagListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             vorschlag: props.vorschlag,
+
             //match: null,
+
             profil: null,
+            gruppe: null,
+
             person: null,
-            profilID: null,
             personName: null,
             personVorname: null,
+
+            lerngruppe: null,
+            lerngruppeName: null,
+
+            chatPartnerProfil: props.vorschlag.match_profil_id,
+
+            teilnahmeChat: null,
+
             showProfil: false,
             showAnfrageForm: false,
+
             loadingInProgress: false,
             error: null
         };
@@ -45,7 +58,7 @@ class VorschlagListeEintrag extends Component {
     expansionPanelStateChanged = () => {
     this.props.onExpandedStateChange(this.props.vorschlag);
     }
-    
+
     //Handles the onClick event of the show profil button
     showProfilButtonClicked = (event) => {
       event.stopPropagation();
@@ -62,12 +75,43 @@ class VorschlagListeEintrag extends Component {
       });
     }
 
-    // API Anbindung um Profil vom Backend zu bekommen 
+    getProfil = () => {
+    LernpartnerAPI.getAPI().getProfil(this.props.vorschlag.match_profil_id)
+    .then(profilBO =>
+      this.setState({
+            profil: profilBO,
+            gruppe: profilBO.gruppe,
+            //profilLernfaecher: profilBO.lernfaecher,
+            profilLernvorliebenID: profilBO.lernvorlieben,
+            loadingInProgress: false,
+            error: null
+      })).then(() => {
+            this.getPartner();
+            console.log(this.state.gruppe)
+        }).catch(e =>
+        this.setState({ // Reset state with error from catch
+          profil: null,
+          gruppe: null,
+          //profilLernfaecher: null,
+          profilLernvorliebenID: null,
+          loadingInProgress: false,
+          error: e,
+        })
+      );
+
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+
+    // API Anbindung um Person vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPersonByProfil(this.props.vorschlag.getmatch_profil_id())
+      LernpartnerAPI.getAPI().getPersonByProfil(this.state.vorschlag.match_profil_id)
       .then(personBO =>
           this.setState({
-            person: personBO,
+            //chatPartnerProfil: personBO,
             personName: personBO.name,
             personVorname: personBO.vorname,
             loadingInProgress: false,
@@ -75,7 +119,7 @@ class VorschlagListeEintrag extends Component {
           }))
           .catch(e =>
               this.setState({
-                person: null,
+                chatPartnerProfil: null,
                 personName: null,
                 personVorname: null,
                 loadingInProgress: false,
@@ -86,35 +130,83 @@ class VorschlagListeEintrag extends Component {
         error: null
       });
     }
- 
+
+    // API Anbindung um Lerngruppe vom Backend zu bekommen
+    getLerngruppe = () => {
+      LernpartnerAPI.getAPI().getLerngruppeByProfil(this.state.vorschlag.match_profil_id)
+      .then(lerngruppeBO =>
+          this.setState({
+            //chatPartnerProfil: lerngruppeBO,
+            lerngruppeName: lerngruppeBO.name,
+            loadingInProgress: false,
+            error: null,
+          }))
+          .catch(e =>
+              this.setState({
+                chatPartnerProfil: null,
+                lerngruppeName: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
+    getPartner = () => {
+        if (this.state.gruppe === true){
+            this.getLerngruppe();
+        }else{
+            this.getPerson();
+        }
+    }
+
+  /** Handles the onClose event of the CustomerForm */
+  anfrageFormClosed = (chatPartnerProfil) => {
+    // customer is not null and therefor changed
+    if (chatPartnerProfil) {
+      this.setState({
+        chatPartnerProfil: chatPartnerProfil,
+        showAnfrageForm: false
+      });
+    } else {
+      this.setState({
+        showAnfrageForm: false
+      });
+    }
+  }
+
     componentDidMount() {
       // load initial balance
-      this.getPerson();
+      this.getProfil();
     }
-  
-    /** Lifecycle method, which is called when the component was updated */
-    componentDidUpdate(prevProps) {
-      if ((this.props.show) && (this.props.show !== prevProps.show)) {
-        this.getPerson();
-      }
-    }
-  
-    render(){
 
-          const { classes, expandedState } = this.props;
-          const { person, vorschlag, profil, profilID, personName, personVorname, showProfil, showAnfrageForm } = this.state;
-          console.log(person)
+    render(){
+          const { classes, expandedState, currentPerson } = this.props;
+          const { vorschlag, profil, gruppe, person, personName, personVorname, lerngruppe, lerngruppeName, chatPartnerProfil, showProfil, showAnfrageForm } = this.state;
+          console.log(chatPartnerProfil)
+          //console.log(vorschlag)
+          //console.log(profil)
+          //console.log(gruppe)
+
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  id={`vorschlag${vorschlag.getID()}accountpanel-header`}
-                >
+                  id={`vorschlag${vorschlag.getID()}accountpanel-header`}>
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
                     <Grid item>
+                    {
+                    gruppe ?
+                    <Typography variant='body1' className={classes.heading}>{lerngruppeName}
+                      </Typography>
+                    :
                     <Typography variant='body1' className={classes.heading}>{personVorname} {personName}
                       </Typography>
+                    }
+
                     <Typography variant='body1' className={classes.heading}>Matchquote: {vorschlag.getmatch_quote()}%
                       </Typography>
                     </Grid>
@@ -138,6 +230,7 @@ class VorschlagListeEintrag extends Component {
                       </ButtonGroup>
                     </AccordionDetails>
               </Accordion>
+              <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
             </div>
           );
         }

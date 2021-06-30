@@ -92,7 +92,6 @@ class GruppenForm extends Component {
             lernfachListe: [this.state.lernfaecher]
         })).then(() => {
             this.addProfil();
-
     }).catch(e =>
       this.setState({
         updatingInProgress: false,    // disable loading indicator
@@ -224,11 +223,6 @@ class GruppenForm extends Component {
     this.props.onClose(null);
   }
 
-    /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
-    componentDidMount() {
-
-    }
-
   /** Handles value changes of the customer select textfield */
   lernfaecherSelectionChange = (event) => {
       this.setState({lernfaecher: event.target.value});
@@ -358,17 +352,16 @@ class GruppenForm extends Component {
             </form>
             <LoadingProgress show={addingInProgress} />
 
-                <ContextErrorMessage error={addingError} contextErrorMsg={`Die Gruppe konnte nicht angelegt werden.`} onReload={this.addLerngruppe} />
+                <ContextErrorMessage error={addingError} contextErrorMsg={`Die Gruppe konnte nicht angelegt werden.`} onReload={this.addLernvorlieben} />
 
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color='secondary'>
-              Cancel
+              Abbrechen
             </Button>
-
-                <Button disabled={gruppenNameValidationFailed || !gruppenNameEdited || !lernfaecher || !tageszeiten || !tage || !frequenz || !lernart || !lernort} variant='contained' onClick={this.addLernvorlieben} color='primary'>
-                  Gruppe erstellen
-             </Button>
+            <Button disabled={gruppenNameValidationFailed || !gruppenNameEdited || !lernfaecher || !tageszeiten || !tage || !frequenz || !lernart || !lernort} variant='contained' onClick={this.addLernvorlieben} color='primary'>
+                Gruppe erstellen
+            </Button>
 
           </DialogActions>
         </Dialog>
@@ -404,16 +397,7 @@ const styles = theme => ({
 GruppenForm.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
-  /** The CustomerBO to be edited */
-  /**lerngruppe: PropTypes.object,*/
-  /** If true, the form is rendered */
   show: PropTypes.bool.isRequired,
-  /**
-   * Handler function which is called, when the dialog is closed.
-   * Sends the edited or created CustomerBO as parameter or null, if cancel was pressed.
-   *
-   * Signature: onClose(CustomerBO customer);
-   */
   onClose: PropTypes.func.isRequired,
 }
 
