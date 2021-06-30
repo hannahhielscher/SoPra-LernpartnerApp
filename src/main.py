@@ -662,7 +662,7 @@ class NachrichtByKonversationIdOperation(Resource):
 class NachrichtByKonversationByPersonOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
-    @secured
+    #@secured
     def get (self, konversation_id, person_id):
         """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
         adm = AppAdministration()
