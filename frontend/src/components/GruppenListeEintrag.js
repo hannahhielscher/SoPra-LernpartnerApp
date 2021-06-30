@@ -32,7 +32,7 @@ class GruppenListeEintrag extends Component {
             lerngruppe: props.lerngruppe,
             gruppeName: this.props.lerngruppe.name,
             teilnahmeGruppe: null,
-            profilID: this.props.lerngruppe.gruppenprofil,
+            profilID: this.props.lerngruppe.profil,
             showProfil: false,
             showLerngruppeVerlassenDialog: false,
             //showTeilnehmer: false,
@@ -137,8 +137,7 @@ class GruppenListeEintrag extends Component {
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}
-                >
+                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}>
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
                     <Typography variant='body1'>
                         {lerngruppe.getname()}

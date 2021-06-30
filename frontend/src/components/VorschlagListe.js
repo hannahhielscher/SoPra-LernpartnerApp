@@ -100,9 +100,9 @@ class VorschlagListe extends Component {
     }
 
     render() {
-        const { show, classes, lernfach } = this.props;
+        const { show, classes, currentPerson, lernfach } = this.props;
         const { vorschlaege, expandedVorschlagID, error, loadingInProgress}  = this.state;
-        console.log(lernfach)
+        //console.log(lernfach)
         return (
           show ?
           <div className={classes.root}>
@@ -113,7 +113,7 @@ class VorschlagListe extends Component {
               // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters
   
               vorschlaege.map(vorschlag =>
-                <VorschlagListeEintrag key={vorschlag.getID()} vorschlag={vorschlag} expandedState={expandedVorschlagID === vorschlag.getID()}
+                <VorschlagListeEintrag key={vorschlag.getID()} vorschlag={vorschlag} currentPerson={currentPerson} expandedState={expandedVorschlagID === vorschlag.getID()}
                   onExpandedStateChange={this.onExpandedStateChange}
                 />)
             }

@@ -53,6 +53,7 @@ export default class LernpartnerAPI {
         
         //Gruppenbezogen
         #getLerngruppenURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
+        #getLerngruppeByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lerngruppen-by-profil/${profilid}`;
         #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
@@ -92,16 +93,16 @@ export default class LernpartnerAPI {
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationbyperson/${personid}`;
-        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
-        #addKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
-        #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversationen/${name}`;
+        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
+        #addKonversationURL = () => `${this.#lernappServerBaseURL}/konversationen`;
+        #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
 
         //TeilnahmeChatbezogen
         #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
         #getTeilnahmeChatByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
-        #addTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenChat`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
@@ -270,6 +271,24 @@ export default class LernpartnerAPI {
               })           
             })
           }
+
+        /**
+         * Gibt eine Lerngruppe mit einer bestimmten ID als BO zurück
+         *
+         * @param {Number} profilID to be retrieved
+         * @public
+         */
+        getLerngruppeByProfil(profilID) {
+          return this.#fetchAdvanced(this.#getLerngruppeByProfilURL(profilID)).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON, but only need one object
+            let lerngruppeBO = LerngruppeBO.fromJSON(responseJSON);
+            console.log(lerngruppeBO);
+            return new Promise(function (resolve) {
+              resolve(lerngruppeBO);
+            })
+          })
+        }
+
           /**
            * Adds a lerngruppe and returns a Promise, which resolves to a new LerngruppeBO object
            *  
@@ -364,12 +383,28 @@ export default class LernpartnerAPI {
           getProfile() {
             return this.#fetchAdvanced(this.#getProfileURL()).then((responseJSON) => {
               let profileBOs = ProfilBO.fromJSON(responseJSON);
-              // console.info(profilBOs);
+              // console.info(profileBOs);
               return new Promise(function (resolve) {
                 resolve(profileBOs);
               })           
             })
           }
+
+        /**
+         * Gibt ein Profil-Objekt zurück
+         * @param {Number} profilID to be retrieved
+         * @public
+          */
+         getProfil(profilID) {
+          return this.#fetchAdvanced(this.#getProfilURL(profilID)).then((responseJSON) => {
+            let profilBO = ProfilBO.fromJSON(responseJSON);
+            console.info(profilBO)
+            return new Promise(function (resolve) {
+              resolve(profilBO);
+            })
+          })
+        }
+
         /**
          * Adds a person and returns a Promise, which resolves to a new PersonBO object
          *  
@@ -393,21 +428,6 @@ export default class LernpartnerAPI {
              })
            })
          }
-
-        /**
-         * Gibt ein Profil-Objekt zurück
-         * @param {Number} profilID to be retrieved
-         * @public
-          */
-         getProfil(profilID) {
-          return this.#fetchAdvanced(this.#getProfilURL(profilID,{method: 'GET'})).then((responseJSON) => {
-            let profilBO = ProfilBO.fromJSON(responseJSON);
-            console.info(profilBO)
-            return new Promise(function (resolve) {
-              resolve(profilBO);
-            })
-          })
-        }
 
         /**
          * Updated ein Profil und gibt Promise zurück, resolves as ProfilBO.
@@ -738,6 +758,23 @@ export default class LernpartnerAPI {
               })           
             })
           }
+
+         /**
+         * Gibt Promise zurück, holt Konversationen mit bestimmtem Namen
+         *
+         * @param {String} name to be retrived
+         * @public
+         */
+          getKonversationByName(name){
+            return this.#fetchAdvanced(this.#getKonversationByNameURL(name)).then((responseJSON) => {
+                let konversationBO = KonversationBO.fromJSON(responseJSON);
+                console.log(konversationBO)
+                return new Promise(function (resolve){
+                    resolve(konversationBO)
+                })
+            })
+          }
+
           /** 
           * Adds a Konversation and returns a Promise, which resolves to a new KonversationBO object
           *  
@@ -755,8 +792,8 @@ export default class LernpartnerAPI {
              body: JSON.stringify(konversationBO)
            }).then((responseJSON) => {
              // We always get an array of NachrichtBOs.fromJSON, but only need one object
-             let responseKonversationBO = KonversationBO.fromJSON(responseJSON)[0];
-             // console.info(KonversationBOs);
+             let responseKonversationBO = KonversationBO.fromJSON(responseJSON);
+             console.log(responseKonversationBO);
              return new Promise(function (resolve) {
                resolve(responseKonversationBO);
              })
@@ -781,24 +818,6 @@ export default class LernpartnerAPI {
             })
           })
         }
-
-         /**
-         * Gibt Promise zurück, Löscht Nachricht mit bestimmter ID
-         * 
-         * @param {String} name to be retrived 
-         * @public
-         */
-
-
-          getKonversationByName(name){
-            return this.#fetchAdvanced(this.#getKonversationByNameURL(name)).then((responseJSON) => {
-            let konversationBOs = KonversationBO.fromJSON(responseJSON);
-            console.info(konversationBOs)
-            return new Promise(function (resolve){
-              resolve(konversationBOs)
-               })
-             })
-            }
 
           //setzt den Zustand einer Konversation mit der bestimmten ID auf einen neuen Zustand
 	        setKonversation(id) { 
@@ -880,10 +899,10 @@ export default class LernpartnerAPI {
                body: JSON.stringify(teilnahmechatBO)
                }).then((responseJSON) => {
                // We always get an array of TeilnahmeChatBOs.fromJSON, but only need one object
-               let responseTeilnahmeChatBO = TeilnahmeChatBO.fromJSON(responseJSON)[0];
-               // console.info(TeilnahmeChatBOs);
-                 return new Promise(function (resolve) {
-                  resolve(responseTeilnahmeChatBO);
+               let responseTeilnahmeChatBO = TeilnahmeChatBO.fromJSON(responseJSON);
+                  console.log(responseTeilnahmeChatBO);
+                  return new Promise(function (resolve) {
+                    resolve(responseTeilnahmeChatBO);
                      })
                    })
                }

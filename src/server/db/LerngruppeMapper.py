@@ -56,6 +56,34 @@ class LerngruppeMapper(Mapper):
 
         return result
 
+    def find_by_profil_id(self, id):
+
+        cursor = self._connection.cursor()
+        command = "SELECT id, name, profil_id FROM lerngruppen WHERE profil_id={}".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            (id, name, profil_id) = tuples[0]
+            
+            lerngruppe = Lerngruppe()
+
+            lerngruppe.set_id(id)
+            lerngruppe.set_name(name)
+            lerngruppe.set_profil(profil_id)
+
+            result = lerngruppe
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     #notwendig?
     def find_by_name(self, name):
         """Auslesen der Lerngruppe anhand des Namens

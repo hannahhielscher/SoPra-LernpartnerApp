@@ -68,30 +68,35 @@ class LernvorliebenMapper(Mapper):
         (tageszeiten_id, tageszeiten_bez) = tuples[0]
         tageszeiten_id = tageszeiten_id
         tageszeiten_bez = tageszeiten_bez
+
         command2 = "SELECT lernvorlieben.tage_id, tage.praeferenz FROM lernvorlieben INNER JOIN tage ON lernvorlieben.tage_id = tage.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command2)
         tuples = cursor.fetchall()
         (tage_id, tage_bez) = tuples[0]
         tage_id = tage_id
         tage_bez = tage_bez
+
         command3 = "SELECT lernvorlieben.frequenzen_id, frequenzen.praeferenz FROM lernvorlieben INNER JOIN frequenzen ON lernvorlieben.frequenzen_id = frequenzen.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command3)
         tuples = cursor.fetchall()
         (frequenzen_id, frequenzen_bez) = tuples[0]
         frequenzen_id = frequenzen_id
         frequenzen_bez = frequenzen_bez
+
         command4 = "SELECT lernvorlieben.lernarten_id, lernarten.praeferenz FROM lernvorlieben INNER JOIN lernarten ON lernvorlieben.lernarten_id = lernarten.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command4)
         tuples = cursor.fetchall()
         (lernarten_id, lernarten_bez) = tuples[0]
         lernarten_id = lernarten_id
         lernarten_bez = lernarten_bez
+
         command5 = "SELECT lernvorlieben.gruppengroessen_id, gruppengroessen.praeferenz FROM lernvorlieben INNER JOIN gruppengroessen ON lernvorlieben.gruppengroessen_id = gruppengroessen.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command5)
         tuples = cursor.fetchall()
         (gruppengroessen_id, gruppengroessen_bez) = tuples[0]
         gruppengroessen_id = gruppengroessen_id
         gruppengroessen_bez = gruppengroessen_bez
+
         command6 = "SELECT lernvorlieben.lernorte_id, lernorte.praeferenz FROM lernvorlieben INNER JOIN lernorte ON lernvorlieben.lernorte_id = lernorte.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command6)
         tuples = cursor.fetchall()

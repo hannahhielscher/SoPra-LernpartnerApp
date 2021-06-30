@@ -58,7 +58,7 @@ class ProfilMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        result = None
+        result = []
 
         cursor = self._connection.cursor()
         command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
@@ -81,7 +81,7 @@ class ProfilMapper(Mapper):
                 profil.set_lernfaecher(lernfaecher)
                 profil.set_lernvorlieben_id(lernvorlieben_id)
 
-                result = profil
+                result.append(profil)
 
             else:
                 pass
