@@ -306,6 +306,11 @@ class AppAdministration (object):
         with LerngruppeMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_lerngruppe_by_profil_id(self, id):
+        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        with LerngruppeMapper() as mapper:
+            return mapper.find_by_profil_id(id)
+
     def get_lerngruppe_by_person_id(self, id):
         """Eine Lerngruppe mit einer bestimmten ID auslesen"""
         with LerngruppeMapper() as mapper:
@@ -441,6 +446,18 @@ class AppAdministration (object):
     Konversation-spezifische Methoden
     """
 
+    def create_konversation(self, name, anfragestatus):
+        """Speichert die Konversation."""
+
+        konversation = Konversation()
+
+        konversation.set_name(name)
+        konversation.set_anfragestatus(anfragestatus)
+        konversation.set_id(1)
+
+        with KonversationMapper() as mapper:
+            return mapper.insert(konversation)
+
     def get_all_konversationen(self):
         """Gibt alle Konversationen zurück."""
         with KonversationMapper() as mapper:
@@ -461,11 +478,6 @@ class AppAdministration (object):
         with KonversationMapper() as mapper:
             return mapper.find_by_name(name)
 
-    def create_konversation(self, konversation):
-        """Speichert die Konversation."""
-        with KonversationMapper() as mapper:
-            return mapper.insert(konversation)
-
     def save_konversation(self, konversation):
         """Speichert die Konversation."""
         with KonversationMapper() as mapper:
@@ -480,12 +492,13 @@ class AppAdministration (object):
     TeilnahmeChats-spezifische Methoden
     """
 
-    def create_teilnahmeChat(self, teilnehmer, konversation):
+    def create_teilnahmeChat(self, teilnehmer, status, konversation):
         """Eine Teilnahme an einem Chat anlegen"""
 
         teilnahme = TeilnahmeChat()
 
         teilnahme.set_teilnehmer(teilnehmer)
+        teilnahme.set_status(status)
         teilnahme.set_konversation(konversation)
         teilnahme.set_id(1)
 
@@ -573,12 +586,12 @@ class AppAdministration (object):
         # Main-Person mit der verglichen wird
         with PersonMapper() as mapper:
             main_person = mapper.find_by_id(main_person_id)
-        #main_personenprofil_id = main_person.get_personenprofil()
+        # main_personenprofil_id = main_person.get_personenprofil()
 
         with ProfilMapper() as mapper:
             main_profil_list = mapper.find_by_id(main_person.get_profil())
 
-        #Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
+        # Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
         for profil in main_profil_list:
             main_lernvorlieben_id = profil.get_lernvorlieben_id()
             main_profil = profil
@@ -586,7 +599,7 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             main_lernvorlieben = mapper.find_by_id(main_lernvorlieben_id)
 
-        #Alle anderen Personen/Gruppen
+        # Alle anderen Personen/Gruppen
         with ProfilMapper() as mapper:
             match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
 
@@ -606,19 +619,20 @@ class AppAdministration (object):
 
             with LernvorliebenMapper() as mapper:
                 lernvorlieben = mapper.find_by_id(lernvorlieben_id)
+            print(lernvorlieben_id)
 
             quote = 0
-            if lernvorlieben.get_tageszeiten() == main_lernvorlieben.get_tageszeiten():
+            if lernvorlieben.get_tageszeiten_id() == main_lernvorlieben.get_tageszeiten_id():
                 quote += 1
-            if lernvorlieben.get_tage() == main_lernvorlieben.get_tage():
+            if lernvorlieben.get_tage_id() == main_lernvorlieben.get_tage_id():
                 quote += 1
-            if lernvorlieben.get_frequenz() == main_lernvorlieben.get_frequenz():
+            if lernvorlieben.get_frequenz_id() == main_lernvorlieben.get_frequenz_id():
                 quote += 1
-            if lernvorlieben.get_lernart() == main_lernvorlieben.get_lernart():
+            if lernvorlieben.get_lernart_id() == main_lernvorlieben.get_lernart_id():
                 quote += 1
-            if lernvorlieben.get_gruppengroesse() == main_lernvorlieben.get_gruppengroesse():
+            if lernvorlieben.get_gruppengroesse_id() == main_lernvorlieben.get_gruppengroesse_id():
                 quote += 1
-            if lernvorlieben.get_lernort() == main_lernvorlieben.get_lernort():
+            if lernvorlieben.get_lernort_id() == main_lernvorlieben.get_lernort_id():
                 quote += 1
 
             quote_ges = round(((quote / 6 ) * 100), 2)

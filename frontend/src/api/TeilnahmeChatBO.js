@@ -2,10 +2,11 @@ import BusinessObject from './BusinessObject';
 
 export default class TeilnahmeChatBO extends BusinessObject{
 
-	constructor(ateilnehmer, akonversation){
+	constructor(ateilnehmer, astatus, akonversation){
         super();
         this.teilnehmer = ateilnehmer;
-        this.koversation = akonversation;
+        this.status = astatus;
+        this.konversation = akonversation;
     }
 
 
@@ -22,7 +23,21 @@ export default class TeilnahmeChatBO extends BusinessObject{
         this.teilnehmer = ateilnehmer;
     }
 
-      /*
+    /*
+	erhalte
+	*/
+    getstatus(){
+        return this.status;
+    }
+
+    /*
+	setze
+	*/
+    setstatus(astatus){
+        this.status = astatus;
+    }
+
+    /*
 	erhalte 
 	*/
     getkonversation(){

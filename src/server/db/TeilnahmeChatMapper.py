@@ -29,14 +29,15 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, konversation_id FROM teilnahmen_chat WHERE person_id={}".format(person_id)
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE person_id={}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, konversation_id) in tuples:
+        for (id, person_id, status, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
 
@@ -49,14 +50,15 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, konversation_id FROM teilnahmen_chat WHERE konversation_id={}".format(konversation_id)
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={}".format(konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, konversation_id) in tuples:
+        for (id, person_id, status, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
 
@@ -79,6 +81,7 @@ class TeilnahmeChatMapper(Mapper):
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen_chat")
         tuples = cursor.fetchall()
+
         """TODO User autoincrement"""
         for (maxid) in tuples:
             if maxid[0] is not None:
@@ -90,9 +93,8 @@ class TeilnahmeChatMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 teilnahme.set_id(1)
 
-        command = "INSERT INTO teilnahmen_chat (id, person_id, konversation_id) VALUES (%s,%s,%s)"
-
-        data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_konversation())
+        command = "INSERT INTO teilnahmen_chat (id, person_id, status, konversation_id) VALUES (%s,%s,%s,%s)"
+        data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_status(), teilnahme.get_konversation())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -108,8 +110,8 @@ class TeilnahmeChatMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "UPDATE teilnahmen_chat SET person_id=%s, konversation_id=%s WHERE id=%s"
-        data = (teilnahme.get_teilnehmer(), teilnahme.get_konversation(), teilnahme.get_id())
+        command = "UPDATE teilnahmen_chat SET person_id=%s, status=%s, konversation_id=%s WHERE id=%s"
+        data = (teilnahme.get_teilnehmer(), teilnahme.get_status(), teilnahme.get_konversation(), teilnahme.get_id())
         cursor.execute(command, data)
 
         self._connection.commit()
