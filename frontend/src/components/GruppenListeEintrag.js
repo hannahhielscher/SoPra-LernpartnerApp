@@ -220,8 +220,7 @@ class GruppenListeEintrag extends Component {
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}
-                >
+                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}>
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
                     <Typography variant='body1'>
                         {lerngruppe.getname()}

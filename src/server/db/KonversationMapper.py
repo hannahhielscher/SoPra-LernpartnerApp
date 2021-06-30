@@ -85,10 +85,8 @@ class KonversationMapper (Mapper):
         return result
 
     def find_by_name(self, name):
-
-        result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name, anfragestatus FROM konversationen WHERE name={}".format(name)
+        command = "SELECT id, name, anfragestatus FROM konversationen WHERE name='{}'".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

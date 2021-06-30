@@ -24,10 +24,10 @@ class NachrichtMapper (Mapper):
         cursor.execute("SELECT id, nachricht_inhalt, person_id, konversation_id from nachrichten")
         tuples = cursor.fetchall()
 
-        for (id, inhalt, person_id, konversation_id) in tuples:
+        for (id, nachricht_inhalt, person_id, konversation_id) in tuples:
             nachricht = Nachricht()
             nachricht.set_id(id)
-            nachricht.set_nachricht_inhalt(inhalt)
+            nachricht.set_nachricht_inhalt(nachricht_inhalt)
             nachricht.set_person_id(person_id)
             nachricht.set_konversation_id(konversation_id)
             
