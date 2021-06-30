@@ -116,12 +116,12 @@ class GruppenBearbeitenForm extends Component {
   /** Updates the person */
     updatenLernvorlieben = () => {
         let lernvorlieben = this.props.lernvorlieben;
-        lernvorlieben.tageszeiten = this.state.tageszeiten
-        lernvorlieben.tage = this.state.tage
-        lernvorlieben.frequenz = this.state.frequenz
-        lernvorlieben.lernart = this.state.lernart
-        lernvorlieben.gruppengroesse = this.state.gruppengroesse
-        lernvorlieben.lernort = this.state.lernort
+        lernvorlieben.tageszeiten_id = this.state.tageszeiten
+        lernvorlieben.tage_id = this.state.tage
+        lernvorlieben.frequenz_id = this.state.frequenz
+        lernvorlieben.lernart_id = this.state.lernart
+        lernvorlieben.gruppengroesse_id = this.state.gruppengroesse
+        lernvorlieben.lernort_id = this.state.lernort
 
         LernpartnerAPI.getAPI().updateLernvorlieben(lernvorlieben.id, this.state.tageszeiten, this.state.tage, this.state.frequenz, this.state.lernart, this.state.gruppengroesse, this.state.lernort)
         .then(lernvorlieben => {

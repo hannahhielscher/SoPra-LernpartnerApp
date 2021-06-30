@@ -68,30 +68,35 @@ class LernvorliebenMapper(Mapper):
         (tageszeiten_id, tageszeiten_bez) = tuples[0]
         tageszeiten_id = tageszeiten_id
         tageszeiten_bez = tageszeiten_bez
+
         command2 = "SELECT lernvorlieben.tage_id, tage.praeferenz FROM lernvorlieben INNER JOIN tage ON lernvorlieben.tage_id = tage.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command2)
         tuples = cursor.fetchall()
         (tage_id, tage_bez) = tuples[0]
         tage_id = tage_id
         tage_bez = tage_bez
+
         command3 = "SELECT lernvorlieben.frequenzen_id, frequenzen.praeferenz FROM lernvorlieben INNER JOIN frequenzen ON lernvorlieben.frequenzen_id = frequenzen.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command3)
         tuples = cursor.fetchall()
         (frequenzen_id, frequenzen_bez) = tuples[0]
         frequenzen_id = frequenzen_id
         frequenzen_bez = frequenzen_bez
+
         command4 = "SELECT lernvorlieben.lernarten_id, lernarten.praeferenz FROM lernvorlieben INNER JOIN lernarten ON lernvorlieben.lernarten_id = lernarten.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command4)
         tuples = cursor.fetchall()
         (lernarten_id, lernarten_bez) = tuples[0]
         lernarten_id = lernarten_id
         lernarten_bez = lernarten_bez
+
         command5 = "SELECT lernvorlieben.gruppengroessen_id, gruppengroessen.praeferenz FROM lernvorlieben INNER JOIN gruppengroessen ON lernvorlieben.gruppengroessen_id = gruppengroessen.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command5)
         tuples = cursor.fetchall()
         (gruppengroessen_id, gruppengroessen_bez) = tuples[0]
         gruppengroessen_id = gruppengroessen_id
         gruppengroessen_bez = gruppengroessen_bez
+
         command6 = "SELECT lernvorlieben.lernorte_id, lernorte.praeferenz FROM lernvorlieben INNER JOIN lernorte ON lernvorlieben.lernorte_id = lernorte.id WHERE lernvorlieben.id = '{}'".format(id)
         cursor.execute(command6)
         tuples = cursor.fetchall()
@@ -177,7 +182,7 @@ class LernvorliebenMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE lernvorlieben " + "SET tageszeiten_id=%s, tage_id=%s, frequenzen_id=%s, lernarten_id=%s, gruppengroessen_id=%s, lernorte_id=%s WHERE id=%s"
-        data = (lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort(), lernvorlieben.get_id())
+        data = (lernvorlieben.get_tageszeiten_id(), lernvorlieben.get_tage_id(), lernvorlieben.get_frequenz_id(), lernvorlieben.get_lernart_id(), lernvorlieben.get_gruppengroesse_id(), lernvorlieben.get_lernort_id(), lernvorlieben.get_id())
 
         cursor.execute(command, data)
 

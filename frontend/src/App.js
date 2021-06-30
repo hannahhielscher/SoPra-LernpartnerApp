@@ -4,7 +4,7 @@ import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Header from './components/layout/Header';
-//import KonversationListe from './components/KonversationListe';
+import KonversationListe from './components/KonversationListe';
 //import VorschlagListe from './components/VorschlagListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
@@ -175,6 +175,7 @@ class App extends React.Component {
 									</Route>
 
 									<Route path='/meinechats'>
+										<KonversationListe currentPerson={currentPerson} />
 									</Route>
 									
 									<Route path='/about' component={About} />

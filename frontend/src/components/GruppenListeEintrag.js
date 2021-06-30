@@ -15,7 +15,9 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import GruppeVerlassenDialog from './dialogs/GruppeVerlassenDialog';
 import GruppenBearbeitenForm from './dialogs/GruppenBearbeitenForm';
 import GruppenForm from './dialogs/GruppenForm';
-import LernpartnerAPI from '../api/LernpartnerAPI'
+//import LernpartnerAPI from '../api/LernpartnerAPI'
+import { LernpartnerAPI } from '../api';
+
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -30,7 +32,7 @@ class GruppenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            lerngruppe: props.lerngruppe,
+            lerngruppe: this.props.lerngruppe,
             profil: null,
             lernvorlieben: null,
             gruppeName: this.props.lerngruppe.name,
@@ -79,20 +81,18 @@ class GruppenListeEintrag extends Component {
 		LernpartnerAPI.getAPI().getProfil(this.state.profilID)
 			.then(profilBO =>
 				this.setState({
-            profil: profilBO,
-            gruppeLernvorliebenID: profilBO.lernvorlieben_id,
-            error: null,
-            loadingInProgress: false,
-          })).then(() => {
-            this.getLernvorlieben();
-
-          }).catch(e =>
-            this.setState({
-              profil: null,
-              gruppeLernvorliebenID: null,
-              error: e,
-              loadingInProgress: false,
-            }));
+                    profil: profilBO,
+                    gruppeLernvorliebenID: profilBO.lernvorlieben_id,
+                    error: null,
+                    loadingInProgress: false,
+                }))
+                .catch(e =>
+                    this.setState({
+                        profil: null,
+                        gruppeLernvorliebenID: null,
+                        error: e,
+                        loadingInProgress: false,
+                 }));
 
       // set loading to true
       this.setState({
@@ -102,6 +102,7 @@ class GruppenListeEintrag extends Component {
     }
 
    getGruppenLernvorlieben = () => {
+   //console.log(profil)
     LernpartnerAPI.getAPI().getLernvorlieben(this.state.gruppeLernvorliebenID)
     .then(lernvorliebenBO =>
       this.setState({
@@ -155,11 +156,11 @@ class GruppenListeEintrag extends Component {
     });
   }
 
-  bearbeitenFormClosed = (lerngruppen) => {
+  bearbeitenFormClosed = (lerngruppe) => {
     this.getPerson();
-    if (lerngruppen) {
+    if (lerngruppe) {
         this.setState({
-            lerngruppen: lerngruppen,
+            lerngruppe: lerngruppe,
             showGruppenBearbeitenForm: false,
         });
     } else {
@@ -211,17 +212,24 @@ class GruppenListeEintrag extends Component {
     render(){
 
           const { classes, expandedState, currentPerson } = this.props;
-          const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
+          //const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
 
-          const { lerngruppe, lernvorlieben, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm } = this.state;
+<<<<<<< HEAD
+          const { lerngruppe, lernvorlieben, gruppeName, profilID, profil, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm, showLerngruppeForm } = this.state;
+=======
+          const { lerngruppe, lernvorlieben, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm , showLerngruppeForm } = this.state;
+>>>>>>> 94a42cfe42211c02d64a25f48a4c5e5cb7ff04f7
             console.log(lerngruppe)
+            console.log(profil)
+            console.log(lernvorlieben)
+            console.log(profilID)
+
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}
-                >
+                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}>
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
                     <Typography variant='body1'>
                         {lerngruppe.getname()}

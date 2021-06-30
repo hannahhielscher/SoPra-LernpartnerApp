@@ -240,13 +240,13 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`nachrichten` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_nachrichten_konversation1`
     FOREIGN KEY (`konversation_id`)
-    REFERENCES `lernapp_SWPra`.`konversation` (`id`)
+    REFERENCES `lernapp_SWPra`.`konversationen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 --
--- Dumping data for table `konversationen`
+-- Dumping data for table `nachrichten`
 --
 
 LOCK TABLES `lernapp_SWPra`.`nachrichten` WRITE;
@@ -447,7 +447,7 @@ LOCK TABLES `lernapp_SWPra`.`lernvorlieben` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernvorlieben` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`lernvorlieben` VALUES (1, 2, 1, 3, 2, 1, 1), (2, 2, 2, 2, 1, 1, 3), (3, 1, 1, 2, 3, 3, 4), 
 (4, 3, 1, 3, 4, 3, 4), (5, 1, 2, 1, 1, 3, 3), (6, 2, 2, 2, 2, 1, 4), (7, 3, 2, 2, 1, 2, 2), (8, 1, 2, 3, 2, 1, 1),
-(9, 3, 1, 3, 3, 2, 1), (10, 2, 3, 3, 4, 1, 2);
+(9, 3, 1, 3, 3, 2, 1), (10, 2, 2, 1, 1, 1, 2);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernvorlieben` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -490,6 +490,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`teilnahmen_chat` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_chat` (
   `id` INT NOT NULL,
   `person_id` INT NOT NULL,
+  `status` TINYINT NULL,
   `konversation_id` INT NOT NULL,
   PRIMARY KEY (`id`, `person_id`, `konversation_id`),
   INDEX `fk_teilnehmer_chat_person1_idx` (`person_id` ASC) VISIBLE,

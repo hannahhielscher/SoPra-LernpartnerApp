@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
-import { LernpartnerAPI } from '../../api';
 import Nachricht from './Nachricht';
 //import KonversationListe from './KonversationListe';
-import LernpartnerAPI from '../api/LernpartnerAPI'
+import LernpartnerAPI from '../api/LernpartnerAPI';
 
 
 /** 
