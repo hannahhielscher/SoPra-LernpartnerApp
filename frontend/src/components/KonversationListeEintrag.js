@@ -51,6 +51,19 @@ verlassenButtonClicked = (event) => {
   });
 }
 
+/** Handles the onClose event of the CustomerDeleteDialog */
+verlasseChatFormClosed = (teilnahmeChat) => {
+   // if customer is not null, delete it
+  if (teilnahmeChat) {
+     this.props.onTeilnahmeChatDeleted(teilnahmeChat);
+  };
+
+  // Don´t show the dialog
+  this.setState({
+      showChatVerlassenForm: false
+  });
+}
+
     
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
