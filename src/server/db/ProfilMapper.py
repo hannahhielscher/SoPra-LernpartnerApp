@@ -58,8 +58,8 @@ class ProfilMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        result = None
-
+        result = []
+        lernfaecherliste = []
         cursor = self._connection.cursor()
         command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
         cursor.execute(command)
@@ -68,11 +68,11 @@ class ProfilMapper(Mapper):
     
         for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
 
-            buff = False
-            for i in result:
-                if i.get_id() == id:
-                    buff = True
-                    i.set_lernfaecher(lernfaecher)
+            #buff = False
+            #for i in result:
+                #if i.get_id() == id:
+                    #buff = True
+                    #i.set_lernfaecher(lernfaecher)
 
             if buff == False:
                 profil = Profil()
@@ -81,7 +81,7 @@ class ProfilMapper(Mapper):
                 profil.set_lernfaecher(lernfaecher)
                 profil.set_lernvorlieben_id(lernvorlieben_id)
 
-                result = profil
+                result.append(profil)
 
             else:
                 pass
@@ -89,6 +89,7 @@ class ProfilMapper(Mapper):
         self._connection.commit()
         cursor.close()
         print(result)
+        
         return result
 
     def find_profil_test(self, profil_id):
@@ -104,7 +105,7 @@ class ProfilMapper(Mapper):
             profil = Profil()
             profil.set_id(id)
             profil.set_gruppe(gruppe)
-            profil.set_lernfaecher(self.find_lernfaecher_by_profil_id(profil_id))
+            profil.set_lernfaecher(self.find_lernfaecher_id_by_profil_id(profil_id))
             profil.set_lernvorlieben_id(lernvorlieben_id)
 
             result = profil
@@ -154,16 +155,17 @@ class ProfilMapper(Mapper):
         result = []
 
         cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id FROM profile_has_lernfaecher WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
+        command = "SELECT lernfaecher_id FROM profile_has_lernfaecher WHERE profil_id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
-
-        for (lernfaecher_id) in tuples:
-            result.append(lernfaecher_id)
+    
+        for lernfaecher_id in tuples:
+            data = lernfaecher_id[0]
+            result.append(data)
 
         self._connection.commit()
         cursor.close()
-
+        print(result)
         return result
     
     def find_by_lernfach_id(self, lernfach_id):
@@ -246,18 +248,31 @@ class ProfilMapper(Mapper):
         :param profil das Objekt, das in die DB geschrieben werden soll
         """
         cursor = self._connection.cursor()
-
+        
+        
         command = "UPDATE profile " + "SET gruppe=%s, lernvorlieben_id=%s WHERE id=%s"
-        data = (profil.get_id(), profil.get_gruppe(), profil.get_lernvorlieben_id())
+        data = ( profil.get_gruppe(), profil.get_lernvorlieben_id(), profil.get_id())
+        self.delete_profil_has_lernfaecher(profil.get_id())
         cursor.execute(command, data)
-
-        command2 = "UPDATE profile_has_lernfaecher" + "SET profil_id=s%, lernfaecher_id=set%  WHERE id=s%"
-
-        data2 = (profil.get_id(), profil.get_lernfaecher_id())
-        cursor.execute(command2, data2)
+        #command1 = "DELETE FROM profile_has_lernfaecher WHERE profil_id=%s"
+        #data1 = (profil.get_id())
+        #cursor.execute(command1, data1)
+        lernfaecherperson = profil.get_lernfaecher()
+        lernfaecher = lernfaecherperson.split(",")
+        command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
+        
+        for (lernfach) in lernfaecher:
+            
+            data2 = (profil.get_id(), lernfach)
+            print(lernfaecher)
+            print(lernfach)
+            #print(i)
+            cursor.execute(command2, data2)
 
         self._connection.commit()
         cursor.close()
+
+        return profil
 
     def delete(self, profil):
         """Löschen der Daten eines Profil-Objekts aus der Datenbank.
@@ -267,6 +282,16 @@ class ProfilMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM profile WHERE id={}".format(profil.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete_profil_has_lernfaecher(self, profil_id):
+        
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM profile_has_lernfaecher WHERE profil_id={}".format(profil_id)
         cursor.execute(command)
 
         self._connection.commit()

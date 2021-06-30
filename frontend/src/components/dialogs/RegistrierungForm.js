@@ -199,9 +199,9 @@ class RegistrierungForm extends Component {
                     onChange={this.numberValueChange} error={semesterValidationFailed} 
                     helperText={geschlechtValidationFailed ? 'The semester must contain at least one character' : ' '} /> 
                     
-                  <FormControl className={classes.formControl}>
+                  <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Studiengang</InputLabel>
-                             <Select required error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
+                             <Select  error={studiengangValidationFailed} value={studiengang} onChange={this.handleChangeStudiengang}>
                                 <MenuItem value='Audiovisuelle Medien'>Audiovisuelle Medien</MenuItem>
                                 <MenuItem value='Crossmedia-Redaktion/Public Relations'>Crossmedia-Redaktion/Public Relations</MenuItem>
                                 <MenuItem value='Deutsch-chinesischer Studiengang Medien und Technologie'>Deutsch-chinesischer Studiengang Medien und Technologie</MenuItem>

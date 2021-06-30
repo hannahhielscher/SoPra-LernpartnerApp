@@ -33,12 +33,20 @@ class MeinProfil extends Component {
             personLernvorliebenID: null,
             profil: null,
             lernvorlieben: null,
+
+            lernvorliebentageszeiten: null,
+            lernvorliebentage: null,
             lernvorliebenfrequenz: null,
+            lernvorliebenlernart: null,
+            lernvorliebengruppengroesse: null,
+            lernvorliebenlernort: null,
+
             gruppe: false,
             showMeinProfilForm: false,
             showRegistrierungForm: false,
             loadingInProgress: false,
             loadingError: null,
+            lernfaechertest: []
             
         };
     }
@@ -55,7 +63,7 @@ class MeinProfil extends Component {
             personAlter: personBO.alter,
             personSemester: personBO.semester,
             personStudiengang: personBO.studiengang,
-            personProfilID: personBO.personenprofil,
+            personProfilID: personBO.profil,
             loadingInProgress: false,
             error: null,
           })).then(() => {
@@ -138,12 +146,14 @@ class MeinProfil extends Component {
       .then(lernfaecherBOs =>
         this.setState({
               lernfaechergesamt: lernfaecherBOs,
+              lernfaechertest: lernfaecherBOs.map(lernfach => lernfach.id),
               loadingInProgress: false,
               error: null
         }))
         .catch(e =>
           this.setState({ // Reset state with error from catch
             lernfaechergesamt: null,
+            lernfaechertest: null,
             loadingInProgress: false,
             error: e,
           })
@@ -161,7 +171,12 @@ class MeinProfil extends Component {
     .then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
-            lernvorliebenfrequenz: lernvorliebenBO.frequenz,
+            lernvorliebentageszeiten: lernvorliebenBO.tageszeiten_bez,
+            lernvorliebentage: lernvorliebenBO.tage_bez,
+            lernvorliebenfrequenz: lernvorliebenBO.frequenz_bez,
+            lernvorliebenlernart: lernvorliebenBO.lernart_bez,
+            lernvorliebengruppengroesse: lernvorliebenBO.gruppengroesse_bez,
+            lernvorliebenlernort: lernvorliebenBO.lernort_bez,
             loadingInProgress: false,
             error: null
       }))
@@ -183,6 +198,7 @@ class MeinProfil extends Component {
   
   //Handles the onClick event of the show profil button
   bearbeitenButtonClicked = (event) => {
+    event.stopPropagation();
     this.setState({
       showMeinProfilForm: true
     });
@@ -234,28 +250,36 @@ class MeinProfil extends Component {
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
-      const { lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebenfrequenz, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
+      const { lernfaechertest, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
       console.log(lernfaechergesamt)
+      console.log(lernfaechertest)
+      console.log(profil)
+      console.log(showMeinProfilForm)
+      console.log('Test1')
       
-    
       return (
         <div className={classes.root}>
         <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
-        <Typography>
-            <h1>Dein Profil</h1>
-        </Typography>
+        <Paper>
         <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
         <Typography variant='body1' color={'textSecondary'}>
-
+        
                               <b>Name: </b>{personVorname} {personName}<br />
                               <b>Alter: </b> {personAlter} <br />
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
                               <b>Lernfächer: </b>{lernfaechernamen}<br />
-                              <b>Lernvorlieben-Frequenz Test: </b>{lernvorliebenfrequenz}<br />
-
+                              <b>Lernvorlieben: </b><br />
+                              <b>Tageszeit: </b>{lernvorliebentageszeiten}<br />
+                              <b>Tage: </b>{lernvorliebentage}<br />
+                              <b>Frequenz: </b>{lernvorliebenfrequenz}<br />
+                              <b>Lernart: </b>{lernvorliebenlernart}<br />
+                              <b>Gruppengröße: </b>{lernvorliebengruppengroesse}<br />
+                              <b>Lernort: </b>{lernvorliebenlernort}<br />
+        
         </Typography>
-        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernvorlieben={lernvorlieben} lernfaechergesamt={lernfaechergesamt} onClose={this.bearbeitenFormClosed}/>
+        </Paper>
+        <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
         </div>
       );
     }

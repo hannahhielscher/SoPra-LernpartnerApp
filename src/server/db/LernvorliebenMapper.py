@@ -177,7 +177,7 @@ class LernvorliebenMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE lernvorlieben " + "SET tageszeiten_id=%s, tage_id=%s, frequenzen_id=%s, lernarten_id=%s, gruppengroessen_id=%s, lernorte_id=%s WHERE id=%s"
-        data = (lernvorlieben.get_tageszeiten(), lernvorlieben.get_tage(), lernvorlieben.get_frequenz(), lernvorlieben.get_lernart(), lernvorlieben.get_gruppengroesse(), lernvorlieben.get_lernort(), lernvorlieben.get_id())
+        data = (lernvorlieben.get_tageszeiten_id(), lernvorlieben.get_tage_id(), lernvorlieben.get_frequenz_id(), lernvorlieben.get_lernart_id(), lernvorlieben.get_gruppengroesse_id(), lernvorlieben.get_lernort_id(), lernvorlieben.get_id())
 
         cursor.execute(command, data)
 
