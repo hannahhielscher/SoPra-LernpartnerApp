@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Grid, Typography} from '@material-ui/core';
+import { withStyles} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -58,14 +58,6 @@ class KonversationListe extends Component {
           loadingKonversationenError: null
       });
     }
-    
-
- 
-// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-componentDidMount() {
-  this.getKonversation();
-}
-
 
  /** 
      * Handles onExpandedStateChange events from the VorschlagListeEintrag component. Toggels the expanded state of 
@@ -90,7 +82,11 @@ componentDidMount() {
     });
 }
 
- 
+// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+componentDidMount() {
+  this.getKonversation();
+}
+
 
 render() {
   const { classes, currentPerson } = this.props;

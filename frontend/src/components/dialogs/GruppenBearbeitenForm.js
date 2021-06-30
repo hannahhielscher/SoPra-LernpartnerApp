@@ -29,6 +29,9 @@ class GruppenBearbeitenForm extends Component {
 
         //initiiere den state
         this.state = {
+
+            lerngruppe: this.props.lerngruppe,
+            lernvorlieben: this.props.lernvorlieben,
             name: null,
             nameValidationFailed: false,
             nameEdited: false,
@@ -62,6 +65,9 @@ class GruppenBearbeitenForm extends Component {
             lernfaecherValidationFailed: false,
             lernfaecherEdited: false,
 
+            updatingError: null,
+            updatingInProgress: false,
+
 
         };
         // State speichern falls cancel
@@ -80,13 +86,16 @@ class GruppenBearbeitenForm extends Component {
 
     /** Updates the person */
     updatenGruppe = () => {
-        let gruppe = this.props.user;
-        gruppe.name = this.state.name
-        LernpartnerAPI.getAPI().updatePerson(gruppe.id, this.state.name, ).then(gruppe => {
+        let lerngruppe = this.props.lerngruppe;
+        lerngruppe.id = this.state.lerngruppe.id
+        lerngruppe.name = this.state.name
+        lerngruppe.profil = this.state.lerngruppe.profil
+
+        LernpartnerAPI.getAPI().updateLerngruppe(this.state.lerngruppe.id, this.state.name, this.state.lerngruppe.profil).then(lerngruppe => {
             // Backend call sucessfull
             // reinit the dialogs state for a new empty customer
             this.setState(this.baseState);
-            this.props.onClose(gruppe); // call the parent with the customer object from backend
+            this.props.onClose(lerngruppe); // call the parent with the customer object from backend
         }).catch(e =>
             this.setState({
                 updatingInProgress: false,    // disable loading indicator
@@ -100,6 +109,9 @@ class GruppenBearbeitenForm extends Component {
             updatingError: null             // disable error message
       });
     }
+
+
+
 
   /** Updates the person */
     updatenLernvorlieben = () => {
@@ -219,7 +231,8 @@ class GruppenBearbeitenForm extends Component {
 	/** Renders the sign in page, if user objext is null */
 	/** Renders the component */
     render() {
-        const { classes, show, currentPerson, lernvorlieben } = this.props;
+        const { classes, show, currentPerson, lerngruppe, lernvorlieben } = this.props;
+        console.log()
         const { name, nameValidationFailed, tageszeiten, tageszeitenValidationFailed, tage, tageValidationFailed, frequenz, frequenzValidationFailed, lernart, lernartValidationFailed, gruppengroesse, gruppengroesseValidationFailed,
           lernort, lernortValidationFailed, lernfaecher, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
 
@@ -244,7 +257,7 @@ class GruppenBearbeitenForm extends Component {
                   <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='name' label='Nachname:' value={name}
                     onChange={this.textFieldValueChange} error={nameValidationFailed}
                     helperText={nameValidationFailed ? 'The last name must contain at least one character' : ' '} />
-
+                  <br/>
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welche Tageszeit präferierst du?</InputLabel>
                              <Select required error={tageszeitenValidationFailed} value={tageszeiten} onChange={this.handleChangeTageszeiten}>
@@ -253,6 +266,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='3'>Abends</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welche Tage präferierst du?</InputLabel>
@@ -261,6 +275,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='2'>Am Wochenende</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welche Frequenz präferierst du?</InputLabel>
@@ -270,6 +285,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='3'>Alle zwei Wochen</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welche Lernart präferierst du?</InputLabel>
@@ -280,6 +296,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='4'>Kommunikativ</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welche Gruppengroesse präferierst du?</InputLabel>
@@ -289,6 +306,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='3'>Über 5 Personen</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welchen Lernort präferierst du?</InputLabel>
@@ -299,6 +317,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='4'>Cafe</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
                    <FormControl className={classes.formControl}>
                             <InputLabel>Welche Lernfaecher präferierst du?</InputLabel>
@@ -313,6 +332,7 @@ class GruppenBearbeitenForm extends Component {
                                 <MenuItem value='8'>IT-Security</MenuItem>
                             </Select>
                    </FormControl>
+                   <br/>
 
 
 
@@ -331,8 +351,8 @@ class GruppenBearbeitenForm extends Component {
                             Abbrechen
                 </Button>
                 {
-                    <Button disabled={nameValidationFailed || vornameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
-                          onClick={this.updatenGruppe} color='primary'>
+                    <Button disabled={nameValidationFailed } variant='contained'
+                          onClick={ () => {this.updatenGruppe(); this.updatenLernvorlieben();}} color='primary'>
                           Änderungen abschließen
                     </Button>
                 }
@@ -352,7 +372,7 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-MeinProfilForm.propTypes = {
+GruppenBearbeitenForm.propTypes = {
 	/** @ignore */
   classes: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,

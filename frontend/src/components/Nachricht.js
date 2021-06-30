@@ -63,10 +63,10 @@ class Nachricht extends Component {
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
  getNachrichten= () => {
-  LernpartnerAPI.getAPI().getNachrichtenByKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation_id.getID())
+     LernpartnerAPI.getAPI().getNachrichtenByKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation_id.getID())
     .then((nachrichtenBOs) =>
       this.setState({
-        nachricht: nachrichtenBOs,
+        nachrichten: nachrichtenBOs,
         nachricht_inhalt: nachrichtenBOs.nachricht_inhalt,
         personID: nachrichtenBOs.personID,
         konversation_id: nachrichtenBOs.konversation_id,
@@ -91,12 +91,12 @@ addNachricht = () => {
     let newNachricht = new NachrichtBO(
       this.state.nachricht_inhalt,
       this.props.currentPerson.getID(),
-      this.props.personID.getID(),
+      this.props.nachricht_inhalt.getInhalt(),
+      this.props.person_id.getID(),
       this.props.konversation_id.getID()
     );
 
-    LernpartnerAPI.getAPI()
-      .addNachricht(newNachricht)
+    LernpartnerAPI.getAPI().addNachricht(newNachricht)
       .then((nachricht) => {
         this.state.nachricht.push(nachricht);
         this.setState({ nachricht_inhalt: "" });
@@ -118,7 +118,7 @@ this.setState({
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
-  this.getNachrichten();
+ this.getNachrichten();
 }
 
 //Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird

@@ -56,13 +56,14 @@ export default class LernpartnerAPI {
         #getLerngruppeByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lerngruppen-by-profil/${profilid}`;
         #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #updateLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
+        #updateLerngruppeURL = (id, name, profil)  => `${this.#lernappServerBaseURL}/lerngruppe?id=${id}&name=${name}&profil=${profil}`;
         #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         
         //Profilbezogen
         #getProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
+        #addProfilURL = () => `${this.#lernappServerBaseURL}/profile`;
         #addProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
-        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
+        #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile-by-id/${id}`;
         #updateProfilURL = (id, gruppe, lernfaecher, lernvorlieben) => `${this.#lernappServerBaseURL}/profile?id=${id}&gruppe=${gruppe}&lernfaecher=${lernfaecher}&lernvorlieben=${lernvorlieben}`;
         //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
@@ -83,7 +84,7 @@ export default class LernpartnerAPI {
         #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
-        #getNachrichtenByKonversationByPersonURL = (konversationID, personID) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${personID}`;
+        #getNachrichtenByKonversationByPersonURL = (konversationID, person_id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${person_id}`;
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
         #deleteNachrichtenByKonversationURL = (konversation_id) => `${this.#lernappServerBaseURL}/nachrichten/${konversation_id}`;
         #getNachrichtenByPersonURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
@@ -336,23 +337,15 @@ export default class LernpartnerAPI {
            * @param {LerngruppeBO} lerngruppeBO to be updated
            * @public
            */
-          updateLerngruppe(lerngruppeBO) {
-            return this.#fetchAdvanced(this.#updateLerngruppeURL(lerngruppeBO.getID()), {
-              method: 'PUT',
-              headers: {
-                'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
-              },
-              body: JSON.stringify(lerngruppeBO)
-            }).then((responseJSON) => {
-              // We always get an array of LerngruppeBOs.fromJSON
-              let responseLerngruppeBO = LerngruppeBO.fromJSON(responseJSON)[0];
-              // console.info(LerngruppeBOs);
-              return new Promise(function (resolve) {
-                resolve(responseLerngruppeBO);
-              })
-            })
-          }
+          updateLerngruppe(id, name, profil) {
+            return this.#fetchAdvanced(this.#updateLerngruppeURL(id, name, profil), {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json, text/plain',
+              'Content-type': 'application/json',
+            }
+          })
+        }
    
           /**
            * Gibt Promise zurück
@@ -667,8 +660,8 @@ export default class LernpartnerAPI {
          * @public
          */
     
-          getNachrichtenByKonversationByPerson(konversation_id, personID) {
-            return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversation_id, personID, {method: 'GET'})).then((responseJSON) => {
+          getNachrichtenByKonversationByPerson(konversation_id, person_id) {
+            return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversation_id, person_id, {method: 'GET'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
               //console.info(nachrichtenBOs)
               return new Promise(function (resolve) {

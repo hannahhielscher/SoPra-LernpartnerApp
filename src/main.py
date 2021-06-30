@@ -66,7 +66,7 @@ person = api.inherit('Person', nbo, {
 
 profil = api.inherit('Profil', bo, {
     'gruppe': fields.Boolean(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
-    'lernfaecher': fields.List(cls_or_instance=fields.String, attribute='_lernfaecher', description='Lernfaecher der Person'),
+    'lernfaecher': fields.List(cls_or_instance=fields.Integer, attribute='_lernfaecher', description='Lernfaecher der Person'),
     'lernvorlieben_id': fields.Integer(attribute='_lernvorlieben_id', description='Lernvorlieben der Person'),
 })
 
@@ -257,13 +257,15 @@ class ProfilListOperationen(Resource):
         profilid = request.args.get("id")
         gruppe = request.args.get("gruppe")
         lernfaecher = request.args.get("lernfaecher")
-        lernvorlieben_id = request.args.get("lernvorlieben_id")
+        lernvorlieben_id = request.args.get("lernvorlieben")
         adm = AppAdministration()
-
-        profil = adm.get_profil_by_id(profilid)
+        
+        profil = adm.get_profil_test(profilid)
+        print(profil)
         profil.set_gruppe(gruppe)
         profil.set_lernfaecher(lernfaecher)
         profil.set_lernvorlieben_id(lernvorlieben_id)
+        
         adm.update_profil_by_id(profil)
     #@secured
     #def post(self):
@@ -322,7 +324,7 @@ class ProfilListOperationen(Resource):
            # i.set_lernvorlieben_id(lernvorlieben_id)
             #adm.update(i)
 
-@lernApp.route('/profile/<int:id>')
+@lernApp.route('/profile-by-id/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
@@ -339,15 +341,15 @@ class ProfilByIDOperationen(Resource):
 
     @lernApp.marshal_with(profil)
     @lernApp.expect(profil, validate=True)
-    @secured
+    #@secured
     def put(self, id):
-        """Update des Profil-Objekts."""
-
-        adm = AppAdministration()
         c = Profil.from_dict(api.payload)
-
+        print(c)
+        adm = AppAdministration()
         if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Profil-Objekts gesetzt."""
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Person-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
             c.set_id(id)
             adm.save_profil(c)
             return '', 200
@@ -432,25 +434,21 @@ class LerngruppeOperationen(Resource):
     @lernApp.marshal_with(lerngruppe)
     @lernApp.expect(lerngruppe, validate=True)
     @secured
-    def put(self, id):
+    def put(self):
         """Update eines bestimmten Lerngruppen-Objekts.
 
         **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
         verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
         Person-Objekts.
         """
+        lerngruppeId = request.args.get("id")
+        name = request.args.get("name")
+        profil = request.args.get("profil")
         adm = AppAdministration()
-        c = Lerngruppe.from_dict(api.payload)
-
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Lerngruppe-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
-            c.set_id(id)
-            adm.save_lerngruppe(c)
-            return '', 200
-        else:
-            return '', 500
+        lerngruppe = adm.get_person_by_id(lerngruppeId)
+        lerngruppe.set_name(name)
+        lerngruppe.set_profil(profil)
+        adm.update_lerngruppe_by_id(lerngruppe)
 
     #@secured
     def delete(self, id):
@@ -682,7 +680,7 @@ class NachrichtByKonversationIdOperation(Resource):
 class NachrichtByKonversationByPersonOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
-    @secured
+    #@secured
     def get (self, konversation_id, person_id):
         """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
         adm = AppAdministration()
@@ -1088,12 +1086,12 @@ class LernvorliebenListeOperationen(Resource):
         
         adm = AppAdministration()
         lernvorlieben = adm.get_lernvorlieben_by_id(lernvorliebenId)
-        lernvorlieben.set_tageszeiten(tageszeiten)
-        lernvorlieben.set_tage(tage)
-        lernvorlieben.set_frequenz(frequenz)
-        lernvorlieben.set_lernart(lernart)
-        lernvorlieben.set_gruppengroesse(gruppengroesse)
-        lernvorlieben.set_lernort(lernort)
+        lernvorlieben.set_tageszeiten_id(tageszeiten)
+        lernvorlieben.set_tage_id(tage)
+        lernvorlieben.set_frequenz_id(frequenz)
+        lernvorlieben.set_lernart_id(lernart)
+        lernvorlieben.set_gruppengroesse_id(gruppengroesse)
+        lernvorlieben.set_lernort_id(lernort)
         
         adm.update_lernvorlieben_by_id(lernvorlieben)
 

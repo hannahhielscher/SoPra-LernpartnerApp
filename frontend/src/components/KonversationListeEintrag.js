@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
 import Nachricht from './Nachricht';
 //import KonversationListe from './KonversationListe';
-import LernpartnerAPI from '../api/LernpartnerAPI'
+import LernpartnerAPI from '../api/LernpartnerAPI';
 
 
 /** 
@@ -52,11 +52,12 @@ verlassenButtonClicked = (event) => {
 }
 
     
-
+/** 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getKonversation();
     }
+*/
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
@@ -85,9 +86,6 @@ render() {
                         </Button>
                         <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
                           Chat verlassen
-                        </Button>
-                        <Button color='secondary' onClick={this.loescheKonversationButtonClicked}>
-                          Chat löschen
                         </Button>
                 </ButtonGroup>
               </AccordionDetails>
