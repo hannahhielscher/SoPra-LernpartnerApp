@@ -32,10 +32,9 @@ class AnfrageForm extends Component {
             //gruppe: props.chatPartnerProfil.gruppe,
             gruppeProfil: null,
 
-            lerngruppeName: null,
-
-            personName: null,
-            personVorname: null,
+            name: null,
+            vorname: null,
+            konvName: null,
 
             konversation: null,
             konversationID: null,
@@ -60,7 +59,7 @@ class AnfrageForm extends Component {
   addKonversation = () => {
     let newKonversation = new KonversationBO();
     newKonversation.id = 0;
-    newKonversation.name = "Chat";
+    newKonversation.name = this.state.konvName;
     newKonversation.anfragestatus = false;
     LernpartnerAPI.getAPI().addKonversation(newKonversation)
     .then(konversationBO =>
@@ -132,7 +131,7 @@ class AnfrageForm extends Component {
 
   /** Add TeilnahmeChatPartner */
   getKonversation = () => {
-    LernpartnerAPI.getAPI().getKonversationByName(this.state.lerngruppeName)
+    LernpartnerAPI.getAPI().getKonversationByName(this.state.name)
     .then(konversationBO =>
       this.setState({
         konversationID: konversationBO.id,              // disable loading indicator                 // no error message
@@ -171,8 +170,9 @@ class AnfrageForm extends Component {
       .then(personBO =>
           this.setState({
             chatPartner: personBO,
-            personName: personBO.name,
-            personVorname: personBO.vorname,
+            name: personBO.name,
+            vorname: personBO.vorname,
+            konvName: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
             loadingInProgress: false,
             error: null,
       })).catch(e =>
@@ -195,7 +195,7 @@ class AnfrageForm extends Component {
       .then(lerngruppeBO =>
           this.setState({
             chatPartner: lerngruppeBO,
-            lerngruppeName: lerngruppeBO.name,
+            name: lerngruppeBO.name,
             loadingInProgress: false,
             error: null,
       })).catch(e =>
@@ -295,10 +295,9 @@ class AnfrageForm extends Component {
   /** Renders the component */
   render() {
     const { classes, show } = this.props;
-    const { chatPartner, lerngruppeName, personName, personVorname, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { chatPartner, name, vorname, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(chatPartner)
-    console.log(lerngruppeName)
-    console.log(personName)
+    console.log(name)
     console.log(gruppeProfil)
     console.log(konversationID)
     console.log(konversation)
@@ -315,7 +314,7 @@ class AnfrageForm extends Component {
 
               {
               gruppeProfil ?
-              <div>Bist du dir sicher, dass du  eine Anfrage schicken möchtest?</div>
+              <div>Bist du dir sicher, dass du eine Anfrage schicken möchtest?</div>
               :
               <div>Bist du dir sicher, dass du eine Anfrage schicken möchtest?</div>
               }
@@ -328,7 +327,6 @@ class AnfrageForm extends Component {
             <Button onClick={this.handleClose} color='secondary'>
               Abbrechen
             </Button>
-
                 <Button variant='contained' onClick={this.getChatPartnerStatus} color='primary'>
                   Anfrage senden
              </Button>

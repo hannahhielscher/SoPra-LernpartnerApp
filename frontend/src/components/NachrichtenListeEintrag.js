@@ -100,7 +100,7 @@ class NachrichtenListeEintrag extends Component {
       });
     }
 
-   
+
        // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getNachrichten();

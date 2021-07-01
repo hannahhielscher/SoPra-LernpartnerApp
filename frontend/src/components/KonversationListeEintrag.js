@@ -8,6 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 //import KonversationListe from './KonversationListe';
 import LernpartnerAPI from '../api/LernpartnerAPI';
+import ChatVerlassenForm from './dialogs/ChatVerlassenForm';
 
 
 
@@ -83,6 +84,20 @@ verlassenButtonClicked = (event) => {
       this.getTeilnahmeChat();
   }
 
+/** Handles the onClose event of the CustomerDeleteDialog */
+verlasseChatFormClosed = (teilnahmeChat) => {
+   // if customer is not null, delete it
+  if (teilnahmeChat) {
+     this.props.onTeilnahmeChatDeleted(teilnahmeChat);
+  };
+
+  // Don´t show the dialog
+  this.setState({
+      showChatVerlassenForm: false
+  });
+}
+
+    
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
@@ -124,7 +139,7 @@ render() {
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-             
+             <ChatVerlassenForm show={showChatVerlassenForm} />
             </div>
             
         );
