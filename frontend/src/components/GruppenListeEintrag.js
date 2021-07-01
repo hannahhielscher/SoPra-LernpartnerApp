@@ -85,7 +85,9 @@ class GruppenListeEintrag extends Component {
                     gruppeLernvorliebenID: profilBO.lernvorlieben_id,
                     error: null,
                     loadingInProgress: false,
-                }))
+                })).then (()=> {
+                    this.getGruppenLernvorlieben();
+                })
                 .catch(e =>
                     this.setState({
                         profil: null,
@@ -156,11 +158,11 @@ class GruppenListeEintrag extends Component {
     });
   }
 
-  bearbeitenFormClosed = (lerngruppe) => {
-    this.getPerson();
-    if (lerngruppe) {
+  bearbeitenFormClosed = (profil) => {
+    this.getGruppenProfil();
+    if (profil) {
         this.setState({
-            lerngruppe: lerngruppe,
+            profil: profil,
             showGruppenBearbeitenForm: false,
         });
     } else {
@@ -176,6 +178,7 @@ class GruppenListeEintrag extends Component {
      /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
    componentDidMount() {
        this.getTeilnahmeGruppe();
+       this.getGruppenProfil();
    }
 
   /** Handles the onClick event of the edit customer button */
@@ -215,7 +218,7 @@ class GruppenListeEintrag extends Component {
           //const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
 
 
-          const { lerngruppe, lernvorlieben, gruppeName, profilID, profil, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm, showLerngruppeForm } = this.state;
+          const { lerngruppe, lernvorlieben, gruppeName, profilID, profil, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm, showLerngruppeForm, loadingInProgress, error } = this.state;
             console.log(lerngruppe)
             console.log(profil)
             console.log(lernvorlieben)

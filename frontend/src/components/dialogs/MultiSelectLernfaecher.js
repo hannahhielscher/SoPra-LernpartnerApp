@@ -1,31 +1,40 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
+import { Button } from '@material-ui/core'
 
-function Test() {
+function MultiSelectLernfaecher( { lernfaecher, onChangeLernfaecher }) {
   const data = [
     {
       value: 1,
-      label: "Lernfach1"
+      label: "Software Entwicklung"
     },
     {
       value: 2,
-      label: "Lernfach2"
+      label: "Data Science"
     },
     {
       value: 3,
-      label: "true red"
+      label: "Führungsorientiertes Rechnungswesen"
     },
     {
       value: 4,
-      label: "aqua sky"
+      label: "Medienrecht"
     },
     {
       value: 5,
-      label: "tigerlily"
+      label: "Crossmedia-Konzeption"
     },
     {
       value: 6,
-      label: "blue turquoise"
+      label: "Web-Technologien"
+    },
+    {
+      value: 7,
+      label: "Datenbanken"
+    },
+    {
+      value: 8,
+      label: "IT-Security"
     }
   ];
 
@@ -37,10 +46,14 @@ function Test() {
     setSelectedValue(Array.isArray(e) ? e.map(x => x.value) : []);
     
   }
+
   console.log(selectedValue)
+  
   return (
     <div className="App">
-
+      <b>Wähle bitte alle Lernfächer, die du aktuell lernen möchtest.</b><br/>
+      <b style={{color: "red", fontSize: 14}}>Deine vorherige Auswahl wird vollständig gelöscht!</b><br/>
+      <br/>
       <Select
         className="dropdown"
         placeholder="Wähle deine Lernfächer"
@@ -50,12 +63,12 @@ function Test() {
         isMulti
         isClearable
       />
-
-      {selectedValue && <div style={{ marginTop: 20, lineHeight: '25px' }}>
-        <div><b>Ausgewählte Lernfächer: </b> {JSON.stringify(selectedValue, null, 2)}</div>
-      </div>}
+    <Button
+    onClick={() => {onChangeLernfaecher(selectedValue);}} color='primary'>
+        Ausgewählte Lernfächer bestätigen
+    </Button>
     </div>
   );
 }
 
-export default Test;
+export default MultiSelectLernfaecher;

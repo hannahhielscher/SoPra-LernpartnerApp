@@ -194,7 +194,7 @@ class GruppenBearbeitenForm extends Component {
     //Setzen des Status, bei schließen des Dialogs
       handleClose = () => {
         this.setState(this.baseState);
-        this.props.onClose();
+        this.props.onClose(null);
     }
 
 
@@ -342,7 +342,7 @@ class GruppenBearbeitenForm extends Component {
 
                   <ContextErrorMessage error={updatingError}
                       contextErrorMsg={`Dein Profil konnte nicht bearbeitet werden :/`}
-                      onReload={this.updatenPerson} />
+                      onReload={this.updatenGruppe} />
 
                 }
               </DialogContent>
@@ -351,7 +351,7 @@ class GruppenBearbeitenForm extends Component {
                             Abbrechen
                 </Button>
                 {
-                    <Button disabled={nameValidationFailed } variant='contained'
+                    <Button disabled={nameValidationFailed || tageszeitenValidationFailed || tageValidationFailed || frequenzValidationFailed || lernartValidationFailed || gruppengroesseValidationFailed || lernortValidationFailed || lernfaecherValidationFailed } variant='contained'
                           onClick={ () => {this.updatenGruppe(); this.updatenLernvorlieben();}} color='primary'>
                           Änderungen abschließen
                     </Button>

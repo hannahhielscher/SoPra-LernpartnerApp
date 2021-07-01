@@ -8,7 +8,7 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
     } from '@material-ui/core';
 
 import { LernpartnerAPI } from '../../api';
-import Test from './MultiSelect';
+import MultiSelectLernfaecher from './MultiSelectLernfaecher';
 import { withRouter } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
@@ -309,15 +309,7 @@ class MeinProfilForm extends Component {
 
         console.log(currentProfil)
         console.log(currentPerson)
-        console.log(lernfaechergesamt)
-        console.log(lernfaecher_id)
-        console.log(lernfaecher_bez)
 
-        var test = [...lernfaecher_id, ...lernfaecher_bez]
-        console.log(test)
-        
-        
-        
         let title = 'Profil bearbeiten';
         let header = 'Bitte gib deine neuen Daten ein:';
 
@@ -442,8 +434,7 @@ class MeinProfilForm extends Component {
                    </FormControl>
                    <br/>
                    <FormControl required fullWidth margin='normal' className={classes.formControl}>
-                        <InputLabel>Was möchtest du lernen?</InputLabel>
-                        <Test onChangeLernfaecher = {this.onChangeLernfaecher}/>
+                        <MultiSelectLernfaecher lernfaecher = {lernfach} onChangeLernfaecher = {this.onChangeLernfaecher}/>
                     
                     
                     </FormControl>
