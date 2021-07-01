@@ -82,7 +82,7 @@ export default class LernpartnerAPI {
 
         //Nachrichtenbezogen
         #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
-        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
+        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, person_id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${person_id}`;
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
@@ -624,7 +624,7 @@ export default class LernpartnerAPI {
         getNachrichtenByKonversation(konversation_id){
 		      return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversation_id)).then((responseJSON) => {
 			      let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
-			      //console.info(nachrichtenBOs)
+			      console.info(nachrichtenBOs)
 			      return new Promise(function (resolve){
 			  	    resolve(nachrichtenBOs)
 			      })
@@ -663,7 +663,7 @@ export default class LernpartnerAPI {
           getNachrichtenByKonversationByPerson(konversation_id, person_id) {
             return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversation_id, person_id, {method: 'GET'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
-              //console.info(nachrichtenBOs)
+              console.info(nachrichtenBOs)
               return new Promise(function (resolve) {
                 resolve(nachrichtenBOs);
               })
