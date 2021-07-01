@@ -268,6 +268,7 @@ class MeinProfil extends Component {
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
+
       const { test, lernfaecher_id, lernfaecher_bez, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
       console.log(lernfaechergesamt)
       console.log(lernfaecher_id)
