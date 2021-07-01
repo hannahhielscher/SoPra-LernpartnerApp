@@ -107,12 +107,14 @@ export default class LernpartnerAPI {
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
+        #getTeilnahmeChatByKonversationAndPersonURL = (konversation_id, person_id) => `${this.#lernappServerBaseURL}/teilnahmenChat-by-konv-pers/${konversation_id}/${person_id}`;
 
         //TeilnahmeGruppebezogen
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
+        
         #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
         //Lernfachbezogene
@@ -951,6 +953,21 @@ export default class LernpartnerAPI {
               })
              }
 
+             /** 
+              * gibt die Teilnahme mit der bestimmten konversationsID und personID als BO zurück
+              * @param {Number} id to be retrieved
+              * @public
+             */
+  
+            getTeilnahmeChatByKonversationAndPerson(konversation_id, person_id){
+              return this.#fetchAdvanced(this.#getTeilnahmeChatByKonversationAndPersonURL(konversation_id, person_id)).then((responseJSON) => {
+              let teilnahmechatBO = TeilnahmeChatBO.fromJSON(responseJSON);
+              console.info(teilnahmechatBO)
+              return new Promise(function (resolve){
+                resolve(teilnahmechatBO)
+                })
+              })
+              }
             //Teilnahme Gruppe bezogen
 
             /**

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, TextField, Grid, Typography, Divider } from '@material-ui/core';
+import { withStyles, Button, TextField, Grid, Typography, Divider, Link } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtBO from '../api/NachrichtBO';
+import { Link as RouterLink } from 'react-router-dom';
 //import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 //import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -45,7 +46,9 @@ class Nachricht extends Component {
      personid: null,  
      error: null,
      loadingInProgress: false,
-     konversationID: 2
+     konversationID: 2,
+     showKonversationListe: false
+    
      
    };
  }
@@ -94,19 +97,16 @@ class Nachricht extends Component {
 
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
-      this.state.nachricht_inhalt,
+      this.state.neueNachricht,
       this.props.currentPerson.getID(),
-      this.props.nachricht_inhalt.getInhalt(),
-      this.props.person_id.getID(),
-      this.props.konversation_id.getID()
+      this.state.konversationID
     );
-
     LernpartnerAPI.getAPI().addNachricht(newNachricht)
-      .then((nachricht) => {
-        this.state.nachricht.push(nachricht);
-        this.setState({ nachricht_inhalt: "" });
-        // Backend call sucessfull
-        // reinit the dialogs state for a new empty nachricht
+    .then(() => {
+        this.getNachrichten();
+        this.setState({
+          neueNachricht: "",
+        })
       })
       .catch((e) =>
         this.setState({
@@ -115,7 +115,7 @@ addNachricht = () => {
         })
       );
 
-this.setState({
+    this.setState({
     loadingInProgress: true,
     error: null
   });
@@ -144,12 +144,14 @@ nachrichtFormClosed = nachrichten => {
     }
   }
 
-  handleChange = (e) => {
-    this.setState({ content: e.target.value });
-  };
+  clearneueNachricht = () => {
+    this.setState({
+      neueNachricht: null,
+    })
+  }
 
-  handleClose = () => {
-    this.props.onClose();
+  handleChange = (event) => {
+    this.setState({neueNachricht: event.target.value});
   };
 
   //nachrichtDeleted = nachricht => {
@@ -166,13 +168,8 @@ nachrichtFormClosed = nachrichten => {
     
       const { neueNachricht, nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
       
-      console.log(currentPerson)
-      console.log(nachrichten)
-      console.log(this.props.testvalue)
-
       return (
         <div>
-          <b>{nachrichten.nachricht_inhalt}</b>
           { 
           nachrichten ? 
           
@@ -186,6 +183,7 @@ nachrichtFormClosed = nachrichten => {
                           className={classes.outerColumn}
                           style={{ display: "flex", alignItems: "center", position: "rigth" }}
                         >
+                          
                           <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
@@ -196,6 +194,7 @@ nachrichtFormClosed = nachrichten => {
                   else {
                     return (
                       <div id="sender_text">
+                        
                         <Grid
                           item
                           className={classes.outerColumn}
@@ -204,8 +203,8 @@ nachrichtFormClosed = nachrichten => {
                           alignItems="center"
                           justify="flex-end"
                           position= "left"
-                        >
-                          <Typography>{nachricht.nachricht_inhalt}</Typography>
+                        ><b>Test</b>
+                        <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -213,7 +212,8 @@ nachrichtFormClosed = nachrichten => {
                   }
                 }
               })
-            : null}
+            : null
+            }
   
           
           <form className={classes.root} noValidate autoComplete="off">
@@ -224,9 +224,15 @@ nachrichtFormClosed = nachrichten => {
               onChange={this.handleChange}
             />
           </form>
-          <Button className={classes.button_style} variant="outlined" color="primary" onClick={this.handleClose}>
-          <ArrowBackIcon/>
-          </Button>
+
+          <Link component={RouterLink} to={{
+                pathname: '/meinechats',
+          }} >
+            <Button className={classes.button_style} variant="outlined" color="primary" onClick={this.handleClose}>
+            <ArrowBackIcon/>
+            </Button>
+          </Link>
+
           <Button color="primary" variant="contained" onClick={this.addNachricht}>
             senden 
           </Button>
