@@ -82,6 +82,18 @@ class KonversationListe extends Component {
     });
 }
 
+/**
+   * Handles lerngruppeVerlassen events from the GruppenListeEintrag component
+   */
+  chatVerlassen = () => {
+    this.getKonversation();
+    this.setState({
+        konversationen: this.state.konversationen,
+        //showCustomerForm: false
+    });
+}
+
+
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
   this.getKonversation();
@@ -102,6 +114,7 @@ render() {
               konversationen.map(konversation =>
                 <KonversationListeEintrag key={konversation.getID()} currentPerson= {currentPerson} konversation={konversation} expandedState={expandedKonversationID === konversation.getID()}
                 onExpandedStateChange={this.onExpandedStateChange}
+                onTeilnahmeChatDeleted={this.chatVerlassen}
                 />)
             }
             <LoadingProgress show={loadingInProgress} />

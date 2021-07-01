@@ -542,10 +542,10 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmeChat(self, teilnahme):
+    def delete_teilnahmeChat(self, id):
         """Löscht die Teilnahme."""
         with TeilnahmeChatMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete_by_id(id)
 
     """
     Vorschlag-spezifische Methoden

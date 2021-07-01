@@ -904,15 +904,15 @@ class TeilnahmeChatOperation(Resource):
         else:
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
-    
 
-    @lernApp.marshal_with(teilnahmechat)
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten TeilnahmeChat-objekts."""
         adm = AppAdministration()
-        t = adm.get_teilnahme_by_id(id)
-        adm.delete_teilnahme(t)
+        adm.delete_teilnahmeChat(id)
         return '', 200
+    
+
 
 @lernApp.route('/teilnahmeChat-by-person-id/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

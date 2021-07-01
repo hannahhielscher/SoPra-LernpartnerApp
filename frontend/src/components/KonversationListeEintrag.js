@@ -77,26 +77,25 @@ verlassenButtonClicked = (event) => {
   });
 }
 
-  
- 
-  // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-  componentDidMount() {
-      this.getTeilnahmeChat();
-  }
 
 /** Handles the onClose event of the CustomerDeleteDialog */
 verlasseChatFormClosed = (teilnahmeChat) => {
    // if customer is not null, delete it
   if (teilnahmeChat) {
-     this.props.onTeilnahmeChatDeleted(teilnahmeChat);
-  };
-
+    this.props.onTeilnahmeChatDeleted(teilnahmeChat);
+  } else {
   // Don´t show the dialog
-  this.setState({
-      showChatVerlassenForm: false
-  });
+    this.setState({
+        showChatVerlassenForm: false
+    });
+}
 }
 
+
+// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+  componentDidMount() {
+      this.getTeilnahmeChat();
+  }
     
 
 render() {
@@ -133,13 +132,13 @@ render() {
                 </Button>
                 </Link>
                         
-                        <Button color='secondary' onClick={this.deleteChatButtonClicked}>
-                          Chat verlassen
-                        </Button>
+                <Button color='secondary' onClick={this.verlassenButtonClicked}>
+                        Chat verlassen
+                </Button>
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-             <ChatVerlassenForm show={showChatVerlassenForm} />
+             <ChatVerlassenForm show={showChatVerlassenForm} teilnahmeChat={teilnahmeChat} onClose={this.verlasseChatFormClosed}/>
             </div>
             
         );
