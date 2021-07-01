@@ -331,7 +331,7 @@ class AppAdministration (object):
         """Eine Lerngruppe speichern"""
 
         with LerngruppeMapper() as mapper:
-            mapper.update_by_id(lerngruppe)
+            mapper.update(lerngruppe)
 
     def delete_ById(self, gruppenId):
         """Eine Lerngruppe löschen"""

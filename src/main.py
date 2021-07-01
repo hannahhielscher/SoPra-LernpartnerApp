@@ -387,8 +387,29 @@ class LerngruppeListOperationen(Resource):
         lerngruppen = adm.get_all_lerngruppen()
         return lerngruppen
 
+    @lernApp.marshal_with(lerngruppe)
+    @secured
+    def put(self):
+        """Update eines bestimmten Lerngruppen-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Person-Objekts.
+        """
+        lerngruppeId = request.args.get("id")
+        name = request.args.get("name")
+        profil = request.args.get("profil")
+        adm = AppAdministration()
+        lerngruppe = adm.get_lerngruppe_by_id(lerngruppeId)
+        lerngruppe.set_name(name)
+        lerngruppe.set_profil(profil)
+        adm.update_lerngruppe_by_id(lerngruppe)
+
+
     @lernApp.marshal_with(lerngruppe, code=200)
     @lernApp.expect(lerngruppe)
+
+
     #@secured
     def post (self):
         """Anlegen eines neuen Modul-Objekts."""
@@ -431,24 +452,7 @@ class LerngruppeOperationen(Resource):
         
         return lerngruppe
         
-    @lernApp.marshal_with(lerngruppe)
-    @lernApp.expect(lerngruppe, validate=True)
-    @secured
-    def put(self):
-        """Update eines bestimmten Lerngruppen-Objekts.
 
-        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
-        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Person-Objekts.
-        """
-        lerngruppeId = request.args.get("id")
-        name = request.args.get("name")
-        profil = request.args.get("profil")
-        adm = AppAdministration()
-        lerngruppe = adm.get_person_by_id(lerngruppeId)
-        lerngruppe.set_name(name)
-        lerngruppe.set_profil(profil)
-        adm.update_lerngruppe_by_id(lerngruppe)
 
     #@secured
     def delete(self, id):
