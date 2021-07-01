@@ -258,7 +258,7 @@ class GruppenBearbeitenForm extends Component {
                     onChange={this.textFieldValueChange} error={nameValidationFailed}
                     helperText={nameValidationFailed ? 'The last name must contain at least one character' : ' '} />
                   <br/>
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Tageszeit präferierst du?</InputLabel>
                              <Select required error={tageszeitenValidationFailed} value={tageszeiten} onChange={this.handleChangeTageszeiten}>
                                 <MenuItem value='1'>Morgens</MenuItem>
@@ -268,7 +268,7 @@ class GruppenBearbeitenForm extends Component {
                    </FormControl>
                    <br/>
 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Tage präferierst du?</InputLabel>
                              <Select required error={tageValidationFailed} value={tage} onChange={this.handleChangeTage}>
                                 <MenuItem value='1'>Unter der Woche</MenuItem>
@@ -277,7 +277,7 @@ class GruppenBearbeitenForm extends Component {
                    </FormControl>
                    <br/>
 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Frequenz präferierst du?</InputLabel>
                              <Select required error={frequenzValidationFailed} value={frequenz} onChange={this.handleChangeFrequenz}>
                                 <MenuItem value='1'>Wöchentlich</MenuItem>
@@ -287,7 +287,7 @@ class GruppenBearbeitenForm extends Component {
                    </FormControl>
                    <br/>
 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Lernart präferierst du?</InputLabel>
                              <Select required error={lernartValidationFailed} value={lernart} onChange={this.handleChangeLernart}>
                                 <MenuItem value='1'>Visuell</MenuItem>
@@ -298,7 +298,7 @@ class GruppenBearbeitenForm extends Component {
                    </FormControl>
                    <br/>
 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Gruppengroesse präferierst du?</InputLabel>
                              <Select required error={gruppengroesseValidationFailed} value={gruppengroesse} onChange={this.handleChangeGruppengroesse}>
                                 <MenuItem value='1'>Bis zu 3 Personen</MenuItem>
@@ -308,7 +308,7 @@ class GruppenBearbeitenForm extends Component {
                    </FormControl>
                    <br/>
 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welchen Lernort präferierst du?</InputLabel>
                              <Select required error={lernortValidationFailed} value={lernort} onChange={this.handleChangeLernort}>
                                 <MenuItem value='1'>Remote</MenuItem>
@@ -319,7 +319,7 @@ class GruppenBearbeitenForm extends Component {
                    </FormControl>
                    <br/>
 
-                   <FormControl className={classes.formControl}>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Welche Lernfaecher präferierst du?</InputLabel>
                              <Select required error={lernfaecherValidationFailed} value={lernfaecher} onChange={this.handleChangeLernfaecher}>
                                 <MenuItem value='1'>Software Entwicklung</MenuItem>
