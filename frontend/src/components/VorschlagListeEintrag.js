@@ -29,6 +29,7 @@ class VorschlagListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             vorschlag: props.vorschlag,
+            currentPerson: props.currentPerson,
 
             //match: null,
 
@@ -36,15 +37,20 @@ class VorschlagListeEintrag extends Component {
             gruppe: null,
 
             person: null,
-            personName: null,
-            personVorname: null,
+
+            nameGes: null,
+
+            namePerson: null,
 
             lerngruppe: null,
-            lerngruppeName: null,
 
             chatPartnerProfil: props.vorschlag.match_profil_id,
 
             teilnahmeChat: null,
+
+            konversationBO: null,
+            konversation: false,
+            konversationStatus: null,
 
             showProfil: false,
             showAnfrageForm: false,
@@ -112,16 +118,16 @@ class VorschlagListeEintrag extends Component {
       .then(personBO =>
           this.setState({
             //chatPartnerProfil: personBO,
-            personName: personBO.name,
-            personVorname: personBO.vorname,
+            namePerson: personBO.vorname+ " " + personBO.name,
+            nameGes: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
             loadingInProgress: false,
             error: null,
-          }))
-          .catch(e =>
+      })).then(() => {
+            this.getKonversation();
+        }).catch(e =>
               this.setState({
                 chatPartnerProfil: null,
-                personName: null,
-                personVorname: null,
+                nameGes: null,
                 loadingInProgress: false,
                 error: e,
               }));
@@ -137,14 +143,15 @@ class VorschlagListeEintrag extends Component {
       .then(lerngruppeBO =>
           this.setState({
             //chatPartnerProfil: lerngruppeBO,
-            lerngruppeName: lerngruppeBO.name,
+            nameGes: lerngruppeBO.name,
             loadingInProgress: false,
             error: null,
-          }))
-          .catch(e =>
+      })).then(() => {
+            this.getKonversation();
+        }).catch(e =>
               this.setState({
                 chatPartnerProfil: null,
-                lerngruppeName: null,
+                nameGes: null,
                 loadingInProgress: false,
                 error: e,
               }));
@@ -161,6 +168,37 @@ class VorschlagListeEintrag extends Component {
             this.getPerson();
         }
     }
+
+  /** Add TeilnahmeChatPartner */
+  getKonversation = () => {
+    LernpartnerAPI.getAPI().getKonversationByName(this.state.nameGes)
+    .then(konversationBO =>
+      this.setState({
+        konversationBO: konversationBO,              // disable loading indicator                 // no error message
+        konversationStatus: konversationBO.status
+      })).then(() => {
+            this.setKonversation();
+        }).catch(e =>
+      this.setState({
+        konversationBO: false,
+        konversationStatus: false,
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
+  }
+
+  setKonversation = () => {
+    if (this.state.konversationStatus === null) {
+        this.setState({
+            konversation: false,
+      });
+    } else {
+        this.setState({
+            konversation: true,
+      });
+    }
+  }
 
   /** Handles the onClose event of the CustomerForm */
   anfrageFormClosed = (chatPartnerProfil) => {
@@ -183,12 +221,13 @@ class VorschlagListeEintrag extends Component {
     }
 
     render(){
-          const { classes, expandedState, currentPerson } = this.props;
-          const { vorschlag, profil, gruppe, person, personName, personVorname, lerngruppe, lerngruppeName, chatPartnerProfil, showProfil, showAnfrageForm } = this.state;
+          const { classes, expandedState } = this.props;
+          const { vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartnerProfil, konversationBO, konversation, konversationStatus, showProfil, showAnfrageForm } = this.state;
           console.log(chatPartnerProfil)
-          //console.log(vorschlag)
-          //console.log(profil)
-          //console.log(gruppe)
+          console.log(konversation)
+          console.log(konversationStatus)
+          console.log(currentPerson)
+          console.log(nameGes)
 
           return (
             <div>
@@ -200,11 +239,11 @@ class VorschlagListeEintrag extends Component {
                     <Grid item>
                     {
                     gruppe ?
-                    <Typography variant='body1' className={classes.heading}>{lerngruppeName}
-                      </Typography>
+                        <Typography variant='body1' className={classes.heading}>{nameGes}
+                        </Typography>
                     :
-                    <Typography variant='body1' className={classes.heading}>{personVorname} {personName}
-                      </Typography>
+                        <Typography variant='body1' className={classes.heading}>{namePerson}
+                        </Typography>
                     }
 
                     <Typography variant='body1' className={classes.heading}>Matchquote: {vorschlag.getmatch_quote()}%
@@ -220,14 +259,26 @@ class VorschlagListeEintrag extends Component {
                   </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
-                      <ButtonGroup variant='text' size='small'>
-                        <Button color='primary' onClick={this.showProfilButtonClicked}>
-                          Profil ansehen
-                        </Button>
-                        <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
-                          Kontaktanfrage
-                        </Button>
-                      </ButtonGroup>
+                       {
+                       konversation ?
+                        <ButtonGroup variant='text' size='small'>
+                            <Button color='primary' onClick={this.showProfilButtonClicked}>
+                              Profil ansehen
+                            </Button>
+                            <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
+                              Kontaktanfrage
+                            </Button>
+                        </ButtonGroup>
+                        :
+                        <>
+                            <Button color='primary' onClick={this.showProfilButtonClicked}>
+                              Profil ansehen
+                            </Button>
+                            <h4>
+                            Du bist bereits mit {nameGes} in Kontakt oder es steht bereits eine Kontaktanfrage aus.
+                            </h4>
+                        </>
+                       }
                     </AccordionDetails>
               </Accordion>
               <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
