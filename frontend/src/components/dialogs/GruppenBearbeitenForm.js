@@ -9,6 +9,7 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
 
 import { LernpartnerAPI } from '../../api';
 import { withRouter } from 'react-router-dom';
+import MultiSelectLernfaecher from './MultiSelectLernfaecher';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
@@ -61,9 +62,11 @@ class GruppenBearbeitenForm extends Component {
             lernortValidationFailed: false,
             lernortEdited: false,
 
-            lernfaecher: null,
+            lernfaecher: [],
             lernfaecherValidationFailed: false,
             lernfaecherEdited: false,
+
+            gruppe: 1,
 
             updatingError: null,
             updatingInProgress: false,
@@ -78,7 +81,7 @@ class GruppenBearbeitenForm extends Component {
         this.handleChangeLernart = this.handleChangeLernart.bind(this);
         this.handleChangeGruppengroesse = this.handleChangeGruppengroesse.bind(this);
         this.handleChangeLernort = this.handleChangeLernort.bind(this);
-        this.handleChangeLernfaecher = this.handleChangeLernfaecher.bind(this);
+        this.onChangeLernfaecher = this.onChangeLernfaecher.bind(this);
 
     }
 
@@ -110,7 +113,28 @@ class GruppenBearbeitenForm extends Component {
       });
     }
 
+/** Updates the profil */
+updatenProfil = () => {
+  let profil = this.props.currentProfil;
+  LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
+  ).then(profil => {
+      // Backend call sucessfull
+      // reinit the dialogs state for a new empty customer
+      this.setState(this.baseState);
+      this.props.onClose(profil); // call the parent with the customer object from backend
+  }).catch(e =>
+      this.setState({
+          updatingInProgress: false,    // disable loading indicator
+          updatingError: e              // show error message
+      })
+  );
 
+  // set loading to true
+  this.setState({
+      updatingInProgress: true,       // show loading indicator
+      updatingError: null             // disable error message
+});
+}
 
 
   /** Updates the person */
@@ -222,23 +246,27 @@ class GruppenBearbeitenForm extends Component {
       this.setState({lernort: event.target.value});
     }
 
-    handleChangeLernfaecher(event) {
-      this.setState({lernfaecher: event.target.value});
-    }
+    onChangeLernfaecher(newLernfaecher) {
+      console.log(newLernfaecher)
+      this.setState({
+        lernfaecher: newLernfaecher
+      
+    })
+  }
 
 
 
 	/** Renders the sign in page, if user objext is null */
 	/** Renders the component */
     render() {
-        const { classes, show, currentPerson, lerngruppe, lernvorlieben } = this.props;
-        console.log()
+        const { classes, show, currentProfil, currentPerson, lerngruppe, lernvorlieben } = this.props;
+        console.log(currentProfil)
         const { name, nameValidationFailed, tageszeiten, tageszeitenValidationFailed, tage, tageValidationFailed, frequenz, frequenzValidationFailed, lernart, lernartValidationFailed, gruppengroesse, gruppengroesseValidationFailed,
           lernort, lernortValidationFailed, lernfaecher, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
 
 
-        let title = 'Registriere dich zuerst, bevor du die App nutzen kannst!';
-        let header = 'Bitte gib deine neuen Daten ein:';
+        let title = 'Gruppenprofil bearbeiten';
+        let header = 'Bitte gib die neuen Daten ein:';
 
         return (
             show ?
@@ -254,7 +282,7 @@ class GruppenBearbeitenForm extends Component {
                 </DialogContentText>
                 <form className={classes.root} noValidate autoComplete='off'>
 
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='name' label='Nachname:' value={name}
+                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='name' label='Gruppenname:' value={name}
                     onChange={this.textFieldValueChange} error={nameValidationFailed}
                     helperText={nameValidationFailed ? 'The last name must contain at least one character' : ' '} />
                   <br/>
@@ -320,18 +348,9 @@ class GruppenBearbeitenForm extends Component {
                    <br/>
 
                    <FormControl required fullWidth margin='normal' className={classes.formControl}>
-                            <InputLabel>Welche Lernfaecher präferierst du?</InputLabel>
-                             <Select required error={lernfaecherValidationFailed} value={lernfaecher} onChange={this.handleChangeLernfaecher}>
-                                <MenuItem value='1'>Software Entwicklung</MenuItem>
-                                <MenuItem value='2'>Data Science</MenuItem>
-                                <MenuItem value='3'>Führungsorientiertes Rechnungswesen</MenuItem>
-                                <MenuItem value='4'>Medienrecht</MenuItem>
-                                <MenuItem value='5'>Crossmedia-Konzeption</MenuItem>
-                                <MenuItem value='6'>Web-Technologie</MenuItem>
-                                <MenuItem value='7'>Datenbanken</MenuItem>
-                                <MenuItem value='8'>IT-Security</MenuItem>
-                            </Select>
-                   </FormControl>
+                        <MultiSelectLernfaecher onChangeLernfaecher = {this.onChangeLernfaecher}/>
+                    
+                    </FormControl>
                    <br/>
 
 
@@ -352,7 +371,7 @@ class GruppenBearbeitenForm extends Component {
                 </Button>
                 {
                     <Button disabled={nameValidationFailed || tageszeitenValidationFailed || tageValidationFailed || frequenzValidationFailed || lernartValidationFailed || gruppengroesseValidationFailed || lernortValidationFailed || lernfaecherValidationFailed } variant='contained'
-                          onClick={ () => {this.updatenGruppe(); this.updatenLernvorlieben();}} color='primary'>
+                          onClick={ () => {this.updatenGruppe(); this.updatenProfil(); this.updatenLernvorlieben();}} color='primary'>
                           Änderungen abschließen
                     </Button>
                 }

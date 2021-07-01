@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 //import LernpartnerAPI from '../api/LernpartnerAPI'
 import Profil from './Profil';
 import { withRouter } from 'react-router-dom';
-import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
+import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid, List, ListItem } from '@material-ui/core';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import InputLabel from '@material-ui/core/InputLabel';
@@ -208,16 +208,23 @@ class GruppenListeEintrag extends Component {
                     <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
                         Gruppe verlassen
                     </Button>
-                    <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
+                    
                     
                   </AccordionSummary>
                  <AccordionDetails>
+                  <List>
+                    <ListItem>
+                  <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
+                  </ListItem>
+                  <ListItem>
                   <Profil user={lerngruppe}/>
+                  </ListItem>
+                  </List>
                 </AccordionDetails>
               </Accordion>
               
               <GruppeVerlassenDialog show={showLerngruppeVerlassenDialog} teilnahmeGruppe={teilnahmeGruppe} currentPerson={currentPerson} onClose={this.verlasseLerngruppeDialogClosed}/>
-              <GruppenBearbeitenForm show={showGruppenBearbeitenForm} lerngruppe={lerngruppe} lernvorlieben={lernvorlieben}  onClose={this.bearbeitenFormClosed}/>
+              <GruppenBearbeitenForm show={showGruppenBearbeitenForm} lerngruppe={lerngruppe} currentProfil ={profil} lernvorlieben={lernvorlieben}  onClose={this.bearbeitenFormClosed}/>
 
             </div>
           );
