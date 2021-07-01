@@ -7,6 +7,7 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtBO from '../api/NachrichtBO';
 import { Link as RouterLink } from 'react-router-dom';
+import GruppenForm from './dialogs/GruppenForm';
 //import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 //import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -47,7 +48,8 @@ class Nachricht extends Component {
      error: null,
      loadingInProgress: false,
      konversationID: 2,
-     showKonversationListe: false
+     showKonversationListe: false,
+     showLerngruppeForm: false
     
      
    };
@@ -154,6 +156,29 @@ nachrichtFormClosed = nachrichten => {
     this.setState({neueNachricht: event.target.value});
   };
 
+  /** Handles the onClick event of the edit customer button */
+  showGruppeFormButtonClicked= (event) => {
+    event.stopPropagation();
+    this.setState({
+      showLerngruppeForm: true
+    });
+  }
+
+  /** Handles the onClose event of the CustomerForm */
+  lerngruppeFormClosed = (lerngruppe) => {
+    // customer is not null and therefor changed
+    if (lerngruppe) {
+      this.setState({
+        lerngruppe: lerngruppe,
+        showLerngruppeForm: false
+      });
+    } else {
+      this.setState({
+        showLerngruppeForm: false
+      });
+    }
+  }
+
   //nachrichtDeleted = nachricht => {
    // const newNachricht = this.state.nachrichten.filter(nachrichtFromState => nachrichtFromState.getID() !== nachricht.getID());
    // this.setState({
@@ -166,7 +191,7 @@ nachrichtFormClosed = nachrichten => {
     render() {
       const { classes, currentPerson, konversation } = this.props;
     
-      const { neueNachricht, nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
+      const { showLerngruppeForm, neueNachricht, nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
       
       return (
         <div>
@@ -203,7 +228,7 @@ nachrichtFormClosed = nachrichten => {
                           alignItems="center"
                           justify="flex-end"
                           position= "left"
-                        ><b>Test</b>
+                        >
                         <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
@@ -243,7 +268,7 @@ nachrichtFormClosed = nachrichten => {
 
       <LoadingProgress show={loadingInProgress} />
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
-      
+      <GruppenForm show={showLerngruppeForm} currentPerson={currentPerson} onClose={this.lerngruppeFormClosed} />
       </div>
       
     );

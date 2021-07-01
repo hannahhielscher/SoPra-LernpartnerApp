@@ -179,7 +179,7 @@ class App extends React.Component {
 										<KonversationListe currentPerson={currentPerson} />
 									</Route>
 
-									<Route path='/chat/:id'>
+									<Route path='/chat'>
 										<Nachricht currentPerson={currentPerson} />
 									</Route>
 									
