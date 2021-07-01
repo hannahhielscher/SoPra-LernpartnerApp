@@ -19,6 +19,8 @@ class ChatVerlassenForm extends Component {
     };
   }
 
+
+
   /** Chat verlassen */
   verlasseChat = () => {
     LernpartnerAPI.getAPI().deleteTeilnahmeChat(this.props.teilnahmeChat.getID())

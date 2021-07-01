@@ -7,6 +7,7 @@ import Nachricht from './Nachricht';
 import { Link as RouterLink } from 'react-router-dom';
 //import KonversationListe from './KonversationListe';
 import LernpartnerAPI from '../api/LernpartnerAPI';
+import ChatVerlassenForm from './dialogs/ChatVerlassenForm';
 
 
 
@@ -113,7 +114,7 @@ render() {
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-             
+             <ChatVerlassenForm show={showChatVerlassenForm} />
             </div>
             
         );
