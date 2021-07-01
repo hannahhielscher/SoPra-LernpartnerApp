@@ -153,7 +153,6 @@ class NachrichtMapper (Mapper):
 
         return result
 
-
     
     def insert(self, nachricht):
         """Einfügen eines Nachrichten-Objekts in die Datenbank.
@@ -179,7 +178,7 @@ class NachrichtMapper (Mapper):
                 nachricht.set_id(1)
 
         command = "INSERT INTO nachrichten (id, nachricht_inhalt, person_id, konversation_id) VALUES (%s,%s,%s,%s)"
-        data = (nachricht.get_id(), nachricht.get_nachricht_inhalt(), nachricht.get_person_id(), nachricht.get_konversation_id())
+        data = (nachricht.get_id(), str(nachricht.get_nachricht_inhalt()), nachricht.get_person_id(), nachricht.get_konversation_id())
         cursor.execute(command, data)
 
         self._connection.commit()

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, TextField, Grid, Typography, Divider } from '@material-ui/core';
+import { withStyles, Button, TextField, Grid, Typography, Divider, Link } from '@material-ui/core';
 //import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import NachrichtBO from '../api/NachrichtBO';
+import { Link as RouterLink } from 'react-router-dom';
 //import NachrichtenListeEintrag from './NachrichtenListeEintrag';
 //import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -30,17 +31,24 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 class Nachricht extends Component {
 
+  
+
   constructor(props) {
     super(props);
 
+  
    // Init an empty state
    this.state = {
      nachrichten: [], 
      nachricht_inhalt: null,
+     neueNachricht: null,
      konversation_id: null,
      personid: null,  
      error: null,
      loadingInProgress: false,
+     konversationID: 2,
+     showKonversationListe: false
+    
      
    };
  }
@@ -62,8 +70,8 @@ class Nachricht extends Component {
 }
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
- getNachrichten= () => {
-     LernpartnerAPI.getAPI().getNachrichtenByKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation_id.getID())
+  getNachrichten = () => {
+     LernpartnerAPI.getAPI().getNachrichtenByKonversation(this.state.konversationID)
     .then((nachrichtenBOs) =>
       this.setState({
         nachrichten: nachrichtenBOs,
@@ -89,19 +97,16 @@ class Nachricht extends Component {
 
 addNachricht = () => {
     let newNachricht = new NachrichtBO(
-      this.state.nachricht_inhalt,
+      this.state.neueNachricht,
       this.props.currentPerson.getID(),
-      this.props.nachricht_inhalt.getInhalt(),
-      this.props.person_id.getID(),
-      this.props.konversation_id.getID()
+      this.state.konversationID
     );
-
     LernpartnerAPI.getAPI().addNachricht(newNachricht)
-      .then((nachricht) => {
-        this.state.nachricht.push(nachricht);
-        this.setState({ nachricht_inhalt: "" });
-        // Backend call sucessfull
-        // reinit the dialogs state for a new empty nachricht
+    .then(() => {
+        this.getNachrichten();
+        this.setState({
+          neueNachricht: "",
+        })
       })
       .catch((e) =>
         this.setState({
@@ -110,7 +115,7 @@ addNachricht = () => {
         })
       );
 
-this.setState({
+    this.setState({
     loadingInProgress: true,
     error: null
   });
@@ -118,7 +123,7 @@ this.setState({
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
- this.getNachrichten();
+  this.getNachrichten();
 }
 
 //Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird
@@ -139,12 +144,14 @@ nachrichtFormClosed = nachrichten => {
     }
   }
 
-  handleChange = (e) => {
-    this.setState({ content: e.target.value });
-  };
+  clearneueNachricht = () => {
+    this.setState({
+      neueNachricht: null,
+    })
+  }
 
-  handleClose = () => {
-    this.props.onClose();
+  handleChange = (event) => {
+    this.setState({neueNachricht: event.target.value});
   };
 
   //nachrichtDeleted = nachricht => {
@@ -157,17 +164,18 @@ nachrichtFormClosed = nachrichten => {
 
  // Rendert die Componente 
     render() {
-      const { classes, currentPerson } = this.props;
-      const { nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
+      const { classes, currentPerson, konversation } = this.props;
+    
+      const { neueNachricht, nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
       
       return (
         <div>
-
-          {nachrichten? 
+          { 
+          nachrichten ? 
           
           nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getCurrentPerson() !== currentPerson.getID()) {
+                  if (nachricht.person_id !== currentPerson.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid item
@@ -175,7 +183,8 @@ nachrichtFormClosed = nachrichten => {
                           className={classes.outerColumn}
                           style={{ display: "flex", alignItems: "center", position: "rigth" }}
                         >
-                          <Typography>{nachricht.getNachricht_Inhalt()}</Typography>
+                          
+                          <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -185,6 +194,7 @@ nachrichtFormClosed = nachrichten => {
                   else {
                     return (
                       <div id="sender_text">
+                        
                         <Grid
                           item
                           className={classes.outerColumn}
@@ -193,8 +203,8 @@ nachrichtFormClosed = nachrichten => {
                           alignItems="center"
                           justify="flex-end"
                           position= "left"
-                        >
-                          <Typography>{nachricht.getNachricht_Inhalt()}</Typography>
+                        ><b>Test</b>
+                        <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -202,19 +212,27 @@ nachrichtFormClosed = nachrichten => {
                   }
                 }
               })
-            : null}
+            : null
+            }
   
+          
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
               id="standard-basic"
-              label="schreibe eine Nachricht"
-              value={nachricht_inhalt}
+              label="Schreibe eine Nachricht"
+              value={neueNachricht}
               onChange={this.handleChange}
             />
           </form>
-          <Button className={classes.button_style} variant="outlined" color="primary" onClick={this.handleClose}>
-          <ArrowBackIcon/>
-          </Button>
+
+          <Link component={RouterLink} to={{
+                pathname: '/meinechats',
+          }} >
+            <Button className={classes.button_style} variant="outlined" color="primary" onClick={this.handleClose}>
+            <ArrowBackIcon/>
+            </Button>
+          </Link>
+
           <Button color="primary" variant="contained" onClick={this.addNachricht}>
             senden 
           </Button>

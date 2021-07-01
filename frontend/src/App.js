@@ -18,6 +18,7 @@ import firebaseConfig from './firebaseconfig';
 import LernfaecherForm from './components/dialogs/LernfaecherForm';
 import Profil from './components/Profil';
 import GruppenListe from './components/GruppenListe';
+import Nachricht from './components/Nachricht';
 
 class App extends React.Component {
 
@@ -176,6 +177,10 @@ class App extends React.Component {
 
 									<Route path='/meinechats'>
 										<KonversationListe currentPerson={currentPerson} />
+									</Route>
+
+									<Route path='/chat/:id'>
+										<Nachricht currentPerson={currentPerson} />
 									</Route>
 									
 									<Route path='/about' component={About} />

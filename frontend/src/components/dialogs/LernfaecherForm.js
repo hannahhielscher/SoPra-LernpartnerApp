@@ -130,4 +130,12 @@ class LernfaecherForm extends Component {
   } 
 }
 
+/** Component specific styles */
+const styles = theme => ({
+  formControl: {
+    marginBottom: theme.spacing(1),
+    minWidth: 120,
+  }
+});
+
 export default withRouter(withStyles(useStyles)(LernfaecherForm));

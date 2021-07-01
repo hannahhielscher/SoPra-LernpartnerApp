@@ -82,7 +82,7 @@ export default class LernpartnerAPI {
 
         //Nachrichtenbezogen
         #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
-        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/konversation/${id}`;
+        #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, person_id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${person_id}`;
         #deleteNachrichtURL = (id) => `${this.#lernappServerBaseURL}/nachrichten/${id}`;
@@ -107,12 +107,14 @@ export default class LernpartnerAPI {
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
+        #getTeilnahmeChatByKonversationAndPersonURL = (konversation_id, person_id) => `${this.#lernappServerBaseURL}/teilnahmenChat-by-konv-pers/${konversation_id}/${person_id}`;
 
         //TeilnahmeGruppebezogen
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
+        
         #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
         //Lernfachbezogene
@@ -624,7 +626,7 @@ export default class LernpartnerAPI {
         getNachrichtenByKonversation(konversation_id){
 		      return this.#fetchAdvanced(this.#getNachrichtenByKonversationURL(konversation_id)).then((responseJSON) => {
 			      let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
-			      //console.info(nachrichtenBOs)
+			      console.info(nachrichtenBOs)
 			      return new Promise(function (resolve){
 			  	    resolve(nachrichtenBOs)
 			      })
@@ -663,7 +665,7 @@ export default class LernpartnerAPI {
           getNachrichtenByKonversationByPerson(konversation_id, person_id) {
             return this.#fetchAdvanced(this.#getNachrichtenByKonversationByPersonURL(konversation_id, person_id, {method: 'GET'})).then((responseJSON) => {
               let nachrichtenBOs = NachrichtBO.fromJSON(responseJSON);
-              //console.info(nachrichtenBOs)
+              console.info(nachrichtenBOs)
               return new Promise(function (resolve) {
                 resolve(nachrichtenBOs);
               })
@@ -951,6 +953,21 @@ export default class LernpartnerAPI {
               })
              }
 
+             /** 
+              * gibt die Teilnahme mit der bestimmten konversationsID und personID als BO zurück
+              * @param {Number} id to be retrieved
+              * @public
+             */
+  
+            getTeilnahmeChatByKonversationAndPerson(konversation_id, person_id){
+              return this.#fetchAdvanced(this.#getTeilnahmeChatByKonversationAndPersonURL(konversation_id, person_id)).then((responseJSON) => {
+              let teilnahmechatBO = TeilnahmeChatBO.fromJSON(responseJSON);
+              console.info(teilnahmechatBO)
+              return new Promise(function (resolve){
+                resolve(teilnahmechatBO)
+                })
+              })
+              }
             //Teilnahme Gruppe bezogen
 
             /**

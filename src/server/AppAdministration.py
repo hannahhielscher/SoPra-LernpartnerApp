@@ -422,8 +422,15 @@ class AppAdministration (object):
         with NachrichtMapper() as mapper:
             return mapper.find_by_konversation_by_person(konversation_id, person_id)
 
-    def create_nachricht(self, nachricht):
+    def create_nachricht(self, nachricht_inhalt, person_id, konversation_id):
         """Speichert die Nachricht."""
+        nachricht = Nachricht()
+
+        nachricht.set_nachricht_inhalt(nachricht_inhalt)
+        nachricht.set_person_id(person_id)
+        nachricht.set_konversation_id(konversation_id)
+        nachricht.set_id(1)
+
         with NachrichtMapper() as mapper:
             return mapper.insert(nachricht)
 
@@ -515,6 +522,11 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_person_id(personid)
 
+    def get_teilnahmeChat_by_konversation_and_person(self, konversation_id, person_id):
+        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_konversation_and_person(konversation_id, person_id)
+
     def get_teilnahmeChat_by_konversation_id(self, konversationid):
         """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
@@ -530,10 +542,10 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmeChat(self, teilnahme):
+    def delete_teilnahmeChat(self, id):
         """Löscht die Teilnahme."""
         with TeilnahmeChatMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete_by_id(id)
 
     """
     Vorschlag-spezifische Methoden
@@ -584,17 +596,19 @@ class AppAdministration (object):
     def match_berechnen(self, main_person_id, lernfach_id):
 
         # Main-Person mit der verglichen wird
+        # Person by ID holen
         with PersonMapper() as mapper:
             main_person = mapper.find_by_id(main_person_id)
         # main_personenprofil_id = main_person.get_personenprofil()
 
+        # Profil by Person ID holen
         with ProfilMapper() as mapper:
-            main_profil_list = mapper.find_by_id(main_person.get_profil())
+            main_profil = mapper.find_by_id(main_person.get_profil())
 
         # Schleife wegen Rückgabewert --> eigentlich list, kommt aber in dem Fall nur 1 Wert
-        for profil in main_profil_list:
-            main_lernvorlieben_id = profil.get_lernvorlieben_id()
-            main_profil = profil
+        #for profil in main_profil_list:
+        main_lernvorlieben_id = main_profil.get_lernvorlieben_id()
+            #main_profil = profil
 
         with LernvorliebenMapper() as mapper:
             main_lernvorlieben = mapper.find_by_id(main_lernvorlieben_id)
