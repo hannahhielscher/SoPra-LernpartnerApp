@@ -56,7 +56,7 @@ export default class LernpartnerAPI {
         #getLerngruppeByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lerngruppen-by-profil/${profilid}`;
         #addLerngruppeURL = () => `${this.#lernappServerBaseURL}/lerngruppen`;
         #getLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
-        #updateLerngruppeURL = (id, name, profil)  => `${this.#lernappServerBaseURL}/lerngruppe?id=${id}&name=${name}&profil=${profil}`;
+        #updateLerngruppeURL = (id, name, profil)  => `${this.#lernappServerBaseURL}/lerngruppen?id=${id}&name=${name}&profil=${profil}`;
         #deleteLerngruppeURL = (id) => `${this.#lernappServerBaseURL}/lerngruppen/${id}`;
         
         //Profilbezogen

@@ -38,7 +38,7 @@ class LerngruppeMapper(Mapper):
     def find_by_id(self, id):
         """Auslesen der Lerngruppen anhand der ID
         """
-        result = []
+        result = None
         cursor = self._connection.cursor()
         command = "SELECT id, name, profil_id FROM lerngruppen WHERE id={}".format(id)
         cursor.execute(command)
@@ -49,7 +49,7 @@ class LerngruppeMapper(Mapper):
             lerngruppe.set_id(id)
             lerngruppe.set_name(name)
             lerngruppe.set_profil(profil_id)
-            result.append(lerngruppe)
+            result = lerngruppe
 
         self._connection.commit()
         cursor.close()
@@ -190,8 +190,8 @@ class LerngruppeMapper(Mapper):
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE lerngruppen " + "SET id=%s, name=%s, profil_id=%s  WHERE id=%s"
-        data = (lerngruppe.get_id(), lerngruppe.get_name(), lerngruppe.get_profil)
+        command = "UPDATE lerngruppen " + "SET name=%s, profil_id=%s  WHERE id=%s"
+        data = (lerngruppe.get_name(), lerngruppe.get_profil(), lerngruppe.get_id())
         cursor.execute(command, data)
 
         self._connection.commit()
