@@ -50,7 +50,7 @@ class ProfilMapper(Mapper):
 
         return result
 
-    def find_by_id(self, id):
+    def find_by_id(self, profil_id):
         """Suchen eines Profils nach ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
@@ -58,38 +58,24 @@ class ProfilMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        result = []
-        lernfaecherliste = []
+        result = None
         cursor = self._connection.cursor()
-        command = "SELECT profile.id, profile.gruppe, profile_has_lernfaecher.lernfaecher_id, profile.lernvorlieben_id FROM profile INNER JOIN profile_has_lernfaecher ON profile.id = profile_has_lernfaecher.profil_id WHERE profile_has_lernfaecher.profil_id ='{}'".format(id)
+        command = "SELECT id, gruppe, lernvorlieben_id FROM profile WHERE id ='{}'".format(profil_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-    
-        for (id, gruppe, lernfaecher, lernvorlieben_id) in tuples:
+        for (id, gruppe, lernvorlieben_id) in tuples:
+            profil = Profil()
+            profil.set_id(id)
+            profil.set_gruppe(gruppe)
+            profil.set_lernfaecher(self.find_lernfaecher_id_by_profil_id(profil_id))
+            profil.set_lernvorlieben_id(lernvorlieben_id)
 
-            #buff = False
-            #for i in result:
-                #if i.get_id() == id:
-                    #buff = True
-                    #i.set_lernfaecher(lernfaecher)
-
-            if buff == False:
-                profil = Profil()
-                profil.set_id(id)
-                profil.set_gruppe(gruppe)
-                profil.set_lernfaecher(lernfaecher)
-                profil.set_lernvorlieben_id(lernvorlieben_id)
-
-                result.append(profil)
-
-            else:
-                pass
-        
+            result = profil
+            print(result)
         self._connection.commit()
         cursor.close()
-        print(result)
-        
+
         return result
 
     def find_profil_test(self, profil_id):
@@ -202,7 +188,6 @@ class ProfilMapper(Mapper):
         :param profil das zu speichernde Objekt
         :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
         """
-        print(profil)
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM profile ")
         tuples = cursor.fetchall()
@@ -223,17 +208,13 @@ class ProfilMapper(Mapper):
 
         lernfaecher = profil.get_lernfaecher()
         command2 = "INSERT INTO profile_has_lernfaecher (profil_id, lernfaecher_id) VALUES (%s,%s)"
-        #data2 = (profil.get_id(), profil.get_lernfaecher())
-        #cursor.execute(command2, data2)
 
         for lernfach in lernfaecher:
             #for i in lernfach:
-                #for k in i:
-            print(lernfach)
             data2 = (profil.get_id(), lernfach)
-                    #print(lernfaecher)
-                    #print(lernfach)
-                    #print(i)
+                #print(lernfaecher)
+                #print(lernfach)
+                #print(i)
             cursor.execute(command2, data2)
 
         self._connection.commit()

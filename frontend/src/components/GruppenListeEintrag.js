@@ -15,7 +15,9 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import GruppeVerlassenDialog from './dialogs/GruppeVerlassenDialog';
 import GruppenBearbeitenForm from './dialogs/GruppenBearbeitenForm';
 import GruppenForm from './dialogs/GruppenForm';
-import LernpartnerAPI from '../api/LernpartnerAPI'
+//import LernpartnerAPI from '../api/LernpartnerAPI'
+import { LernpartnerAPI } from '../api';
+
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -30,7 +32,7 @@ class GruppenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            lerngruppe: props.lerngruppe,
+            lerngruppe: this.props.lerngruppe,
             profil: null,
             lernvorlieben: null,
             gruppeName: this.props.lerngruppe.name,
@@ -79,20 +81,20 @@ class GruppenListeEintrag extends Component {
 		LernpartnerAPI.getAPI().getProfil(this.state.profilID)
 			.then(profilBO =>
 				this.setState({
-            profil: profilBO,
-            gruppeLernvorliebenID: profilBO.lernvorlieben_id,
-            error: null,
-            loadingInProgress: false,
-          })).then(() => {
-            this.getLernvorlieben();
-
-          }).catch(e =>
-            this.setState({
-              profil: null,
-              gruppeLernvorliebenID: null,
-              error: e,
-              loadingInProgress: false,
-            }));
+                    profil: profilBO,
+                    gruppeLernvorliebenID: profilBO.lernvorlieben_id,
+                    error: null,
+                    loadingInProgress: false,
+                })).then (()=> {
+                    this.getGruppenLernvorlieben();
+                })
+                .catch(e =>
+                    this.setState({
+                        profil: null,
+                        gruppeLernvorliebenID: null,
+                        error: e,
+                        loadingInProgress: false,
+                 }));
 
       // set loading to true
       this.setState({
@@ -102,6 +104,7 @@ class GruppenListeEintrag extends Component {
     }
 
    getGruppenLernvorlieben = () => {
+   //console.log(profil)
     LernpartnerAPI.getAPI().getLernvorlieben(this.state.gruppeLernvorliebenID)
     .then(lernvorliebenBO =>
       this.setState({
@@ -155,11 +158,11 @@ class GruppenListeEintrag extends Component {
     });
   }
 
-  bearbeitenFormClosed = (lerngruppen) => {
-    this.getPerson();
-    if (lerngruppen) {
+  bearbeitenFormClosed = (profil) => {
+    this.getGruppenProfil();
+    if (profil) {
         this.setState({
-            lerngruppen: lerngruppen,
+            profil: profil,
             showGruppenBearbeitenForm: false,
         });
     } else {
@@ -175,6 +178,7 @@ class GruppenListeEintrag extends Component {
      /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
    componentDidMount() {
        this.getTeilnahmeGruppe();
+       this.getGruppenProfil();
    }
 
   /** Handles the onClick event of the edit customer button */
@@ -213,8 +217,13 @@ class GruppenListeEintrag extends Component {
           const { classes, expandedState, currentPerson } = this.props;
           //const { lerngruppe, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showLerngruppeForm } = this.state;
 
-          const { lerngruppe, lernvorlieben, gruppeName, profilID, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm , showLerngruppeForm } = this.state;
+
+          const { lerngruppe, lernvorlieben, gruppeName, profilID, profil, teilnahmeGruppe, showProfil, showLerngruppeVerlassenDialog, showGruppenBearbeitenForm, showLerngruppeForm, loadingInProgress, error } = this.state;
             console.log(lerngruppe)
+            console.log(profil)
+            console.log(lernvorlieben)
+            console.log(profilID)
+
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>

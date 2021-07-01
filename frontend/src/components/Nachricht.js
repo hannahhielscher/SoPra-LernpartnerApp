@@ -30,17 +30,22 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 class Nachricht extends Component {
 
+  
+
   constructor(props) {
     super(props);
 
+  
    // Init an empty state
    this.state = {
      nachrichten: [], 
      nachricht_inhalt: null,
+     neueNachricht: null,
      konversation_id: null,
      personid: null,  
      error: null,
      loadingInProgress: false,
+     konversationID: 2
      
    };
  }
@@ -62,8 +67,8 @@ class Nachricht extends Component {
 }
  
  // API Anbindung um alle Nachrichten vom Backend zu bekommen 
- getNachrichten= () => {
-     LernpartnerAPI.getAPI().getNachrichtenByKonversationByPerson(this.props.currentPerson.getID(), this.props.konversation_id.getID())
+  getNachrichten = () => {
+     LernpartnerAPI.getAPI().getNachrichtenByKonversation(this.state.konversationID)
     .then((nachrichtenBOs) =>
       this.setState({
         nachrichten: nachrichtenBOs,
@@ -118,7 +123,7 @@ this.setState({
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
- this.getNachrichten();
+  this.getNachrichten();
 }
 
 //Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird
@@ -157,17 +162,23 @@ nachrichtFormClosed = nachrichten => {
 
  // Rendert die Componente 
     render() {
-      const { classes, currentPerson } = this.props;
-      const { nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
+      const { classes, currentPerson, konversation } = this.props;
+    
+      const { neueNachricht, nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
       
+      console.log(currentPerson)
+      console.log(nachrichten)
+      console.log(this.props.testvalue)
+
       return (
         <div>
-
-          {nachrichten? 
+          <b>{nachrichten.nachricht_inhalt}</b>
+          { 
+          nachrichten ? 
           
           nachrichten.map((nachricht) => {
                 {
-                  if (nachricht.getCurrentPerson() !== currentPerson.getID()) {
+                  if (nachricht.person_id !== currentPerson.getID()) {
                     return (
                       <div id="empfänger_text">
                         <Grid item
@@ -175,7 +186,7 @@ nachrichtFormClosed = nachrichten => {
                           className={classes.outerColumn}
                           style={{ display: "flex", alignItems: "center", position: "rigth" }}
                         >
-                          <Typography>{nachricht.getNachricht_Inhalt()}</Typography>
+                          <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -194,7 +205,7 @@ nachrichtFormClosed = nachrichten => {
                           justify="flex-end"
                           position= "left"
                         >
-                          <Typography>{nachricht.getNachricht_Inhalt()}</Typography>
+                          <Typography>{nachricht.nachricht_inhalt}</Typography>
                         </Grid>
                         <Divider />
                       </div>
@@ -204,11 +215,12 @@ nachrichtFormClosed = nachrichten => {
               })
             : null}
   
+          
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
               id="standard-basic"
-              label="schreibe eine Nachricht"
-              value={nachricht_inhalt}
+              label="Schreibe eine Nachricht"
+              value={neueNachricht}
               onChange={this.handleChange}
             />
           </form>

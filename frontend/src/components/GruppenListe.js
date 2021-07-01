@@ -114,6 +114,7 @@ class GruppenListe extends Component {
     render() {
         const { classes, currentPerson } = this.props;
         const { lerngruppen, personID, expandedLerngruppeID, loadingInProgress, error }  = this.state;
+        console.log(lerngruppen)
 
         return (
             <div className={classes.root}>

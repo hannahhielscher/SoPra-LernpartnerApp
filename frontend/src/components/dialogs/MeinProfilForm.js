@@ -8,10 +8,12 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
     } from '@material-ui/core';
 
 import { LernpartnerAPI } from '../../api';
+import MultiSelectLernfaecher from './MultiSelectLernfaecher';
 import { withRouter } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
+
 
 
 /**
@@ -81,7 +83,7 @@ class MeinProfilForm extends Component {
             lernortValidationFailed: false,
             lernortEdited: false,
 
-            lernfach: null,
+            lernfaecher: [],
             lernfaecherValidationFailed: false,
             lernfaecherEdited: false,
             
@@ -93,6 +95,11 @@ class MeinProfilForm extends Component {
             selectedValue: null,
             setSelectedValue: null,
 
+            
+            lernfaecher_bez: this.props.lernfaechergesamt.map(lernfach => lernfach.bezeichnung),
+            lernfaecher_id: this.props.lernfaechergesamt.map(lernfach => lernfach.id),
+            
+          
 
         };
         // State speichern falls cancel
@@ -105,11 +112,11 @@ class MeinProfilForm extends Component {
         this.handleChangeLernart = this.handleChangeLernart.bind(this);
         this.handleChangeGruppengroesse = this.handleChangeGruppengroesse.bind(this);
         this.handleChangeLernort = this.handleChangeLernort.bind(this);
-        this.handleChangeLernfaecher = this.handleChangeLernfaecher.bind(this);
-
+        this.onChangeLernfaecher = this.onChangeLernfaecher.bind(this);
+        
     }
 
-
+    
     /** Updates the person */
     updatenPerson = () => {
         let person = this.props.currentPerson;
@@ -143,7 +150,7 @@ class MeinProfilForm extends Component {
   /** Updates the person */
   updatenProfil = () => {
     let profil = this.props.currentProfil;
-    LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfach, profil.lernvorlieben_id
+    LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
     ).then(profil => {
         // Backend call sucessfull
         // reinit the dialogs state for a new empty customer
@@ -281,10 +288,13 @@ class MeinProfilForm extends Component {
       this.setState({lernort: event.target.value});
     }
 
-    handleChangeLernfaecher(event) {
-      this.setState({lernfach: event.target.value});
+    onChangeLernfaecher(newLernfaecher) {
+      console.log(newLernfaecher)
+      this.setState({
+        lernfaecher: newLernfaecher
       
-    }
+    })
+  }
 
     
 
@@ -292,17 +302,14 @@ class MeinProfilForm extends Component {
 	/** Renders the component */
     render() {
         const { classes, show, currentPerson, currentProfil, lernvorlieben, lernfaechergesamt } = this.props;
-        const { lernfaecherauswahl, profil, name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
+        const { selectedValue, setSelectedValue, data, lernfaecher_id, lernfaecher_bez, lernfaecherauswahl, profil, name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
           alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, tageszeiten,
           tageszeitenValidationFailed, tage, tageValidationFailed, frequenz, frequenzValidationFailed, lernart, lernartValidationFailed, gruppengroesse, gruppengroesseValidationFailed,
-          lernort, lernortValidationFailed, lernfach, test, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
+          lernort, lernortValidationFailed, lernfach, lernfaecherValidationFailed, addingInProgress, updatingInProgress, updatingError} = this.state;
 
         console.log(currentProfil)
         console.log(currentPerson)
-        console.log(lernfaechergesamt)
-        console.log(show)
-        console.log('Test2')
-        
+
         let title = 'Profil bearbeiten';
         let header = 'Bitte gib deine neuen Daten ein:';
 
@@ -427,17 +434,9 @@ class MeinProfilForm extends Component {
                    </FormControl>
                    <br/>
                    <FormControl required fullWidth margin='normal' className={classes.formControl}>
-                        <InputLabel>Was möchtest du lernen?</InputLabel>
-                   <Select
-                      native
-                      error={lernfaecherValidationFailed}
-                      value= {lernfach}
-                      onChange={this.handleChangeLernfaecher}
-                    >
-                    {lernfaechergesamt.map(lernfach =>
-                      <option key={lernfach.id} value={lernfach.id}>{lernfach.bezeichnung}</option>
-                    )};
-                    </Select>
+                        <MultiSelectLernfaecher lernfaecher = {lernfach} onChangeLernfaecher = {this.onChangeLernfaecher}/>
+                    
+                    
                     </FormControl>
                 </form>
                 <LoadingProgress show={addingInProgress || updatingInProgress} />

@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@material-ui/core';
+import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid, Link } from '@material-ui/core';
 import Nachricht from './Nachricht';
+import { Link as RouterLink } from 'react-router-dom';
 //import KonversationListe from './KonversationListe';
 import LernpartnerAPI from '../api/LernpartnerAPI';
+
 
 
 /** 
@@ -75,6 +77,7 @@ verlasseChatFormClosed = (teilnahmeChat) => {
 render() {
   const { classes, expandedState, currentPerson} = this.props;
   const { konversation, showKonversation, showChatVerlassenForm } = this.state;
+  console.log(currentPerson)
   console.log(konversation)
   return(
     <div>
@@ -94,16 +97,23 @@ render() {
               </AccordionSummary>
                 <AccordionDetails>
                 <ButtonGroup variant='text' size='small'>
-                        <Button color='primary' onClick={this.showProfilButtonClicked}>
+                <Link component={RouterLink} to={{
+                pathname: '/chat',
+                
+                }} >
+                  
+                <Button color='primary' onClick={this.showKonversationButtonClicked}>
                           Chat ansehen
-                        </Button>
-                        <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
+                </Button>
+                </Link>
+                        
+                        <Button color='secondary' onClick={this.deleteChatButtonClicked}>
                           Chat verlassen
                         </Button>
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-              <Nachricht show={showKonversation} konversationid = {konversation.getID()}/> 
+             
             </div>
             
         );
@@ -130,6 +140,8 @@ KonversationListeEintrag.propTypes = {
   classes: PropTypes.object.isRequired,
   /** @ignore */
   location: PropTypes.object.isRequired,
+  currentPerson: PropTypes.object.isRequired,
+  konversation: PropTypes.object.isRequired,
 }
 
 
