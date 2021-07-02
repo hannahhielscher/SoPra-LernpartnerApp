@@ -790,8 +790,7 @@ class KonversationByIdOperation(Resource):
     def delete(self, id):
         """Löschen eines bestimmten Konversationobjekts."""
         adm = AppAdministration()
-        k = adm.get_konversation_by_id(id)
-        adm.delete_konversation(k)
+        adm.delete_konversation(id)
         return '', 200
 
 @lernApp.route('/konversationbyperson/<int:personid>')
@@ -896,6 +895,7 @@ class TeilnahmenChatOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
+    @lernApp.marshal_list_with(teilnahmechat)
     #@secured
     def put(self):
         """Update eines bestimmten Konversationobjekts."""
@@ -904,6 +904,8 @@ class TeilnahmenChatOperation(Resource):
         status = request.args.get("status")
         konversation = request.args.get("konversation")
         adm = AppAdministration()
+        print("ID")
+        print(teilnahmechatid)
         print(teilnehmer)
         print(status)
         print(konversation)

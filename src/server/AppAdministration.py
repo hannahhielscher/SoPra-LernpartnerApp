@@ -490,10 +490,10 @@ class AppAdministration (object):
         with KonversationMapper() as mapper:
             return mapper.update_status(konversation)
 
-    def delete_konversation(self, konversation):
+    def delete_konversation(self, id):
         """Löscht die Konversation."""
         with KonversationMapper() as mapper:
-            mapper.delete(konversation)
+            mapper.delete(id)
 
     """
     TeilnahmeChats-spezifische Methoden
@@ -556,6 +556,11 @@ class AppAdministration (object):
         """Speichert die Teilnahme."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.update(teilnahme)
+
+    def delete_teilnahmeChatByKonByPer(self, konversationId, personId):
+        """Löscht die Teilnahme."""
+        with TeilnahmeChatMapper() as mapper:
+            mapper.delete(konversationId, personId)
 
     def delete_teilnahmeChat(self, id):
         """Löscht die Teilnahme."""

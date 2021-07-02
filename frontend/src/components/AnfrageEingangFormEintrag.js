@@ -46,6 +46,8 @@ class AnfrageEingangFormEintrag extends Component {
             konversationName: null,
             konversationAnfragestatus: null,
 
+            testVar: false,
+
             currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
 
@@ -169,28 +171,6 @@ class AnfrageEingangFormEintrag extends Component {
   }
 
   anfrageAblehnen = () => {
-    for (var teilnahme in this.state.teilnahmen){
-        LernpartnerAPI.getAPI().deleteTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'])
-        .then(teilnahmeChatBO => {
-                // Backend call sucessfull
-                // reinit the dialogs state for a new empty customer
-                this.konversationLoeschen(); // call the parent with the customer object from backend
-            }).catch(e =>
-                this.setState({
-                    updatingInProgress: false,    // disable loading indicator
-                    updatingError: e              // show error message
-                })
-            );
-
-            // set loading to true
-            this.setState({
-                updatingInProgress: true,       // show loading indicator
-                updatingError: null             // disable error message
-          });
-      }
-    }
-
-  konversationLoeschen = () => {
     LernpartnerAPI.getAPI().deleteKonversation(this.state.konversationID)
     .then(konversationBO => {
             // Backend call sucessfull
