@@ -216,7 +216,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`konversationen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys Chat', true), (2, 'Girl Power Chat', true), (3, 'Programmier-Pros', true);
+INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys', true), (2, 'Girl Power', true), (3, 'Programmier-Pros', true);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -325,5 +325,4 @@ VorschlagListeEintrag.propTypes = {
   show: PropTypes.bool.isRequired
 }
 
-
 export default withStyles(styles)(VorschlagListeEintrag);

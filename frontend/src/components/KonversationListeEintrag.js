@@ -27,8 +27,12 @@ class KonversationListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            konversation: this.props.konversation,
-            konversationID: this.props.konversation.id,
+            konversation: props.konversation,
+            konversationID: props.konversation.id,
+
+            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
+            nameNeu: null,
+            str: props.konversation.name,
             showKonversation: false,
             showChatVerlassenForm: false, 
             teilnahmeChat: null,
@@ -60,7 +64,7 @@ class KonversationListeEintrag extends Component {
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {
-  this.props.onExpandedStateChange(this.props.konversation);
+  this.props.onExpandedStateChange(this.state.konversation);
   }
 
 //Handles the onClick event of the show Konversation button
@@ -77,6 +81,11 @@ verlassenButtonClicked = (event) => {
   });
 }
 
+nameAnpassen = () => {
+    this.setState({
+        nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
+    });
+}
 
 /** Handles the onClose event of the CustomerDeleteDialog */
 verlasseChatFormClosed = (teilnahmeChat) => {
@@ -94,16 +103,22 @@ verlasseChatFormClosed = (teilnahmeChat) => {
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
-      this.getTeilnahmeChat();
+    this.nameAnpassen();
+    this.getTeilnahmeChat();
   }
     
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
-  const { teilnahmeChat, konversationID, konversation, showKonversation, showChatVerlassenForm } = this.state;
+  const { teilnahmeChat, konversation, konversationID, currentPersonName, nameNeu, showKonversation, showChatVerlassenForm } = this.state;
   console.log(currentPerson)
   console.log(konversation)
+  console.log(currentPersonName)
+  console.log(konversation.getname())
+  console.log(nameNeu)
+  console.log(currentPerson)
   console.log(teilnahmeChat)
+
   return(
     <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -113,7 +128,7 @@ render() {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Typography variant='body1'>
-                  {konversation.getname()}
+                  {nameNeu}
               </Typography>
             </Grid>
               <Typography variant='body1'>

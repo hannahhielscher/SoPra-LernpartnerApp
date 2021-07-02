@@ -485,10 +485,10 @@ class AppAdministration (object):
         with KonversationMapper() as mapper:
             return mapper.find_by_name(name)
 
-    def save_konversation(self, konversation):
+    def update_konversation_status(self, konversation):
         """Speichert die Konversation."""
         with KonversationMapper() as mapper:
-            return mapper.update(konversation)
+            return mapper.update_status(konversation)
 
     def delete_konversation(self, konversation):
         """Löscht die Konversation."""
@@ -517,10 +517,25 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_all()
 
+    def get_teilnahmeChat_by_id(self, id):
+        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_id(id)
+
     def get_teilnahmeChat_by_person_id(self, personid):
         """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_person_id(personid)
+
+    def get_teilnahmeChat_by_person_id_und_status(self, person_id, status):
+        """Gibt die Teilnahme einer gegebenen PersonId und em Status der Konversation zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_person_id_und_status(person_id, status)
+
+    def get_teilnahmeChat_by_konversation_id_und_status(self, status, konversationid):
+        """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_konversation_id_und_status(status, konversationid)
 
     def get_teilnahmeChat_by_konversation_and_person(self, konversation_id, person_id):
         """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""

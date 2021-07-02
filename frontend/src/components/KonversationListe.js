@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import KonversationListeEintrag from './KonversationListeEintrag';
+import { Button, ButtonGroup } from '@material-ui/core';
+import AnfrageEingangForm from './dialogs/AnfrageEingangForm';
 
 
 /**
@@ -31,6 +33,11 @@ class KonversationListe extends Component {
         // initiiere einen leeren state
         this.state = {
             konversationen : [],
+
+            anfrage: null,
+
+            showAnfrageEingangForm: false,
+
             error: null,
             loadingInProgress: false, 
             expandedKonversationID: expandedID,
@@ -82,6 +89,28 @@ class KonversationListe extends Component {
     });
 }
 
+    /** Handles the onClick event of the delete customer button */
+    getAnfrageEingangForm = (event) => {
+        event.stopPropagation();
+        this.setState({
+            showAnfrageEingangForm: true
+        });
+    }
+
+  /** Handles the onClose event of the CustomerForm */
+  anfrageEingangFormFormClosed = (anfrage) => {
+    // customer is not null and therefor changed
+    if (anfrage) {
+      this.setState({
+        anfrage: anfrage,
+        showAnfrageEingangForm: false
+      });
+    } else {
+      this.setState({
+        showAnfrageEingangForm: false
+      });
+    }
+  }
 /**
    * Handles lerngruppeVerlassen events from the GruppenListeEintrag component
    */
@@ -102,10 +131,13 @@ componentDidMount() {
 
 render() {
   const { classes, currentPerson } = this.props;
-        const { konversationen, expandedKonversationID, error, loadingInProgress}  = this.state; 
+        const { konversationen, showAnfrageEingangForm, expandedKonversationID, error, loadingInProgress}  = this.state;
 
         return(
           <div className={classes.root}>
+            <Button variant='contained' onClick={this.getAnfrageEingangForm} color='primary' className={classes.button}>
+                  Anfragen
+             </Button>
            
             { 
               // Show the list of KonversationListeEintrag components
@@ -119,6 +151,9 @@ render() {
             }
             <LoadingProgress show={loadingInProgress} />
             <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Chats nicht geladen werden!`} onReload={this.getKonversation} />
+
+            <AnfrageEingangForm show={showAnfrageEingangForm} currentPerson={currentPerson} onClose={this.anfrageEingangFormFormClosed} />
+
           </div>
 
         );
@@ -131,9 +166,9 @@ const styles = theme => ({
   root: {
     width: '100%',
   },
-  customerFilter: {
+  button: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   }
 });
 

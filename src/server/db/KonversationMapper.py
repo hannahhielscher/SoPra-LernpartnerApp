@@ -141,19 +141,22 @@ class KonversationMapper (Mapper):
 
         return konversation
 
-    def update(self, konversation):
+    def update_status(self, konversation):
         """Aktualisierung eines Konversations-Objekts in der DB
 
         :param Konversation -> Konversations-Objekt
         """
         cursor = self._connection.cursor()
 
-        command = "UPDATE konversationen " + "SET name=%s, anfragestatus=%s WHERE id=%s"
-        data = (konversation.get_name(), konversation.get_anfragestatus(), konversation.get_id())
+        command = "UPDATE konversationen " + "SET anfragestatus=%s WHERE id=%s"
+        data = (konversation.get_anfragestatus(), konversation.get_id())
         cursor.execute(command, data)
 
         self._connection.commit() 
         cursor.close()
+
+    def update(self):
+        pass
 
     def delete(self, konversation):
         """Löschen der Daten eines Konversation-Objekts aus der Datenbank.

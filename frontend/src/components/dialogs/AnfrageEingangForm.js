@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Card,
+import { withStyles, Button, ButtonGroup, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Card,
+    Accordion, AccordionSummary, AccordionDetails,
+    List, ListItem, ListItemText, ListItemSecondaryAction,
     FormControl,
     InputLabel,
     Select,
@@ -18,7 +20,7 @@ import TeilnahmeChatBO from '../../api/TeilnahmeChatBO';
 import ProfilBO from '../../api/ProfilBO';
 import PersonBO from '../../api/PersonBO';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
-import VorschlagListeEintrag from '../VorschlagListeEintrag';
+import AnfrageEingangFormEintrag from '../AnfrageEingangFormEintrag';
 
 
 class AnfrageEintragForm extends Component {
@@ -27,9 +29,7 @@ class AnfrageEintragForm extends Component {
         super(props);
 
         this.state = {
-            chatPartner: null,
-            chatPartnerProfil: null,
-            gruppeProfil: null,
+            teilnahmenChat: [],
 
             addingInProgress: false,
             updatingInProgress: false,
@@ -42,15 +42,46 @@ class AnfrageEintragForm extends Component {
         this.baseState = this.state;
     }
 
+    // API Anbindung um Konversationen des Students vom Backend zu bekommen
+    getTeilnahmenChat = () => {
+      LernpartnerAPI.getAPI().getTeilnahmeChatByPersonByStatus(this.props.currentPerson.id, 0)
+      .then(teilnahmenChatBOs =>
+          this.setState({
+              teilnahmenChat: teilnahmenChatBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  teilnahmenChat: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingKonversationenError: null
+      });
+    }
+
+  /** Handles the close / cancel button click event */
+  handleClose = () => {
+    // Reset the state
+    this.setState(this.baseState);
+    this.props.onClose(null);
+  }
+
+    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+    componentDidMount() {
+        this.getTeilnahmenChat();
+    }
+
  /** Renders the component */
   render() {
-    const { classes, show } = this.props;
-    const { chatPartner, name, vorname, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
-    console.log(chatPartner)
-    console.log(name)
-    console.log(gruppeProfil)
-    console.log(konversationID)
-    console.log(konversation)
+    const { classes, show, currentPerson, konversationen } = this.props;
+    const { teilnahmenChat, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    console.log(teilnahmenChat)
+    console.log(currentPerson.id)
 
     return (
       show ?
@@ -60,62 +91,18 @@ class AnfrageEintragForm extends Component {
               <CloseIcon />
             </IconButton>
           </DialogTitle>
-          <DialogContent>
-/*
-              <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}>
-                  <Grid container spacing={1} justify='flex-start' alignItems='center'>
-                    <Typography variant='body1'>
-                        Name
-                    </Typography>
-                  </Grid>
-                    <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
-                        Ablehnen
-                    </Button>
-                    <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
-                    <Button style={{ width : 250, color: "blue"}} color='secondary' onClick={this.gruppeFormButtonClicked}>
-                        Annehmen
-                    </Button>
-                  </AccordionSummary>
-                 <AccordionDetails>
-                  <Profil user={lerngruppe}/>
-                </AccordionDetails>
-              </Accordion>*/
 
-              <List dense={dense}>
-              {generate(
-                <ListItem>
-                  <ListItemText
-                    primary="Name"
-                  />
-                  <ListItemSecondaryAction>
-                    <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
-                        Ablehnen
-                    </Button>
-                    <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
-                    <Button style={{ width : 250, color: "blue"}} color='secondary' onClick={this.gruppeFormButtonClicked}>
-                        Annehmen
-                    </Button>
-                  </ListItemSecondaryAction>
-                </ListItem>,
-              )}
-            </List>
+
+            {
+              teilnahmenChat.map(teilnahmeChat =>
+                <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
+                />)
+            }
 
             <LoadingProgress show={addingInProgress} />
                 <ContextErrorMessage error={addingError} contextErrorMsg={`Die Anfrage konnte nicht gesendet werden.`} onReload={this.getChatPartnerStatus} />
-
+            <DialogContent>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color='secondary'>
-              Abbrechen
-            </Button>
-                <Button variant='contained' onClick={this.getChatPartnerStatus} color='primary'>
-                  Anfrage senden
-             </Button>
-
-          </DialogActions>
         </Dialog>
         : null
     );
