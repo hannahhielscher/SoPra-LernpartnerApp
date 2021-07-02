@@ -137,7 +137,7 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_id(self):
+    def find_by_id(self, id):
         """Reads a tuple with a given ID"""
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE id={}".format(id)

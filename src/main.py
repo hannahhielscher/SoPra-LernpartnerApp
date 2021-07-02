@@ -895,6 +895,7 @@ class TeilnahmenChatOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
+    @lernApp.marshal_list_with(teilnahmechat)
     #@secured
     def put(self):
         """Update eines bestimmten Konversationobjekts."""
@@ -903,6 +904,8 @@ class TeilnahmenChatOperation(Resource):
         status = request.args.get("status")
         konversation = request.args.get("konversation")
         adm = AppAdministration()
+        print("ID")
+        print(teilnahmechatid)
         print(teilnehmer)
         print(status)
         print(konversation)
