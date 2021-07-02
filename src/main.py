@@ -790,8 +790,7 @@ class KonversationByIdOperation(Resource):
     def delete(self, id):
         """Löschen eines bestimmten Konversationobjekts."""
         adm = AppAdministration()
-        k = adm.get_konversation_by_id(id)
-        adm.delete_konversation(k)
+        adm.delete_konversation(id)
         return '', 200
 
 @lernApp.route('/konversationbyperson/<int:personid>')

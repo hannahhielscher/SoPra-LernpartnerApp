@@ -158,15 +158,16 @@ class KonversationMapper (Mapper):
     def update(self):
         pass
 
-    def delete(self, konversation):
+    def delete(self, id):
         """Löschen der Daten eines Konversation-Objekts aus der Datenbank.
-
         """
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM konversationen WHERE id=%s"
-        data = (konversation.get_id())
-        cursor.execute(command, data)
+        command = "DELETE FROM teilnahmen_chat WHERE konversation_id={}".format(id)
+        cursor.execute(command)
+
+        command2 = "DELETE FROM konversationen WHERE id={}".format(id)
+        cursor.execute(command2)
 
         self._connection.commit()
         cursor.close()

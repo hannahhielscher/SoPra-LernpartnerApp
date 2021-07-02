@@ -68,6 +68,32 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
+    def find_by_person_id_und_status(self, person_id, status):
+        """ Findet alle Teilnahmen von einer ProjektID"""
+
+        result = []
+        cursor = self._connection.cursor()
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE person_id={} AND status={}".format(person_id, status)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, person_id, status, konversation_id) in tuples:
+
+            teilnahme = TeilnahmeChat()
+
+            teilnahme.set_id(id)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_status(status)
+            teilnahme.set_konversation(konversation_id)
+
+            result.append(teilnahme)
+            print(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+        print(result)
+        return result
+
     def find_by_konversation_id(self, konversation_id):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
