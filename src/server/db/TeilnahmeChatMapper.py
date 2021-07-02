@@ -89,33 +89,29 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_person_id_und_status(self, person_id, status):
+    def find_by_konversation_and_person(self, konversation_id, person_id):
         """ Findet alle Teilnahmen von einer ProjektID"""
-
-        result = []
+        result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE person_id={} AND status={}".format(person_id, status)
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND person_id={}".format(konversation_id, person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, person_id, status, konversation_id) in tuples:
-
             teilnahme = TeilnahmeChat()
-
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
-
-            result.append(teilnahme)
-            print(teilnahme)
+            
+            result = teilnahme
 
         self._connection.commit()
         cursor.close()
-        print(result)
+
         return result
 
-    def find_by_id(self, id):
+    def find_by_id(self):
         """Reads a tuple with a given ID"""
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE id={}".format(id)
@@ -200,5 +196,15 @@ class TeilnahmeChatMapper(Mapper):
         command = "DELETE FROM teilnahmen_chat WHERE konversation_id=%s AND person_id=%s"
         data = (konversationId, personId)
         cursor.execute(command, data)
+        self._connection.commit()
+        cursor.close()
+    
+    def delete_by_id(self, id):
+        """Delete an object from the DB"""
+        
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM teilnahmen_chat WHERE id={}".format(id)
+        cursor.execute(command)
         self._connection.commit()
         cursor.close()

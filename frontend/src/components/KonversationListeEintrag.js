@@ -5,8 +5,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid, Link } from '@material-ui/core';
 import Nachricht from './Nachricht';
 import { Link as RouterLink } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 //import KonversationListe from './KonversationListe';
 import LernpartnerAPI from '../api/LernpartnerAPI';
+import ChatVerlassenForm from './dialogs/ChatVerlassenForm';
 
 
 
@@ -26,16 +28,39 @@ class KonversationListeEintrag extends Component {
         // initiiere einen leeren state
         this.state = {
             konversation: props.konversation,
+            konversationID: props.konversation.id,
+
             currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
-            str:  props.konversation.name,
+            str: props.konversation.name,
             showKonversation: false,
             showChatVerlassenForm: false, 
+            teilnahmeChat: null,
             //showProfil: false,
         };
     }
 
-
+// API Anbindung um Konversationen des Students vom Backend zu bekommen 
+  getTeilnahmeChat = () => {
+    LernpartnerAPI.getAPI().getTeilnahmeChatByKonversationAndPerson(this.state.konversationID, this.props.currentPerson.getID())
+    .then(teilnahmeBO =>
+        this.setState({
+            teilnahmeChat: teilnahmeBO,
+            error: null,
+            loadingInProgress: false,
+        })).catch(e =>
+            this.setState({
+                teilnahmeChat: null,
+                error: e,
+                loadingInProgress: false,
+            }));
+    this.setState({
+        error: null,
+        loadingInProgress: true,
+        loadingKonversationenError: null
+    });
+  }
+    
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {
@@ -62,25 +87,37 @@ nameAnpassen = () => {
     });
 }
 
-    componentDidMount() {
-        this.nameAnpassen();
-    }
+/** Handles the onClose event of the CustomerDeleteDialog */
+verlasseChatFormClosed = (teilnahmeChat) => {
+   // if customer is not null, delete it
+  if (teilnahmeChat) {
+    this.props.onTeilnahmeChatDeleted(teilnahmeChat);
+  } else {
+  // Don´t show the dialog
+    this.setState({
+        showChatVerlassenForm: false
+    });
+}
+}
+
+
+// Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
+  componentDidMount() {
+    this.nameAnpassen();
+    this.getTeilnahmeChat();
+  }
     
-/** 
-    // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
-    componentDidMount() {
-        this.getKonversation();
-    }
-*/
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
-  const { konversation, currentPersonName, nameNeu, showKonversation, showChatVerlassenForm } = this.state;
+  const { teilnahmeChat, konversation, konversationID, currentPersonName, nameNeu, showKonversation, showChatVerlassenForm } = this.state;
   console.log(currentPerson)
   console.log(konversation)
   console.log(currentPersonName)
   console.log(konversation.getname())
   console.log(nameNeu)
+  console.log(currentPerson)
+  console.log(teilnahmeChat)
 
   return(
     <div>
@@ -102,7 +139,7 @@ render() {
                 <ButtonGroup variant='text' size='small'>
                 <Link component={RouterLink} to={{
                 pathname: '/chat',
-                
+                test: {konversationID: konversationID}
                 }} >
                   
                 <Button color='primary' onClick={this.showKonversationButtonClicked}>
@@ -110,13 +147,13 @@ render() {
                 </Button>
                 </Link>
                         
-                        <Button color='secondary' onClick={this.deleteChatButtonClicked}>
-                          Chat verlassen
-                        </Button>
+                <Button color='secondary' onClick={this.verlassenButtonClicked}>
+                        Chat verlassen
+                </Button>
                 </ButtonGroup>
               </AccordionDetails>
               </Accordion>
-             
+             <ChatVerlassenForm show={showChatVerlassenForm} teilnahmeChat={teilnahmeChat} onClose={this.verlasseChatFormClosed}/>
             </div>
             
         );

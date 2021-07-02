@@ -563,23 +563,34 @@ class NachrichtenOperation(Resource):
         adm = AppAdministration()
         nachricht = adm.get_all_nachrichten()
         return nachricht
-
-    @lernApp.marshal_with(nachricht)
-    def post(self):
-        """Anlegen/schreiben einer Nachricht."""
+    
+    @lernApp.marshal_with(nachricht, code=200)
+    @lernApp.expect(nachricht)
+    #@secured
+    def post (self):
+        """Anlegen eines neuen Nachricht-Objekts."""
+        print(nachricht)
         adm = AppAdministration()
 
         proposal = Nachricht.from_dict(api.payload)
 
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
         if proposal is not None:
-            """ Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.create_nachricht(proposal.get_inhalt(), proposal.get_empfaenger())
-            return c, 200
+            """ Wir verwenden modul des Proposals für
+             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
+
+            nachricht_inhalt = proposal.get_nachricht_inhalt()
+            person_id = proposal.get_person_id()
+            konversation_id = proposal.get_konversation_id()
+
+            result = adm.create_nachricht(nachricht_inhalt, person_id, konversation_id)
+
+            print(result)
+            return result, 200
+
         else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
+            werfen einen Server-Fehler. """
             return '', 500
 
 @lernApp.route('/nachricht/<int:id>')
@@ -942,15 +953,17 @@ class TeilnahmeChatOperation(Resource):
             adm.update_teilnahmeChat(c)
             return '', 200
         else:
-            return '', 500
+            return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
-    @lernApp.marshal_with(teilnahmechat)
+
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten TeilnahmeChat-objekts."""
         adm = AppAdministration()
-        t = adm.get_teilnahme_by_id(id)
-        adm.delete_teilnahme(t)
+        adm.delete_teilnahmeChat(id)
         return '', 200
+    
+
 
 @lernApp.route('/teilnahmeChat-by-person-id/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -999,6 +1012,22 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
         return teilnahme
 
 
+
+@lernApp.route('/teilnahmenChat-by-konv-pers/<int:konversation_id>/<int:person_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeChatByKonversationByPersonOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmechat)
+    @secured
+    def get (self, konversation_id, person_id):
+        """Auslesen einer bestimmten Teilnahme."""
+        adm = AppAdministration()
+        teilnahme = adm.get_teilnahmeChat_by_konversation_and_person(konversation_id, person_id)
+
+        if teilnahme is not None:
+            return teilnahme
+        else:
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
 @lernApp.route('/teilnahmenGruppe')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

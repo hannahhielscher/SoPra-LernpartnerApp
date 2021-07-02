@@ -422,8 +422,15 @@ class AppAdministration (object):
         with NachrichtMapper() as mapper:
             return mapper.find_by_konversation_by_person(konversation_id, person_id)
 
-    def create_nachricht(self, nachricht):
+    def create_nachricht(self, nachricht_inhalt, person_id, konversation_id):
         """Speichert die Nachricht."""
+        nachricht = Nachricht()
+
+        nachricht.set_nachricht_inhalt(nachricht_inhalt)
+        nachricht.set_person_id(person_id)
+        nachricht.set_konversation_id(konversation_id)
+        nachricht.set_id(1)
+
         with NachrichtMapper() as mapper:
             return mapper.insert(nachricht)
 
@@ -530,7 +537,12 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversation_id_und_status(status, konversationid)
 
-    def get_teilnahmeChat_by_konversation_id_s(self, konversationid):
+    def get_teilnahmeChat_by_konversation_and_person(self, konversation_id, person_id):
+        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_konversation_and_person(konversation_id, person_id)
+
+    def get_teilnahmeChat_by_konversation_id(self, konversationid):
         """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversation_id(konversationid)
@@ -545,10 +557,10 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmeChat(self, teilnahme):
+    def delete_teilnahmeChat(self, id):
         """Löscht die Teilnahme."""
         with TeilnahmeChatMapper() as mapper:
-            mapper.delete(teilnahme)
+            mapper.delete_by_id(id)
 
     """
     Vorschlag-spezifische Methoden

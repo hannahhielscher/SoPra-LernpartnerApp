@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
+import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid, Container } from '@material-ui/core';
 //import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 import RegistrierungForm from './dialogs/RegistrierungForm';
@@ -9,6 +9,7 @@ import { LernpartnerAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import Button from '@material-ui/core/Button';
+
 
 
 class MeinProfil extends Component {
@@ -268,6 +269,7 @@ class MeinProfil extends Component {
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
+      console.log(currentPerson)
 
       const { test, lernfaecher_id, lernfaecher_bez, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
       console.log(lernfaechergesamt)
@@ -281,8 +283,12 @@ class MeinProfil extends Component {
       return (
         <div className={classes.root}>
         <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
-        <Paper>
-        <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
+
+        <Button variant="outlined" color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
+        <br/>
+        <Paper className={classes.inhalt}>
+        <h2>Meine Daten:</h2>
+
         <Typography variant='body1' color={'textSecondary'}>
         
                               <b>Name: </b>{personVorname} {personName}<br />
@@ -290,7 +296,14 @@ class MeinProfil extends Component {
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
                               <b>Lernfächer: </b>{lernfaechernamen}<br />
-                              <b>Lernvorlieben: </b><br />
+
+                              </Typography>
+                              </Paper>
+
+                              <Paper className={classes.inhalt}>
+
+                              <h2> Meine Lernvorlieben: </h2>
+                              <Typography variant='body1' color={'textSecondary'}>
                               <b>Tageszeit: </b>{lernvorliebentageszeiten}<br />
                               <b>Tage: </b>{lernvorliebentage}<br />
                               <b>Frequenz: </b>{lernvorliebenfrequenz}<br />
@@ -313,24 +326,17 @@ class MeinProfil extends Component {
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1),
   },
-  content: {
-      margin: theme.spacing(1),
-    },
-  table: {
-      minWidth: 700,
-    },
-  formControl: {
-      margin: theme.spacing(1),
-      minWidth: 200,
-      textAlign: "left"
-  },
 
-  laden: {
-    padding: 0
-  },
-  breite: {
-    width: 220
+  inhalt: {
+      width: '100%',
+      marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
   }
+
   });
 
 
