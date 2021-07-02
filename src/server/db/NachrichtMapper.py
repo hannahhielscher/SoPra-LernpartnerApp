@@ -138,7 +138,6 @@ class NachrichtMapper (Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-
         for (id, inhalt) in tuples:
             nachrichten = Nachricht()
             nachrichten.set_id(id)

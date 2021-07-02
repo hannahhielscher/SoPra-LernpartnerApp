@@ -25,7 +25,10 @@ class KonversationListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            konversation: this.props.konversation,
+            konversation: props.konversation,
+            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
+            nameNeu: null,
+            str:  props.konversation.name,
             showKonversation: false,
             showChatVerlassenForm: false, 
             //showProfil: false,
@@ -36,7 +39,7 @@ class KonversationListeEintrag extends Component {
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {
-  this.props.onExpandedStateChange(this.props.konversation);
+  this.props.onExpandedStateChange(this.state.konversation);
   }
 
 //Handles the onClick event of the show Konversation button
@@ -53,6 +56,15 @@ verlassenButtonClicked = (event) => {
   });
 }
 
+nameAnpassen = () => {
+    this.setState({
+        nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
+    });
+}
+
+    componentDidMount() {
+        this.nameAnpassen();
+    }
     
 /** 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
@@ -63,9 +75,13 @@ verlassenButtonClicked = (event) => {
 
 render() {
   const { classes, expandedState, currentPerson} = this.props;
-  const { konversation, showKonversation, showChatVerlassenForm } = this.state;
+  const { konversation, currentPersonName, nameNeu, showKonversation, showChatVerlassenForm } = this.state;
   console.log(currentPerson)
   console.log(konversation)
+  console.log(currentPersonName)
+  console.log(konversation.getname())
+  console.log(nameNeu)
+
   return(
     <div>
         <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -75,7 +91,7 @@ render() {
           >
             <Grid container spacing={1} justify='flex-start' alignItems='center'>
               <Typography variant='body1'>
-                  {konversation.getname()}
+                  {nameNeu}
               </Typography>
             </Grid>
               <Typography variant='body1'>

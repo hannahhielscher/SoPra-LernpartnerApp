@@ -43,14 +43,15 @@ class TeilnahmeChatMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
+        print(result)
 
         return result
 
-    def find_by_konversation_id(self, konversation_id):
+    def find_by_konversation_id_und_status(self, status, konversation_id):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={}".format(konversation_id)
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE status={} AND konversation_id={} ".format(status, konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -67,9 +68,81 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_id(self):
+    def find_by_konversation_id(self, konversation_id):
+        """ Findet alle Teilnahmen von einer ProjektID"""
+        result = []
+        cursor = self._connection.cursor()
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND status={}".format(konversation_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, person_id, status, konversation_id) in tuples:
+            teilnahme = TeilnahmeChat()
+            teilnahme.set_id(id)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_status(status)
+            teilnahme.set_konversation(konversation_id)
+            result.append(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_person_id_und_status(self, person_id, status):
+        """ Findet alle Teilnahmen von einer ProjektID"""
+
+        result = []
+        cursor = self._connection.cursor()
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE person_id={} AND status={}".format(person_id, status)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, person_id, status, konversation_id) in tuples:
+
+            teilnahme = TeilnahmeChat()
+
+            teilnahme.set_id(id)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_status(status)
+            teilnahme.set_konversation(konversation_id)
+
+            result.append(teilnahme)
+            print(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+        print(result)
+        return result
+
+    def find_by_id(self, id):
         """Reads a tuple with a given ID"""
-        pass
+        cursor = self._connection.cursor()
+        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE id={}".format(id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            (id, person_id, status, konversation_id) = tuples[0]
+            teilnahme = TeilnahmeChat()
+            teilnahme.set_id(id)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_status(status)
+            teilnahme.set_konversation(konversation_id)
+
+            result = teilnahme
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+        print(result)
+        print(id)
+
+        return result
 
 
     def insert(self, teilnahme):
@@ -110,9 +183,11 @@ class TeilnahmeChatMapper(Mapper):
 
         cursor = self._connection.cursor()
 
-        command = "UPDATE teilnahmen_chat SET person_id=%s, status=%s, konversation_id=%s WHERE id=%s"
-        data = (teilnahme.get_teilnehmer(), teilnahme.get_status(), teilnahme.get_konversation(), teilnahme.get_id())
+        command = "UPDATE teilnahmen_chat SET status=%s WHERE id=%s"
+        data = (teilnahme.get_status(), teilnahme.get_id())
         cursor.execute(command, data)
+
+        print(teilnahme.get_status())
 
         self._connection.commit()
         cursor.close()

@@ -94,7 +94,7 @@ konversation = api.inherit('Konversation', nbo, {
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
-    'status': fields.Boolean(attribute='_status', description='Status der Konversation'),
+    'status': fields.Integer(attribute='_status', description='Status der Konversation'),
     'konversation': fields.Integer(attribute='_konversation', description='ID der Konversation'),
 })
 
@@ -164,7 +164,7 @@ class PersonenOperationen(Resource):
 class PersonOperationen(Resource):
     @lernApp.marshal_list_with(person)
    
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -341,7 +341,7 @@ class ProfilByIDOperationen(Resource):
 
     @lernApp.marshal_with(profil)
     @lernApp.expect(profil, validate=True)
-    #@secured
+    @secured
     def put(self, id):
         c = Profil.from_dict(api.payload)
         print(c)
@@ -738,12 +738,32 @@ class KonversationenOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
+    #@secured
+    def put(self):
+        """Update eines bestimmten Konversationobjekts."""
+        konversationid = request.args.get("id")
+        name = request.args.get("name")
+        anfragestatus = request.args.get("anfragestatus")
+        adm = AppAdministration()
+
+        if anfragestatus == 1:
+            anfragestatus = True
+        else:
+            anfragestatus = False
+
+        konversation = adm.get_konversation_by_id(konversationid)
+        konversation.set_name(name)
+        konversation.set_anfragestatus(anfragestatus)
+        print(konversation)
+
+        adm.update_konversation_status(konversation)
+
 @lernApp.route('/konversationen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByIdOperation(Resource):
 
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, id):
         """Auslesen einer bestimmten Konversation."""
         adm = AppAdministration()
@@ -753,23 +773,6 @@ class KonversationByIdOperation(Resource):
             return konversation
         else:
             return '', 500 #Wenn es keine Konversation mit der id gibt.
-
-    @lernApp.marshal_with(konversation)
-    @secured
-    def put(self, id):
-        """Update eines bestimmten Konversationobjekts."""
-        adm = AppAdministration()
-        konv = konversation.from_dict(api.payload)
-
-        if konv is not None:
-            konv.set_id(id)
-            adm.save_konversation(konv)
-            konversation = adm.get_konversation_by_id(id)
-            return konversation, 200
-        else:
-            return '', 500  # Wenn es keine Konversation mit der id gibt.
-
-
 
     @lernApp.marshal_with(konversation)
     #@secured
@@ -810,7 +813,7 @@ class KonversationByNameOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByIdOperation(Resource):
 
-    @lernApp.marshal_with(konversation)
+    @lernApp.marshal_with(teilnahmechat)
     def get(self, id):
         """Auslesen einer bestimmten Teilnahme anhand der Id."""
         adm = AppAdministration()
@@ -821,12 +824,31 @@ class TeilnahmeChatByIdOperation(Resource):
         else:
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
+@lernApp.route('/teilnahmeChat-by-person-id-status/<int:person_id>/<int:status>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeChatByIdOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmechat)
+    #@secured
+    def get(self, person_id, status):
+        """Auslesen aller Teilnahme-Objekte des Chats.
+        Sollten keine Teilnahme-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+
+        if status == 1:
+            status = True
+        else:
+            status = False
+
+        adm = AppAdministration()
+        teilnahmen = adm.get_teilnahmeChat_by_person_id_und_status(person_id, status)
+
+        return teilnahmen
 
 @lernApp.route('/teilnahmenChat')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmenChatOperation(Resource):
-
     @lernApp.marshal_list_with(teilnahmechat)
+
     def get(self):
         """Auslesen aller Teilnahme-Objekte des Chats.
 
@@ -839,7 +861,7 @@ class TeilnahmenChatOperation(Resource):
     @lernApp.expect(teilnahmechat)
     #@secured
     def post(self):
-        """Anlegen einer Konversation."""
+        """Anlegen einer Teilnahme."""
         adm = AppAdministration()
 
         proposal = TeilnahmeChat.from_dict(api.payload)
@@ -854,7 +876,7 @@ class TeilnahmenChatOperation(Resource):
             konversation = proposal.get_konversation()
 
             result = adm.create_teilnahmeChat(teilnehmer, status, konversation)
-            print(result)
+            #print(result)
 
             return result, 200
 
@@ -863,37 +885,64 @@ class TeilnahmenChatOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
+    #@secured
+    def put(self):
+        """Update eines bestimmten Konversationobjekts."""
+        teilnahmechatid = request.args.get("id")
+        teilnehmer = request.args.get("teilnehmer")
+        status = request.args.get("status")
+        konversation = request.args.get("konversation")
+        adm = AppAdministration()
+        print(teilnehmer)
+        print(status)
+        print(konversation)
+
+        teilnahmechat = adm.get_teilnahmeChat_by_id(teilnahmechatid)
+        print(teilnahmechat)
+        teilnahmechat.set_teilnehmer(teilnehmer)
+        teilnahmechat.set_status(status)
+        teilnahmechat.set_konversation(konversation)
+        print(teilnahmechat)
+        print("Hallo")
+
+        adm.update_teilnahmeChat(teilnahmechat)
+
 @lernApp.route('/teilnahmeChat/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatOperation(Resource):
-
     @lernApp.marshal_with(teilnahmechat)
+
+    #@secured
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
-        teilnahme = adm.get_teilnahme_by_id(id)
+        teilnahmechat = adm.get_teilnahmeChat_by_id(id)
+        print(teilnahmechat)
 
-        if teilnahme is not None:
-            return teilnahme
-        else:
-            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
-
+        return teilnahmechat
     
     @lernApp.marshal_with(teilnahmechat)
+    @lernApp.expect(teilnahmechat, validate=True)
+    @secured
     def put(self, id):
-        """Update eines bestimmten TeilnahmeChat-objekts."""
+        """Update eines bestimmten Person-Objekts.
+
+        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
+        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
+        Person-Objekts.
+        """
         adm = AppAdministration()
-        teil = teilnahmechat.from_dict(api.payload)
+        c = TeilnahmeChat.from_dict(api.payload)
 
-        if teil is not None:
-            teil.set_id(id)
-            adm.save_teilnahmechat(teil)
-            teilnahmechat = adm.get_teilnahme_by_id(id)
-            return teilnahmechat, 200
+        if c is not None:
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Person-Objekts gesetzt.
+            Siehe Hinweise oben.
+            """
+            c.set_id(id)
+            adm.update_teilnahmeChat(c)
+            return '', 200
         else:
-            return '', 500  # Wenn es keine Teilnahme mit der id gibt.
-
-    
+            return '', 500
 
     @lernApp.marshal_with(teilnahmechat)
     def delete(self, id):
@@ -918,20 +967,38 @@ class TeilnahmeChatByPersonIdOperation(Resource):
         else:
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
-@lernApp.route('/teilnahmeChat-by-konversation-id/<int:id>')
+@lernApp.route('/teilnehmer-by-konversation-id-status/<int:status>/<int:konversation_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeChatByKonversationIdOperation(Resource):
+    @lernApp.marshal_with(teilnahmechat)
+
+    def get(self, status, konversation_id):
+        """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
+        adm = AppAdministration()
+
+        if status == 1:
+            status = True
+        else:
+            status = False
+
+        teilnahme = adm.get_teilnahmeChat_by_konversation_id_und_status(status, konversation_id)
+        print(teilnahme)
+        return teilnahme
+
+@lernApp.route('/teilnehmer-by-konversation-id/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByKonversationIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
-    def get(self, konversationid):
+    def get(self, konversation_id):
         """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
         adm = AppAdministration()
-        teiln = adm.get_teilnahme_by_konversation_id(konversationid)
 
-        if teiln is not None:
-            return teiln
-        else:
-            return '', 500  # Wenn es keine Teilnahme mit der id gibt.
+        teilnahme = adm.get_teilnahmeChat_by_konversation_id_s(konversation_id)
+
+        return teilnahme
+
+
 
 @lernApp.route('/teilnahmenGruppe')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

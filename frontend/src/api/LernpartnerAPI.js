@@ -95,6 +95,7 @@ export default class LernpartnerAPI {
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationbyperson/${personid}`;
         #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversationen/${name}`;
+        #updateKonversationURL = (id, name, anfragestatus) => `${this.#lernappServerBaseURL}/konversationen?id=${id}&name=${name}&anfragestatus=${anfragestatus}`;
         #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #addKonversationURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
@@ -102,10 +103,13 @@ export default class LernpartnerAPI {
         //TeilnahmeChatbezogen
         #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
         #getTeilnahmeChatByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #getTeilnahmeChatByPersonByStatusURL = (person_id, status) => `${this.#lernappServerBaseURL}/teilnahmeChat-by-person-id-status/${person_id}/${status}`;
+        #updateTeilnahmeChatURL = (id, teilnehmer, status, konversation) => `${this.#lernappServerBaseURL}/teilnahmenChat?id=${id}&teilnehmer=${teilnehmer}&status=${status}&konversation=${konversation}`;
         #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenChat`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
+        #getTeilnahmeChatByKonversationByStatusURL = (status, konversation_id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id-status/${status}/${konversation_id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
 
         //TeilnahmeGruppebezogen
@@ -119,6 +123,7 @@ export default class LernpartnerAPI {
         #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
         #getLernfachByIDURL = (id) => `${this.#lernappServerBaseURL}/lernfaecher-by-id/${id}`;
         #getLernfaecherByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lernfaecher-by-profil/${profilid}`;
+
         //Personenbezogene
         /**
            * Gibt alle Personen als BO zurück
@@ -812,17 +817,15 @@ export default class LernpartnerAPI {
           })
         }
 
-          //setzt den Zustand einer Konversation mit der bestimmten ID auf einen neuen Zustand
-	        setKonversation(id) { 
-		      //immer Zustand 1 holen
-		        return this.#fetchAdvanced(this.#setKonversationURL(id),{method: 'PUT'}).then((responseJSON) => {
-			      let konversationBOs = KonversationBO.fromJSON(responseJSON);
-			      console.info(konversationBOs)
-			      return new Promise(function (resolve){
-			      	resolve(konversationBOs);
-		           	})
-	        	  })
-          	}
+        updateKonversation(id, name, anfragestatus) {
+            return this.#fetchAdvanced(this.#updateKonversationURL(id, name, anfragestatus), {
+              method: 'PUT',
+              headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+              }
+            })
+          }
 
              //Teilnahme Chat bezogene
 
@@ -863,17 +866,45 @@ export default class LernpartnerAPI {
              * @param {Number} id to be deleted
              * @public
              */
+          getTeilnahmeChatByPersonByStatus(person_id, status){
+            return this.#fetchAdvanced(this.#getTeilnahmeChatByPersonByStatusURL(person_id, status, {method: 'GET'})).then((responseJSON) => {
+            let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+            console.log(teilnahmechatBOs)
+            return new Promise(function (resolve){
+              resolve(teilnahmechatBOs)
+               })
+             })
+            }
 
-             setTeilnahmeChat(id) { 
-             //immer Zustand 1 holen
-               return this.#fetchAdvanced(this.#setTeilnahmeChatURL(id),{method: 'PUT'}).then((responseJSON) => {
-               let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
-               console.info(teilnahmechatBOs)
-               return new Promise(function (resolve){
-                 resolve(teilnahmechatBOs);
-                 })
-                })
+          getTeilnahmeChatByKonversationByStatus(status, konversation_id){
+            return this.#fetchAdvanced(this.#getTeilnahmeChatByKonversationByStatusURL(status, konversation_id, {method: 'GET'})).then((responseJSON) => {
+            let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+            console.log(teilnahmechatBOs)
+            return new Promise(function (resolve){
+              resolve(teilnahmechatBOs)
+               })
+             })
+            }
+
+        updateTeilnahmeChat(id, teilnehmer, status, konversation) {
+            return this.#fetchAdvanced(this.#updateTeilnahmeChatURL(id, teilnehmer, status, konversation), {
+              method: 'PUT',
+              headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
               }
+            })
+          }
+
+        setTeilnahmeChat(id) {
+            return this.#fetchAdvanced(this.#setTeilnahmeChatURL(id), {
+              method: 'PUT',
+              headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+              }
+            })
+          }
 
             /** 
              * Adds a Teilnahme and returns a Promise, which resolves to a new TeilnahmeChatBO object

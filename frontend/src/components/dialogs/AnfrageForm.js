@@ -33,7 +33,6 @@ class AnfrageForm extends Component {
             gruppeProfil: null,
 
             name: null,
-            vorname: null,
             konvName: null,
 
             konversation: null,
@@ -129,7 +128,7 @@ class AnfrageForm extends Component {
     );
   }
 
-  /** Add TeilnahmeChatPartner */
+  /** Konversation holen */
   getKonversation = () => {
     LernpartnerAPI.getAPI().getKonversationByName(this.state.name)
     .then(konversationBO =>
@@ -171,15 +170,14 @@ class AnfrageForm extends Component {
           this.setState({
             chatPartner: personBO,
             name: personBO.name,
-            vorname: personBO.vorname,
             konvName: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
             loadingInProgress: false,
             error: null,
       })).catch(e =>
               this.setState({
                 chatPartner: null,
-                personName: null,
-                personVorname: null,
+                name: null,
+                konvName: null,
                 loadingInProgress: false,
                 error: e,
               }));
@@ -295,7 +293,7 @@ class AnfrageForm extends Component {
   /** Renders the component */
   render() {
     const { classes, show } = this.props;
-    const { chatPartner, name, vorname, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { chatPartner, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(chatPartner)
     console.log(name)
     console.log(gruppeProfil)
@@ -312,12 +310,7 @@ class AnfrageForm extends Component {
           </DialogTitle>
           <DialogContent>
 
-              {
-              gruppeProfil ?
               <div>Bist du dir sicher, dass du eine Anfrage schicken möchtest?</div>
-              :
-              <div>Bist du dir sicher, dass du eine Anfrage schicken möchtest?</div>
-              }
 
             <LoadingProgress show={addingInProgress} />
                 <ContextErrorMessage error={addingError} contextErrorMsg={`Die Anfrage konnte nicht gesendet werden.`} onReload={this.getChatPartnerStatus} />
