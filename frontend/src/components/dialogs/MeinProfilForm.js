@@ -95,12 +95,6 @@ class MeinProfilForm extends Component {
             selectedValue: null,
             setSelectedValue: null,
 
-            
-            lernfaecher_bez: this.props.lernfaechergesamt.map(lernfach => lernfach.bezeichnung),
-            lernfaecher_id: this.props.lernfaechergesamt.map(lernfach => lernfach.id),
-            
-          
-
         };
         // State speichern falls cancel
         this.baseState = this.state;
@@ -113,7 +107,7 @@ class MeinProfilForm extends Component {
         this.handleChangeGruppengroesse = this.handleChangeGruppengroesse.bind(this);
         this.handleChangeLernort = this.handleChangeLernort.bind(this);
         this.onChangeLernfaecher = this.onChangeLernfaecher.bind(this);
-        
+ 
     }
 
     

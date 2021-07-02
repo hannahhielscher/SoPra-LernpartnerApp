@@ -4,7 +4,7 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
-import LernpartnerAPI from '../../api/LernpartnerAPI'
+import LernpartnerAPI from '../../api/LernpartnerAPI';
 
 
 class ChatVerlassenForm extends Component {
@@ -18,8 +18,6 @@ class ChatVerlassenForm extends Component {
       verlassenError: null
     };
   }
-
-
 
   /** Chat verlassen */
   verlasseChat = () => {

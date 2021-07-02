@@ -11,7 +11,6 @@ import LoadingProgress from './dialogs/LoadingProgress';
 import Button from '@material-ui/core/Button';
 
 
-
 class MeinProfil extends Component {
 
     constructor(props){
@@ -27,10 +26,11 @@ class MeinProfil extends Component {
             personAlter: null,
             personStudiengang: null,
             lerngruppe: false,
+
             personProfilID: null,
             personLernfaecher: [],
             lernfaechernamen: [],
-            lernfaechergesamt: [],
+
             personLernvorliebenID: null,
             profil: null,
             lernvorlieben: null,
@@ -47,9 +47,7 @@ class MeinProfil extends Component {
             showRegistrierungForm: false,
             loadingInProgress: false,
             loadingError: null,
-            lernfaecher_id: [],
-            lernfaecher_bez: [],
-            test: []
+            
             
         };
     }
@@ -153,16 +151,7 @@ class MeinProfil extends Component {
               lernfaecher_bez: lernfaecherBOs.map(lernfach => lernfach.bezeichnung),
               loadingInProgress: false,
               error: null
-        })).then(() => {
-  
-          this.setState({
-            
-            
-            
-          
-        })
-        }
-        )
+        }))
         .catch(e =>
           this.setState({ // Reset state with error from catch
             lernfaechergesamt: null,
@@ -272,13 +261,6 @@ class MeinProfil extends Component {
       console.log(currentPerson)
 
       const { test, lernfaecher_id, lernfaecher_bez, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
-      console.log(lernfaechergesamt)
-      console.log(lernfaecher_id)
-      console.log(lernfaecher_bez)
-      console.log(profil)
-      console.log(showMeinProfilForm)
-      console.log(test)
-      
       
       return (
         <div className={classes.root}>
@@ -295,10 +277,24 @@ class MeinProfil extends Component {
                               <b>Alter: </b> {personAlter} <br />
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
-                              <b>Lernfächer: </b>{lernfaechernamen}<br />
-
+                              
                               </Typography>
                               </Paper>
+
+                              <Paper className={classes.inhalt}>
+                              <h2>Meine Lernfächer:</h2>
+
+                              <Typography variant='body1' color={'textSecondary'}>
+        
+                              {
+                                lernfaechernamen.map(lernfach => 
+                                  <li>{lernfach}</li>
+                                  )
+                                 
+                              }
+                              </Typography>
+                              </Paper>
+
 
                               <Paper className={classes.inhalt}>
 

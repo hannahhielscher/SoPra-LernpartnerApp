@@ -25,11 +25,11 @@ class Header extends Component {
 
   /** Renders the component */
   render() {
-    const { user } = this.props;
+    const { user, currentPerson } = this.props;
 
     return (
       <Paper variant='outlined' >
-        <ProfileDropDown user={user} />
+        <ProfileDropDown user={currentPerson} />
         <Typography variant='h3' component='h1' align='center'>
           Lernapp
         </Typography>
@@ -62,8 +62,8 @@ class Header extends Component {
 
 /** PropTypes */
 Header.propTypes = {
-  /** The logged in firesbase user */
-  user: PropTypes.object,
+  /** The logged in firesbase currentPerson */
+  currentPerson: PropTypes.object,
 }
 
 export default Header;
