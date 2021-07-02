@@ -277,16 +277,20 @@ class GruppenForm extends Component {
               <CloseIcon />
             </IconButton>
           </DialogTitle>
+          
           <DialogContent>
+            <b>Bitte fülle für deine neue Lerngruppe folgende Profilinformationen mit euren Präferenzen vollständig aus.</b>
             <form className={classes.root} noValidate autoComplete='off'>
               <TextField autoFocus type='text' required fullWidth margin='normal' id='gruppenName' label='Gruppenname:' value={gruppenName}
                 onChange={this.textFieldValueChange} error={gruppenNameValidationFailed}
                 helperText={gruppenNameValidationFailed ? 'Der Gruppenname muss mindestens ein Zeichen enthalten' : ' '} />
-
-              Bitte fülle für deine neue Lerngruppe folgende Profilinformationen mit euren Präferenzen vollständig aus.
+              
+              <b>Wähle das Lernfach aus, für welches ihr gemeinsam lernt: </b>
               <br/>
-              <FormControl required className={classes.formControl}>
+              <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                
                 <InputLabel>Lernfach:</InputLabel>
+                
                 <Select error={lernfaecherValidationFailed} value={lernfaecher} onChange={this.lernfaecherSelectionChange}>
                 <MenuItem value={1}>Software Entwicklung</MenuItem>
                 <MenuItem value={2}>Data Science</MenuItem>
@@ -300,7 +304,7 @@ class GruppenForm extends Component {
               </FormControl>
               <br/>
 
-              <FormControl required className={classes.formControl}>
+              <FormControl required fullWidth margin='normal' className={classes.formControl}>
                 <InputLabel>Tageszeiten:</InputLabel>
                 <Select error={tageszeitenValidationFailed} value={tageszeiten} onChange={this.tageszeitenSelectionChange}>
                 <MenuItem value={1}>Morgens</MenuItem>
@@ -310,7 +314,7 @@ class GruppenForm extends Component {
               </FormControl>
               <br/>
 
-              <FormControl required className={classes.formControl}>
+              <FormControl required fullWidth margin='normal' className={classes.formControl}>
                 <InputLabel>Tage:</InputLabel>
                 <Select error={tageValidationFailed} value={tage} onChange={this.tageSelectionChange}>
                 <MenuItem value={1}>Unter der Woche</MenuItem>
@@ -319,7 +323,7 @@ class GruppenForm extends Component {
               </FormControl>
               <br/>
 
-              <FormControl required className={classes.formControl}>
+              <FormControl required fullWidth margin='normal' className={classes.formControl}>
                 <InputLabel>Frequenz:</InputLabel>
                 <Select error={frequenzValidationFailed} value={frequenz} onChange={this.frequenzSelectionChange}>
                 <MenuItem value={1}>Mehrmals die Woche</MenuItem>
@@ -329,7 +333,7 @@ class GruppenForm extends Component {
               </FormControl>
               <br/>
 
-              <FormControl required className={classes.formControl}>
+              <FormControl required fullWidth margin='normal' className={classes.formControl}>
                 <InputLabel>Lernart:</InputLabel>
                 <Select error={lernartValidationFailed} value={lernart} onChange={this.lernartSelectionChange}>
                 <MenuItem value={1}>Visuell</MenuItem>
@@ -340,7 +344,7 @@ class GruppenForm extends Component {
               </FormControl>
               <br/>
 
-              <FormControl required className={classes.formControl}>
+              <FormControl required fullWidth margin='normal' className={classes.formControl}>
                 <InputLabel >Lernort:</InputLabel>
                 <Select error={lernortValidationFailed} value={lernort} onChange={this.lernortSelectionChange}>
                 <MenuItem value={1}>Remote</MenuItem>

@@ -18,7 +18,7 @@ import firebaseConfig from './firebaseconfig';
 import LernfaecherForm from './components/dialogs/LernfaecherForm';
 import Profil from './components/Profil';
 import GruppenListe from './components/GruppenListe';
-import Nachricht from './components/Nachricht';
+import NachrichtListe from './components/NachrichtListe';
 
 class App extends React.Component {
 
@@ -156,14 +156,14 @@ class App extends React.Component {
 				<Router basename={process.env.PUBLIC_URL}>
 					<Container maxWidth='md'>
 					
-						<Header user={currentUser} person={currentPerson}/>
+						<Header user={currentUser} currentPerson={currentPerson}/>
 						{
 							// Is a user signed in?
-							currentUser ?
+							currentUser && (currentPerson) ?
 								<>
-									<Redirect from='/' to='/about'/>
+									<Redirect from='/' to='meinProfil'/>
 									
-									<Route path='/meinprofil' component={MeinProfil}>
+									<Route exact path='/meinprofil' component={MeinProfil}>
 										<MeinProfil currentPerson={currentPerson}/>
 									</Route>
 
@@ -180,7 +180,7 @@ class App extends React.Component {
 									</Route>
 
 									<Route path='/chat'>
-										<Nachricht currentPerson={currentPerson} />
+										<NachrichtListe currentPerson={currentPerson} />
 									</Route>
 									
 									<Route path='/about' component={About} />
@@ -192,6 +192,7 @@ class App extends React.Component {
 									<Redirect to='/index.html' />
 									<SignIn onSignIn={this.handleSignIn} />
 								</>
+						
 						}
 						
 								

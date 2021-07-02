@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Grid, Typography,  } from '@material-ui/core';
+import { withStyles, Grid, Typography,  Divider } from '@material-ui/core';
+import { MessageBox } from 'react-chat-elements';
+import 'react-chat-elements/dist/main.css';
 //import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core';
 //import { Button, ButtonGroup } from '@material-ui/core';
 //import TextField from "@material-ui/core/TextField";
 
@@ -24,9 +25,10 @@ class NachrichtenListeEintrag extends Component {
 
         // initiiere einen leeren state
         this.state = {
-            nachrichten: [], //Liste mit den IDs aller Nachrichten 
+            nachricht: this.props.nachricht, //Liste mit den IDs aller Nachrichten 
             //konversation_ID: null,  
             nachricht_inhalt: null, 
+            person: null,
             person_id: null,
             personName: null,
             personVorname: null,
@@ -35,8 +37,6 @@ class NachrichtenListeEintrag extends Component {
         };
     }
 
-
-    
     //open the onClick event of the show Nachricht button
     showNachrichtButtonClicked = (event) => {
       event.stopPropagation();
@@ -50,34 +50,9 @@ class NachrichtenListeEintrag extends Component {
       //this.props.getNachrichten(); }
 
 
-      // API Anbindung um Nachricht vom Backend zu bekommen 
-    getNachrichten = () => {
-        LernpartnerAPI.getAPI().getNachrichten(this.props.nachrichten)
-        .then(nachrichtBO =>
-            this.setState({
-              nachrichten: nachrichtBO,
-              nachricht_inhalt: nachrichtBO.nachricht_inhalt,
-              loadingInProgress: false,
-              error: null,
-            })).then(()=>{
-              this.getNachrichten()
-            })
-            .catch(e =>
-                this.setState({
-                  nachrichten: null,
-                  inhalt: null,
-                  loadingInProgress: false,
-                  error: e,
-                }));
-        this.setState({
-          loadingInProgress: true,
-          error: null
-        });
-      }
-
       // API Anbindung um Person vom Backend zu bekommen 
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPerson(this.props.nachricht.getmain_person_id())
+      LernpartnerAPI.getAPI().getPerson(this.props.nachricht.person_id)
       .then(personBO =>
           this.setState({
             person: personBO,
@@ -103,43 +78,75 @@ class NachrichtenListeEintrag extends Component {
 
        // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
-        this.getNachrichten();
+        this.getPerson();
     }
 
       render() {
-        const { classes, currentperson } = this.props;
-        const {nachrichten, nachricht_inhalt, personName, personVorname, expandedNachrichtID} = this.state;
+        const { classes, currentPerson } = this.props;
+        const {nachricht, nachricht_inhalt, person, personName, personVorname, expandedNachrichtID} = this.state;
+        console.log(person)
 
-        return(
-          <div>
-            <Grid container spacing={3} justify="flex-end" alignItems="felx-end">
-            <Grid item xs={6} sm={3}>
-             <Typography variant="body1" className={classes.heading}>
-               {Person.getPersonVorname() + ""+ Person.getPersonName()}
-               <br/>
-               {Nachricht.getNachricht_Inhalt()}
-               <br/>
-             </Typography>
-            </Grid>
-            </Grid>
-                  {
-                      nachrichten ?
-                      <>
-                      {
-                          nachrichten.map(nachricht =>
-                            <NachrichtenListeEintrag key={nachricht.getID()} currentperson={currentperson} nachricht={nachrichten} personName={personVorname + " " +personName} inhalt={nachricht_inhalt} expandedState={expandedNachrichtID === nachricht.getID()}
-                              onExpandedStateChange={this.onExpandedStateChange}
-                            />)
-                      }
-                      </>
-                      :
-                      <></>
-                  }
+        if (nachricht.person_id !== currentPerson.getID()) {
+                    
+          return (
+            <div id="empfänger_text">
+              <Grid item
+                xs
+                className={classes.outerColumn}
+                style={{ display: "flex", alignItems: "center", position: "rigth" }}
+              >
+                
+            <b>{personVorname} {personName}</b>
+              </Grid>
+              <Grid item
+                xs
+                className={classes.outerColumn}
+                style={{ display: "flex", alignItems: "center", position: "rigth" }}
+              >
+                
+                <Typography>{nachricht.nachricht_inhalt}</Typography>
+              </Grid>
+              <Divider />
+            </div>
+          );
+        } 
         
-        </div>
-        )
-      }
+        else {
+          return (
+            <div id="sender_text">
+              <Grid
+                item
+                className={classes.outerColumn}
+                container
+                direction="row"
+                alignItems="center"
+                justify="flex-end"
+                position= "left"
+              >
+              <b>Du</b>
+              </Grid>
+              <Grid
+                item
+                className={classes.outerColumn}
+                container
+                direction="row"
+                alignItems="center"
+                justify="flex-end"
+                position= "left"
+              >
+              <Typography>{nachricht.nachricht_inhalt}</Typography>
+              </Grid>
+              
+              <Divider />
+            </div>
+            
+
+          );
+        }
+    }
 }
+      
+
 
 const styles = (theme) => ({
   root: {
