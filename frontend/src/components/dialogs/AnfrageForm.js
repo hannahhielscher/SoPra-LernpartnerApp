@@ -208,7 +208,7 @@ class AnfrageForm extends Component {
     }
 
     getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(5)
+    LernpartnerAPI.getAPI().getProfil(this.props.chatPartner.profil)
     .then(profilBO =>
       this.setState({
             gruppeProfil: profilBO.gruppe,
@@ -276,18 +276,6 @@ class AnfrageForm extends Component {
     }
   }
 
-  componentDidMount() {
-    // load initial balance
-    this.getProfil();
-  }
-
-  /** Lifecycle method, which is called when the component was updated */
- /* componentDidUpdate(prevProps) {
-    if ((this.props.show) && (this.props.show !== prevProps.show)) {
-      this.getPartner();
-    }
-  }*/
-
   /** Renders the component */
   render() {
     const { classes, show, chatPartner, currentPerson } = this.props;
@@ -304,7 +292,7 @@ class AnfrageForm extends Component {
 
     return (
       show ?
-        <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
+        <Dialog open={show} onEnter={this.getProfil} onClose={this.handleClose} maxWidth='xs'>
           <DialogTitle>Kontaktanfrage senden
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />

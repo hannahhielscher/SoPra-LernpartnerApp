@@ -139,7 +139,6 @@ class AnfrageEintragForm extends Component {
     console.log(teilnahmenChat)
     console.log(teilnahmenChatGefiltert)
     console.log(teilnahmenChatAusstehend)
-    console.log(teilnahmeChatGefiltert)
 
     return (
       show ?
