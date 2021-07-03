@@ -160,7 +160,7 @@ class GruppenListeEintrag extends Component {
     });
   }
 
-    /** Aufrufen des */
+    /** Aufrufen des Profils, nachdem das GruppenBeaarbeitenForm geschlossen wurde*/
   bearbeitenFormClosed = (profil) => {
     this.getGruppenProfil();
     if (profil) {
