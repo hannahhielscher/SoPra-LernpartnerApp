@@ -147,7 +147,7 @@ class AnfrageEintragForm extends Component {
  /** Renders the component */
   render() {
     const { classes, show, currentPerson, konversationen } = this.props;
-    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatAusstehendGefiltert, teilnahmenChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatAusstehendGefiltert, teilnahmenChatGefiltert, addingInProgress, showAnfrageEintrag, addingError, updatingInProgress, updatingError } = this.state;
     console.log(teilnahmenChat)
     console.log(teilnahmenChatGefiltert)
     console.log(teilnahmenChatAusstehendGefiltert)

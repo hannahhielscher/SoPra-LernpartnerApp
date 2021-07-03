@@ -280,7 +280,7 @@ class AnfrageForm extends Component {
   /** Renders the component */
   render() {
     const { classes, show, chatPartner, currentPerson } = this.props;
-    const { chatPartnerProfil, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { chatPartnerProfil, currentPersonID, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(chatPartner)
    // console.log(chatPartner.id)
     console.log(chatPartnerProfil)
