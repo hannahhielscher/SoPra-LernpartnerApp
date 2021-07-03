@@ -194,7 +194,7 @@ export default class LernpartnerAPI {
           return this.#fetchAdvanced(this.#getPersonByProfilURL(profilID)).then((responseJSON) => {
             // We always get an array of PersonBOs.fromJSON, but only need one object
             let personBO = PersonBO.fromJSON(responseJSON);
-            console.info(personBO);
+            console.log(personBO);
             return new Promise(function (resolve) {
               resolve(personBO);
             })

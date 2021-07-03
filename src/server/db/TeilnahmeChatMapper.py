@@ -13,11 +13,12 @@ class TeilnahmeChatMapper(Mapper):
         cursor.execute("SELECT * from teilnahmen_chat")
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, konversation) in tuples:
+        for (id, teilnehmer, anfrage_sender, status, konversation) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(teilnehmer)
             teilnahme.set_anfrage_sender(anfrage_sender)
+            teilnahme.set_status(status)
             teilnahme.set_konversation(konversation)
             result.append(teilnahme)
 
@@ -103,7 +104,7 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND status={}".format(konversation_id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={}".format(konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

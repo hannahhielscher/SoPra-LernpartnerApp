@@ -40,6 +40,7 @@ class AnfrageEingangFormEintrag extends Component {
             teilnahmeChatID: props.teilnahmeChat.id,
 
             teilnahmen: [],
+            anfragenAnzahl: null,
 
             konversation: null,
             konversationID: null,
@@ -89,6 +90,7 @@ class AnfrageEingangFormEintrag extends Component {
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
+        anfragenAnzahl: teilnahmeChatBOs.length
       })).catch(e =>
       this.setState({
         teilnahmePartner: null,
@@ -203,14 +205,15 @@ class AnfrageEingangFormEintrag extends Component {
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmeChat, teilnahmeChatID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
+          const { teilnahmeChat, teilnahmeChatID, teilnahmen, anfragenAnzahl, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
           console.log(konversation)
           console.log(konversationID)
           console.log(teilnahmen)
-          console.log(teilnahmeChatID)
+          console.log(anfragenAnzahl)
 
           return (
-            <Card>
+          show ?
+            <Card open={show} >
                <List>
                 <ListItem>
                   <ListItemText primary={nameNeu} className={classes.name}/>
@@ -228,7 +231,10 @@ class AnfrageEingangFormEintrag extends Component {
                 </ListItem>
                </List>
                </Card>
-
+               :
+               <Card className={classes.text}>
+                    Du hast keine Anfragen
+                </Card>
           );
         }
 }
@@ -249,6 +255,10 @@ const styles = theme => ({
     margin: theme.spacing(1),
     backgroundColor: '#CC3333'
   },
+  text: {
+    padding: theme.spacing(2),
+    color: theme.palette.grey[500]
+  }
   });
 
 /** PropTypes */

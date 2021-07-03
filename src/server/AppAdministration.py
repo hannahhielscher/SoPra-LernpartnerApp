@@ -669,7 +669,6 @@ class AppAdministration (object):
 
         #Match berechnen
 
-        unsorted = []
         result = []
 
         for profil in match_profil_all:
@@ -706,10 +705,9 @@ class AppAdministration (object):
             vorschlag.set_id(1)
 
             with VorschlagMapper() as mapper:
-                unsorted.append(mapper.insert(vorschlag))
+                result.append(mapper.insert(vorschlag))
 
-
-        return unsorted
+        return result
 
     """
     Profil-spezifische Methoden

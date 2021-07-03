@@ -35,6 +35,10 @@ class AnfrageEintragForm extends Component {
             teilnahmenChatGefiltert: [],
             teilnahmenChatAusstehendGefiltert: [],
 
+            anfragenAnzahl: null,
+
+            showAnfrageEintrag: false,
+
             addingInProgress: false,
             updatingInProgress: false,
             addingError: null,
@@ -52,6 +56,7 @@ class AnfrageEintragForm extends Component {
       .then(teilnahmenChatBOs =>
           this.setState({
               teilnahmenChat: teilnahmenChatBOs,
+              showAnfrageEintrag: true,
               error: null,
               loadingInProgress: false,
             })).then(() => {
@@ -71,12 +76,13 @@ class AnfrageEintragForm extends Component {
     }
 
   filterTeilnahmenChat = () => {
-    for (var teilnahme in this.state.teilnahmenChat)
+    for (var teilnahme in this.state.teilnahmenChat){
         //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
         if (this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
             this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
             console.log(this.state.teilnahmenChatGefiltert)
          }
+    }
   }
 
   filterTeilnahmenChatAusstehend = () => {
@@ -112,12 +118,24 @@ class AnfrageEintragForm extends Component {
       });
     }
 
+  //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
+  anfrageEintragClosed = () => {
+    this.setState({
+        showAnfrageEintrag: false,
+    });
+  }
 
   /** Handles the close / cancel button click event */
   handleClose = () => {
     // Reset the state
     this.setState(this.baseState);
     this.props.onClose(null);
+  }
+
+  getAnzahlAnfrageEingang = (newAnfragenAnzahl) => {
+    this.setState({
+        anfragenAnzahl: newAnfragenAnzahl
+    })
   }
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
@@ -138,18 +156,29 @@ class AnfrageEintragForm extends Component {
     return (
       show ?
         <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
-          <DialogTitle> Deine Anfragen
+          <DialogTitle> Anfragen
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />
             </IconButton>
           </DialogTitle>
 
             <Card className={classes.liste}>
+
            {
+            teilnahmenChatGefiltert.length > 0 ?
+
+
               teilnahmenChatGefiltert.map(teilnahmeChat =>
                 <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
-                />)
+                show={showAnfrageEintrag} onClose={this.anfrageEintragClosed} anzahlAnfragen={this.getAnzahlAnfrageEingang} />)
+
+             :
+             <Card className={classes.text2}>
+                Du hast keine Anfragen
+             </Card>
             }
+
+
             </Card>
 
                <Card className={classes.cardText}>
@@ -211,6 +240,10 @@ const styles = theme => ({
   card: {
     marginTop: theme.spacing(6),
     marginBottom: theme.spacing(6),
+  },
+  text2: {
+    padding: theme.spacing(2),
+    color: theme.palette.grey[500]
   }
 });
 
