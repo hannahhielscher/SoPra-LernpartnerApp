@@ -105,7 +105,7 @@ export default class LernpartnerAPI {
         #getTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmeChat`;
         #getTeilnahmeChatByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByPersonByStatusURL = (person_id, status) => `${this.#lernappServerBaseURL}/teilnahmeChat-by-person-id-status/${person_id}/${status}`;
-        #updateTeilnahmeChatURL = (id, teilnehmer, status, konversation) => `${this.#lernappServerBaseURL}/teilnahmenChat?id=${id}&teilnehmer=${teilnehmer}&status=${status}&konversation=${konversation}`;
+        #updateTeilnahmeChatURL = (id, teilnehmer, anfrage_sender, status, konversation) => `${this.#lernappServerBaseURL}/teilnahmenChat?id=${id}&teilnehmer=${teilnehmer}&anfrage_sender=${anfrage_sender}&status=${status}&konversation=${konversation}`;
         #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenChat`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
@@ -113,6 +113,7 @@ export default class LernpartnerAPI {
         #getTeilnahmeChatByKonversationByStatusURL = (status, konversation_id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id-status/${status}/${konversation_id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
         #getTeilnahmeChatByKonversationAndPersonURL = (konversation_id, person_id) => `${this.#lernappServerBaseURL}/teilnahmenChat-by-konv-pers/${konversation_id}/${person_id}`;
+        #getTeilnahmeChatByAnfrageSenderURL = (anfrage_sender) => `${this.#lernappServerBaseURL}/teilnehmer-by-anfrage-sender/${anfrage_sender}`;
 
         //TeilnahmeGruppebezogen
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
@@ -905,8 +906,8 @@ export default class LernpartnerAPI {
              })
             }
 
-        updateTeilnahmeChat(id, teilnehmer, status, konversation) {
-            return this.#fetchAdvanced(this.#updateTeilnahmeChatURL(id, teilnehmer, status, konversation), {
+        updateTeilnahmeChat(id, teilnehmer, anfrage_sender, status, konversation) {
+            return this.#fetchAdvanced(this.#updateTeilnahmeChatURL(id, teilnehmer, anfrage_sender, status, konversation), {
               method: 'PUT',
               headers: {
                 'Accept': 'application/json, text/plain',
@@ -976,7 +977,7 @@ export default class LernpartnerAPI {
               */
 
               getTeilnahmeChatByStudentId(personid) {
-                return this.#fetchAdvanced(this.#getTeilnahmeChatByStudentIdURL(personid,{method: 'GET'})).then((responseJSON) => {
+                return this.#fetchAdvanced(this.#getTeilnahmeChatByStudentIdURL(personid, {method: 'GET'})).then((responseJSON) => {
                 let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
                 //console.info(teilnahmechatBOs)
                 return new Promise(function (resolve) {
@@ -993,6 +994,22 @@ export default class LernpartnerAPI {
   
             getTeilnahmeChatByKonversationId(id){
                return this.#fetchAdvanced(this.#getTeilnahmeChatByKonversationIdURL(id)).then((responseJSON) => {
+               let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
+              //console.info(teilnahmechatBOs)
+              return new Promise(function (resolve){
+               resolve(teilnahmechatBOs)
+                })
+              })
+             }
+
+
+             /**
+              * gibt die Nachrichten mit der bestimmten konversationsID als BO zurück
+              * @param {Number} id to be retrieved
+              * @public
+             */
+            getTeilnahmeChatByAnfrageSender(id){
+               return this.#fetchAdvanced(this.#getTeilnahmeChatByAnfrageSenderURL(id)).then((responseJSON) => {
                let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
               //console.info(teilnahmechatBOs)
               return new Promise(function (resolve){

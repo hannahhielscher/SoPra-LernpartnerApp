@@ -504,12 +504,13 @@ class AppAdministration (object):
     TeilnahmeChats-spezifische Methoden
     """
 
-    def create_teilnahmeChat(self, teilnehmer, status, konversation):
+    def create_teilnahmeChat(self, teilnehmer, anfrage_sender, status, konversation):
         """Eine Teilnahme an einem Chat anlegen"""
 
         teilnahme = TeilnahmeChat()
 
         teilnahme.set_teilnehmer(teilnehmer)
+        teilnahme.set_teilnehmer(anfrage_sender)
         teilnahme.set_status(status)
         teilnahme.set_konversation(konversation)
         teilnahme.set_id(1)
@@ -551,6 +552,11 @@ class AppAdministration (object):
         """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversation_id(konversationid)
+
+    def get_teilnahmeChat_anfrage_sender(self, anfrage_sender):
+        """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
+        with TeilnahmeChatMapper() as mapper:
+            return mapper.find_by_anfrage_sender(anfrage_sender)
 
     def save_teilnahmeChat(self, teilnahme):
         """Speichert die Teilnahme."""

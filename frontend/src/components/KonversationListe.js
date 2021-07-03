@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles} from '@material-ui/core';
+import { withStyles, Badge} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -136,6 +136,8 @@ render() {
         return(
           <div className={classes.root}>
             <Button variant='contained' onClick={this.getAnfrageEingangForm} color='primary' className={classes.button}>
+            <Badge badgeContent={17} color="secondary" className={classes.badge}>
+             </Badge>
                   Anfragen
              </Button>
            
@@ -169,6 +171,10 @@ const styles = theme => ({
   button: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+  },
+  badge: {
+    marginRight: theme.spacing(3),
+    marginLeft: theme.spacing(1),
   }
 });
 

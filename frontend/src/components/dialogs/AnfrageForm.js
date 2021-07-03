@@ -86,6 +86,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.state.chatPartner.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -114,6 +115,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -149,6 +151,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversationID
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
