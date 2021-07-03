@@ -60,7 +60,6 @@ class KonversationListeEintrag extends Component {
         loadingKonversationenError: null
     });
   }
-    
 
 /** Handles onChange events of the underlying ExpansionPanel */
 expansionPanelStateChanged = () => {

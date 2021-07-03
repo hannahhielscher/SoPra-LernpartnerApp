@@ -37,8 +37,10 @@ class VorschlagListeEintrag extends Component {
             gruppe: null,
 
             person: null,
+            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
 
             nameGes: null,
+            nameNeu: null,
 
             namePerson: null,
 
@@ -48,8 +50,8 @@ class VorschlagListeEintrag extends Component {
 
             teilnahmeChat: null,
 
-            konversationBO: null,
-            konversation: false,
+            konversation: null,
+            iskonversation: false,
             konversationStatus: null,
 
             showProfil: false,
@@ -93,7 +95,7 @@ class VorschlagListeEintrag extends Component {
             error: null
       })).then(() => {
             this.getPartner();
-            console.log(this.state.gruppe)
+            
         }).catch(e =>
         this.setState({ // Reset state with error from catch
           profil: null,
@@ -117,7 +119,7 @@ class VorschlagListeEintrag extends Component {
       LernpartnerAPI.getAPI().getPersonByProfil(this.state.vorschlag.match_profil_id)
       .then(personBO =>
           this.setState({
-            //chatPartnerProfil: personBO,
+            chatPartnerProfil: personBO,
             namePerson: personBO.vorname+ " " + personBO.name,
             nameGes: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
             loadingInProgress: false,
@@ -174,11 +176,20 @@ class VorschlagListeEintrag extends Component {
     LernpartnerAPI.getAPI().getKonversationByName(this.state.nameGes)
     .then(konversationBO =>
       this.setState({
-        konversationBO: konversationBO,              // disable loading indicator                 // no error message
-        konversationStatus: konversationBO.status
+        konversation: konversationBO,              // disable loading indicator                 // no error message
+        konversationStatus: konversationBO.anfragestatus
       })).then(() => {
-            this.setKonversation();
-        }).catch(e =>
+        this.nameAnpassen();
+        if (this.state.konversationStatus !== null){
+          this.setState({
+            iskonversation: true,
+          });
+        } else {
+            this.setState({
+                iskonversation: false,
+          });
+        }
+      }).catch(e =>
       this.setState({
         konversationBO: false,
         konversationStatus: false,
@@ -189,7 +200,7 @@ class VorschlagListeEintrag extends Component {
   }
 
   setKonversation = () => {
-    if (this.state.konversationStatus === null) {
+    if (this.state.konversationStatus === 'Null') {
         this.setState({
             konversation: false,
       });
@@ -198,6 +209,12 @@ class VorschlagListeEintrag extends Component {
             konversation: true,
       });
     }
+  }
+
+  nameAnpassen = () => {
+    this.setState({
+        nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
+    });
   }
 
   /** Handles the onClose event of the CustomerForm */
@@ -222,13 +239,8 @@ class VorschlagListeEintrag extends Component {
 
     render(){
           const { classes, expandedState } = this.props;
-          const { vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartnerProfil, konversationBO, konversation, konversationStatus, showProfil, showAnfrageForm } = this.state;
-          console.log(chatPartnerProfil)
-          console.log(konversation)
-          console.log(konversationStatus)
-          console.log(currentPerson)
-          console.log(nameGes)
-
+          const { nameNeu, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showAnfrageForm } = this.state;
+          console.log(nameNeu)
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -241,7 +253,7 @@ class VorschlagListeEintrag extends Component {
                     gruppe ?
                         <Typography variant='body1' className={classes.heading}>{nameGes}
                         </Typography>
-                    :
+                      :
                         <Typography variant='body1' className={classes.heading}>{namePerson}
                         </Typography>
                     }
@@ -260,7 +272,16 @@ class VorschlagListeEintrag extends Component {
                 </AccordionSummary>
                 <AccordionDetails>
                        {
-                       konversation ?
+                       iskonversation ?
+                        <>
+                            <Button color='primary' onClick={this.showProfilButtonClicked}>
+                              Profil ansehen
+                            </Button>
+                            <h4>
+                            Du bist bereits mit {nameNeu} in Kontakt oder es steht bereits eine Kontaktanfrage aus.
+                            </h4>
+                        </>
+                        :
                         <ButtonGroup variant='text' size='small'>
                             <Button color='primary' onClick={this.showProfilButtonClicked}>
                               Profil ansehen
@@ -269,15 +290,6 @@ class VorschlagListeEintrag extends Component {
                               Kontaktanfrage
                             </Button>
                         </ButtonGroup>
-                        :
-                        <>
-                            <Button color='primary' onClick={this.showProfilButtonClicked}>
-                              Profil ansehen
-                            </Button>
-                            <h4>
-                            Du bist bereits mit {nameGes} in Kontakt oder es steht bereits eine Kontaktanfrage aus.
-                            </h4>
-                        </>
                        }
                     </AccordionDetails>
               </Accordion>

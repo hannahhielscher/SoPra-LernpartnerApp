@@ -86,6 +86,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.state.chatPartner.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -114,6 +115,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -149,6 +151,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversationID
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -271,7 +274,7 @@ class AnfrageForm extends Component {
   getChatPartnerStatus = () => {
     if (this.state.gruppeProfil === true){
     console.log(this.state.gruppeProfil)
-        this.getKonversation();
+        this.props.getKonversation();
     }else{
     console.log(this.state.gruppeProfil)
         this.addKonversation();
@@ -321,7 +324,7 @@ class AnfrageForm extends Component {
               Abbrechen
             </Button>
                 <Button variant='contained' onClick={this.getChatPartnerStatus} color='primary'>
-                  Anfrage senden
+              Anfrage senden
              </Button>
 
           </DialogActions>

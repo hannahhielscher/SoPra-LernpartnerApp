@@ -21,6 +21,9 @@ const theme = createMuiTheme({
       main: colors.blue['A400'],
       light: colors.blue['A400']
     },
+    tab: {
+        color: white,
+    },
     success: {
       contrastText: white,
       dark: colors.green[900],
@@ -51,8 +54,12 @@ const theme = createMuiTheme({
       link: colors.blue[600]
     },
     background: {
-      default: '#F4F6F8',
+      default: '#faf0e6',
       paper: white
+    },
+    logo: {
+      maxWidth: 40,
+      marginRight: '10px'
     },
     icon: colors.blueGrey[600],
     divider: colors.grey[200]

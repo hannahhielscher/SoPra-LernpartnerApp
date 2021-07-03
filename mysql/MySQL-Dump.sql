@@ -490,6 +490,7 @@ DROP TABLE IF EXISTS `lernapp_SWPra`.`teilnahmen_chat` ;
 CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_chat` (
   `id` INT NOT NULL,
   `person_id` INT NOT NULL,
+  `anfrage_sender` INT NOT NULL,
   `status` TINYINT NULL,
   `konversation_id` INT NOT NULL,
   PRIMARY KEY (`id`, `person_id`, `konversation_id`),

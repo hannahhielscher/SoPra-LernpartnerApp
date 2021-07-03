@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Paper, Typography, Tabs, Tab } from '@material-ui/core';
+import { Paper, Typography, Tabs, Tab, AppBar, Toolbar, Box } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import ProfileDropDown from '../dialogs/ProfileDropDown';
+import logo from './Logo.png';
 
 class Header extends Component {
 
@@ -28,34 +29,35 @@ class Header extends Component {
     const { user, currentPerson } = this.props;
 
     return (
-      <Paper variant='outlined' >
-        <ProfileDropDown user={currentPerson} />
-        <Typography variant='h3' component='h1' align='center'>
-          Lernapp
-        </Typography>
-        <Typography variant='h4' component='h2' align='center'>
-          Hier könnte Ihre Werbung stehen
-        </Typography>
+    <div style={{ width: '100%'}}>
+      <AppBar style={{ backgroundColor: '#cdb79e'}}>
+      <Toolbar>
+        <img src={logo} alt="Easy Learn" style={{ width : 150, margin: 5}}/>
+
         {
           user ?
-
-                    
-             <> 
-            <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
+        <>
+        <Box display="flex" flexDirection="row-reverse" justifyContent="flex-end" p={1} marginLeft={40}>
+            <Tabs indicatorColor='primary' textColor='tab' variant="fullWidth" onChange={this.handleTabChange} right>
               <Tab label='Profil' component={RouterLink} to={`/meinprofil`}/>
               <Tab label='Lerngruppen' component={RouterLink} to={`/meinelerngruppen`}/>
               <Tab label='Vorschläge' component={RouterLink} to={`/meinevorschlaege`}/>
               <Tab label='Chats' component={RouterLink} to={`/meinechats`}/>
               <Tab label='About' component={RouterLink} to={`/about`} />
             </Tabs>
-            </>
-            : null
+         </Box>
+         <ProfileDropDown user={currentPerson} />
+         </>
+         : null
           
 
-          } 
-        
+          }
 
-      </Paper>
+
+      </Toolbar>
+      </AppBar>
+      <Toolbar />
+      </div>
     )
   }
 }
