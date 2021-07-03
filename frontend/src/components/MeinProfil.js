@@ -215,6 +215,7 @@ class MeinProfil extends Component {
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
   userFormClosed = (person) => {
     this.getPerson();
+    this.getLernfaecher();
     if (person) {
         this.setState({
             person: person,

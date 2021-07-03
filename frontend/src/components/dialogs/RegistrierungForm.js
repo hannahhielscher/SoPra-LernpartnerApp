@@ -6,9 +6,9 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
     Select,
     MenuItem,
     } from '@material-ui/core';
-
 import { LernpartnerAPI } from '../../api';
 import { withRouter } from 'react-router-dom';
+import MultiSelectLernfaecher from './MultiSelectLernfaecher';
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
@@ -56,6 +56,38 @@ class RegistrierungForm extends Component {
             lerngruppeValidationFailed: false,
             lerngruppeEdited: false,
 
+            tageszeiten: null,
+            tageszeitenValidationFailed: false,
+            tageszeitenEdited: false,
+
+            tage: null,
+            tageValidationFailed: false,
+            tageEdited: false,
+
+            frequenz: null,
+            frequenzValidationFailed: false,
+            frequenzEdited: false,
+
+            lernart: null,
+            lernartValidationFailed: false,
+            lernartEdited: false,
+
+            gruppengroesse: null,
+            gruppengroesseValidationFailed: false,
+            gruppengroesseEdited: false,
+
+            lernort: null,
+            lernortValidationFailed: false,
+            lernortEdited: false,
+
+            lernfaecher: [],
+            lernfaecherValidationFailed: false,
+            lernfaecherEdited: false,
+
+            gruppe: 0,
+            profil: null,
+            personLernvorliebenID: null,
+
             addingError: null,
             addingInProgress: false,
 
@@ -66,35 +98,102 @@ class RegistrierungForm extends Component {
         };
         // save this state for canceling
         this.baseState = this.state;
+
+        //Binding der handleChange Methoden an die Komponente
         this.handleChangeStudiengang = this.handleChangeStudiengang.bind(this);
         this.handleChangeLerngruppe = this.handleChangeLerngruppe.bind(this);
         this.handleChangeGeschlecht = this.handleChangeGeschlecht.bind(this);
+        this.handleChangeTageszeiten = this.handleChangeTageszeiten.bind(this);
+        this.handleChangeTage = this.handleChangeTage.bind(this);
+        this.handleChangeFrequenz = this.handleChangeFrequenz.bind(this);
+        this.handleChangeLernart = this.handleChangeLernart.bind(this);
+        this.handleChangeGruppengroesse = this.handleChangeGruppengroesse.bind(this);
+        this.handleChangeLernort = this.handleChangeLernort.bind(this);
+        this.onChangeLernfaecher = this.onChangeLernfaecher.bind(this);
         }
     
 
-    /** Updates the person */
-    registrieren = () => {
+    /** Updaten der Person. Über Security Decorator wurde bereits ein Person, Profil und
+     * Lernvorlieben Objekt erstellt, weswegen die "Registrierung" hier ein Update ist
+     */
+    updatenPerson = () => {
         let person = this.props.currentPerson;
-        person.name = this.state.name
-        person.vorname = this.state.vorname
-        person.semester = this.state.semester
-        person.studiengang = this.state.studiengang
-        person.alter = this.state.alter
-        person.geschlecht = this.state.geschlecht
-        person.lerngruppe = this.state.lerngruppe
         LernpartnerAPI.getAPI().updatePerson(person.id, this.state.name, this.state.vorname, this.state.semester, this.state.studiengang, this.state.alter, this.state.geschlecht,
           this.state.lerngruppe).then(person => {
-            // Backend call sucessfull
-            // reinit the dialogs state for a new empty customer
+            // Backend call erfolgreich
+            // Initialisiert State neu
             this.setState(this.baseState);
-            this.props.onClose(person); // call the parent with the customer object from backend
+            this.props.onClose(person); // Ruft parent Komponente auf mit neuem Person-Objekt aus Backend
         }).catch(e =>
             this.setState({
                 updatingInProgress: false,    // disable loading indicator 
                 updatingError: e              // show error message
             })
         );
+        // set loading to true
+        this.setState({
+            updatingInProgress: true,       // show loading indicator
+            updatingError: null             // disable error message
+      });
+    }
 
+    // API Anbindung um das Profil der Person vom Backend zu bekommen, um dieses dann zu updaten
+   getProfil = () => {
+		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getprofil())
+			.then(profilBO =>
+				this.setState({
+            profil: profilBO,
+            personLernvorliebenID: profilBO.lernvorlieben_id,
+            error: null,
+            loadingInProgress: false,
+          })).catch(e =>
+            this.setState({
+              profil: null,
+              personLernvorliebenID: null,
+              error: e,
+              loadingInProgress: false,
+            }));
+      // set loading to true
+      this.setState({
+        loadingInProgress: true,
+        loadingError: null
+      });
+    }
+
+  /** Updaten des Profils mit den ausgewählten Daten */
+  updatenProfil = () => {
+    LernpartnerAPI.getAPI().updateProfil(this.state.profil.id, this.state.gruppe, this.state.lernfaecher, this.state.personLernvorliebenID
+    ).then(profil => {
+        // Backend call erfolgreich
+        // Initialisiert State neu für nächste Registrierung
+        this.setState(this.baseState);
+    }).catch(e =>
+        this.setState({
+            updatingInProgress: false,    // disable loading indicator
+            updatingError: e              // show error message
+        })
+    );
+
+    // set loading to true
+    this.setState({
+        updatingInProgress: true,       // show loading indicator
+        updatingError: null             // disable error message
+  });
+}
+
+  /** Updaten der zugehörigen Lervorlieben über ID aus Profil */
+    updatenLernvorlieben = () => {
+        LernpartnerAPI.getAPI().updateLernvorlieben(this.state.personLernvorliebenID, this.state.tageszeiten, this.state.tage, this.state.frequenz, this.state.lernart, this.state.gruppengroesse, this.state.lernort)
+        .then(lernvorlieben => {
+            // Backend call erfolgreich
+            // Initialisiert State neu für nächste Registrierung
+            this.setState(this.baseState);
+        }).catch(e =>
+            this.setState({
+                updatingInProgress: false,    // disable loading indicator
+                updatingError: e              // show error message
+            })
+        );
         // set loading to true
         this.setState({
             updatingInProgress: true,       // show loading indicator
@@ -154,37 +253,110 @@ class RegistrierungForm extends Component {
         this.props.onClose(null);
     }
 
+    //Handle Change des Studiengang-Dropdowns
     handleChangeStudiengang(event) {
       this.setState({studiengang: event.target.value});
     }
 
+    //Handle Change des Lerngruppen-Dropdowns
     handleChangeLerngruppe(event) {
       this.setState({lerngruppe: event.target.value});
     }
 
+    //Handle Change des Geschlecht-Dropdowns
     handleChangeGeschlecht(event) {
       this.setState({geschlecht: event.target.value});
     }
 
+    //Handle Change des Tageszeiten-Dropdowns
+    handleChangeTageszeiten(event) {
+      this.setState({tageszeiten: event.target.value});
+    }
+
+    //Handle Change des Tage-Dropdowns
+    handleChangeTage(event) {
+      this.setState({tage: event.target.value});
+    }
+
+    //Handle Change des Frequenz-Dropdowns
+    handleChangeFrequenz(event) {
+      this.setState({frequenz: event.target.value});
+    }
+
+    //Handle Change des Lernart-Dropdowns
+    handleChangeLernart(event) {
+      this.setState({lernart: event.target.value});
+    }
+
+    //Handle Change des Gruppengroesse-Dropdowns
+    handleChangeGruppengroesse(event) {
+      this.setState({gruppengroesse: event.target.value});
+    }
+
+    //Handle Change des Lernort-Dropdowns
+    handleChangeLernort(event) {
+      this.setState({lernort: event.target.value});
+    }
+
+    //Handle Change des Lernfaecher-Dropdowns
+    onChangeLernfaecher(newLernfaecher) {
+      console.log(newLernfaecher)
+      this.setState({
+        lernfaecher: newLernfaecher
+      
+    })
+  }
+
   
-	/** Renders the sign in page, if user objext is null */
+	/** Rendert den Dialog, wenn CurrentPerson Vorname gleich null, sprich die Person neu im System ist */
 	/** Renders the component */
     render() {
         const { classes, show, currentPerson, } = this.props;
-        const { name, nameValidationFailed, vorname, vornameValidationFailed, semester, semesterValidationFailed, studiengang, studiengangValidationFailed,
-          alter, alterValidationFailed, geschlecht, geschlechtValidationFailed, lerngruppe, lerngruppeValidationFailed, addingInProgress,
-          updatingInProgress, updatingError} = this.state;
+        const { 
+          profil, 
+          personLernvorliebenID, 
+          name, 
+          nameValidationFailed, 
+          vorname, 
+          vornameValidationFailed, 
+          semester, 
+          semesterValidationFailed, 
+          studiengang, 
+          studiengangValidationFailed,
+          alter, 
+          alterValidationFailed, 
+          geschlecht, 
+          geschlechtValidationFailed, 
+          lerngruppe, 
+          lerngruppeValidationFailed, 
+          tageszeiten,
+          tageszeitenValidationFailed, 
+          tage, 
+          tageValidationFailed, 
+          frequenz, 
+          frequenzValidationFailed, 
+          lernart, 
+          lernartValidationFailed, 
+          gruppengroesse, 
+          gruppengroesseValidationFailed,
+          lernort, 
+          lernortValidationFailed,
+          lernfach, 
+          lernfaecherValidationFailed, 
+          addingInProgress,
+          updatingInProgress, 
+          updatingError} = this.state;
     
+        console.log(profil)
+        console.log(personLernvorliebenID)
         let title = 'Registriere dich zuerst, bevor du die App nutzen kannst!';
         let header = 'Bitte gib deine Daten ein:';
     
         return (
             show ?
-            <Dialog open={show}>
+            <Dialog open={show} onEnter={this.getProfil}>
               <DialogTitle id='form-dialog-title'>{title}
-                  <IconButton className={classes.closeButton} onClick={this.handleClose}>
-                      <CloseIcon />
-                  </IconButton>
+                  
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
@@ -238,32 +410,89 @@ class RegistrierungForm extends Component {
                                 <MenuItem value='divers'>Divers</MenuItem>
                             </Select>
                    </FormControl>
-                  <br/>
-                  <FormControl className={classes.formControl}>
+
+                  <FormControl required fullWidth className={classes.formControl}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
                              <Select required error={lerngruppeValidationFailed} value={lerngruppe} onChange={this.handleChangeLerngruppe}>
                                 <MenuItem value='1'>Ja!</MenuItem>
                                 <MenuItem value='0'>Nein!</MenuItem>
                             </Select>
                    </FormControl>
-
+                  <br/><br/>
+                  <b>Deine Lernvorlieben:</b><br/>
+                  <FormControl required fullWidth margin='normal'className={classes.formControl}>
+                            <InputLabel >Welche Tageszeit präferierst du? </InputLabel>
+                             <Select error={tageszeitenValidationFailed} value={tageszeiten}
+                             onChange={this.handleChangeTageszeiten}>
+                                <MenuItem value='1'>Morgens</MenuItem>
+                                <MenuItem value='2'>Mittags</MenuItem>
+                                <MenuItem value='3'>Abends</MenuItem>
+                            </Select>
+                   </FormControl>
+                   <br/>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Welche Tage präferierst du?</InputLabel>
+                             <Select error={tageValidationFailed} value={tage} onChange={this.handleChangeTage}>
+                                <MenuItem value='1'>Unter der Woche</MenuItem>
+                                <MenuItem value='2'>Am Wochenende</MenuItem>
+                            </Select>
+                   </FormControl>
+                   <br/>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Welche Frequenz präferierst du?</InputLabel>
+                             <Select error={frequenzValidationFailed} value={frequenz} onChange={this.handleChangeFrequenz}>
+                                <MenuItem value='1'>Wöchentlich</MenuItem>
+                                <MenuItem value='2'>Mehrmals die Woche</MenuItem>
+                                <MenuItem value='3'>Alle zwei Wochen</MenuItem>
+                            </Select>
+                   </FormControl>
+                   <br/> 
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Welche Lernart präferierst du?</InputLabel>
+                             <Select error={lernartValidationFailed} value={lernart} onChange={this.handleChangeLernart}>
+                                <MenuItem value='1'>Visuell</MenuItem>
+                                <MenuItem value='2'>Auditiv</MenuItem>
+                                <MenuItem value='3'>Motorisch</MenuItem>
+                                <MenuItem value='4'>Kommunikativ</MenuItem>
+                            </Select>
+                   </FormControl>
+                   <br/>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Welche Gruppengroesse präferierst du?</InputLabel>
+                             <Select error={gruppengroesseValidationFailed} value={gruppengroesse} onChange={this.handleChangeGruppengroesse}>
+                                <MenuItem value='1'>Bis zu 3 Personen</MenuItem>
+                                <MenuItem value='2'>3-5 Personen</MenuItem>
+                                <MenuItem value='3'>Über 5 Personen</MenuItem>
+                            </Select>
+                   </FormControl>
+                   <br/>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Welchen Lernort präferierst du?</InputLabel>
+                             <Select error={lernortValidationFailed} value={lernort} onChange={this.handleChangeLernort}>
+                                <MenuItem value='1'>Remote</MenuItem>
+                                <MenuItem value='2'>Hochschule</MenuItem>
+                                <MenuItem value='3'>Bibliothek</MenuItem>
+                                <MenuItem value='4'>Cafe</MenuItem>
+                            </Select>
+                   </FormControl>
+                   <br/>
+                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                        <MultiSelectLernfaecher lernfaecher = {lernfach} onChangeLernfaecher = {this.onChangeLernfaecher}/>
+                    </FormControl>
                 </form>
                 <LoadingProgress show={addingInProgress || updatingInProgress} />
                 {
 
                   <ContextErrorMessage error={updatingError}
                       contextErrorMsg={`Du konntest leider nicht registriert werden :/`}
-                      onReload={this.registrieren} />
+                      onReload={() => {this.updatenPerson(); this.updatenProfil(); this.updatenLernvorlieben();}} />
 
                 }
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleClose} color='secondary'>
-                            Abbrechen
-                </Button>
                 {
                     <Button disabled={nameValidationFailed || vornameValidationFailed || semesterValidationFailed || studiengangValidationFailed || alterValidationFailed || geschlechtValidationFailed || lerngruppeValidationFailed } variant='contained'
-                          onClick={this.registrieren} color='primary'>
+                          onClick={() => {this.updatenPerson(); this.updatenProfil(); this.updatenLernvorlieben();}} color='primary'>
                           Jetzt registrieren
                     </Button>
                 }
