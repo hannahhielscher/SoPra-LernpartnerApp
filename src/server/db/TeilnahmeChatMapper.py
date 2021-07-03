@@ -17,6 +17,7 @@ class TeilnahmeChatMapper(Mapper):
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(teilnehmer)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_konversation(konversation)
             result.append(teilnahme)
 
@@ -29,14 +30,15 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen für eine bestimmte user_id"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE person_id={}".format(person_id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE person_id={}".format(person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, status, konversation_id) in tuples:
+        for (id, person_id, anfrage_sender, status, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
@@ -51,14 +53,15 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE status={} AND konversation_id={} ".format(status, konversation_id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE status={} AND konversation_id={} ".format(status, konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, status, konversation_id) in tuples:
+        for (id, person_id, anfrage_sender, status, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
@@ -73,16 +76,17 @@ class TeilnahmeChatMapper(Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE person_id={} AND status={}".format(person_id, status)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE person_id={} AND status={}".format(person_id, status)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, status, konversation_id) in tuples:
+        for (id, person_id, anfrage_sender, status, konversation_id) in tuples:
 
             teilnahme = TeilnahmeChat()
 
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
 
@@ -98,14 +102,15 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND status={}".format(konversation_id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND status={}".format(konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, status, konversation_id) in tuples:
+        for (id, person_id, anfrage_sender, status, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
             result.append(teilnahme)
@@ -119,14 +124,15 @@ class TeilnahmeChatMapper(Mapper):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND person_id={}".format(konversation_id, person_id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND person_id={}".format(konversation_id, person_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, person_id, status, konversation_id) in tuples:
+        for (id, person_id, anfrage_sender, status, konversation_id) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
             
@@ -137,18 +143,42 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
+    def find_by_anfrage_sender(self, anfrage_sender):
+        """ Findet alle Teilnahmen von einer ProjektID"""
+        result = []
+        cursor = self._connection.cursor()
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE anfrage_sender={}".format(anfrage_sender)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, person_id, anfrage_sender, status, konversation_id) in tuples:
+            teilnahme = TeilnahmeChat()
+            teilnahme.set_id(id)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
+            teilnahme.set_status(status)
+            teilnahme.set_konversation(konversation_id)
+
+            result.append(teilnahme)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def find_by_id(self, id):
         """Reads a tuple with a given ID"""
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, status, konversation_id FROM teilnahmen_chat WHERE id={}".format(id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, person_id, status, konversation_id) = tuples[0]
+            (id, person_id, anfrage_sender, status, konversation_id) = tuples[0]
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_anfrage_sender(anfrage_sender)
             teilnahme.set_status(status)
             teilnahme.set_konversation(konversation_id)
 
@@ -188,8 +218,8 @@ class TeilnahmeChatMapper(Mapper):
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
                 teilnahme.set_id(1)
 
-        command = "INSERT INTO teilnahmen_chat (id, person_id, status, konversation_id) VALUES (%s,%s,%s,%s)"
-        data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_status(), teilnahme.get_konversation())
+        command = "INSERT INTO teilnahmen_chat (id, person_id, anfrage_sender, status, konversation_id) VALUES (%s,%s,%s,%s,%s)"
+        data = (teilnahme.get_id(), teilnahme.get_teilnehmer(), teilnahme.get_anfrage_sender(), teilnahme.get_status(), teilnahme.get_konversation())
         cursor.execute(command, data)
 
         self._connection.commit()

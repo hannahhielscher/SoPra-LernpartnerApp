@@ -94,6 +94,7 @@ konversation = api.inherit('Konversation', nbo, {
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
+    'anfrage_sender':  fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
     'status': fields.Integer(attribute='_status', description='Status der Konversation'),
     'konversation': fields.Integer(attribute='_konversation', description='ID der Konversation'),
 })
@@ -882,10 +883,11 @@ class TeilnahmenChatOperation(Resource):
              Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
 
             teilnehmer = proposal.get_teilnehmer()
+            anfrage_sender = proposal.get_anfrage_sender()
             status = proposal.get_status()
             konversation = proposal.get_konversation()
 
-            result = adm.create_teilnahmeChat(teilnehmer, status, konversation)
+            result = adm.create_teilnahmeChat(teilnehmer, anfrage_sender, status, konversation)
             #print(result)
 
             return result, 200
@@ -901,18 +903,21 @@ class TeilnahmenChatOperation(Resource):
         """Update eines bestimmten Konversationobjekts."""
         teilnahmechatid = request.args.get("id")
         teilnehmer = request.args.get("teilnehmer")
+        anfrage_sender = request.args.get("anfrage_sender")
         status = request.args.get("status")
         konversation = request.args.get("konversation")
         adm = AppAdministration()
         print("ID")
         print(teilnahmechatid)
         print(teilnehmer)
+        print(anfrage_sender)
         print(status)
         print(konversation)
 
         teilnahmechat = adm.get_teilnahmeChat_by_id(teilnahmechatid)
         print(teilnahmechat)
         teilnahmechat.set_teilnehmer(teilnehmer)
+        teilnahmechat.set_anfrage_sender(anfrage_sender)
         teilnahmechat.set_status(status)
         teilnahmechat.set_konversation(konversation)
         print(teilnahmechat)
@@ -936,7 +941,7 @@ class TeilnahmeChatOperation(Resource):
     
     @lernApp.marshal_with(teilnahmechat)
     @lernApp.expect(teilnahmechat, validate=True)
-    @secured
+    #@secured
     def put(self, id):
         """Update eines bestimmten Person-Objekts.
 
@@ -964,7 +969,6 @@ class TeilnahmeChatOperation(Resource):
         adm = AppAdministration()
         adm.delete_teilnahmeChat(id)
         return '', 200
-    
 
 
 @lernApp.route('/teilnahmeChat-by-person-id/<int:id>')
@@ -1014,13 +1018,27 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
         return teilnahme
 
 
+@lernApp.route('/teilnehmer-by-anfrage-sender/<int:anfrage_sender>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeChatByKonversationIdOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmechat)
+    def get(self, anfrage_sender):
+        """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
+        adm = AppAdministration()
+
+        teilnahme = adm.get_teilnahmeChat_anfrage_sender(anfrage_sender)
+
+        return teilnahme
+
+
 
 @lernApp.route('/teilnahmenChat-by-konv-pers/<int:konversation_id>/<int:person_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByKonversationByPersonOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
-    @secured
+    #@secured
     def get (self, konversation_id, person_id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()

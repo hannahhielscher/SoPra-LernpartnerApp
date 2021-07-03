@@ -2,13 +2,13 @@ import BusinessObject from './BusinessObject';
 
 export default class TeilnahmeChatBO extends BusinessObject{
 
-	constructor(ateilnehmer, astatus, akonversation){
+	constructor(ateilnehmer, aanfrage_sender, astatus, akonversation){
         super();
         this.teilnehmer = ateilnehmer;
+        this.anfrage_sender = aanfrage_sender
         this.status = astatus;
         this.konversation = akonversation;
     }
-
 
     /*
 	erhalte 
@@ -21,6 +21,19 @@ export default class TeilnahmeChatBO extends BusinessObject{
 	*/
     setteilnehmer(ateilnehmer){
         this.teilnehmer = ateilnehmer;
+    }
+
+    /*
+	erhalte
+	*/
+    getanfrage_sender(){
+        return this.teilnehmer;
+    }
+    /*
+	setze
+	*/
+    setanfrage_sender(aanfrage_sender){
+        this.anfrage_sender = aanfrage_sender;
     }
 
     /*

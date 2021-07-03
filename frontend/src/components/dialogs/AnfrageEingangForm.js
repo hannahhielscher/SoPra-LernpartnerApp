@@ -21,6 +21,7 @@ import ProfilBO from '../../api/ProfilBO';
 import PersonBO from '../../api/PersonBO';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
 import AnfrageEingangFormEintrag from '../AnfrageEingangFormEintrag';
+import AnfrageAusstehendEintrag from '../AnfrageAusstehendEintrag';
 
 
 class AnfrageEintragForm extends Component {
@@ -30,6 +31,8 @@ class AnfrageEintragForm extends Component {
 
         this.state = {
             teilnahmenChat: [],
+            teilnahmenChatAusstehend: [],
+            teilnahmeChatGefiltert: [],
 
             addingInProgress: false,
             updatingInProgress: false,
@@ -64,6 +67,39 @@ class AnfrageEintragForm extends Component {
       });
     }
 
+  filterTeilnahmeChat = () => {
+    for (var teilnahme in this.state.teilnahmen)
+        if (this.state.teilnahmen.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
+            this.state.teilnahmeChatGefiltert.push(this.state.teilnahmen.[teilnahme])
+        }
+    console.log(this.state.teilnahmen.[teilnahme])
+    console.log(this.state.teilnahmen.[teilnahme]['anfrage_sender'])
+    console.log(this.state.teilnahmeChatGefiltert)
+  }
+
+    // API Anbindung um Konversationen des Students vom Backend zu bekommen
+    getTeilnahmenChatAusstehend = () => {
+      LernpartnerAPI.getAPI().getTeilnahmeChatByAnfrageSender(this.props.currentPerson.id)
+      .then(teilnahmenChatBOs =>
+          this.setState({
+              teilnahmenChatAusstehend: teilnahmenChatBOs,
+              error: null,
+              loadingInProgress: false,
+          })).catch(e =>
+              this.setState({
+                  teilnahmenChat: [],
+                  error: e,
+                  loadingInProgress: false,
+              }));
+
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingKonversationenError: null
+      });
+    }
+
+
   /** Handles the close / cancel button click event */
   handleClose = () => {
     // Reset the state
@@ -74,14 +110,15 @@ class AnfrageEintragForm extends Component {
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
         this.getTeilnahmenChat();
+        this.getTeilnahmenChatAusstehend();
     }
 
  /** Renders the component */
   render() {
     const { classes, show, currentPerson, konversationen } = this.props;
-    const { teilnahmenChat, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmeChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(teilnahmenChat)
-    console.log(currentPerson.id)
+    console.log(teilnahmenChatAusstehend)
 
     return (
       show ?
@@ -92,12 +129,29 @@ class AnfrageEintragForm extends Component {
             </IconButton>
           </DialogTitle>
 
-
-            {
-              teilnahmenChat.map(teilnahmeChat =>
+            <Card className={classes.liste}>
+           {
+              teilnahmeChatGefiltert.map(teilnahmeChat =>
                 <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
                 />)
             }
+            </Card>
+
+               <Card className={classes.cardText}>
+               <List>
+                <ListItem>
+                  <ListItemText primary="Deine ausstehende Anfragen:" className={classes.text}/>
+                </ListItem>
+               </List>
+               </Card>
+
+            <Card className={classes.liste}>
+            {
+              teilnahmenChatAusstehend.map(teilnahmenChatAusstehend =>
+                <AnfrageAusstehendEintrag key={teilnahmenChatAusstehend.getID()} teilnahmenChatAusstehend={teilnahmenChatAusstehend} currentPerson={currentPerson}
+                />)
+            }
+            </Card>
 
             <LoadingProgress show={addingInProgress} />
                 <ContextErrorMessage error={addingError} contextErrorMsg={`Die Anfrage konnte nicht gesendet werden.`} onReload={this.getChatPartnerStatus} />
@@ -129,7 +183,20 @@ const styles = theme => ({
   },
   content: {
     margin: theme.spacing(1),
-    }
+    },
+  liste: {
+    overflow: 'scroll',
+  },
+  text: {
+    marginBottom: theme.spacing(1),
+  },
+  cardText: {
+    backgroundColor: theme.palette.grey[100],
+  },
+  card: {
+    marginTop: theme.spacing(6),
+    marginBottom: theme.spacing(6),
+  }
 });
 
 /** PropTypes */

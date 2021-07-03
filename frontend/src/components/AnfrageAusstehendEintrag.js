@@ -29,15 +29,15 @@ import AnfrageForm from './dialogs/AnfrageForm';
  *
  */
 
-class AnfrageEingangFormEintrag extends Component {
+class AnfrageAusstehendEintrag extends Component {
     constructor(props){
         super(props);
 
         // initiiere einen leeren state
         this.state = {
 
-            teilnahmeChat: props.teilnahmeChat,
-            teilnahmeChatID: props.teilnahmeChat.id,
+            teilnahmenChatAusstehend: props.teilnahmenChatAusstehend,
+            teilnahmenChatAusstehendID: props.teilnahmenChatAusstehend.id,
 
             teilnahmen: [],
 
@@ -62,7 +62,7 @@ class AnfrageEingangFormEintrag extends Component {
 
   /** Konversation holen */
   getKonversation = () => {
-    LernpartnerAPI.getAPI().getKonversation(this.state.teilnahmeChat.konversation)
+    LernpartnerAPI.getAPI().getKonversation(this.state.teilnahmenChatAusstehend.konversation)
     .then(konversationBO =>
       this.setState({
         konversation: konversationBO,              // disable loading indicator                 // no error message
@@ -89,9 +89,7 @@ class AnfrageEingangFormEintrag extends Component {
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
-      })).then(() => {
-        this.filterTeilnahmeChat();
-    }).catch(e =>
+      })).catch(e =>
       this.setState({
         teilnahmePartner: null,
         updatingInProgress: false,    // disable loading indicator
@@ -100,77 +98,11 @@ class AnfrageEingangFormEintrag extends Component {
     );
   }
 
-  anfrageAnnehmen = () => {
-    LernpartnerAPI.getAPI().updateKonversation(this.state.konversationID, this.state.konversationName, 1)
-    .then(konversationBO => {
-            // Backend call sucessfull
-            // reinit the dialogs state for a new empty customer
-            this.anfrageAnnehmenTeilnahme(); // call the parent with the customer object from backend
-        }).catch(e =>
-            this.setState({
-                updatingInProgress: false,    // disable loading indicator
-                updatingError: e              // show error message
-            })
-        );
-
-        // set loading to true
-        this.setState({
-            updatingInProgress: true,       // show loading indicator
-            updatingError: null             // disable error message
-      });
-    }
-
-  anfrageAnnehmenTeilnahme = () => {
-    //console.log(teilnahmePerson)
-    //console.log(teilnahmeID)
-    for (var teilnahme in this.state.teilnahmen){
-        LernpartnerAPI.getAPI().updateTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['teilnehmer'], 1, this.state.konversationID)
-        .then(teilnahmeChatBO => {
-                // Backend call sucessfull
-                // reinit the dialogs state for a new empty customer
-                this.setState(this.baseState);
-                this.props.onClose(teilnahmeChatBO); // call the parent with the customer object from backend
-            }).catch(e =>
-                this.setState({
-                    updatingInProgress: false,    // disable loading indicator
-                    updatingError: e              // show error message
-                })
-            );
-
-            // set loading to true
-            this.setState({
-                updatingInProgress: true,       // show loading indicator
-                updatingError: null             // disable error message
-          });
-      }
-  }
-
   nameAnpassen = () => {
     this.setState({
         nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
     });
   }
-
-  anfrageAblehnen = () => {
-    LernpartnerAPI.getAPI().deleteKonversation(this.state.konversationID)
-    .then(konversationBO => {
-            // Backend call sucessfull
-            // reinit the dialogs state for a new empty customer
-                this.setState(this.baseState);
-                this.props.onClose(konversationBO); // call the parent with the customer object from backend
-            }).catch(e =>
-            this.setState({
-                updatingInProgress: false,    // disable loading indicator
-                updatingError: e              // show error message
-            })
-        );
-
-        // set loading to true
-        this.setState({
-            updatingInProgress: true,       // show loading indicator
-            updatingError: null             // disable error message
-      });
-    }
 
   //Setzen des Status, bei schließen des Dialogs
   handleClose = () => {
@@ -185,24 +117,17 @@ class AnfrageEingangFormEintrag extends Component {
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmeChat, teilnahmeChatID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
+          const { teilnahmenChatAusstehend, teilnahmenChatAusstehendID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
           console.log(konversation)
           console.log(konversationID)
           console.log(teilnahmen)
-          console.log(teilnahmeChatID)
-          var test = true
+          console.log(teilnahmenChatAusstehendID)
 
           return (
 
-            test == true ?
-
-            <Card>
-            Du hast keine Anfragen
-            </Card>
-
-            :
             konversationAnfragestatus === false ?
-            <Card>
+
+            <Card className={classes.card}>
                <List>
                 <ListItem>
                   <ListItemText primary={nameNeu} className={classes.name}/>
@@ -210,16 +135,8 @@ class AnfrageEingangFormEintrag extends Component {
                         Profil ansehen
                     </Button>
                   </ListItem>
-                  <ListItem>
-                    <Button style={{ width : 170}} size="small" className={classes.buttonAnnehmen} variant="contained" color="primary" onClick={this.anfrageAnnehmen}>
-                        Annehmen
-                    </Button>
-                    <Button style={{ width : 170}} size="small" className={classes.buttonAblehnen} variant="contained" color="secondary" onClick={this.anfrageAblehnen}>
-                        Ablehnen
-                    </Button>
-                </ListItem>
                </List>
-               </Card>
+             </Card>
             : null
 
           );
@@ -236,16 +153,18 @@ const styles = theme => ({
   },
   buttonAnnehmen: {
     margin: theme.spacing(1),
-    backgroundColor: '#cdaf95'
     },
   buttonAblehnen: {
     margin: theme.spacing(1),
     backgroundColor: '#CC3333'
   },
+  card: {
+    backgroundColor: theme.palette.grey[100],
+  }
   });
 
 /** PropTypes */
-AnfrageEingangFormEintrag.propTypes = {
+AnfrageAusstehendEintrag.propTypes = {
   /** @ignore */
   classes: PropTypes.object.isRequired,
   vorschlag: PropTypes.object.isRequired,
@@ -253,4 +172,4 @@ AnfrageEingangFormEintrag.propTypes = {
   expandedState: PropTypes.bool.isRequired,
 }
 
-export default withStyles(styles)(AnfrageEingangFormEintrag);
+export default withStyles(styles)(AnfrageAusstehendEintrag);
