@@ -155,10 +155,15 @@ class KonversationListe extends Component {
             this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
          }
     }
-    this.setState({
-        anfragenAnzahl: this.state.teilnahmenChatGefiltert.length
-    });
-    console.log(this.state.anfragenAnzahl)
+    if (this.state.teilnahmenChatGefiltert.length < 1) {
+        this.setState({
+            anfragenAnzahl: '0'
+        });
+    }else{
+        this.setState({
+            anfragenAnzahl: this.state.teilnahmenChatGefiltert.length
+        });
+    }
   }
 
 
