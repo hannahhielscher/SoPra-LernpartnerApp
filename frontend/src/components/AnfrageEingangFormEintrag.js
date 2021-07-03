@@ -89,9 +89,7 @@ class AnfrageEingangFormEintrag extends Component {
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
-      })).then(() => {
-        this.filterTeilnahmeChat();
-    }).catch(e =>
+      })).catch(e =>
       this.setState({
         teilnahmePartner: null,
         updatingInProgress: false,    // disable loading indicator
@@ -124,7 +122,7 @@ class AnfrageEingangFormEintrag extends Component {
     //console.log(teilnahmePerson)
     //console.log(teilnahmeID)
     for (var teilnahme in this.state.teilnahmen){
-        LernpartnerAPI.getAPI().updateTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['teilnehmer'], 1, this.state.konversationID)
+        LernpartnerAPI.getAPI().updateTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['teilnehmer'], 1, this.state.konversationID)
         .then(teilnahmeChatBO => {
                 // Backend call sucessfull
                 // reinit the dialogs state for a new empty customer
@@ -152,6 +150,26 @@ class AnfrageEingangFormEintrag extends Component {
   }
 
   anfrageAblehnen = () => {
+    for (var teilnahme in this.state.teilnahmen){
+        LernpartnerAPI.getAPI().deleteTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'])
+        .then(konversationBO => {
+                    this.anfrageAblehnenKonversation();
+                }).catch(e =>
+                this.setState({
+                    updatingInProgress: false,    // disable loading indicator
+                    updatingError: e              // show error message
+                })
+            );
+
+            // set loading to true
+            this.setState({
+                updatingInProgress: true,       // show loading indicator
+                updatingError: null             // disable error message
+          });
+      }
+    }
+
+  anfrageAblehnenKonversation = () => {
     LernpartnerAPI.getAPI().deleteKonversation(this.state.konversationID)
     .then(konversationBO => {
             // Backend call sucessfull
@@ -190,18 +208,8 @@ class AnfrageEingangFormEintrag extends Component {
           console.log(konversationID)
           console.log(teilnahmen)
           console.log(teilnahmeChatID)
-          var test = true
 
           return (
-
-            test == true ?
-
-            <Card>
-            Du hast keine Anfragen
-            </Card>
-
-            :
-            konversationAnfragestatus === false ?
             <Card>
                <List>
                 <ListItem>
@@ -220,7 +228,6 @@ class AnfrageEingangFormEintrag extends Component {
                 </ListItem>
                </List>
                </Card>
-            : null
 
           );
         }

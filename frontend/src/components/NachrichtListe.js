@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LernpartnerAPI from '../api/LernpartnerAPI'
-import { withStyles, Button, TextField, Grid, Typography, Divider, Link, Paper } from '@material-ui/core';
+import { withStyles, Button, TextField, Grid, Typography, Divider, Link, Pape, Card, Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -240,13 +240,15 @@ nachrichtFormClosed = nachrichten => {
           </Grid>
           </Paper>
           <br/>
+          <div className={classes.liste}>
           { 
             nachrichten.map((nachricht) => 
                 <NachrichtListeEintrag key={nachricht.getID()} currentPerson={currentPerson} nachricht={nachricht}/>
                   
             )
-              
           }
+          </div>
+
           <form className={classes.root} noValidate autoComplete="off">
             <TextField
               id="standard-basic"
@@ -297,6 +299,10 @@ const styles = (theme) => ({
   button_style: {
     margin: 5,
     padding: 5,
+  },
+  liste: {
+    overflow: 'scroll',
+    maxHeight: '400px'
   }
 });
 

@@ -630,7 +630,11 @@ class AppAdministration (object):
         # Person by ID holen
         with PersonMapper() as mapper:
             main_person = mapper.find_by_id(main_person_id)
-        # main_personenprofil_id = main_person.get_personenprofil()
+
+        # Wert speichern, ob Person Gruppen als Matches möchte
+        gruppe = main_person.get_lerngruppe()
+        print('Hi')
+        print(gruppe)
 
         # Profil by Person ID holen
         with ProfilMapper() as mapper:
@@ -648,12 +652,24 @@ class AppAdministration (object):
         with ProfilMapper() as mapper:
             match_profil_all = mapper.find_by_lernfach_id(lernfach_id)
 
-        for profil in match_profil_all:
-            if profil.get_id() == main_profil.get_id():
-                match_profil_all.remove(profil)
+        # Gruppen bei Bedarf aus Matching-Liste löschen + rausfiltern von CurrentPerson
+        if gruppe == 0:
+            for profil in match_profil_all:
+                if profil.get_gruppe() == 1:
+                    match_profil_all.remove(profil)
+                    print('ha')
+                    print(profil.get_gruppe())
+                if profil.get_id() == main_profil.get_id():
+                    match_profil_all.remove(profil)
+        else:
+            for profil in match_profil_all:
+                if profil.get_id() == main_profil.get_id():
+                    match_profil_all.remove(profil)
+
 
         #Match berechnen
 
+        unsorted = []
         result = []
 
         for profil in match_profil_all:
@@ -690,9 +706,10 @@ class AppAdministration (object):
             vorschlag.set_id(1)
 
             with VorschlagMapper() as mapper:
-                result.append(mapper.insert(vorschlag))
+                unsorted.append(mapper.insert(vorschlag))
 
-        return result
+
+        return unsorted
 
     """
     Profil-spezifische Methoden

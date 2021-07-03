@@ -132,11 +132,9 @@ class AnfrageAusstehendEintrag extends Component {
           console.log(konversationID)
           console.log(teilnahmen)
           console.log(teilnahmenChatAusstehendID)
+          console.log(konversationAnfragestatus)
 
           return (
-            <div>
-            { 
-            konversationAnfragestatus === false ?
 
             <Card className={classes.card}>
                <List>
@@ -148,11 +146,8 @@ class AnfrageAusstehendEintrag extends Component {
                   </ListItem>
                </List>
              </Card>
-            : null
-            }
-          <ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
-          </div>)
-          ;
+
+          );
         }
 }
 
