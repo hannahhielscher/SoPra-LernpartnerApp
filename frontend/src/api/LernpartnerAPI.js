@@ -120,7 +120,7 @@ export default class LernpartnerAPI {
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
-        
+        #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
         #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
 
         //Lernfachbezogene
@@ -1089,6 +1089,21 @@ export default class LernpartnerAPI {
                   })
                 })
               }
+
+              /** 
+               * gibt die Teilnehmer mit der bestimmten LerngruppenID als BO zurück
+               * @param {Number} lerngruppeId to be retrieved
+               * @public
+              */
+             getTeilnahmeGruppeByGruppe(lerngruppeId){
+              return this.#fetchAdvanced(this.#getTeilnahmeGruppeByGruppeURL(lerngruppeId)).then((responseJSON) => {
+              let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
+              //console.info(teilnahmegruppeBOs)
+              return new Promise(function (resolve){
+               resolve(teilnahmegruppeBOs)
+                })
+              })
+            }
 
               /** 
                * gibt die Teilnehmer mit der bestimmten ID als BO zurück

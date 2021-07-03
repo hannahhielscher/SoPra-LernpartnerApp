@@ -21,6 +21,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
 import AnfrageForm from './dialogs/AnfrageForm';
+import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -40,6 +41,7 @@ class AnfrageAusstehendEintrag extends Component {
             teilnahmenChatAusstehendID: props.teilnahmenChatAusstehend.id,
 
             teilnahmen: [],
+            chatPartner: null,
 
             konversation: null,
             konversationID: null,
@@ -51,7 +53,7 @@ class AnfrageAusstehendEintrag extends Component {
             currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
 
-            showProfil: false,
+            showProfilDialog: false,
             showAnfrageForm: false,
 
             loadingInProgress: false,
@@ -104,6 +106,14 @@ class AnfrageAusstehendEintrag extends Component {
     });
   }
 
+  //Handles the onClick event of the show profil button
+  showProfilButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showProfilDialog: true
+    });
+  }
+
   //Setzen des Status, bei schließen des Dialogs
   handleClose = () => {
     this.setState(this.baseState);
@@ -117,7 +127,7 @@ class AnfrageAusstehendEintrag extends Component {
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmenChatAusstehend, teilnahmenChatAusstehendID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
+          const { teilnahmenChatAusstehend, teilnahmenChatAusstehendID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus, chatPartner, showProfilDialog } = this.state;
           console.log(konversation)
           console.log(konversationID)
           console.log(teilnahmen)
@@ -130,7 +140,7 @@ class AnfrageAusstehendEintrag extends Component {
                <List>
                 <ListItem>
                   <ListItemText primary={nameNeu} className={classes.name}/>
-                    <Button color='secondary'>
+                    <Button color='secondary' onClick={this.showProfilButtonClicked}>
                         Profil ansehen
                     </Button>
                   </ListItem>

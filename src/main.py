@@ -1125,6 +1125,22 @@ class TeilnahmeGruppeOperation(Resource):
         adm.delete_teilnahmegruppe(id)
         return '', 200
 
+@lernApp.route('/teilnahmenGruppe-by-gruppe/<int:lerngruppe_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeGruppeByLerngruppeOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmegruppe)
+    @secured
+    def get (self, lerngruppe_id):
+        """Auslesen einer bestimmten Teilnahme."""
+        adm = AppAdministration()
+        teilnahme = adm.get_teilnahmegruppe_by_lerngruppen_id(lerngruppe_id)
+
+        if teilnahme is not None:
+            return teilnahme
+        else:
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
+
 @lernApp.route('/teilnahmenGruppe/<int:person_id>/<int:lerngruppe_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeByPersonByGruppeOperation(Resource):
