@@ -510,7 +510,7 @@ class AppAdministration (object):
         teilnahme = TeilnahmeChat()
 
         teilnahme.set_teilnehmer(teilnehmer)
-        teilnahme.set_teilnehmer(anfrage_sender)
+        teilnahme.set_anfrage_sender(anfrage_sender)
         teilnahme.set_status(status)
         teilnahme.set_konversation(konversation)
         teilnahme.set_id(1)

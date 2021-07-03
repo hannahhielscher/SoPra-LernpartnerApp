@@ -33,6 +33,7 @@ class AnfrageEintragForm extends Component {
             teilnahmenChat: [],
             teilnahmenChatAusstehend: [],
             teilnahmenChatGefiltert: [],
+            teilnahmenChatAusstehendGefiltert: [],
 
             addingInProgress: false,
             updatingInProgress: false,
@@ -78,6 +79,15 @@ class AnfrageEintragForm extends Component {
          }
   }
 
+  filterTeilnahmenChatAusstehend = () => {
+    for (var teilnahme in this.state.teilnahmenChatAusstehend)
+        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+        if (this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] !== this.props.currentPerson.id){
+            this.state.teilnahmenChatAusstehendGefiltert.push(this.state.teilnahmenChatAusstehend.[teilnahme])
+            console.log(this.state.teilnahmenChatAusstehendGefiltert)
+         }
+  }
+
     // API Anbindung um Konversationen des Students vom Backend zu bekommen
     getTeilnahmenChatAusstehend = () => {
       LernpartnerAPI.getAPI().getTeilnahmeChatByAnfrageSender(this.props.currentPerson.id)
@@ -86,7 +96,9 @@ class AnfrageEintragForm extends Component {
               teilnahmenChatAusstehend: teilnahmenChatBOs,
               error: null,
               loadingInProgress: false,
-          })).catch(e =>
+          })).then(() => {
+            this.filterTeilnahmenChatAusstehend();
+          }).catch(e =>
               this.setState({
                   teilnahmenChat: [],
                   error: e,
@@ -117,11 +129,11 @@ class AnfrageEintragForm extends Component {
  /** Renders the component */
   render() {
     const { classes, show, currentPerson, konversationen } = this.props;
-    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatAusstehendGefiltert, teilnahmenChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(teilnahmenChat)
     console.log(teilnahmenChatGefiltert)
-    console.log(teilnahmenChatAusstehend)
-    console.log(teilnahmeChatGefiltert)
+    console.log(teilnahmenChatAusstehendGefiltert)
+    
 
     return (
       show ?
@@ -150,7 +162,7 @@ class AnfrageEintragForm extends Component {
 
             <Card className={classes.liste}>
             {
-              teilnahmenChatAusstehend.map(teilnahmenChatAusstehend =>
+              teilnahmenChatAusstehendGefiltert.map(teilnahmenChatAusstehend =>
                 <AnfrageAusstehendEintrag key={teilnahmenChatAusstehend.getID()} teilnahmenChatAusstehend={teilnahmenChatAusstehend} currentPerson={currentPerson}
                 />)
             }

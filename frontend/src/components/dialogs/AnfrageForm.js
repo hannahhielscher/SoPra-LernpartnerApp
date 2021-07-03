@@ -31,7 +31,7 @@ class AnfrageForm extends Component {
             chatPartnerProfil: props.chatPartnerProfil,
             //gruppe: props.chatPartnerProfil.gruppe,
             gruppeProfil: null,
-
+            currentPersonID: props.currentPerson.id,
             name: null,
             konvName: null,
 
@@ -86,7 +86,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.state.chatPartner.id
-    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.state.currentPersonID
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -115,7 +115,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
-    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.state.currentPersonID
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -135,6 +135,7 @@ class AnfrageForm extends Component {
     LernpartnerAPI.getAPI().getKonversationByName(this.state.name)
     .then(konversationBO =>
       this.setState({
+        konversation: konversationBO,
         konversationID: konversationBO.id,              // disable loading indicator                 // no error message
       })).then(() => {
         this.addTeilnahmeChatLerngruppe();
@@ -213,7 +214,7 @@ class AnfrageForm extends Component {
     }
 
     getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.chatPartnerProfil)
+    LernpartnerAPI.getAPI().getProfil(this.props.chatPartnerProfil.profil)
     .then(profilBO =>
       this.setState({
             gruppeProfil: profilBO.gruppe,
@@ -274,17 +275,13 @@ class AnfrageForm extends Component {
   getChatPartnerStatus = () => {
     if (this.state.gruppeProfil === true){
     console.log(this.state.gruppeProfil)
-        this.props.getKonversation();
-    }else{
+        this.getKonversation();
+    } else{
     console.log(this.state.gruppeProfil)
         this.addKonversation();
     }
   }
 
-  componentDidMount() {
-    // load initial balance
-    this.getProfil();
-  }
 
   /** Lifecycle method, which is called when the component was updated */
  /* componentDidUpdate(prevProps) {
@@ -295,19 +292,20 @@ class AnfrageForm extends Component {
 
   /** Renders the component */
   render() {
-    const { classes, show, currentPerson } = this.props;
-    const { chatPartner, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { classes, show, currentPerson, chatPartnerProfil } = this.props;
+    const { currentPersonID, chatPartner, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(chatPartner)
     console.log(name)
     console.log(gruppeProfil)
     console.log(konversationID)
     console.log(konversation)
     console.log(teilnahmeChat)
-    console.log(currentPerson.id)
+    console.log(chatPartnerProfil)
+    console.log(currentPersonID)
 
     return (
       show ?
-        <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
+        <Dialog open={show} onEnter={this.getProfil} onClose={this.handleClose} maxWidth='xs'>
           <DialogTitle>Kontaktanfrage senden
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />

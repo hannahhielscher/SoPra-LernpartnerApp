@@ -819,7 +819,7 @@ class KonversationByPersonOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByNameOperation(Resource):
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, name):
         """Auslesen einer bestimmten Konversation."""
         adm = AppAdministration()
@@ -896,7 +896,7 @@ class TeilnahmenChatOperation(Resource):
             konversation = proposal.get_konversation()
 
             result = adm.create_teilnahmeChat(teilnehmer, anfrage_sender, status, konversation)
-            #print(result)
+            print(result)
 
             return result, 200
 
@@ -1031,6 +1031,7 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
 class TeilnahmeChatByKonversationIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
+    #@secured
     def get(self, anfrage_sender):
         """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
         adm = AppAdministration()
