@@ -103,6 +103,7 @@ class KonversationListe extends Component {
 
   /** Handles the onClose event of the CustomerForm */
   anfrageEingangFormFormClosed = (anfrage) => {
+    this.getKonversation();
     // customer is not null and therefor changed
     if (anfrage) {
       this.setState({
