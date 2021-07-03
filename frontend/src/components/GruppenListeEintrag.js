@@ -52,10 +52,10 @@ class GruppenListeEintrag extends Component {
 
     /** Handles onChange events of the underlying ExpansionPanel */
     expansionPanelStateChanged = () => {
-    this.props.onExpandedStateChange(this.props.lerngruppe);
+        this.props.onExpandedStateChange(this.props.lerngruppe);
     }
 
-    /** Handles the onClick event of the Profil ansehen button */
+    /** Event beim Klicken auf den Profil ansehen Button wird definiert */
     showProfilButtonClicked = (event) => {
         event.stopPropagation();
         this.setState({
@@ -103,6 +103,7 @@ class GruppenListeEintrag extends Component {
       });
     }
 
+        /** Lernvorlieben der Gruppe holen */
    getGruppenLernvorlieben = () => {
    //console.log(profil)
     LernpartnerAPI.getAPI().getLernvorlieben(this.state.gruppeLernvorliebenID)
@@ -130,7 +131,7 @@ class GruppenListeEintrag extends Component {
 
 
 
-    /** Handles the onClick event of the delete customer button */
+    /**Event beim Klicken auf den Gruppe verlassen Button wird definiert*/
     verlasseLerngruppeButtonClicked = (event) => {
         event.stopPropagation();
         this.setState({
@@ -138,7 +139,8 @@ class GruppenListeEintrag extends Component {
         });
     }
 
-    /** Handles the onClose event of the CustomerDeleteDialog */
+
+    /** Event beim schließen de */
     verlasseLerngruppeDialogClosed = (teilnahmeGruppe) => {
         // if customer is not null, delete it
         if (teilnahmeGruppe) {
@@ -151,13 +153,14 @@ class GruppenListeEintrag extends Component {
         });
     }
 
-
+    /** Aufrufen des GruppenBearbeitenForm beim Klicken des Gruppenprofil bearbeiten Button */
   bearbeitenButtonClicked = (event) => {
     this.setState({
       showGruppenBearbeitenForm: true
     });
   }
 
+    /** Aufrufen des Profils, nachdem das GruppenBeaarbeitenForm geschlossen wurde*/
   bearbeitenFormClosed = (profil) => {
     this.getGruppenProfil();
     if (profil) {

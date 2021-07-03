@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid, Container } from '@material-ui/core';
-//import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
 import RegistrierungForm from './dialogs/RegistrierungForm';
 import MeinProfilForm from './dialogs/MeinProfilForm';
@@ -10,6 +9,12 @@ import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import Button from '@material-ui/core/Button';
 
+/**
+* Es wird das eigene Profil mit den persönlichen Daten, Lernfächern und Lernvorlieben angezeigt.
+* Die Daten werden bei der Registrierung oder der Bearbeitung des Profils eingegeben.
+*
+* @see See MeinProfilForm [Dialog] (https://material-ui.com/components/dialogs)
+*/
 
 class MeinProfil extends Component {
 
@@ -52,10 +57,9 @@ class MeinProfil extends Component {
         };
     }
 
-    // API Anbindung um Profil vom Backend zu bekommen
-    
+    // API Anbindung um die persönlichen Daten der Person vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.currentPerson.getgoogle_user_id())
+    LernpartnerAPI.getAPI().getPersonByGoogleID(this.props.currentPerson.getgoogle_user_id())
       .then(personBO =>
           this.setState({
             person: personBO,
@@ -91,7 +95,7 @@ class MeinProfil extends Component {
       });
     }
     
-
+    // API Anbindung um das Profil der Person vom Backend zu bekommen
    getProfil = () => {
 		LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getprofil())
 			.then(profilBO =>
@@ -118,6 +122,7 @@ class MeinProfil extends Component {
       });
     }
 
+    // API Anbindung um die Lernfächer der Person vom Backend zu bekommen
     getLernfaecher = () => {
       LernpartnerAPI.getAPI().getLernfaecherByProfil(this.props.currentPerson.getprofil())
       .then(lernfaecherBOs =>
@@ -167,7 +172,8 @@ class MeinProfil extends Component {
         loadingError: null
       });
     }
-   
+
+    // API Anbindung um die Lernvorlieben der Person vom Backend zu bekommen
     getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.state.personLernvorliebenID)
     .then(lernvorliebenBO =>
@@ -198,7 +204,7 @@ class MeinProfil extends Component {
   }
   
   
-  //Handles the onClick event of the show profil button
+  //Wird aufgerufen, wenn der Mein Profil bearbeiten Button gedrückt wird
   bearbeitenButtonClicked = (event) => {
     event.stopPropagation();
     this.setState({
@@ -209,6 +215,7 @@ class MeinProfil extends Component {
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
   userFormClosed = (person) => {
     this.getPerson();
+    this.getLernfaecher();
     if (person) {
         this.setState({
             person: person,
@@ -244,7 +251,7 @@ class MeinProfil extends Component {
     })
   }
 
-  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+  /** Lifecycle method, wird aufgerufen wenn component in den DOM eingesetzt wird*/
   componentDidMount(){
     this.getPerson();
     this.getProfil();
@@ -254,7 +261,7 @@ class MeinProfil extends Component {
   }
 
 
-   /** Renders the component */
+   /** Rendern der Komponente */
     render() {
       const { classes , currentPerson } = this.props;
       // Use the states customer
@@ -315,6 +322,10 @@ class MeinProfil extends Component {
     }
 }
 //<MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson}/>
+
+
+
+/**Spezifische Styles*/
   const styles = theme => ({
   root: {
       width: '100%',
