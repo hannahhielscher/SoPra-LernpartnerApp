@@ -30,7 +30,7 @@ class AnfrageForm extends Component {
             chatPartnerProfil: props.chatPartnerProfil,
             //gruppe: props.chatPartnerProfil.gruppe,
             gruppeProfil: null,
-
+            currentPersonID: props.currentPerson.id,
             name: null,
             konvName: null,
 
@@ -114,7 +114,7 @@ class AnfrageForm extends Component {
     let newTeilnahmeChat = new TeilnahmeChatBO()
     newTeilnahmeChat.id = 0;
     newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
-    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.state.currentPersonID
     newTeilnahmeChat.status = false
     newTeilnahmeChat.konversation = this.state.konversation.id
     LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
@@ -134,6 +134,7 @@ class AnfrageForm extends Component {
     LernpartnerAPI.getAPI().getKonversationByName(this.state.name)
     .then(konversationBO =>
       this.setState({
+        konversation: konversationBO,
         konversationID: konversationBO.id,              // disable loading indicator                 // no error message
       })).then(() => {
         this.addTeilnahmeChatLerngruppe();
@@ -288,7 +289,8 @@ class AnfrageForm extends Component {
     console.log(konversationID)
     console.log(konversation)
     console.log(teilnahmeChat)
-    console.log(currentPerson.id)
+    console.log(chatPartnerProfil)
+    console.log(currentPersonID)
 
     return (
       show ?
