@@ -94,7 +94,7 @@ konversation = api.inherit('Konversation', nbo, {
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
-    'anfrage_sender':  fields.Integer(attribute='_anfrage_sender', description='ID des Teilnehmers'),
+    'anfrage_sender':  fields.Integer(attribute='_anfrage_sender', description='Anfrage-Sender des Teilnehmers'),
     'status': fields.Integer(attribute='_status', description='Status der Konversation'),
     'konversation': fields.Integer(attribute='_konversation', description='ID der Konversation'),
 })
@@ -896,7 +896,7 @@ class TeilnahmenChatOperation(Resource):
             konversation = proposal.get_konversation()
 
             result = adm.create_teilnahmeChat(teilnehmer, anfrage_sender, status, konversation)
-            #print(result)
+            print(result)
 
             return result, 200
 

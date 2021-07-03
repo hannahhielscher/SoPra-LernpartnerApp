@@ -510,7 +510,7 @@ class AppAdministration (object):
         teilnahme = TeilnahmeChat()
 
         teilnahme.set_teilnehmer(teilnehmer)
-        teilnahme.set_teilnehmer(anfrage_sender)
+        teilnahme.set_anfrage_sender(anfrage_sender)
         teilnahme.set_status(status)
         teilnahme.set_konversation(konversation)
         teilnahme.set_id(1)
@@ -669,7 +669,6 @@ class AppAdministration (object):
 
         #Match berechnen
 
-        unsorted = []
         result = []
 
         for profil in match_profil_all:
@@ -706,10 +705,9 @@ class AppAdministration (object):
             vorschlag.set_id(1)
 
             with VorschlagMapper() as mapper:
-                unsorted.append(mapper.insert(vorschlag))
+                result.append(mapper.insert(vorschlag))
 
-
-        return unsorted
+        return result
 
     """
     Profil-spezifische Methoden

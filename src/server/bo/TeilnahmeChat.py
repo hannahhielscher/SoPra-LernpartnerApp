@@ -20,7 +20,7 @@ class TeilnahmeChat(bo.BusinessObject):
 
     def get_anfrage_sender(self):
         """Auslesen des Teilnehmers"""
-        return self._teilnehmer
+        return self._anfrage_sender
 
     def set_anfrage_sender(self, value):
         """setzten des Teilnehmers"""
