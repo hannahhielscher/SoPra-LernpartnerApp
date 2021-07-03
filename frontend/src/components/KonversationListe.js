@@ -47,7 +47,7 @@ class KonversationListe extends Component {
 
       // API Anbindung um Konversationen des Students vom Backend zu bekommen 
     getKonversation = () => {
-      LernpartnerAPI.getAPI().getKonversationenByPerson(this.props.currentPerson.getID())
+      LernpartnerAPI.getAPI().getangenommeneKonversationenByPerson(this.props.currentPerson.getID())
       .then(konversationenBOs =>
           this.setState({
               konversationen: konversationenBOs,

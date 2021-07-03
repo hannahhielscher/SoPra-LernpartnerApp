@@ -14,6 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
 import AnfrageForm from './dialogs/AnfrageForm';
+import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -49,12 +50,12 @@ class VorschlagListeEintrag extends Component {
             chatPartnerProfil: props.vorschlag.match_profil_id,
 
             teilnahmeChat: null,
-
+            
             konversation: null,
             iskonversation: false,
             konversationStatus: null,
 
-            showProfil: false,
+            showProfilDialog: false,
             showAnfrageForm: false,
 
             loadingInProgress: false,
@@ -71,7 +72,7 @@ class VorschlagListeEintrag extends Component {
     showProfilButtonClicked = (event) => {
       event.stopPropagation();
       this.setState({
-        showProfil: true
+        showProfilDialog: true
       });
     }
 
@@ -144,7 +145,7 @@ class VorschlagListeEintrag extends Component {
       LernpartnerAPI.getAPI().getLerngruppeByProfil(this.state.vorschlag.match_profil_id)
       .then(lerngruppeBO =>
           this.setState({
-            //chatPartnerProfil: lerngruppeBO,
+            chatPartnerProfil: lerngruppeBO,
             nameGes: lerngruppeBO.name,
             loadingInProgress: false,
             error: null,
@@ -232,6 +233,21 @@ class VorschlagListeEintrag extends Component {
     }
   }
 
+  /** Handles the onClose event of the CustomerForm */
+  profilDialogClosed = (profil) => {
+    // customer is not null and therefor changed
+    if (profil) {
+      this.setState({
+        
+        showProfilDialog: false
+      });
+    } else {
+      this.setState({
+        showProfilDialog: false
+      });
+    }
+  }
+
     componentDidMount() {
       // load initial balance
       this.getProfil();
@@ -239,7 +255,7 @@ class VorschlagListeEintrag extends Component {
 
     render(){
           const { classes, expandedState } = this.props;
-          const { nameNeu, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showAnfrageForm } = this.state;
+          const { nameNeu, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showProfilDialog, showAnfrageForm } = this.state;
           console.log(nameNeu)
           return (
             <div>
@@ -294,6 +310,7 @@ class VorschlagListeEintrag extends Component {
                     </AccordionDetails>
               </Accordion>
               <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
+              <ProfilDialog show={showProfilDialog} currentProfil={profil} chatPartner={chatPartnerProfil} onClose={this.profilDialogClosed}/>
             </div>
           );
         }

@@ -213,7 +213,7 @@ class PersonOperationen(Resource):
 class PersonByProfilOperationen(Resource):
     @lernApp.marshal_list_with(person)
    
-    @secured
+    #@secured
     def get(self, profilid):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -330,7 +330,7 @@ class ProfilListOperationen(Resource):
 class ProfilByIDOperationen(Resource):
     @lernApp.marshal_list_with(profil)
 
-    @secured
+    #@secured
     def get(self, id):
         """Auslesen eines bestimmten Profil-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -471,7 +471,7 @@ class LerngruppeOperationen(Resource):
 class LerngruppByProfilOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
 
-    @secured
+    #@secured
     def get(self, profilid):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -804,6 +804,19 @@ class KonversationByPersonOperation(Resource):
         """Auslesen aller Konversationen einer Person."""
         adm = AppAdministration()
         konversation = adm.get_konversation_by_personid(personid)
+        
+        return konversation
+
+@lernApp.route('/angenommenekonversationbyperson/<int:personid>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class KonversationByPersonOperation(Resource):        
+    
+    @lernApp.marshal_with(konversation)
+    #@secured
+    def get(self, personid):
+        """Auslesen aller Konversationen einer Person."""
+        adm = AppAdministration()
+        konversation = adm.get_angenommeneKonversationen_by_personid(personid)
         
         return konversation
 

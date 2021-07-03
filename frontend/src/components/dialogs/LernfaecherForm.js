@@ -108,7 +108,7 @@ class LernfaecherForm extends Component {
     console.log(showVorschlagListe)
     return (
       <div>
-        <FormControl required fullWidth margin='normal' className={classes.formControl}>
+        <FormControl className={classes.formControl}>
           <InputLabel htmlFor="age-native-simple">Lernfach auswählen:</InputLabel>
           <Select
             native
