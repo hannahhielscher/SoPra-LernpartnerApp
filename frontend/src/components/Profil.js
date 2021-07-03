@@ -82,7 +82,7 @@ class Profil extends Component {
     }
 */
 
-     getProfil = () => {
+    getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.user.id).then(profilBO =>
       this.setState({
             profil: profilBO,
@@ -110,7 +110,7 @@ class Profil extends Component {
   }
 
 
-     getLernvorlieben = () => {
+    getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.props.user.profil).then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,

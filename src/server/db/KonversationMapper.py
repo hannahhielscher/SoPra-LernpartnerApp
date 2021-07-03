@@ -84,6 +84,28 @@ class KonversationMapper (Mapper):
 
         return result
 
+    def find_angenommene_by_personid(self, personid):
+        """Auslesen aller Konversationen einer Person"""
+        
+        result = []
+        cursor = self._connection.cursor()
+        command = "SELECT konversationen.id, konversationen.name, konversationen.anfragestatus FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE person_id = {} AND anfragestatus = 1".format(personid)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, name, anfragestatus) in tuples:
+            konversation = Konversation()
+            konversation.set_id(id)
+            konversation.set_name(name)
+            konversation.set_anfragestatus(anfragestatus)
+
+            result.append(konversation)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def find_by_name(self, name):
         cursor = self._connection.cursor()
         command = "SELECT id, name, anfragestatus FROM konversationen WHERE name='{}'".format(name)

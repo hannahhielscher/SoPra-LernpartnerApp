@@ -94,6 +94,7 @@ export default class LernpartnerAPI {
         #getKonversationenURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #getKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #getKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/konversationbyperson/${personid}`;
+        #getangenommeneKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/angenommenekonversationbyperson/${personid}`;
         #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversationen/${name}`;
         #updateKonversationURL = (id, name, anfragestatus) => `${this.#lernappServerBaseURL}/konversationen?id=${id}&name=${name}&anfragestatus=${anfragestatus}`;
         #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
@@ -751,6 +752,22 @@ export default class LernpartnerAPI {
 
           getKonversationenByPerson(personid) {
             return this.#fetchAdvanced(this.#getKonversationenByPersonURL(personid)).then((responseJSON) => {
+              let konversationBO = KonversationBO.fromJSON(responseJSON);
+              console.log(konversationBO)
+              return new Promise(function (resolve) {
+                resolve(konversationBO);
+              })           
+            })
+          }
+
+        /**
+           * Gibt alle Konversationen einer Person, die Anfragestatus 1 haben, als BO zurück
+           * @param {Number} personid to be retrieved
+           * @public
+           */
+
+          getangenommeneKonversationenByPerson(personid) {
+            return this.#fetchAdvanced(this.#getangenommeneKonversationenByPersonURL(personid)).then((responseJSON) => {
               let konversationBO = KonversationBO.fromJSON(responseJSON);
               console.log(konversationBO)
               return new Promise(function (resolve) {

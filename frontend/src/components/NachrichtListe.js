@@ -43,11 +43,13 @@ class Nachricht extends Component {
      nachricht_inhalt: null,
      neueNachricht: null,
      konversation_id: null,
-     personid: null,  
+     personid: null, 
+     currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name, 
      error: null,
      loadingInProgress: false,
      konversationID: konversationsID,
      konversationName: konversationName,
+     nameNeu: null,
      showKonversationListe: false,
      showLerngruppeForm: false,
     
@@ -130,6 +132,7 @@ addNachricht = () => {
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
   this.getNachrichten();
+  this.nameAnpassen();
 }
 
 //Wird aufgerufen, wenn das Dialog-Fenster Nachrichtform geschlossen wird
@@ -160,6 +163,12 @@ nachrichtFormClosed = nachrichten => {
     this.setState({neueNachricht: event.target.value});
   };
 
+  nameAnpassen = () => {
+    this.setState({
+        nameNeu: this.state.konversationName.replace(this.state.currentPersonName,''),
+    });
+  }
+
   /** Handles the onClick event of the edit customer button */
   showGruppeFormButtonClicked= (event) => {
     event.stopPropagation();
@@ -187,7 +196,7 @@ nachrichtFormClosed = nachrichten => {
     render() {
       const { classes, currentPerson, konversation } = this.props;
     
-      const { konversationName, showLerngruppeForm, neueNachricht, nachrichten, nachricht_inhalt, loadingInProgress, error } = this.state;
+      const { konversationName, showLerngruppeForm, neueNachricht, nachrichten, nachricht_inhalt, nameNeu, loadingInProgress, error } = this.state;
       
       return (
         <div>
@@ -195,7 +204,7 @@ nachrichtFormClosed = nachrichten => {
           <Paper>
           <Grid container>
             <Grid item xs={12} >
-                <Typography variant="h5" className="header-message" align='center'>{konversationName}</Typography>
+                <Typography variant="h5" className="header-message" align='center'>{nameNeu}</Typography>
             </Grid>
           </Grid>
           </Paper>
