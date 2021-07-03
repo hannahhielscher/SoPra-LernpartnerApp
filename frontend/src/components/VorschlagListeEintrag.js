@@ -310,7 +310,7 @@ class VorschlagListeEintrag extends Component {
                     </AccordionDetails>
               </Accordion>
               <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
-              <ProfilDialog show={showProfilDialog} currentProfil={profil} chatPartner={chatPartnerProfil} onClose={this.profilDialogClosed}/>
+              <ProfilDialog show={showProfilDialog} chatPartner={chatPartnerProfil} onClose={this.profilDialogClosed}/>
             </div>
           );
         }

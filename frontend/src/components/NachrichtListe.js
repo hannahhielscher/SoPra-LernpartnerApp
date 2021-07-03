@@ -14,6 +14,7 @@ import 'react-chat-elements/dist/main.css';
 //import Divider from "@material-ui/core/Divider";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import NachrichtListeEintrag from './NachrichtListeEintrag';
+import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
  * Es werden alle Nachrichten des aktuell eingeloggten Studenten angezeigt
@@ -52,7 +53,7 @@ class Nachricht extends Component {
      nameNeu: null,
      showKonversationListe: false,
      showLerngruppeForm: false,
-    
+     showProfilDialog: false,
      empfaenger: null,
      empfaenger_name: null,
      empfaenger_vorname: null
@@ -129,6 +130,12 @@ addNachricht = () => {
   });
 }
 
+checkKonversation = () => {
+  this.setState({
+
+  })
+}
+
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
   this.getNachrichten();
@@ -192,6 +199,29 @@ nachrichtFormClosed = nachrichten => {
     }
   }
 
+  //Handles the onClick event of the show profil button
+  showProfilButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showProfilDialog: true
+    });
+  }
+
+  /** Handles the onClose event of the CustomerForm */
+  profilDialogClosed = (profil) => {
+    // customer is not null and therefor changed
+    if (profil) {
+      this.setState({
+        
+        showProfilDialog: false
+      });
+    } else {
+      this.setState({
+        showProfilDialog: false
+      });
+    }
+  }
+
  // Rendert die Componente 
     render() {
       const { classes, currentPerson, konversation } = this.props;
@@ -205,6 +235,7 @@ nachrichtFormClosed = nachrichten => {
           <Grid container>
             <Grid item xs={12} >
                 <Typography variant="h5" className="header-message" align='center'>{nameNeu}</Typography>
+                <Button color='primary' onClick={this.showProfilButtonClicked}> Profil ansehen </Button>
             </Grid>
           </Grid>
           </Paper>
@@ -250,7 +281,7 @@ nachrichtFormClosed = nachrichten => {
     );
 
 }}
-
+//<ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
 const styles = (theme) => ({
   root: {
     "& > *": {

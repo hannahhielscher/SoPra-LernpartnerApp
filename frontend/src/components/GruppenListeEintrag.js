@@ -63,7 +63,7 @@ class GruppenListeEintrag extends Component {
         });
     }
 
-        /** TeilnahmeGruppe holen fürs Verlassen */
+  /** TeilnahmeGruppe holen fürs Verlassen */
   getTeilnahmeGruppe = () => {
     LernpartnerAPI.getAPI().getTeilnahmeGruppeByPersonByGruppe(this.props.currentPerson.getID(), this.props.lerngruppe.id)
     .then(teilnahmeGruppeBO => {

@@ -33,6 +33,8 @@ class Profil extends Component {
             personProfilID: null,
             personLernfaecher: null,
             personLernvorliebenID: null,
+            teilnahmenGruppen: [],
+            teilnehmerAnzahl: null, 
             loadingInProgress: false,
             loadingError: null,
         };
@@ -91,7 +93,12 @@ class Profil extends Component {
             profilLernvorliebenID: profilBO.lernvorlieben,
             loadingInProgress: false,
             error: null
-      })).catch(e =>
+      })).then(() => {
+        if (this.state.gruppe !== true){
+          this.getTeilnahmen();
+        }
+      }
+      ).catch(e =>
         this.setState({ // Reset state with error from catch
           profil: null,
           gruppe: null,
@@ -111,7 +118,8 @@ class Profil extends Component {
 
 
     getLernvorlieben = () => {
-    LernpartnerAPI.getAPI().getLernvorlieben(this.props.user.profil).then(lernvorliebenBO =>
+    LernpartnerAPI.getAPI().getLernvorlieben(this.props.user.profil)
+    .then(lernvorliebenBO =>
       this.setState({
             lernvorlieben: lernvorliebenBO,
             tageszeiten: lernvorliebenBO.tageszeiten_bez,
@@ -137,6 +145,29 @@ class Profil extends Component {
     });
   }
 
+  getTeilnahmen = () => {
+
+    LernpartnerAPI.getAPI().getTeilnahmeGruppeByGruppe(this.state.user.id)
+    .then(teilnahmeGruppeBOs =>
+      this.setState({
+            teilnahmenGruppen: teilnahmeGruppeBOs,
+            loadingInProgress: false,
+            error: null
+      })).catch(e =>
+        this.setState({ // Reset state with error from catch
+          teilnahmenGruppen: null,
+          loadingInProgress: false,
+          error: e,
+        })
+      );
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+
+
 
   /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
     componentDidMount() {
@@ -149,9 +180,9 @@ class Profil extends Component {
   render() {
     const { classes, show } = this.props;
     // Use the states customer
-    const { user, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
+    const { user, teilnahmenGruppen, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
     console.log(user)
-
+    console.log(teilnahmenGruppen.length)
     // console.log(this.props);
     return (
       <div className={classes.root}>
@@ -173,7 +204,9 @@ class Profil extends Component {
                     Tage: {tage}<br />
                     Frequenz: {frequenz}<br />
                     Lernart: {lernart}<br />
-                    Lernort: {lernort}
+                    Lernort: {lernort}<br/> <br/>
+
+                    <b>Mitgliederzahl: </b>{teilnahmenGruppen.length} <br/>
                 </>
            }
 

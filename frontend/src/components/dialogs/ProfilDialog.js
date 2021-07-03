@@ -48,6 +48,7 @@ class ProfilDialog extends Component {
         LernpartnerAPI.getAPI().getProfil(this.props.chatPartner.profil)
         .then(profilBO =>
           this.setState({
+                profil: profilBO,
                 gruppe: profilBO.gruppe,
                 lernfaecher: profilBO.lernfaecher,
                 loadingInProgress: false,
@@ -66,7 +67,7 @@ class ProfilDialog extends Component {
         }
 
     getLernvorlieben = () => {
-        LernpartnerAPI.getAPI().getLernvorlieben(this.props.currentProfil.lernvorlieben_id)
+        LernpartnerAPI.getAPI().getLernvorlieben(this.state.profil.lernvorlieben_id)
         .then(lernvorliebenBO =>
           this.setState({
                 lernvorlieben: lernvorliebenBO,
@@ -201,12 +202,12 @@ class ProfilDialog extends Component {
   
     /** Renders the component */
     render() {
-      const { classes, teilnahmeGruppe, chatPartner, currentProfil, show } = this.props;
+      const { classes, teilnahmeGruppe, chatPartner, show } = this.props;
       const { personName, personVorname, personAlter, personGeschlecht, personStudiengang, personSemester, lernfaecher, lernfaechernamen, gruppe, lerngruppeName, profil, tageszeiten, lernort, lernart, frequenz, gruppengroesse, tage, verlassenInProgress, profilError } = this.state;
       //console.log(verlassenInProgress)
       console.log(teilnahmeGruppe)
       console.log(chatPartner)
-      console.log(currentProfil)
+      
       console.log(gruppe)
       console.log(lerngruppeName)
       //console.log(teilnahmeGruppe.id)
@@ -304,7 +305,6 @@ class ProfilDialog extends Component {
     /** @ignore */
     classes: PropTypes.object.isRequired,
     /** The CustomerBO to be deleted */
-    currentProfil: PropTypes.object.isRequired,
     chatPartner: PropTypes.object.isRequired,
     /** If true, the dialog is rendered */
     show: PropTypes.bool.isRequired,

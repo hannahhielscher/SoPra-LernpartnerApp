@@ -168,7 +168,7 @@ class AnfrageForm extends Component {
 
     // API Anbindung um Person vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPersonByProfil(this.props.chatPartnerProfil)
+      LernpartnerAPI.getAPI().getPersonByProfil(this.props.chatPartnerProfil.profil)
       .then(personBO =>
           this.setState({
             chatPartner: personBO,
@@ -192,7 +192,7 @@ class AnfrageForm extends Component {
 
     // API Anbindung um Lerngruppe vom Backend zu bekommen
     getLerngruppe = () => {
-      LernpartnerAPI.getAPI().getLerngruppeByProfil(this.props.chatPartnerProfil)
+      LernpartnerAPI.getAPI().getLerngruppeByProfil(this.props.chatPartnerProfil.profil)
       .then(lerngruppeBO =>
           this.setState({
             chatPartner: lerngruppeBO,
@@ -295,13 +295,15 @@ class AnfrageForm extends Component {
 
   /** Renders the component */
   render() {
-    const { classes, show } = this.props;
+    const { classes, show, currentPerson } = this.props;
     const { chatPartner, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(chatPartner)
     console.log(name)
     console.log(gruppeProfil)
     console.log(konversationID)
     console.log(konversation)
+    console.log(teilnahmeChat)
+    console.log(currentPerson.id)
 
     return (
       show ?

@@ -52,16 +52,15 @@ class TeilnahmeGruppeMapper(Mapper):
         """ Findet alle Teilnahmen/Teilnehmer einer bestimmten Gruppen ID"""
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, lerngruppe_id FROM teilnahmen_gruppe WHERE lerngruppe={}".format(
-            lerngruppe_id)
+        command = "SELECT id, person_id, lerngruppe_id FROM teilnahmen_gruppe WHERE lerngruppe_id={}".format(lerngruppe_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, lerngruppe) in tuples:
+        for (id, person_id, lerngruppe_id) in tuples:
             teilnahme = TeilnahmeGruppe()
             teilnahme.set_id(id)
-            teilnahme.set_teilnehmer(teilnehmer)
-            teilnahme.set_lerngruppe(lerngruppe)
+            teilnahme.set_teilnehmer(person_id)
+            teilnahme.set_lerngruppe(lerngruppe_id)
             result.append(teilnahme)
 
         self._connection.commit()

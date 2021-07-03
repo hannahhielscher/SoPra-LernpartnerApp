@@ -366,7 +366,7 @@ class AppAdministration (object):
 
     def get_teilnahmegruppe_by_lerngruppen_id(self, lerngruppe_id):
         """Gibt die Teilnahme einer gegebenen Lerngruppen Id zurück."""
-        with TeilnahmeGruppenMapper() as mapper:
+        with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_lerngruppe_id(lerngruppe_id)
     
     def get_teilnahmegruppe_by_id(self, id):

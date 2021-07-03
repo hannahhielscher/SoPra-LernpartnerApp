@@ -119,6 +119,7 @@ class AnfrageEintragForm extends Component {
     const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmeChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(teilnahmenChat)
     console.log(teilnahmenChatAusstehend)
+    console.log(teilnahmeChatGefiltert)
 
     return (
       show ?
