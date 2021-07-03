@@ -98,6 +98,7 @@ class MeinProfilForm extends Component {
         };
         // State speichern falls cancel
         this.baseState = this.state;
+        this.handleChangeGeschlecht = this.handleChangeGeschlecht.bind(this);
         this.handleChangeStudiengang = this.handleChangeStudiengang.bind(this);
         this.handleChangeLerngruppe = this.handleChangeLerngruppe.bind(this);
         this.handleChangeTageszeiten = this.handleChangeTageszeiten.bind(this);
@@ -249,6 +250,9 @@ class MeinProfilForm extends Component {
         this.props.onClose(null);
     }
 
+    handleChangeGeschlecht(event) {
+      this.setState({geschlecht: event.target.value});
+    }
 
     handleChangeStudiengang(event) {
       this.setState({studiengang: event.target.value});
@@ -359,10 +363,15 @@ class MeinProfilForm extends Component {
                     onChange={this.numberValueChange} error={alterValidationFailed}
                     helperText={alterValidationFailed ? 'The age must contain at least one character' : ' '} />
 
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='geschlecht' label='Geschlecht:' value={geschlecht}
-                    onChange={this.textFieldValueChange} error={geschlechtValidationFailed}
-                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} />
-
+                  <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Geschlecht:</InputLabel>
+                             <Select  error={geschlechtValidationFailed} value={geschlecht} onChange={this.handleChangeGeschlecht}>
+                                <MenuItem value='weiblich'>Weiblich</MenuItem>
+                                <MenuItem value='männlich'>Männlich</MenuItem>
+                                <MenuItem value='divers'>Divers</MenuItem>
+                            </Select>
+                   </FormControl>
+                  <br/>
                   <FormControl required fullWidth margin='normal' className={classes.formControl}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
                              <Select  error={lerngruppeValidationFailed} value={lerngruppe} onChange={this.handleChangeLerngruppe}>

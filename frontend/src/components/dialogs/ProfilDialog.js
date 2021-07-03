@@ -34,7 +34,8 @@ class ProfilDialog extends Component {
             lerngruppe: false,
             lerngruppeName: null,
             personProfilID: null,
-            lernfaecher: null,
+            lernfaecher: [],
+            lernfaechernamen: [],
             personLernvorliebenID: null,
             profilError: null,
             loadingInProgress: false,
@@ -53,6 +54,7 @@ class ProfilDialog extends Component {
                 error: null
           })).then(() => {
             this.getPartner();
+            this.getLernfaecher();
             //console.log(this.state.profil.id)
         }).catch(e =>
             this.setState({ // Reset state with error from catch
@@ -93,7 +95,7 @@ class ProfilDialog extends Component {
 
       // API Anbindung um Person vom Backend zu bekommen
     getPerson = () => {
-        console.log('testPerson')
+        
         LernpartnerAPI.getAPI().getPersonByProfil(this.props.chatPartner.profil)
         .then(personBO =>
             this.setState({
@@ -124,7 +126,8 @@ class ProfilDialog extends Component {
   
       // API Anbindung um Lerngruppe vom Backend zu bekommen
       getLerngruppe = () => {
-        LernpartnerAPI.getAPI().getLerngruppeByProfil(this.state.chatPartner.profil)
+        console.log('testGruppe')
+        LernpartnerAPI.getAPI().getLerngruppeByProfil(this.props.chatPartner.profil)
         .then(lerngruppeBO =>
             this.setState({
               lerngruppe: lerngruppeBO,
@@ -146,6 +149,31 @@ class ProfilDialog extends Component {
         });
       }
 
+    // API Anbindung um die Lernfächer der Person vom Backend zu bekommen
+    getLernfaecher = () => {
+        LernpartnerAPI.getAPI().getLernfaecherByProfil(this.props.chatPartner.profil)
+        .then(lernfaecherBOs =>
+          this.setState({
+                personLernfaecher: lernfaecherBOs,
+                lernfaechernamen: lernfaecherBOs.map(lernfach=> lernfach.bezeichnung + "  "),
+                loadingInProgress: false,
+                error: null
+          }))
+          .catch(e =>
+            this.setState({ // Reset state with error from catch
+              personLernfaecher: null,
+              loadingInProgress: false,
+              error: e,
+            })
+          );
+    
+        // set loading to true
+        this.setState({
+          loadingInProgress: true,
+          loadingError: null
+        });
+      }
+
     getPartner = () => {
         if (this.state.gruppe === true){
             console.log('test1')
@@ -155,7 +183,9 @@ class ProfilDialog extends Component {
             this.getPerson();
         }
     }
-    componentDidMount() {
+
+    getInfos = () => {
+        console.log('Bin da')
         // load initial balance
         this.getProfil();
         
@@ -172,18 +202,19 @@ class ProfilDialog extends Component {
     /** Renders the component */
     render() {
       const { classes, teilnahmeGruppe, chatPartner, currentProfil, show } = this.props;
-      const { personName, personVorname, personAlter, personGeschlecht, personStudiengang, personSemester, lernfaecher, gruppe, lerngruppeName, profil, tageszeiten, lernort, lernart, frequenz, gruppengroesse, tage, verlassenInProgress, profilError } = this.state;
+      const { personName, personVorname, personAlter, personGeschlecht, personStudiengang, personSemester, lernfaecher, lernfaechernamen, gruppe, lerngruppeName, profil, tageszeiten, lernort, lernart, frequenz, gruppengroesse, tage, verlassenInProgress, profilError } = this.state;
       //console.log(verlassenInProgress)
       console.log(teilnahmeGruppe)
       console.log(chatPartner)
       console.log(currentProfil)
       console.log(gruppe)
-      console.log(personVorname)
+      console.log(lerngruppeName)
       //console.log(teilnahmeGruppe.id)
   
       return (
+        
         show ?
-          <Dialog open={show} onClose={this.handleClose}>
+          <Dialog open={show} onEnter={this.getInfos} onClose={this.handleClose}>
             <DialogTitle id='profil-dialog-title'>Profil anzeigen
               <IconButton className={classes.closeButton} onClick={this.handleClose}>
                 <CloseIcon />
@@ -197,7 +228,14 @@ class ProfilDialog extends Component {
                 <>
                     
                     <b> Gruppenname: </b>{chatPartner.name}<br /><br />
-
+                    <b>Lernfächer:</b>
+                    {
+                        lernfaechernamen.map(lernfach => 
+                          <li>{lernfach}</li>
+                        )
+                                 
+                    }
+                    <br/>
                     <b>Lernvorlieben:</b><br/>
                     Tageszeiten: {tageszeiten}<br />
                     Tage: {tage}<br />
@@ -214,7 +252,14 @@ class ProfilDialog extends Component {
                     <b>Semester: </b> {personSemester}<br/>
                     <b>Studiengang: </b>{personStudiengang}<br/>
                     <b>Geschlecht: </b> {personGeschlecht}<br/>
-                    <b>Lernfächer: </b> {lernfaecher} <br/><br/>
+                    <b>Lernfächer: </b> 
+                    {
+                        lernfaechernamen.map(lernfach => 
+                          <li>{lernfach}</li>
+                        )
+                                 
+                    }
+                    <br/>
                     <b>Lernvorlieben:</b><br/>
                     Tageszeiten: {tageszeiten}<br />
                     Tage: {tage}<br />
@@ -238,6 +283,7 @@ class ProfilDialog extends Component {
             </DialogActions>
           </Dialog>
           : null
+        
       );
     }
   }
@@ -259,6 +305,7 @@ class ProfilDialog extends Component {
     classes: PropTypes.object.isRequired,
     /** The CustomerBO to be deleted */
     currentProfil: PropTypes.object.isRequired,
+    chatPartner: PropTypes.object.isRequired,
     /** If true, the dialog is rendered */
     show: PropTypes.bool.isRequired,
     /**

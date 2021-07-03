@@ -68,6 +68,7 @@ class RegistrierungForm extends Component {
         this.baseState = this.state;
         this.handleChangeStudiengang = this.handleChangeStudiengang.bind(this);
         this.handleChangeLerngruppe = this.handleChangeLerngruppe.bind(this);
+        this.handleChangeGeschlecht = this.handleChangeGeschlecht.bind(this);
         }
     
 
@@ -161,6 +162,10 @@ class RegistrierungForm extends Component {
       this.setState({lerngruppe: event.target.value});
     }
 
+    handleChangeGeschlecht(event) {
+      this.setState({geschlecht: event.target.value});
+    }
+
   
 	/** Renders the sign in page, if user objext is null */
 	/** Renders the component */
@@ -224,11 +229,16 @@ class RegistrierungForm extends Component {
                   <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='alter' label='Alter:' value={alter} 
                     onChange={this.numberValueChange} error={alterValidationFailed} 
                     helperText={alterValidationFailed ? 'The age must contain at least one character' : ' '} />
-
-                  <TextField className={classes.textfield} autoFocus type='text' required fullWidth margin='normal' id='geschlecht' label='Geschlecht:' value={geschlecht} 
-                    onChange={this.textFieldValueChange} error={geschlechtValidationFailed} 
-                    helperText={geschlechtValidationFailed ? 'The gender must contain at least one character' : ' '} /> 
-                  
+  
+                  <FormControl required fullWidth margin='normal' className={classes.formControl}>
+                            <InputLabel>Geschlecht:</InputLabel>
+                             <Select  error={geschlechtValidationFailed} value={geschlecht} onChange={this.handleChangeGeschlecht}>
+                                <MenuItem value='weiblich'>Weiblich</MenuItem>
+                                <MenuItem value='männlich'>Männlich</MenuItem>
+                                <MenuItem value='divers'>Divers</MenuItem>
+                            </Select>
+                   </FormControl>
+                  <br/>
                   <FormControl className={classes.formControl}>
                             <InputLabel>Interesse an einer Lerngruppe?</InputLabel>
                              <Select required error={lerngruppeValidationFailed} value={lerngruppe} onChange={this.handleChangeLerngruppe}>
