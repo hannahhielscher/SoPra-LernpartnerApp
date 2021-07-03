@@ -32,7 +32,7 @@ class AnfrageEintragForm extends Component {
         this.state = {
             teilnahmenChat: [],
             teilnahmenChatAusstehend: [],
-            teilnahmeChatGefiltert: [],
+            teilnahmenChatGefiltert: [],
 
             addingInProgress: false,
             updatingInProgress: false,
@@ -53,7 +53,9 @@ class AnfrageEintragForm extends Component {
               teilnahmenChat: teilnahmenChatBOs,
               error: null,
               loadingInProgress: false,
-          })).catch(e =>
+            })).then(() => {
+                  this.filterTeilnahmenChat();
+            }).catch(e =>
               this.setState({
                   teilnahmenChat: [],
                   error: e,
@@ -67,14 +69,13 @@ class AnfrageEintragForm extends Component {
       });
     }
 
-  filterTeilnahmeChat = () => {
-    for (var teilnahme in this.state.teilnahmen)
-        if (this.state.teilnahmen.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
-            this.state.teilnahmeChatGefiltert.push(this.state.teilnahmen.[teilnahme])
-        }
-    console.log(this.state.teilnahmen.[teilnahme])
-    console.log(this.state.teilnahmen.[teilnahme]['anfrage_sender'])
-    console.log(this.state.teilnahmeChatGefiltert)
+  filterTeilnahmenChat = () => {
+    for (var teilnahme in this.state.teilnahmenChat)
+        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+        if (this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
+            this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
+            console.log(this.state.teilnahmenChatGefiltert)
+         }
   }
 
     // API Anbindung um Konversationen des Students vom Backend zu bekommen
@@ -116,8 +117,9 @@ class AnfrageEintragForm extends Component {
  /** Renders the component */
   render() {
     const { classes, show, currentPerson, konversationen } = this.props;
-    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmeChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(teilnahmenChat)
+    console.log(teilnahmenChatGefiltert)
     console.log(teilnahmenChatAusstehend)
 
     return (
@@ -131,7 +133,7 @@ class AnfrageEintragForm extends Component {
 
             <Card className={classes.liste}>
            {
-              teilnahmeChatGefiltert.map(teilnahmeChat =>
+              teilnahmenChatGefiltert.map(teilnahmeChat =>
                 <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
                 />)
             }

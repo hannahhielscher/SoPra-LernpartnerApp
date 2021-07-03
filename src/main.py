@@ -94,7 +94,7 @@ konversation = api.inherit('Konversation', nbo, {
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
-    'anfrage_sender':  fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
+    'anfrage_sender':  fields.Integer(attribute='_anfrage_sender', description='ID des Teilnehmers'),
     'status': fields.Integer(attribute='_status', description='Status der Konversation'),
     'konversation': fields.Integer(attribute='_konversation', description='ID der Konversation'),
 })
@@ -758,11 +758,6 @@ class KonversationenOperation(Resource):
         anfragestatus = request.args.get("anfragestatus")
         adm = AppAdministration()
 
-        if anfragestatus == 1:
-            anfragestatus = True
-        else:
-            anfragestatus = False
-
         konversation = adm.get_konversation_by_id(konversationid)
         konversation.set_name(name)
         konversation.set_anfragestatus(anfragestatus)
@@ -963,7 +958,7 @@ class TeilnahmeChatOperation(Resource):
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
 
-    @secured
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten TeilnahmeChat-objekts."""
         adm = AppAdministration()

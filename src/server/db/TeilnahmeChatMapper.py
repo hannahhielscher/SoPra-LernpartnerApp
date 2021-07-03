@@ -91,6 +91,7 @@ class TeilnahmeChatMapper(Mapper):
             teilnahme.set_konversation(konversation_id)
 
             result.append(teilnahme)
+            print('test CHat')
             print(teilnahme)
 
         self._connection.commit()
