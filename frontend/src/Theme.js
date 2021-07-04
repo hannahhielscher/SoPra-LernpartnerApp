@@ -11,15 +11,15 @@ const theme = createMuiTheme({
     white,
     primary: {
       contrastText: white,
-      dark: colors.indigo[900],
-      main: colors.indigo[500],
-      light: colors.indigo[100]
+      dark: '#8b7765',
+      main: '#8b7d6b',
+      light: '#ffe4c4',
     },
     secondary: {
       contrastText: white,
-      dark: colors.blue[900],
-      main: colors.blue['A400'],
-      light: colors.blue['A400']
+      dark: '#8b6969',
+      main: '#cdb79e',
+      light: 'ffe4e1'
     },
     tab: {
         color: white,
@@ -63,7 +63,10 @@ const theme = createMuiTheme({
     },
     icon: colors.blueGrey[600],
     divider: colors.grey[200]
-  }, 
+  },
+    button: {
+    color: '#cdaf95'
+    },
 });
 
 

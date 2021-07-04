@@ -994,7 +994,7 @@ class TeilnahmeChatByPersonIdOperation(Resource):
         else:
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
-@lernApp.route('/teilnehmer-by-konversation-id-status/<int:status>/<int:konversation_id>')
+@lernApp.route('/teilnehmer-by-status-konversation-id/<int:status>/<int:konversation_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByKonversationIdOperation(Resource):
     @lernApp.marshal_with(teilnahmechat)
@@ -1008,7 +1008,7 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
         else:
             status = False
 
-        teilnahme = adm.get_teilnahmeChat_by_konversation_id_und_status(status, konversation_id)
+        teilnahme = adm.get_teilnahmeChat_by_status_and_konversation_id(status, konversation_id)
         print(teilnahme)
         return teilnahme
 
@@ -1017,11 +1017,11 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
 class TeilnahmeChatByKonversationIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
-    def get(self, konversation_id):
+    def get(self, id):
         """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
         adm = AppAdministration()
 
-        teilnahme = adm.get_teilnahmeChat_by_konversation_id_s(konversation_id)
+        teilnahme = adm.get_teilnahmeChat_by_konversation_id(id)
 
         return teilnahme
 

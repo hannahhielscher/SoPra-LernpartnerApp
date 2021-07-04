@@ -62,13 +62,13 @@ class AnfrageAusstehendEintrag extends Component {
         this.baseState = this.state;
     }
 
-
+    // API Anbindung um Person vom Backend zu bekommen
     getPerson = () => {
       LernpartnerAPI.getAPI().getPerson(this.state.teilnahmenChatAusstehend.teilnehmer)
       .then(personBO =>
         this.setState({
           chatPartner: personBO,              // disable loading indicator                 // no error message
-          
+          nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,'')
         })).catch(e =>
         this.setState({
           chatPartner: null,
@@ -77,7 +77,26 @@ class AnfrageAusstehendEintrag extends Component {
         })
       );
     }
-    
+
+    // API Anbindung um Lerngruppe vom Backend zu bekommen
+    getLerngruppe = () => {
+      LernpartnerAPI.getAPI().getLerngruppe(this.state.teilnahmenChatAusstehend.teilnehmer)
+      .then(lerngruppeBO =>
+          this.setState({
+            chatPartner: lerngruppeBO,
+            nameNeu: this.state.konversation.name,
+      })).catch(e =>
+      this.setState({
+          name: null,
+          loadingInProgress: false,
+          error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
   
   /** Konversation holen */
   getKonversation = () => {
@@ -104,13 +123,13 @@ class AnfrageAusstehendEintrag extends Component {
   }
 
   getTeilnahmeChats = () => {
-    LernpartnerAPI.getAPI().getTeilnahmeChatByKonversationByStatus(0, this.state.konversationID)
+    LernpartnerAPI.getAPI().getTeilnahmeChatByStatusByKonversation(0, this.state.konversationID)
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
       })).catch(e =>
       this.setState({
-        teilnahmePartner: null,
+        teilnahmen: null,
         updatingInProgress: false,    // disable loading indicator
         updatingError: e              // show error message
       })
@@ -118,9 +137,11 @@ class AnfrageAusstehendEintrag extends Component {
   }
 
   nameAnpassen = () => {
-    this.setState({
-        nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
-    });
+    if (this.state.konversation.name.includes(this.state.currentPersonName)){
+        this.getPerson();
+    }else{
+        this.getLerngruppe();
+     }
   }
 
   //Handles the onClick event of the show profil button
@@ -154,7 +175,6 @@ class AnfrageAusstehendEintrag extends Component {
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
     this.getKonversation();
-    this.getPerson();
   }
 
     render(){
@@ -168,7 +188,7 @@ class AnfrageAusstehendEintrag extends Component {
 
           return (
             <div>
-            <Card className={classes.card}>
+            <div className={classes.list}>
                <List>
                 <ListItem>
                   <ListItemText primary={nameNeu} className={classes.name}/>
@@ -177,7 +197,7 @@ class AnfrageAusstehendEintrag extends Component {
                     </Button>
                   </ListItem>
                </List>
-             </Card>
+             </div>
             <ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
           </div>
           );
@@ -199,7 +219,7 @@ const styles = theme => ({
     margin: theme.spacing(1),
     backgroundColor: '#CC3333'
   },
-  card: {
+  list: {
     backgroundColor: theme.palette.grey[100],
   }
   });

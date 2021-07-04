@@ -257,7 +257,7 @@ const styles = theme => ({
   },
   text: {
     padding: theme.spacing(2),
-    color: theme.palette.grey[500]
+    color: theme.palette.grey[100]
   }
   });
 

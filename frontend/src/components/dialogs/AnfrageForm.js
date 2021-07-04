@@ -31,7 +31,6 @@ class AnfrageForm extends Component {
             //gruppe: props.chatPartnerProfil.gruppe,
             gruppeProfil: null,
             currentPersonID: props.currentPerson.id,
-            name: null,
             konvName: null,
 
             konversation: null,
@@ -131,7 +130,7 @@ class AnfrageForm extends Component {
 
   /** Konversation holen */
   getKonversation = () => {
-    LernpartnerAPI.getAPI().getKonversationByName(this.state.name)
+    LernpartnerAPI.getAPI().getKonversationByName(this.props.chatPartner.name)
     .then(konversationBO =>
       this.setState({
         konversation: konversationBO,
@@ -171,13 +170,11 @@ class AnfrageForm extends Component {
       LernpartnerAPI.getAPI().getPersonByProfil(this.props.chatPartner.profil)
       .then(personBO =>
           this.setState({
-            name: personBO.name,
             konvName: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
             loadingInProgress: false,
             error: null,
       })).catch(e =>
               this.setState({
-                name: null,
                 konvName: null,
                 loadingInProgress: false,
                 error: e,
@@ -198,7 +195,7 @@ class AnfrageForm extends Component {
             error: null,
       })).catch(e =>
               this.setState({
-                lerngruppeName: null,
+                name: null,
                 loadingInProgress: false,
                 error: e,
               }));
@@ -209,7 +206,7 @@ class AnfrageForm extends Component {
     }
 
     getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.chatPartner.profil)
+    LernpartnerAPI.getAPI().getProfil(this.state.chatPartnerProfil)
     .then(profilBO =>
       this.setState({
             gruppeProfil: profilBO.gruppe,
@@ -217,7 +214,7 @@ class AnfrageForm extends Component {
             error: null
       })).then(() => {
         this.getPartner();
-        //console.log(this.state.profil.id)
+        console.log(this.state.gruppeProfil)
     }).catch(e =>
         this.setState({ // Reset state with error from catch
           gruppeProfil: null,
@@ -228,6 +225,7 @@ class AnfrageForm extends Component {
     }
 
     getPartner = () => {
+        console.log(console.log())
         if (this.state.gruppeProfil === true){
             this.getLerngruppe();
         }else{
@@ -280,17 +278,16 @@ class AnfrageForm extends Component {
   /** Renders the component */
   render() {
     const { classes, show, chatPartner, currentPerson } = this.props;
-    const { chatPartnerProfil, currentPersonID, name, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { chatPartnerProfil, currentPersonID, konvName, gruppeProfil, konversation, konversationID, teilnahmeChat, teilnahmeChatPartner, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
     console.log(chatPartner)
-   // console.log(chatPartner.id)
-    console.log(chatPartnerProfil)
-    console.log(name)
+    //console.log(chatPartner.name)
+    //console.log(chatPartnerProfil)
     console.log(gruppeProfil)
-    console.log(konversationID)
-    console.log(konversation)
-    console.log(teilnahmeChat)
+    //console.log(konversationID)
+    //console.log(konversation)
+    //console.log(teilnahmeChat)
     console.log(chatPartnerProfil)
-    console.log(currentPersonID)
+    //console.log(currentPersonID)
 
     return (
       show ?

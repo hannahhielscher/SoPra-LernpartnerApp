@@ -50,7 +50,7 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_konversation_id_und_status(self, status, konversation_id):
+    def find_by_status_and_konversation_id(self, status, konversation_id):
         """ Findet alle Teilnahmen von einer ProjektID"""
         result = []
         cursor = self._connection.cursor()

@@ -231,11 +231,10 @@ nachrichtFormClosed = nachrichten => {
       return (
         <div>
           <br/>
-          <Paper>
+          <Paper className={classes.page}>
           <Grid container>
             <Grid item xs={12} >
                 <Typography variant="h5" className="header-message" align='center'>{nameNeu}</Typography>
-                <Button color='primary' onClick={this.showProfilButtonClicked}> Profil ansehen </Button>
             </Grid>
           </Grid>
           </Paper>
@@ -255,6 +254,7 @@ nachrichtFormClosed = nachrichten => {
               label="Schreibe eine Nachricht"
               value={neueNachricht}
               onChange={this.handleChange}
+              className={classes.schreibeNachricht}
             />
           </form>
 
@@ -266,11 +266,11 @@ nachrichtFormClosed = nachrichten => {
             </Button>
           </Link>
 
-          <Button color="primary" variant="contained" onClick={this.addNachricht}>
+          <Button className={classes.button_style} color="primary" variant="contained" onClick={this.addNachricht}>
             senden 
           </Button>
 
-          <Button variant='contained' color='secondary' onClick={this.showGruppeFormButtonClicked}>
+          <Button className={classes.button_style} variant='contained' color='secondary' onClick={this.showGruppeFormButtonClicked}>
               Gruppe erstellen 
           </Button>
 
@@ -298,11 +298,19 @@ const styles = (theme) => ({
   },
   button_style: {
     margin: 5,
-    padding: 5,
+    padding: 10,
+  },
+  schreibeNachricht: {
+    width: '100%',
+    marginBottom: 15,
   },
   liste: {
     overflow: 'scroll',
-    maxHeight: '400px'
+    //maxHeight: '400px'
+  },
+  page: {
+    marginTop: '15px',
+    backgroundColor: '#f7f7f7'
   }
 });
 

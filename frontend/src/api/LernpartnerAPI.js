@@ -110,7 +110,7 @@ export default class LernpartnerAPI {
         #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenChat`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
-        #getTeilnahmeChatByKonversationByStatusURL = (status, konversation_id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id-status/${status}/${konversation_id}`;
+        #getTeilnahmeChatByStatusByKonversationURL = (status, konversation_id) => `${this.#lernappServerBaseURL}/teilnehmer-by-status-konversation-id/${status}/${konversation_id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
         #getTeilnahmeChatByKonversationAndPersonURL = (konversation_id, person_id) => `${this.#lernappServerBaseURL}/teilnahmenChat-by-konv-pers/${konversation_id}/${person_id}`;
         #getTeilnahmeChatByAnfrageSenderURL = (anfrage_sender) => `${this.#lernappServerBaseURL}/teilnehmer-by-anfrage-sender/${anfrage_sender}`;
@@ -896,8 +896,8 @@ export default class LernpartnerAPI {
              })
             }
 
-          getTeilnahmeChatByKonversationByStatus(status, konversation_id){
-            return this.#fetchAdvanced(this.#getTeilnahmeChatByKonversationByStatusURL(status, konversation_id, {method: 'GET'})).then((responseJSON) => {
+          getTeilnahmeChatByStatusByKonversation(status, konversation_id){
+            return this.#fetchAdvanced(this.#getTeilnahmeChatByStatusByKonversationURL(status, konversation_id, {method: 'GET'})).then((responseJSON) => {
             let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
             console.log(teilnahmechatBOs)
             return new Promise(function (resolve){

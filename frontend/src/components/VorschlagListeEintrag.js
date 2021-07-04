@@ -43,6 +43,8 @@ class VorschlagListeEintrag extends Component {
             nameGes: null,
             nameNeu: null,
 
+            status: null,
+
             namePerson: null,
 
             lerngruppe: null,
@@ -182,15 +184,7 @@ class VorschlagListeEintrag extends Component {
         konversationStatus: konversationBO.anfragestatus
       })).then(() => {
         this.nameAnpassen();
-        if (this.state.konversationStatus !== null){
-          this.setState({
-            iskonversation: true,
-          });
-        } else {
-            this.setState({
-                iskonversation: false,
-          });
-        }
+        this.getTeilnahme();
       }).catch(e =>
       this.setState({
         konversationBO: false,
@@ -201,16 +195,20 @@ class VorschlagListeEintrag extends Component {
     );
   }
 
-  setKonversation = () => {
-    if (this.state.konversationStatus === 'Null') {
-        this.setState({
-            konversation: false,
-      });
-    } else {
-        this.setState({
-            konversation: true,
-      });
-    }
+  /** Add TeilnahmeChatPartner */
+  getTeilnahme = () => {
+    LernpartnerAPI.getAPI().getTeilnahmeChatByKonversationAndPerson(this.state.konversation.id, this.state.currentPerson.id)
+    .then(teilnahmeChatBO =>
+      this.setState({
+        teilnahmeChat: teilnahmeChatBO,              // disable loading indicator                 // no error message
+        status: teilnahmeChatBO.status,
+      })).catch(e =>
+      this.setState({
+        teilnahmeChat: false,
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
   }
 
   nameAnpassen = () => {
@@ -250,9 +248,14 @@ class VorschlagListeEintrag extends Component {
 
     render(){
           const { classes, expandedState } = this.props;
-          const { nameNeu, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartner, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showProfilDialog, showAnfrageForm } = this.state;
+          const { nameNeu, teilnahmeChat, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, status, lerngruppe, chatPartner, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showProfilDialog, showAnfrageForm } = this.state;
+          console.log(konversation)
           console.log(nameNeu)
           console.log(chatPartner)
+          console.log(teilnahmeChat)
+          console.log(status)
+          console.log(nameGes)
+
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -284,12 +287,12 @@ class VorschlagListeEintrag extends Component {
                 </AccordionSummary>
                 <AccordionDetails>
                        {
-                       iskonversation ?
+                       status === 0?
                         <>
-                            <Button color='primary' onClick={this.showProfilButtonClicked}>
+                            <Button variant="contained" color='secondary' className={classes.button} size="small" onClick={this.showProfilButtonClicked}>
                               Profil ansehen
                             </Button>
-                            <h4>
+                            <h4 style={{ marginLeft : 25, color: "#bfbfbf"}}>
                             Du bist bereits mit {nameNeu} in Kontakt oder es steht bereits eine Kontaktanfrage aus.
                             </h4>
                         </>
@@ -332,7 +335,7 @@ const styles = theme => ({
       textAlign: "left"
   },
   button: {
-      margin: theme.spacing(1),
+      margin: 2,
       },
   laden: {
     padding: 0

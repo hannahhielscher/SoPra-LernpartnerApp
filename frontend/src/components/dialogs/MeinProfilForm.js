@@ -473,10 +473,11 @@ class MeinProfilForm extends Component {
 const styles = theme => ({
 	root: {
     margin: theme.spacing(2)
-    
-  }
-  
-  
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 });
 
 /** PropTypes */

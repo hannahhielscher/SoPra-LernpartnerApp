@@ -273,18 +273,18 @@ class MeinProfil extends Component {
         <div className={classes.root}>
         <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
 
-        <Button variant="outlined" color="primary" onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
+        <Button variant="contained" color="primary" className={classes.button} onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
         <br/>
         <Paper className={classes.inhalt}>
         <h2>Meine Daten:</h2>
 
         <Typography variant='body1' color={'textSecondary'}>
-        
+
                               <b>Name: </b>{personVorname} {personName}<br />
                               <b>Alter: </b> {personAlter} <br />
                               <b>Semester: </b> {personSemester} <br />
                               <b>Studiengang: </b>{personStudiengang}<br />
-                              
+
                               </Typography>
                               </Paper>
 
@@ -292,12 +292,12 @@ class MeinProfil extends Component {
                               <h2>Meine Lernfächer:</h2>
 
                               <Typography variant='body1' color={'textSecondary'}>
-        
+
                               {
-                                lernfaechernamen.map(lernfach => 
+                                lernfaechernamen.map(lernfach =>
                                   <li>{lernfach}</li>
                                   )
-                                 
+
                               }
                               </Typography>
                               </Paper>
@@ -313,7 +313,7 @@ class MeinProfil extends Component {
                               <b>Lernart: </b>{lernvorliebenlernart}<br />
                               <b>Gruppengröße: </b>{lernvorliebengruppengroesse}<br />
                               <b>Lernort: </b>{lernvorliebenlernort}<br />
-        
+
         </Typography>
         </Paper>
         <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
@@ -329,7 +329,7 @@ class MeinProfil extends Component {
   const styles = theme => ({
   root: {
       width: '100%',
-      marginTop: theme.spacing(2),
+      marginTop: '20px',
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1),
   },
@@ -342,7 +342,8 @@ class MeinProfil extends Component {
       paddingRight: theme.spacing(2),
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(2),
-  }
+  },
+
 
   });
 

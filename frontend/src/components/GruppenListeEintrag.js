@@ -208,19 +208,19 @@ class GruppenListeEintrag extends Component {
                         {lerngruppe.getname()}
                     </Typography>
                   </Grid>
-                    <Button style={{ width : 250, color: "red"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
+                    <Button style={{ width : 250, color: "#cd5b45"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
                         Gruppe verlassen
                     </Button>
                     
                     
                   </AccordionSummary>
-                 <AccordionDetails>
+                 <AccordionDetails style={{ width : 250, backgroundColor: '#faf0e6', width: '100%'}}>
                   <List>
-                    <ListItem>
-                  <Button color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
-                  </ListItem>
                   <ListItem>
                   <Profil user={lerngruppe}/>
+                  </ListItem>
+                  <ListItem>
+                  <Button style={{ marginTop: -20, marginLeft: 8}} variant="contained" size="small" color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
                   </ListItem>
                   </List>
                 </AccordionDetails>
