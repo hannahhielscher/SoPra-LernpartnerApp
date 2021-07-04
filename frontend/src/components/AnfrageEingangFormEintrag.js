@@ -21,12 +21,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
 import AnfrageForm from './dialogs/AnfrageForm';
+import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
- * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
- *
- * Hierfür werden Profilname, Alter, Geschlecht, Semester, Lernfach und der Prozentsatz des Matches angezeigt
- *
+ * Es wird der Eintrag einer eingehenden Anfrage für eine Konversation erstellt.
  */
 
 class AnfrageEingangFormEintrag extends Component {
@@ -41,6 +39,9 @@ class AnfrageEingangFormEintrag extends Component {
 
             teilnahmen: [],
 
+            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
+            chatPartner: null,
+
             konversation: null,
             konversationID: null,
             konversationName: null,
@@ -51,7 +52,7 @@ class AnfrageEingangFormEintrag extends Component {
             currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
 
-            showProfil: false,
+            showProfilDialog: false,
             showAnfrageForm: false,
 
             loadingInProgress: false,
@@ -143,10 +144,27 @@ class AnfrageEingangFormEintrag extends Component {
       }
   }
 
+    // API Anbindung um Person vom Backend zu bekommen
+    getPerson = () => {
+      LernpartnerAPI.getAPI().getPerson(this.state.teilnahmeChat.anfrage_sender)
+      .then(personBO =>
+        this.setState({
+          chatPartner: personBO,              // disable loading indicator                 // no error message
+          nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,'')
+        })).catch(e =>
+        this.setState({
+          chatPartner: null,
+          updatingInProgress: false,    // disable loading indicator
+          updatingError: e              // show error message
+        })
+      );
+    }
+
   nameAnpassen = () => {
     this.setState({
         nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
     });
+    this.getPerson();
   }
 
   anfrageAblehnen = () => {
@@ -198,6 +216,28 @@ class AnfrageEingangFormEintrag extends Component {
     this.props.onClose(null);
   }
 
+  //Handles the onClick event of the show profil button
+  showProfilButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showProfilDialog: true
+    });
+  }
+
+  /** Handles the onClose event of the CustomerForm */
+  profilDialogClosed = (profil) => {
+    // customer is not null and therefor changed
+    if (profil) {
+      this.setState({
+        showProfilDialog: false
+      });
+    } else {
+      this.setState({
+        showProfilDialog: false
+      });
+    }
+  }
+
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
     this.getKonversation();
@@ -205,7 +245,7 @@ class AnfrageEingangFormEintrag extends Component {
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmeChat, teilnahmeChatID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
+          const { teilnahmeChat, teilnahmeChatID, teilnahmen, chatPartner, nameNeu, konversation, konversationID, konversationAnfragestatus, showProfilDialog } = this.state;
           console.log(konversation)
           console.log(konversationID)
           console.log(teilnahmen)
@@ -216,6 +256,9 @@ class AnfrageEingangFormEintrag extends Component {
                <List>
                 <ListItem>
                     <ListItemText primary={nameNeu} />
+                    <Button color='secondary' onClick={this.showProfilButtonClicked}>
+                        Profil ansehen
+                    </Button>
                   </ListItem>
                   <ListItem>
                     <Button style={{ width : 170}} size="small" className={classes.buttonAnnehmen} variant="contained" color="primary" onClick={this.anfrageAnnehmen}>
@@ -226,6 +269,7 @@ class AnfrageEingangFormEintrag extends Component {
                     </Button>
                 </ListItem>
                </List>
+                <ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
                </Card>
                :
                <Card className={classes.text}>

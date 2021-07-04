@@ -6,7 +6,12 @@ import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 import LernpartnerAPI from '../../api/LernpartnerAPI'
 
-
+/**
+ * Dieses Form zeigt ein Dialog zum Verlassen einer  Lerngruppe an.
+ * Dafuer wird auf die API zugegriffen (Backend zugriff)
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ */
 class GruppeVerlassenDialog extends Component {
 
   constructor(props) {
@@ -19,7 +24,7 @@ class GruppeVerlassenDialog extends Component {
     };
   }
 
-  /** Gruppe verlassen */
+  // API Anbindung um eine Lerngruppe zu verlassen und ihm Backend zu löschen
   verlasseGruppe = () => {
     LernpartnerAPI.getAPI().deleteTeilnahmeGruppe(this.props.teilnahmeGruppe.getID())
     .then(teilnahmeGruppe => {

@@ -19,7 +19,7 @@ import ProfilDialog from './dialogs/ProfilDialog';
 /**
  * Es werden alle Nachrichten des aktuell eingeloggten Studenten angezeigt
  * 
- * @see See [NachrichtenListeEintrag]](#nachrichtenlisteeintrag)
+ * @see See [NachrichtenListe]](#nachrichtenliste)
  * 
  * Hierfür werden alle Nachrichten des aktuell eingeloggten Student geladen und in die Componente NachrichtenListeEintrag gemappt
  * 
@@ -179,6 +179,7 @@ nachrichtFormClosed = nachrichten => {
         });
     }else{
         this.setState({
+            nameNeu: this.state.konversationName,
             gruppe: true,
         });
     }

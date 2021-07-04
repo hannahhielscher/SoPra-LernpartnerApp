@@ -20,7 +20,12 @@ import PersonBO from '../../api/PersonBO';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
 import VorschlagListeEintrag from '../VorschlagListeEintrag';
 
-
+/**
+ * Dieses Form zeigt ein Dialog zur Anfrage einer Konversation an.
+ * Dafuer wird auf die API zugegriffen (Backend zugriff)
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ */
 class AnfrageForm extends Component {
 
     constructor(props) {
@@ -52,159 +57,160 @@ class AnfrageForm extends Component {
         this.baseState = this.state;
     }
 
-  /** Add Lerngruppe */
-  addKonversation = () => {
-    let newKonversation = new KonversationBO();
-    newKonversation.id = 0;
-    newKonversation.name = this.state.konvName;
-    newKonversation.anfragestatus = false;
-    LernpartnerAPI.getAPI().addKonversation(newKonversation)
-    .then(konversationBO =>
-      this.setState({
-        konversation: konversationBO
-      })).then(() => {
-        this.addTeilnahmeChatPartner();
-        //console.log(this.state.profil.id)
-    }).catch(e =>
-      this.setState({
-        updatingInProgress: false,    // disable loading indicator
-        updatingError: e              // show error message
-      })
-    );
+    // API Anbindung um die Konversation des Students ihm Backend hinzuzufügen
+    addKonversation = () => {
+        let newKonversation = new KonversationBO();
+        newKonversation.id = 0;
+        newKonversation.name = this.state.konvName;
+        newKonversation.anfragestatus = false;
+        LernpartnerAPI.getAPI().addKonversation(newKonversation)
+        .then(konversationBO =>
+          this.setState({
+            konversation: konversationBO
+          })).then(() => {
+            this.addTeilnahmeChatPartner();
+            //console.log(this.state.profil.id)
+          }).catch(e =>
+          this.setState({
+            updatingInProgress: false,    // disable loading indicator
+            updatingError: e              // show error message
+          })
+        );
 
-    // set loading to true
-    this.setState({
-      updatingInProgress: true,       // show loading indicator
-      updatingError: null             // disable error message
-    });
-  }
+        // set loading to true
+        this.setState({
+          updatingInProgress: true,       // show loading indicator
+          updatingError: null             // disable error message
+        });
+    }
 
-  /** Add TeilnahmeChat */
-  addTeilnahmeChatPartner = () => {
-    let newTeilnahmeChat = new TeilnahmeChatBO()
-    newTeilnahmeChat.id = 0;
-    newTeilnahmeChat.teilnehmer = this.props.chatPartner.id
-    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
-    newTeilnahmeChat.status = false
-    newTeilnahmeChat.konversation = this.state.konversation.id
-    LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
-    .then(teilnahmeChatBO =>
-      this.setState({
-        teilnahmeChat: teilnahmeChatBO
-      })).then(() => {
-        this.addTeilnahmeChat();
-        //console.log(this.state.profil.id)
-    }).catch(e =>
-      this.setState({
-        updatingInProgress: false,    // disable loading indicator
-        updatingError: e              // show error message
-      })
-    );
+    // API Anbindung um die Teilnahme an einem Chat ihm Backend hinzuzufügen
+    addTeilnahmeChatPartner = () => {
+        let newTeilnahmeChat = new TeilnahmeChatBO()
+        newTeilnahmeChat.id = 0;
+        newTeilnahmeChat.teilnehmer = this.props.chatPartner.id
+        newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+        newTeilnahmeChat.status = false
+        newTeilnahmeChat.konversation = this.state.konversation.id
+        LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
+        .then(teilnahmeChatBO =>
+          this.setState({
+            teilnahmeChat: teilnahmeChatBO
+          })).then(() => {
+            this.addTeilnahmeChat();
+            //console.log(this.state.profil.id)
+        }).catch(e =>
+          this.setState({
+            updatingInProgress: false,    // disable loading indicator
+            updatingError: e              // show error message
+          })
+        );
 
-    // set loading to true
-    this.setState({
-      updatingInProgress: true,       // show loading indicator
-      updatingError: null             // disable error message
-    });
-  }
+        // set loading to true
+        this.setState({
+          updatingInProgress: true,       // show loading indicator
+          updatingError: null             // disable error message
+        });
+    }
 
-  /** Add TeilnahmeChatPartner */
-  addTeilnahmeChat = () => {
-    let newTeilnahmeChat = new TeilnahmeChatBO()
-    newTeilnahmeChat.id = 0;
-    newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
-    newTeilnahmeChat.anfrage_sender = this.state.currentPersonID
-    newTeilnahmeChat.status = false
-    newTeilnahmeChat.konversation = this.state.konversation.id
-    LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
-    .then(teilnahmeChatBO => {
-      this.setState(this.baseState);
-      this.props.onClose(teilnahmeChatBO); // call the parent with the lerngruppe object from backend
-    }).catch(e =>
-      this.setState({
-        updatingInProgress: false,    // disable loading indicator
-        updatingError: e              // show error message
-      })
-    );
-  }
+    // API Anbindung um die Teilnahme an einem Chat ihm Backend hinzuzufügen
+    addTeilnahmeChat = () => {
+        let newTeilnahmeChat = new TeilnahmeChatBO()
+        newTeilnahmeChat.id = 0;
+        newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+        newTeilnahmeChat.anfrage_sender = this.state.currentPersonID
+        newTeilnahmeChat.status = false
+        newTeilnahmeChat.konversation = this.state.konversation.id
+        LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
+        .then(teilnahmeChatBO => {
+          this.setState(this.baseState);
+          this.props.onClose(teilnahmeChatBO); // call the parent with the lerngruppe object from backend
+        }).catch(e =>
+          this.setState({
+            updatingInProgress: false,    // disable loading indicator
+            updatingError: e              // show error message
+          })
+        );
+    }
 
-  /** Konversation holen */
-  getKonversation = () => {
-    LernpartnerAPI.getAPI().getKonversationByName(this.props.chatPartner.name)
-    .then(konversationBO =>
-      this.setState({
-        konversation: konversationBO,
-        konversationID: konversationBO.id,              // disable loading indicator                 // no error message
-      })).then(() => {
-        this.addTeilnahmeChatLerngruppe();
-    }).catch(e =>
-      this.setState({
-        updatingInProgress: false,    // disable loading indicator
-        updatingError: e              // show error message
-      })
-    );
-  }
+    // API Anbindung um die Konversation vom Backend zu bekommen
+    getKonversation = () => {
+        LernpartnerAPI.getAPI().getKonversationByName(this.props.chatPartner.name)
+        .then(konversationBO =>
+          this.setState({
+            konversation: konversationBO,
+            konversationID: konversationBO.id,              // disable loading indicator                 // no error message
+          })).then(() => {
+            this.addTeilnahmeChatLerngruppe();
+        }).catch(e =>
+          this.setState({
+            updatingInProgress: false,    // disable loading indicator
+            updatingError: e              // show error message
+          })
+        );
+    }
 
-  /** Add TeilnahmeChatPartner */
-  addTeilnahmeChatLerngruppe = () => {
-    let newTeilnahmeChat = new TeilnahmeChatBO()
-    newTeilnahmeChat.id = 0;
-    newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
-    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
-    newTeilnahmeChat.status = false
-    newTeilnahmeChat.konversation = this.state.konversationID
-    LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
-    .then(teilnahmeChatBO => {
-      this.setState(this.baseState);
-      this.props.onClose(teilnahmeChatBO); // call the parent with the lerngruppe object from backend
-    }).catch(e =>
-      this.setState({
-        updatingInProgress: false,    // disable loading indicator
-        updatingError: e              // show error message
-      })
-    );
-  }
+    // API Anbindung um die Konversation vom Backend zu bekommen
+    addTeilnahmeChatLerngruppe = () => {
+        let newTeilnahmeChat = new TeilnahmeChatBO()
+        newTeilnahmeChat.id = 0;
+        newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+        newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+        newTeilnahmeChat.status = false
+        newTeilnahmeChat.konversation = this.state.konversationID
+        LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
+        .then(teilnahmeChatBO => {
+          this.setState(this.baseState);
+          this.props.onClose(teilnahmeChatBO); // call the parent with the lerngruppe object from backend
+        }).catch(e =>
+          this.setState({
+            updatingInProgress: false,    // disable loading indicator
+            updatingError: e              // show error message
+          })
+        );
+    }
 
     // API Anbindung um Person vom Backend zu bekommen
     getPerson = () => {
-      LernpartnerAPI.getAPI().getPersonByProfil(this.props.chatPartner.profil)
-      .then(personBO =>
-          this.setState({
-            konvName: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
-            loadingInProgress: false,
-            error: null,
-      })).catch(e =>
+          LernpartnerAPI.getAPI().getPersonByProfil(this.props.chatPartner.profil)
+          .then(personBO =>
               this.setState({
-                konvName: null,
+                konvName: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
                 loadingInProgress: false,
-                error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
+                error: null,
+          })).catch(e =>
+                  this.setState({
+                    konvName: null,
+                    loadingInProgress: false,
+                    error: e,
+                  }));
+          this.setState({
+            loadingInProgress: true,
+            error: null
+          });
     }
 
     // API Anbindung um Lerngruppe vom Backend zu bekommen
     getLerngruppe = () => {
-      LernpartnerAPI.getAPI().getLerngruppeByProfil(this.props.chatPartner.id)
-      .then(lerngruppeBO =>
-          this.setState({
-            name: lerngruppeBO.name,
-            loadingInProgress: false,
-            error: null,
-      })).catch(e =>
+          LernpartnerAPI.getAPI().getLerngruppeByProfil(this.props.chatPartner.id)
+          .then(lerngruppeBO =>
               this.setState({
-                name: null,
+                name: lerngruppeBO.name,
                 loadingInProgress: false,
-                error: e,
-              }));
-      this.setState({
-        loadingInProgress: true,
-        error: null
-      });
+                error: null,
+          })).catch(e =>
+                  this.setState({
+                    name: null,
+                    loadingInProgress: false,
+                    error: e,
+                  }));
+          this.setState({
+            loadingInProgress: true,
+            error: null
+          });
     }
 
+    // API Anbindung um Profil vom Backend zu bekommen
     getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.state.chatPartnerProfil)
     .then(profilBO =>
@@ -224,6 +230,7 @@ class AnfrageForm extends Component {
       );
     }
 
+    // API Anbindung um P zu bekommen
     getPartner = () => {
         console.log(console.log())
         if (this.state.gruppeProfil === true){
@@ -234,20 +241,20 @@ class AnfrageForm extends Component {
     }
 
   /** Handles value changes of the forms textfields and validates them */
-  textFieldValueChange = (event) => {
-    const value = event.target.value;
+    textFieldValueChange = (event) => {
+        const value = event.target.value;
 
-    let error = false;
-    if (value.trim().length === 0) {
-      error = true;
+        let error = false;
+        if (value.trim().length === 0) {
+            error = true;
+        }
+
+        this.setState({
+            [event.target.id]: event.target.value,
+            [event.target.id + 'ValidationFailed']: error,
+            [event.target.id + 'Edited']: true
+        });
     }
-
-    this.setState({
-      [event.target.id]: event.target.value,
-      [event.target.id + 'ValidationFailed']: error,
-      [event.target.id + 'Edited']: true
-    });
-  }
 
   //Setzen der Werte aus der Validierung
   setStateValueChange(event, error) {
@@ -259,21 +266,21 @@ class AnfrageForm extends Component {
   }
 
   /** Handles the close / cancel button click event */
-  handleClose = () => {
-    // Reset the state
-    this.setState(this.baseState);
-    this.props.onClose(null);
-  }
-
-  getChatPartnerStatus = () => {
-    if (this.state.gruppeProfil === true){
-    console.log(this.state.gruppeProfil)
-        this.getKonversation();
-    }else{
-    console.log(this.state.gruppeProfil)
-        this.addKonversation();
+    handleClose = () => {
+        // Reset the state
+        this.setState(this.baseState);
+        this.props.onClose(null);
     }
-  }
+
+    getChatPartnerStatus = () => {
+        if (this.state.gruppeProfil === true){
+        console.log(this.state.gruppeProfil)
+            this.getKonversation();
+        }else{
+        console.log(this.state.gruppeProfil)
+            this.addKonversation();
+        }
+    }
 
   /** Renders the component */
   render() {

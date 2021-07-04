@@ -17,8 +17,7 @@ import LoadingProgress from './LoadingProgress';
 
 
 /**
- * Dieses Form zeigt ein Dialog zum erstellen/updaten von ProjektBO's. Falls ein Projekt bereits besteht wird das Formular als edit konfiguriert.
- * Falls das Projekt Objekt null ist wird das Formular zum erstellen eines PojektBO's konfiguriert.
+ * Dieses Form zeigt ein Dialog zum updaten des eigenen Profils. Falls ein Projekt bereits besteht wird das Formular als edit konfiguriert.
  * Dafuer wird auf die API zugegriffen (Backend zugriff)
  *
  * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
@@ -111,8 +110,8 @@ class MeinProfilForm extends Component {
  
     }
 
-    
-    /** Updates the person */
+
+    // API Anbindung um eine Person ihm Backend zu aktualisieren
     updatenPerson = () => {
         let person = this.props.currentPerson;
         person.name = this.state.name
@@ -142,30 +141,30 @@ class MeinProfilForm extends Component {
       });
     }
 
-  /** Updates the person */
-  updatenProfil = () => {
-    let profil = this.props.currentProfil;
-    LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
-    ).then(profil => {
-        // Backend call sucessfull
-        // reinit the dialogs state for a new empty customer
-        this.setState(this.baseState);
-        this.props.onClose(profil); // call the parent with the customer object from backend
-    }).catch(e =>
+    // API Anbindung um das Profil der Person ihm Backend zu aktualisieren
+    updatenProfil = () => {
+        let profil = this.props.currentProfil;
+        LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
+        ).then(profil => {
+            // Backend call sucessfull
+            // reinit the dialogs state for a new empty customer
+            this.setState(this.baseState);
+            this.props.onClose(profil); // call the parent with the customer object from backend
+        }).catch(e =>
+            this.setState({
+                updatingInProgress: false,    // disable loading indicator
+                updatingError: e              // show error message
+            })
+        );
+
+        // set loading to true
         this.setState({
-            updatingInProgress: false,    // disable loading indicator
-            updatingError: e              // show error message
-        })
-    );
+            updatingInProgress: true,       // show loading indicator
+            updatingError: null             // disable error message
+      });
+    }
 
-    // set loading to true
-    this.setState({
-        updatingInProgress: true,       // show loading indicator
-        updatingError: null             // disable error message
-  });
-}
-
-  /** Updates the person */
+    // API Anbindung um die Lernvorlieben der Person ihm Backend zu aktualisieren
     updatenLernvorlieben = () => {
         let lernvorlieben = this.props.lernvorlieben;
         lernvorlieben.tageszeiten = this.state.tageszeiten

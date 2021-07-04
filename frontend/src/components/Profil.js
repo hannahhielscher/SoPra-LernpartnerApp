@@ -6,6 +6,9 @@ import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 
+/**
+ * Es wird das Profil einer Gruppe oder Person angezeigt.
+ */
 
 class Profil extends Component {
 

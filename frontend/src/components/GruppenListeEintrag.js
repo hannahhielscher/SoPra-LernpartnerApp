@@ -20,10 +20,7 @@ import { LernpartnerAPI } from '../api';
 
 
 /**
- * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
- *
- * Hierfür werden Profilname, Alter, Geschlecht, Semester, Lernfach und der Prozentsatz des Matches angezeigt
- *
+ * Es werden die Informationen einer Gruppe im Lergruppen Accordion angezeigt.
  */
 
 class GruppenListeEintrag extends Component {
