@@ -204,15 +204,19 @@ class GruppenListeEintrag extends Component {
                   expandIcon={<ExpandMoreIcon />}
                   id={`lerngruppe${lerngruppe.getID()}accountpanel-header`}>
                   <Grid container spacing={1} justify='flex-start' alignItems='center'>
+                  <Grid item>
                     <Typography variant='body1'>
                         {lerngruppe.getname()}
                     </Typography>
                   </Grid>
-                    <Button style={{ width : 250, color: "#cd5b45"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
-                        Gruppe verlassen
-                    </Button>
-                    
-                    
+                    <Grid item>
+
+                    </Grid>
+                    <Grid item xs />
+                    <Grid item>
+                      <Typography variant='body2' color={'textSecondary'}>Mehr sehen</Typography>
+                    </Grid>
+                  </Grid>
                   </AccordionSummary>
                  <AccordionDetails style={{ width : 250, backgroundColor: '#faf0e6', width: '100%'}}>
                   <List>
@@ -221,6 +225,9 @@ class GruppenListeEintrag extends Component {
                   </ListItem>
                   <ListItem>
                   <Button style={{ marginTop: -20, marginLeft: 8}} variant="contained" size="small" color="primary" onClick= {this.bearbeitenButtonClicked}>Gruppenprofil bearbeiten</Button>
+                  <Button style={{ marginTop: -20, marginLeft: 8, width : 250, color: "#cd5b45"}} color='secondary' onClick={this.verlasseLerngruppeButtonClicked}>
+                    Gruppe verlassen
+                  </Button>
                   </ListItem>
                   </List>
                 </AccordionDetails>
