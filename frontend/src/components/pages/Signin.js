@@ -11,7 +11,7 @@ import { Button, Grid, Typography, withStyles } from '@material-ui/core';
  * @see See Googles [firebase API reference](https://firebase.google.com/docs/reference/js)
  * 
  */
-class SignIn extends Component {
+class Signin extends Component {
 
 
 	/** 
@@ -53,7 +53,7 @@ const styles = theme => ({
 });
 
 /** PropTypes */
-SignIn.propTypes = {
+Signin.propTypes = {
 	/** @ignore */
 	classes: PropTypes.object.isRequired,
 	/** 
@@ -62,4 +62,4 @@ SignIn.propTypes = {
 	onSignIn: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(SignIn)
+export default withStyles(styles)(Signin)

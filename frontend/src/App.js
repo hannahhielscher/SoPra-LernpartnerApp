@@ -9,7 +9,7 @@ import KonversationListe from './components/KonversationListe';
 import LernpartnerAPI from './api/LernpartnerAPI';
 import About from './components/pages/About';
 import Theme from './Theme';
-import SignIn from './components/pages/SignIn';
+import SignIn from './components/pages/Signin';
 import RegistrierungForm from './components/dialogs/RegistrierungForm';
 import MeinProfil from './components/MeinProfil';
 import LoadingProgress from './components/dialogs/LoadingProgress';
