@@ -555,7 +555,6 @@ class NachrichtenOperation(Resource):
 
             result = adm.create_nachricht(nachricht_inhalt, person_id, konversation_id)
 
-            #print(result)
             return result, 200
 
         else:
