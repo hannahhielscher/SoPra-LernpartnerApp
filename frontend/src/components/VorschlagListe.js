@@ -115,8 +115,8 @@ class VorschlagListe extends Component {
         return (
           show ?
           <div className={classes.root}>
-            <h1>Hier sind alle Matches für dein ausgewähltes Lernfach:</h1>
-            <Button color="primary" onClick= {this.getVorschlaege}>Matches generieren</Button>
+            <h2 style={{ marginTop: '30px'}}>Generiere deine neuen Matches:</h2>
+            <Button style={{ marginBottom: '40px'}} variant="contained" color="primary" onClick= {this.getVorschlaege}>Matches generieren</Button>
             { 
               // Show the list of VorschlagListeEintrag components
               // Do not use strict comparison, since expandedVorschlagID maybe a string if given from the URL parameters

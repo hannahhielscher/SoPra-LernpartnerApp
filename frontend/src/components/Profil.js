@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, Button, TableContainer, Table, TableHead, TableCell, Paper, TableRow, TableBody, Link, Grid } from '@material-ui/core';
+import { withStyles, Typography, Button, Paper, Link, Grid } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import {LernpartnerAPI} from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
@@ -84,6 +84,7 @@ class Profil extends Component {
     }
 */
 
+    // API Anbindung um die Person vom Backend zu bekommen
     getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.user.id).then(profilBO =>
       this.setState({
@@ -116,7 +117,7 @@ class Profil extends Component {
     });
   }
 
-
+    // API Anbindung um die Lernvorlieben der Person vom Backend zu bekommen
     getLernvorlieben = () => {
     LernpartnerAPI.getAPI().getLernvorlieben(this.props.user.profil)
     .then(lernvorliebenBO =>
@@ -145,7 +146,9 @@ class Profil extends Component {
     });
   }
 
-  getTeilnahmen = () => {
+
+    // API Anbindung um die Teilnahmen der Person an einer Gruooe vom Backend zu bekommen
+    getTeilnahmen = () => {
 
     LernpartnerAPI.getAPI().getTeilnahmeGruppeByGruppe(this.state.user.id)
     .then(teilnahmeGruppeBOs =>
@@ -169,14 +172,14 @@ class Profil extends Component {
 
 
 
-  /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+  /** Lifecycle method, welche aufgerufen wird, wenn die Komponente in den DOM eingefügt wird */
     componentDidMount() {
         this.getProfil();
         this.getLernvorlieben();
   }
 
 
-   /** Renders the component */
+    /** Rendern der Komponente */
   render() {
     const { classes, show } = this.props;
     // Use the states customer
@@ -219,6 +222,8 @@ class Profil extends Component {
   }
 }
 
+
+/**Spezifische Styles*/
 const styles = theme => ({
   root: {
       width: '100%',
@@ -226,24 +231,6 @@ const styles = theme => ({
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1),
   },
-  content: {
-      margin: theme.spacing(1),
-    },
-  table: {
-      minWidth: 700,
-    },
-  formControl: {
-      margin: theme.spacing(1),
-      minWidth: 200,
-      textAlign: "left"
-  },
-
-  laden: {
-    padding: 0
-  },
-  breite: {
-    width: 220
-  }
 });
 
 

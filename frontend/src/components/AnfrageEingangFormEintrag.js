@@ -40,7 +40,6 @@ class AnfrageEingangFormEintrag extends Component {
             teilnahmeChatID: props.teilnahmeChat.id,
 
             teilnahmen: [],
-            anfragenAnzahl: null,
 
             konversation: null,
             konversationID: null,
@@ -86,11 +85,10 @@ class AnfrageEingangFormEintrag extends Component {
   }
 
   getTeilnahmeChats = () => {
-    LernpartnerAPI.getAPI().getTeilnahmeChatByKonversationByStatus(0, this.state.konversationID)
+    LernpartnerAPI.getAPI().getTeilnahmeChatByStatusByKonversation(0, this.state.konversationID)
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
-        anfragenAnzahl: teilnahmeChatBOs.length
       })).catch(e =>
       this.setState({
         teilnahmePartner: null,
@@ -155,7 +153,9 @@ class AnfrageEingangFormEintrag extends Component {
     for (var teilnahme in this.state.teilnahmen){
         LernpartnerAPI.getAPI().deleteTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'])
         .then(konversationBO => {
-                    this.anfrageAblehnenKonversation();
+                    //this.anfrageAblehnenKonversation();
+                    this.setState(this.baseState);
+                    this.props.onClose(konversationBO);
                 }).catch(e =>
                 this.setState({
                     updatingInProgress: false,    // disable loading indicator
@@ -170,7 +170,7 @@ class AnfrageEingangFormEintrag extends Component {
           });
       }
     }
-
+/*
   anfrageAblehnenKonversation = () => {
     LernpartnerAPI.getAPI().deleteKonversation(this.state.konversationID)
     .then(konversationBO => {
@@ -190,7 +190,7 @@ class AnfrageEingangFormEintrag extends Component {
             updatingInProgress: true,       // show loading indicator
             updatingError: null             // disable error message
       });
-    }
+    }*/
 
   //Setzen des Status, bei schließen des Dialogs
   handleClose = () => {
@@ -205,11 +205,10 @@ class AnfrageEingangFormEintrag extends Component {
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmeChat, teilnahmeChatID, teilnahmen, anfragenAnzahl, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
+          const { teilnahmeChat, teilnahmeChatID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
           console.log(konversation)
           console.log(konversationID)
           console.log(teilnahmen)
-          console.log(anfragenAnzahl)
 
           return (
           show ?
@@ -253,11 +252,11 @@ const styles = theme => ({
     },
   buttonAblehnen: {
     margin: theme.spacing(1),
-    backgroundColor: '#CC3333'
+    backgroundColor: '#cd5b45'
   },
   text: {
     padding: theme.spacing(2),
-    color: theme.palette.grey[500]
+    color: theme.palette.grey[100]
   }
   });
 

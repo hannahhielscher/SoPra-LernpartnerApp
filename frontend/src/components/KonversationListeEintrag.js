@@ -143,13 +143,13 @@ render() {
                 pathname: '/chat',
                 konversation: konversation
                 }} >
-                
-                <Button color='primary' onClick={this.showKonversationButtonClicked}>
-                          Chat ansehen
+                  
+                <Button variant="contained" color='primary' onClick={this.showKonversationButtonClicked}>
+                        Chat ansehen
                 </Button>
                 </Link>
                         
-                <Button color='secondary' onClick={this.verlassenButtonClicked}>
+                <Button style={{ width : 150, color: "#cd5b45"}} onClick={this.verlassenButtonClicked}>
                         Chat verlassen
                 </Button>
                 </ButtonGroup>

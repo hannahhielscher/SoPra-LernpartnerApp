@@ -213,6 +213,7 @@ render() {
 const styles = theme => ({
   root: {
     width: '100%',
+    marginTop: '15px'
   },
   button: {
     marginTop: theme.spacing(2),

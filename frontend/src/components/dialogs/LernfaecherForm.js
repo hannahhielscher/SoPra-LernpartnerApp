@@ -12,16 +12,6 @@ import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
-  
 class LernfaecherForm extends Component {
   
   constructor(props){
@@ -107,13 +97,14 @@ class LernfaecherForm extends Component {
     console.log(profil)
     console.log(showVorschlagListe)
     return (
-      <div>
+      <div className={classes.page}>
+        <h2 style={{ marginTop: '40px'}} >Wähle ein Lernfach, für das du einen neuen Lern Buddy suchst.</h2>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="age-native-simple">Lernfach auswählen:</InputLabel>
           <Select
             native
             value= {lernfach}
             onChange={this.handleChange}
+            className={classes.selectEmpty}
           >
            {lernfaecher.map(lernfach =>
             <option key={lernfach.id} value={lernfach.id}>{lernfach.bezeichnung}</option>
@@ -121,7 +112,7 @@ class LernfaecherForm extends Component {
            
           </Select>
         </FormControl>
-        <Button color="primary" onClick= {this.bestaetigenButtonClicked}>Bestätigen</Button>
+        <Button variant="contained" className={classes.button} color="primary" onClick= {this.bestaetigenButtonClicked}>Bestätigen</Button>
         <VorschlagListe show={showVorschlagListe} currentPerson={currentPerson} lernfach={lernfach} />
         <LoadingProgress show={loadingInProgress}></LoadingProgress>
         <ContextErrorMessage error={error} contextErrorMsg = {'Hier ist ein Fehler aufgetreten'} onReload={this.getProfil} />
@@ -133,9 +124,27 @@ class LernfaecherForm extends Component {
 /** Component specific styles */
 const styles = theme => ({
   formControl: {
-    marginBottom: theme.spacing(1),
+    marginBottom: '10px',
     minWidth: 120,
-  }
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(1),
+  },
+  page: {
+    marginTop: '17px'
+  },
+  button: {
+    marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(2)
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 });
 
-export default withRouter(withStyles(useStyles)(LernfaecherForm));
+
+export default withRouter(withStyles(styles)(LernfaecherForm));

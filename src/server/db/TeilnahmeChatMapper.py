@@ -60,13 +60,14 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-    def find_by_konversation_id_und_status(self, status, konversation_id):
+    def find_by_status_and_konversation_id(self, status, konversation_id):
         """ Findet alle Teilnahmen von einer ProjektID
 
         :param status Status der TeilnahmeChat
         :param konversation_id Konversation ID der TeilnahmeChat
         :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
         """
+        
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE status={} AND konversation_id={} ".format(status, konversation_id)

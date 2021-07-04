@@ -51,7 +51,7 @@ function MultiSelectLernfaecher( { lernfaecher, onChangeLernfaecher }) {
   
   return (
     <div className="App">
-      <b>Wähle bitte alle Lernfächer, die du aktuell lernen möchtest.</b><br/>
+      <b>Wähle bitte alle Lernfächer, die du aktuell lernen möchtest und bestätige deine Auswahl.</b><br/>
       <b style={{color: "red", fontSize: 14}}>Deine vorherige Auswahl wird vollständig gelöscht!</b><br/>
       <br/>
       <Select

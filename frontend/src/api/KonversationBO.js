@@ -9,19 +9,21 @@ export default class KonversationBO extends NamedBusinessObject{
     }
 
 	/*
-	erhalte 
+	erhalten des Anfragestatus
 	*/
     getanfragestatus(){
         return this.anfragestatus;
     }
     /*
-	setze 
+	setzen des Anfragestatus
 	*/
     setanfragestatus(aanfragestatus){
         this.anfragestatus = aanfragestatus;
     }
-    
 
+	/**
+	 * Gibt ein Array von KonversationBO aus einer gegebenen JSON-Struktur zurück
+	 */
     static fromJSON(konversationen) {
 		let results = null;
 		if (Array.isArray(konversationen)) {
@@ -31,7 +33,6 @@ export default class KonversationBO extends NamedBusinessObject{
 				results.push(x);
 			})
 		} else {
-			// Es gibt wohl nur ein Objekt
 			let x = konversationen;
 			Object.setPrototypeOf(x, KonversationBO.prototype);
 			results = x;

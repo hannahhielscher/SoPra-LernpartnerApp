@@ -473,10 +473,17 @@ class MeinProfilForm extends Component {
 const styles = theme => ({
 	root: {
     margin: theme.spacing(2)
-    
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   }
-  
-  
 });
 
 /** PropTypes */

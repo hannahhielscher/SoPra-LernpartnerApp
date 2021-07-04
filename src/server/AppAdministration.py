@@ -462,10 +462,10 @@ class AppAdministration (object):
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_person_id_und_status(person_id, status)
 
-    def get_teilnahmeChat_by_konversation_id_und_status(self, status, konversationid):
+    def get_teilnahmeChat_by_status_and_konversation_id(self, status, konversationid):
         """Gibt die Teilnahme einer gegebenen KonversationId und dem Status der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
-            return mapper.find_by_konversation_id_und_status(status, konversationid)
+            return mapper.find_by_status_and_konversation_id(status, konversationid)
 
     def get_teilnahmeChat_by_konversation_and_person(self, konversation_id, person_id):
         """Gibt die Teilnahme einer gegebenen KonversationId und PersonId zurück."""

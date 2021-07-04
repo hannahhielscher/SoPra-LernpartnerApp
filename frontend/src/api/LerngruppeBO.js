@@ -8,20 +8,20 @@ export default class LerngruppeBO extends NamedBusinessObject{
         this.profil = aprofil;
     }
     /*
-	erhalte 
+	Profil einer Lerngruppe erhalten
 	*/
     getprofil(){
         return this.profil;
     }
     /*
-	setze 
+	Profil einer Lerngruppe setzen
 	*/
     setprofil(aprofil){
         this.profil = aprofil;
     }
     
-    /** 
-     * Returns an Array of PersonBOs from a given JSON structure
+    /**
+     * Gibt ein Array von LerngruppeBO aus einer gegebenen JSON-Struktur zurück
      */
         static fromJSON(lerngruppen) {
             let results = null;
@@ -32,7 +32,6 @@ export default class LerngruppeBO extends NamedBusinessObject{
                     results.push(c);
                 })
             } else {
-                // Es gibt wohl nur ein Objekt
                 let c = lerngruppen;
                 Object.setPrototypeOf(c, LerngruppeBO.prototype);
                 results = c;

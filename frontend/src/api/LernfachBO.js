@@ -8,18 +8,22 @@ export default class LernfachBO extends BusinessObject{
     }
 
     /*
-	erhalte 
+	erhalten der Lernfach Bezeichnung
 	*/
     getbezeichnung(){
         return this.bezeichnung;
     }
     /*
-	setze 
+	setzen der Lernfach Bezeichnung
 	*/
     setbezeichnung(abezeichnung){
         this.bezeichnung = abezeichnung;
     }
 
+
+	/**
+	 * Gibt ein Array von LernfachBO aus einer gegebenen JSON-Struktur zurück
+	 */
     static fromJSON(lernfaecher) {
 		let results = null;
 		if (Array.isArray(lernfaecher)) {
@@ -29,7 +33,6 @@ export default class LernfachBO extends BusinessObject{
 				results.push(c);
 			})
 		} else {
-			// Es gibt wohl nur ein Objekt
 			let c = lernfaecher;
 			Object.setPrototypeOf(c, LernfachBO.prototype);
 			results = c;

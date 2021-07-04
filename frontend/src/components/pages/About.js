@@ -4,7 +4,7 @@ import { makeStyles, Paper, Typography, Link } from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(5),
     marginBottom: theme.spacing(2),
     padding: theme.spacing(1)
   },
