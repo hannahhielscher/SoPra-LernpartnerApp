@@ -186,18 +186,10 @@ nachrichtFormClosed = nachrichten => {
   }*/
 
   nameAnpassen = () => {
-    if (this.state.konversationName.includes(this.state.currentPersonName) == true){
     var buff = this.state.konversationName.replace(this.state.currentPersonName,'');
     this.setState({
         nameNeu: buff.replace(' und ',''),
-        gruppe: false
     });
-    }else{
-    this.setState({
-        nameNeu: this.state.konversationName,
-        gruppe: true
-    });
-    }
   }
 
   /** Handles the onClick event of the edit customer button */
@@ -294,14 +286,11 @@ nachrichtFormClosed = nachrichten => {
             senden 
           </Button>
 
-        {
-        gruppe ?
-        null
-        :
+
           <Button className={classes.button_style} variant='contained' color='secondary' onClick={this.showGruppeFormButtonClicked}>
               Gruppe erstellen
           </Button>
-        }
+
 
       <LoadingProgress show={loadingInProgress} />
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
