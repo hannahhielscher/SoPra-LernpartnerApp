@@ -3,21 +3,16 @@ from server.db.Mapper import Mapper
 
 
 class NachrichtMapper (Mapper):
-    """Mapper-Klasse, die Nachrichten-Objekte auf eine relationale
-    Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-    gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-    gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    """Mapper-Klasse, die Nachrichten-Objekte auf eine relationale Datenbank abbildet. 
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt.
     """
-
     def __init__(self):
         super().__init__()
 
     def find_all(self):
         """Auslesen aller Nachrichten.
 
-        :return Eine Sammlung mit Nachricht-Objekten, die sämtliche nachrichten
-                repräsentieren.
+        :return Eine Sammlung mit Nachricht-Objekten, die sämtliche Nachrichten repräsentieren.
         """
         result = []
         cursor = self._connection.cursor()
@@ -40,7 +35,10 @@ class NachrichtMapper (Mapper):
         return result
 
     def find_by_id(self, id):
-        """Auslesen aller Tuples mit einer gegebenen ID
+        """Auslesen aller Nachrichten mit einer gegebenen ID
+
+        :param id Primärschlüsselattribut einer Nachricht aus der Datenbank
+        :return Nachricht-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         result = None
         cursor = self._connection.cursor()
@@ -63,6 +61,11 @@ class NachrichtMapper (Mapper):
         return result
 
     def find_by_inhalt(self, inhalt):
+        """Auslesen aller Nachrichten mit bestimmten Inhalt
+
+        :param inhalt Inhalt einer Nachricht aus der Datenbank
+        :return Nachricht-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
 
         result = []
         cursor = self._connection.cursor()
@@ -85,6 +88,11 @@ class NachrichtMapper (Mapper):
         return result
 
     def find_by_person_id(self, person_id):
+        """Auslesen aller Nachrichten mit einer gegebenen personID
+
+        :param person_id PersonID einer Nachricht aus der Datenbank
+        :return Nachricht-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         
         result = []
         cursor = self._connection.cursor()
@@ -108,7 +116,11 @@ class NachrichtMapper (Mapper):
         return result
 
     def find_by_konversation_id(self, konversation_id):
-        
+        """Auslesen aller Nachrichten mit einer gegebenen konversationID
+
+        :param konversation_id KonversationID einer Nachricht aus der Datenbank
+        :return Nachricht-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id, nachricht_inhalt, person_id, konversation_id FROM nachrichten WHERE konversation_id={}".format(konversation_id)
@@ -131,6 +143,12 @@ class NachrichtMapper (Mapper):
         return result
 
     def find_by_konversation_by_person(self, konversation_id, person_id):
+        """Auslesen aller Nachrichten mit einer gegebenen konversation ID und personID
+
+        :param konversation_id KonversationID einer Nachricht aus der Datenbank
+        :param person_id PersonID einer Nachricht aus der Datenbank
+        :return Nachricht-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         
         result = []
         cursor = self._connection.cursor()
@@ -186,7 +204,7 @@ class NachrichtMapper (Mapper):
         return nachricht
 
     def update(self, nachricht):
-        """Aktualisierung eines Nachricht-Objekts in die Datenbank.
+        """Überschreiben eines Nachricht-Objekts in die Datenbank.
 
         :param nachricht das Objekt, das in die DB geschrieben werden soll
         """

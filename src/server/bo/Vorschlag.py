@@ -1,12 +1,16 @@
 from server.bo import BusinessObject as bo
 
 class Vorschlag(bo.BusinessObject):
+    """Realisierung eines Vorschlags.
 
+    Ein Vorschlag besitzt eine Main Person ID, für die das Match berechnet wird, eine Matchquote,
+    eine Lernfaecher ID, für die das Match berechnet wird, und eine Match Profil ID.
+    """
     def __init__(self):
-        self._main_person_id = 0
-        self._match_quote = 0
-        self._lernfaecher_id = 0
-        self._match_profil_id = 0
+        self._main_person_id = 0 #Main Person ID, für die das Match berechnet wird
+        self._match_quote = 0 #Match Quote des Vorschlags
+        self._lernfaecher_id = 0 #Lernfaecher ID, für das die Person das Match haben will
+        self._match_profil_id = 0 #Match Profil ID des Vorschlags
 
     def get_main_person_id(self):
         """Auslesen der Person zu der verglichen wird"""
@@ -58,4 +62,3 @@ class Vorschlag(bo.BusinessObject):
         obj.set_lernfaecher_id(dictionary["lernfaecher_id"])
         obj.set_match_profil_id(dictionary["match_profil_id"])
         return obj
-

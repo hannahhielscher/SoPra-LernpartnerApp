@@ -46,6 +46,7 @@ class VorschlagListe extends Component {
             error: null,
             loadingInProgress: false, 
             expandedVorschlagID: expandedID,
+            test: false,
         };
     }
 
@@ -58,7 +59,15 @@ class VorschlagListe extends Component {
                     vorschlaege: vorschlagBOs,
                     error: null,
                     loadingInProgress: false,
-                })).catch(e =>
+                })).then(() => {
+                  if (this.state.vorschlaege === null){
+                    this.setState({
+                      test: true,
+                    })
+                    
+                  }
+                })
+                .catch(e =>
                     this.setState({
                         vorschlaege: [],
                         error: e,

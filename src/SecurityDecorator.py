@@ -7,21 +7,12 @@ from server.AppAdministration import AppAdministration
 
 def secured(function):
     """Decorator zur Google Firebase-basierten Authentifizierung von Benutzern
-
-    Da es sich bei diesem System um eine basale Fallstudie zu Lehrzwecken handelt, wurde hier
-    bewusst auf ein ausgefeiltes Berechtigungskonzept verzichtet. Vielmehr soll dieses Decorator
-    einen Weg aufzeigen, wie man technisch mit vertretbarem Aufwand in eine Authentifizierung
-    einsteigen kann.
-
-    POLICY: Die hier demonstrierte Policy ist, dass jeder, der einen durch Firebase akzeptierten
-    Account besitzt, sich an diesem System anmelden kann. Bei jeder Anmeldung werden Klarname,
-    Mail-Adresse sowie die Google User ID in unserem System gespeichert bzw. geupdated. Auf diese
-    Weise könnte dann für eine Erweiterung des Systems auf jene Daten zurückgegriffen werden.
     """
     firebase_request_adapter = requests.Request()
 
     def wrapper(*args, **kwargs):
         # Verify Firebase auth.
+        #Hier werden alle in Cookies, welche in der Anmeldung vergeben werden, abgefragt
         id_token = request.cookies.get("token")
 
         error_message = None
@@ -55,7 +46,7 @@ def secured(function):
                         adm.save_person(person)
                     else:
                         """Fall: Der Benutzer war bislang noch nicht eingelogged. 
-                        Wir legen daher ein neues User-Objekt an, um dieses ggf. später
+                        Wir legen daher ein neues Lernvorlieben-Objekt, Profil-Objekt und Person-Objekt an, um dieses ggf. später
                         nutzen zu können.
                         """
                         lernvorlieben = adm.create_lernvorlieben(1, 'Null', 1, 'Null', 1, 'Null', 1, 'Null', 1, 'Null', 1, 'Null')

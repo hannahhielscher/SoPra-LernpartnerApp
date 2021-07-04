@@ -2,11 +2,14 @@ from server.bo import BusinessObject as bo
 
 
 class TeilnahmeGruppe (bo.BusinessObject):
-    
+    """Realisierung einer TeilnahmeGruppe.
+
+    Eine TeilnahmeGruppe besitzt einen Teilnehmer und eine zugehörige Lerngruppe.
+    """
     def __init__(self):
         super().__init__()
-        self._teilnehmer = None
-        self._lerngruppe = 0
+        self._teilnehmer = None #Teilnehmer der TeilnahmeGruppe
+        self._lerngruppe = 0 #Lerngruppe der TeilnahmeGruppe
 
     def get_teilnehmer(self):
         """Auslesen des Teilnehmers"""
@@ -26,11 +29,11 @@ class TeilnahmeGruppe (bo.BusinessObject):
 
     def __str__(self):
         """ Umwandlung der Attributwerte des Objekts in einen String"""
-        return "TeilnahemGruppe: {}, {}".format(self._teilnehmer, self._lerngruppe)
+        return "TeilnahmeGruppe: {}, {}".format(self._teilnehmer, self._lerngruppe)
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in einen User()."""
+        """Umwandeln eines Python dict() in eine TeilnahmeGruppe()."""
         obj = TeilnahmeGruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_teilnehmer(dictionary['teilnehmer'])

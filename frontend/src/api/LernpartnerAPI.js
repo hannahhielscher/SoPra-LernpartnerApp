@@ -109,6 +109,7 @@ export default class LernpartnerAPI {
         #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenChat`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #deleteTeilnahmeChatByPersonURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat-by-person-id/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
         #getTeilnahmeChatByStatusByKonversationURL = (status, konversation_id) => `${this.#lernappServerBaseURL}/teilnehmer-by-status-konversation-id/${status}/${konversation_id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
@@ -118,16 +119,16 @@ export default class LernpartnerAPI {
         //TeilnahmeGruppebezogen
         #getTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
-        #getTeilnahmeGruppeByIdURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
+        #getTeilnahmeGruppeByIdURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
         #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
-        #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
+        #deleteTeilnahmeGruppeURL = (personid) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personid}`;
 
         //Lernfachbezogene
         #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
         #getLernfachByIDURL = (id) => `${this.#lernappServerBaseURL}/lernfaecher-by-id/${id}`;
         #getLernfaecherByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lernfaecher-by-profil/${profilid}`;
-
+        #deleteLernfaecherByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lernfaecher-by-profil/${profilid}`;
         //Personenbezogene
         /**
            * Gibt alle Personen als BO zurück
@@ -970,6 +971,25 @@ export default class LernpartnerAPI {
               })
             }
 
+            /** 
+             * löscht Nachrichten einer konversation
+             * @param {Number} personid to be retrieved
+             * @public
+             */
+    
+            deleteTeilnahmeChatByPerson(personid) {
+              return this.#fetchAdvanced(this.#deleteTeilnahmeChatByPersonURL(personid), {
+                method: 'DELETE'
+                }).then((responseJSON) => {
+                // We always get an array of TeilnahmeChatBOs.fromJSON
+                let responseTeilnahmeChatBO = TeilnahmeChatBO.fromJSON(responseJSON)[0];
+                // console.info(KonversationBOs);
+                return new Promise(function (resolve) {
+                  resolve(responseTeilnahmeChatBO);
+                })
+              })
+            }
+
              /** 
               * Gibt alle TeilnahmenChat einer Person zurück
               * @param {Number} personid to be retrieved
@@ -1080,8 +1100,8 @@ export default class LernpartnerAPI {
                * @param {Number} id to be retrieved
                * @public
               */
-              getTeilnahmeGruppeById(id){
-                return this.#fetchAdvanced(this.#getTeilnahmeGruppeByIdURL(id)).then((responseJSON) => {
+              getTeilnahmeGruppeById(person_id){
+                return this.#fetchAdvanced(this.#getTeilnahmeGruppeByIdURL(person_id)).then((responseJSON) => {
                 let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
                 //console.info(teilnahmegruppeBOs)
                 return new Promise(function (resolve){
@@ -1120,24 +1140,19 @@ export default class LernpartnerAPI {
               })
             }
 
-        /**
-         * Gibt Promise zurück, Löscht Konversation mit bestimmter ID
-         *
-         * @param {Number} id to be deleted
-         * @public
-         */
-        deleteTeilnahmeGruppe(id) {
-          return this.#fetchAdvanced(this.#deleteTeilnahmeGruppeURL(id), {
-            method: 'DELETE'
-          }).then((responseJSON) => {
-            // We always get an array of TeilnahmeGruppeBOs.fromJSON
-            let teilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
-             console.info(teilnahmeGruppeBO);
-            return new Promise(function (resolve) {
-              resolve(teilnahmeGruppeBO);
-            })
-          })
-        }
+
+            deleteTeilnahmeGruppe(personid) {
+                return this.#fetchAdvanced(this.#deleteTeilnahmeGruppeURL(personid), {
+                    method: 'DELETE'
+                }).then((responseJSON) => {
+                    // We always get an array of KonversationBOs.fromJSON
+                    let responseTeilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
+                    // console.info(KonversationBOs);
+                    return new Promise(function (resolve) {
+                        resolve(responseTeilnahmeGruppeBO);
+                    })
+                })
+              }
 
 
         //Lernfachspezifische Methoden
@@ -1188,6 +1203,17 @@ export default class LernpartnerAPI {
                 resolve(lernfaecherBOs);
               })
             })
+          }
+
+          deleteLernfaecherByProfil(profil_id) {
+              return this.#fetchAdvanced(this.#deleteLernfaecherByProfilURL(profil_id), {
+                  method: 'DELETE'
+              }).then ((responseJSON) => {
+                    let lernfaecherBOs = LernfachBO.fromJSON(responseJSON)[0];
+                    return new Promise(function (resolve) {
+                        resolve(lernfaecherBOs);
+                    })
+              })
           }
 
 

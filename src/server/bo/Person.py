@@ -2,19 +2,23 @@ from server.bo.NamedBusinessObject import NamedBusinessObject
 from datetime import date, datetime
 
 class Person(NamedBusinessObject):
-    
+    """Realisierung einer Person.
+
+    Eine Person besitzt einen Vornamen, Semester, Studiengang, Alter, Geschlecht, die Information, 
+    ob sie an einer Lerngruppe identifiziert ist, eine eindeutige Google User ID, eine Email und ein
+    Profil.
+    """
     def __init__(self):
         super().__init__()
-        self._vorname = None
-        self._semester = 0
-        self._studiengang = None 
-        self._alter = 0
-        #self._geburtsdatum = ""
-        self._geschlecht = None
-        self._lerngruppe = False
-        self._google_user_id = None
-        self._email = None
-        self._profil = None
+        self._vorname = None #Vorname der Person
+        self._semester = 0 #Semester der Person
+        self._studiengang = None #Studiengang der Person
+        self._alter = 0 #Alter der Person
+        self._geschlecht = None #Geschlecht der Person
+        self._lerngruppe = False #Info, ob die Person interessiert ist an einer Lerngruppe
+        self._google_user_id = None #Eindeutige Google User ID der Person
+        self._email = None #Email der Person
+        self._profil = None #Profil ID der Person
 
     def get_vorname(self):
         """Auslesen des Vornamens"""
@@ -85,13 +89,8 @@ class Person(NamedBusinessObject):
         return self._profil
 
     def set_profil(self, value):
-        """Setzen eines Lernprofils (geht das überhaupt?)"""
+        """Setzen eines Lernprofils"""
         self._profil = value
-
-    #def calculate_alter(self):
-        #heute = date.today()
-        #geb = self.get_geburtsdatum()
-        #return today.year - geb.year - ((today.month, today.day) < (geb.month, geb.day))
 
     def get_all(self):
         inhalt = [self.id, self.name, self._vorname, self._alter, self._semester, self._studiengang, self._geschlecht, self._lerngruppe, self._email, self._profil]
@@ -107,7 +106,7 @@ class Person(NamedBusinessObject):
         """ Umwandeln eines Python dict() in ein Python Objekt Person() """
         obj = Person()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_name(dictionary["name"])
+        obj.set_name(dictionary["name"]) #NBO
         obj.set_vorname(dictionary["vorname"])
         obj.set_semester(dictionary["semester"])
         obj.set_studiengang(dictionary["studiengang"])
@@ -118,5 +117,3 @@ class Person(NamedBusinessObject):
         obj.set_email(dictionary["email"])
         obj.set_profil(dictionary["profil"])
         return obj
-
-

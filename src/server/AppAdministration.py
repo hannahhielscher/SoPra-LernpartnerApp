@@ -22,48 +22,12 @@ from .db.LernvorliebenMapper import LernvorliebenMapper
 from .db.LernfachMapper import LernfachMapper
 
 
-
 class AppAdministration (object):
     """Diese Klasse aggregiert nahezu sämtliche Applikationslogik (engl. Business Logic).
-
-    Sie ist wie eine Spinne, die sämtliche Zusammenhänge in ihrem Netz (in unserem
-    Fall die Daten der Applikation) überblickt und für einen geordneten Ablauf und
-    dauerhafte Konsistenz der Daten und Abläufe sorgt.
-
-    Die Applikationslogik findet sich in den Methoden dieser Klasse. Jede dieser
-    Methoden kann als *Transaction Script* bezeichnet werden. Dieser Name
-    lässt schon vermuten, dass hier analog zu Datenbanktransaktion pro
-    Transaktion gleiche mehrere Teilaktionen durchgeführt werden, die das System
-    von einem konsistenten Zustand in einen anderen, auch wieder konsistenten
-    Zustand überführen. Wenn dies zwischenzeitig scheitern sollte, dann ist das
-    jeweilige Transaction Script dafür verwantwortlich, eine Fehlerbehandlung
-    durchzuführen.
-
-    Diese Klasse steht mit einer Reihe weiterer Datentypen in Verbindung. Dies
-    sind:
-    - die Klassen BusinessObject und deren Subklassen,
-    - die Mapper-Klassen für den DB-Zugriff.
-
-    BankAdministration bilden nur die Server-seitige Sicht der
-    Applikationslogik ab. Diese basiert vollständig auf synchronen
+    Sie verbindet die API Anbindung via Flask (main.py) mit der Datenbankanbindung (Mapper-Klassen)
+    AppAdministration bilden nur die Server-seitige Sicht der Applikationslogik ab. Diese basiert vollständig auf synchronen
     Funktionsaufrufen.
-
-    **Wichtiger Hinweis:** Diese Klasse bedient sich sogenannter
-    Mapper-Klassen. Sie gehören der Datenbank-Schicht an und bilden die
-    objektorientierte Sicht der Applikationslogik auf die relationale
-    organisierte Datenbank ab. Zuweilen kommen "kreative" Zeitgenossen auf die
-    Idee, in diesen Mappern auch Applikationslogik zu realisieren. Siehe dazu
-    auch die Hinweise in der Methode zum Löschen von Customer-Objekten.
-    Einzig nachvollziehbares Argument für einen solchen Ansatz ist die Steigerung
-    der Performance umfangreicher Datenbankoperationen. Doch auch dieses Argument
-    zieht nur dann, wenn wirklich große Datenmengen zu handhaben sind. In einem
-    solchen Fall würde man jedoch eine entsprechend erweiterte Architektur realisieren,
-    die wiederum sämtliche Applikationslogik in der Applikationsschicht isolieren
-    würde. Also: keine Applikationslogik in die Mapper-Klassen "stecken" sondern
-    dies auf die Applikationsschicht konzentrieren!
-
-    Es gibt sicherlich noch viel mehr über diese Klasse zu schreiben. Weitere
-    Infos erhalten Sie in der Lehrveranstaltung.
+    Die Klasse hat spezifische Methoden für jedes BO.
     """
     def __init__(self):
         pass
@@ -88,7 +52,6 @@ class AppAdministration (object):
         
         person.set_id(1)
 
-        
         with PersonMapper() as mapper:
             return mapper.insert(person)
 
@@ -98,7 +61,7 @@ class AppAdministration (object):
             return mapper.find_by_id(id)
 
     def get_person_by_profilid(self, profilid):
-        """Eine Person mit einer bestimmten ID auslesen"""
+        """Eine Person mit einer bestimmten ProfilID auslesen"""
         with PersonMapper() as mapper:
             return mapper.find_by_profilid(profilid)
 
@@ -114,13 +77,11 @@ class AppAdministration (object):
 
     def save_person(self, person):
         """Eine Person speichern"""
-
         with PersonMapper() as mapper:
             mapper.update(person)
 
     def update_person_by_id(self, person):
         """Eine Person speichern"""
-
         with PersonMapper() as mapper:
             mapper.update_by_id(person)
     
@@ -135,7 +96,7 @@ class AppAdministration (object):
     """
 
     def create_profil(self, gruppe, lernfaecher, lernvorlieben_id):
-        """Eine Person anlegen"""
+        """Ein Profil anlegen"""
 
         profil = Profil()
 
@@ -168,6 +129,7 @@ class AppAdministration (object):
             return mapper.find_lernfaecher_by_profil_id(profil_id)
     
     def get_profil_test(self, profil_id):
+        """Ein Profil mit einer bestimmten ProfilID auslesen"""
         with ProfilMapper() as mapper:
             return mapper.find_profil_test(profil_id)
 
@@ -230,44 +192,6 @@ class AppAdministration (object):
         with LernvorliebenMapper() as mapper:
             return mapper.find_by_id(id)
 
-    #def get_praeferenz_by_lernvorlieben_id(self, id):
-     #   """Lernvorlieben mit einer bestimmten ID auslesen"""
-
-        #with LernvorliebenMapper() as mapper:
-         #   tageszeiten_id = mapper.find_tageszeiten_by_lernvorlieben_id(id)
-
-        #with LernvorliebenMapper() as mapper:
-         #   tage_id = mapper.find_tage_by_lernvorlieben_id(id)
-
-        #with LernvorliebenMapper() as mapper:
-         #   frequenzen_id = mapper.find_frequenzen_by_lernvorlieben_id(id)
-
-        #with LernvorliebenMapper() as mapper:
-         #   lernarten_id = mapper.find_lernarten_by_lernvorlieben_id(id)
-
-        #with LernvorliebenMapper() as mapper:
-         #   gruppengroessen_id = mapper.find_gruppengroessen_by_lernvorlieben_id(id)
-
-        #with LernvorliebenMapper() as mapper:
-         #   lernorte_id = mapper.find_lernorte_by_lernvorlieben_id(id)
-
-        #lernvorlieben = Lernvorlieben()
-
-        #lernvorlieben.set_tageszeiten_id(tageszeiten_id)
-        #lernvorlieben.set_tageszeiten_bez(tageszeiten_bez)
-        #lernvorlieben.set_tage_id(tage_id)
-        #lernvorlieben.set_tage_bez(tage_bez)
-        #lernvorlieben.set_frequenz_id(frequenz_id)
-        #lernvorlieben.set_frequenz_bez(frequenz_bez)
-        #lernvorlieben.set_lernart_id(lernart_id)
-        #lernvorlieben.set_lernart_bez(lernart_bez)
-        #lernvorlieben.set_gruppengroesse_id(gruppengroesse_id)
-        #lernvorlieben.set_gruppengroesse_bez(gruppengroesse_bez)
-        #lernvorlieben.set_lernort_id(lernort_id)
-        #lernvorlieben.set_lernort_bez(lernort_bez)
-
-        #return lernvorlieben
-
     def save_lernvorlieben(self, lernvorlieben):
         """Lernvorlieben speichern"""
 
@@ -280,7 +204,7 @@ class AppAdministration (object):
             mapper.update_by_id(lernvorlieben)
     
     def delete_lernvorlieben(self, lernvorlieben):
-        """Eine Person löschen"""
+        """Eine Lernvorliebe löschen"""
         with LernvorliebenMapper() as mapper:
             return mapper.delete(lernvorlieben)
 
@@ -307,12 +231,12 @@ class AppAdministration (object):
             return mapper.find_by_id(id)
 
     def get_lerngruppe_by_profil_id(self, id):
-        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        """Eine Lerngruppe mit einer bestimmten ProfilID auslesen"""
         with LerngruppeMapper() as mapper:
             return mapper.find_by_profil_id(id)
 
     def get_lerngruppe_by_person_id(self, id):
-        """Eine Lerngruppe mit einer bestimmten ID auslesen"""
+        """Eine Lerngruppe mit einer bestimmten PersonID auslesen"""
         with LerngruppeMapper() as mapper:
             return mapper.find_by_person_id(id)
 
@@ -323,13 +247,11 @@ class AppAdministration (object):
 
     def save_lerngruppe(self, lerngruppe):
         """Eine Lerngruppe speichern"""
-
         with LerngruppeMapper() as mapper:
             mapper.update(lerngruppe)
 
     def update_lerngruppe_by_id(self, lerngruppe):
         """Eine Lerngruppe speichern"""
-
         with LerngruppeMapper() as mapper:
             mapper.update(lerngruppe)
 
@@ -360,7 +282,7 @@ class AppAdministration (object):
             return mapper.find_all()
 
     def get_teilnahmegruppe_by_person_id(self, person_id):
-        """Gibt die Teilnahme einer gegebenen Id zurück."""
+        """Gibt die Teilnahme einer gegebenen PersonId zurück."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_person_id(person_id)
 
@@ -370,22 +292,24 @@ class AppAdministration (object):
             return mapper.find_by_lerngruppe_id(lerngruppe_id)
     
     def get_teilnahmegruppe_by_id(self, id):
+        """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_id(id)
     
     def get_teilnahmegruppe_by_person_by_gruppe(self, person_id, lerngruppe_id):
+        """Gibt die Teilnahme einer gegebenen PersonId und einer gegebenen Lerngruppen Id zurück."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.find_by_person_and_lerngruppe(person_id, lerngruppe_id)
 
     def update_teilnahmegruppe(self,teilnahme):
-        """Speichert die Nachricht."""
+        """Speichert die Teilnahme."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmegruppe(self, id):
-        """Löscht die Nachricht."""
+    def delete_teilnahmegruppe(self, person_id):
+        """Löscht die TeilnahmeGruppe nach Person."""
         with TeilnahmeGruppeMapper() as mapper:
-            mapper.delete(id)
+            mapper.delete(person_id)
     
     
     """
@@ -481,7 +405,7 @@ class AppAdministration (object):
             return mapper.find_by_personid(personid)
 
     def get_angenommeneKonversationen_by_personid(self, personid):
-        """Gibt alle Konversationen einer Person zurück"""
+        """Gibt alle angenommenen Konversationen einer Person zurück"""
         with KonversationMapper() as mapper:
             return mapper.find_angenommene_by_personid(personid)
     
@@ -524,27 +448,27 @@ class AppAdministration (object):
             return mapper.find_all()
 
     def get_teilnahmeChat_by_id(self, id):
-        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
+        """Gibt die Teilnahme einer gegebenen Id zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_id(id)
 
     def get_teilnahmeChat_by_person_id(self, personid):
-        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
+        """Gibt die Teilnahme einer gegebenen PersonId zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_person_id(personid)
 
     def get_teilnahmeChat_by_person_id_und_status(self, person_id, status):
-        """Gibt die Teilnahme einer gegebenen PersonId und em Status der Konversation zurück."""
+        """Gibt die Teilnahme einer gegebenen PersonId und dem Status der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_person_id_und_status(person_id, status)
 
     def get_teilnahmeChat_by_status_and_konversation_id(self, status, konversationid):
-        """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
+                """Gibt die Teilnahme einer gegebenen KonversationId und dem Status der Konversation zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_status_and_konversation_id(status, konversationid)
 
     def get_teilnahmeChat_by_konversation_and_person(self, konversation_id, person_id):
-        """Gibt die Teilnahme einer gegebenen Id des Studenten zurück."""
+        """Gibt die Teilnahme einer gegebenen KonversationId und PersonId zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_konversation_and_person(konversation_id, person_id)
 
@@ -554,7 +478,7 @@ class AppAdministration (object):
             return mapper.find_by_konversation_id(konversationid)
 
     def get_teilnahmeChat_anfrage_sender(self, anfrage_sender):
-        """Gibt die Teilnahme einer gegebenen Id der Konversation zurück."""
+        """Gibt die Teilnahme einer gegebenen Anfragesender Id zurück."""
         with TeilnahmeChatMapper() as mapper:
             return mapper.find_by_anfrage_sender(anfrage_sender)
 
@@ -569,14 +493,19 @@ class AppAdministration (object):
             return mapper.update(teilnahme)
 
     def delete_teilnahmeChatByKonByPer(self, konversationId, personId):
-        """Löscht die Teilnahme."""
+        """Löscht die Teilnahme anhand der KonversationID und personID."""
         with TeilnahmeChatMapper() as mapper:
             mapper.delete(konversationId, personId)
 
     def delete_teilnahmeChat(self, id):
-        """Löscht die Teilnahme."""
+        """Löscht die Teilnahme anhand der Id."""
         with TeilnahmeChatMapper() as mapper:
             mapper.delete_by_id(id)
+        
+    def delete_teilnahmeChatByPerson(self, person_id):
+        """Löscht die TeilnahmeChat nach PersonID."""
+        with TeilnahmeGruppeMapper() as mapper:
+            mapper.delete_by_person(person_id)
 
     """
     Vorschlag-spezifische Methoden
@@ -606,12 +535,12 @@ class AppAdministration (object):
             return mapper.find_by_id(id)
 
     def get_vorschlaege_by_main_person_id(self, id):
-        """Gibt den Vorschlag mit der gegebenen Id zurück."""
+        """Gibt den Vorschlag mit der gegebenen Main Person Id zurück."""
         with VorschlagMapper() as mapper:
             return mapper.find_by_main_person_id(id)
 
     def get_vorschlag_by_person_id(self, id):
-        """Gibt den Vorschlag mit der gegebenen Id zurück."""
+        """Gibt den Vorschlag mit der gegebenen PersonId zurück."""
         with VorschlagMapper() as mapper:
             return mapper.find_by_person_id(id)
 
@@ -621,10 +550,12 @@ class AppAdministration (object):
             return mapper.update_by_id(id)
 
     def delete_vorschlag_by_id(self, id):
+        """Lösche den Vorschlag mit der gegebenen Id."""
         with VorschlagMapper() as mapper:
             return mapper.delete(id)
 
     def match_berechnen(self, main_person_id, lernfach_id):
+        """Match für eine PersonID und ein bestimmtes Lernfach berechnen"""
 
         # Main-Person mit der verglichen wird
         # Person by ID holen
@@ -633,9 +564,7 @@ class AppAdministration (object):
 
         # Wert speichern, ob Person Gruppen als Matches möchte
         gruppe = main_person.get_lerngruppe()
-        print('Hi')
-        print(gruppe)
-
+        
         # Profil by Person ID holen
         with ProfilMapper() as mapper:
             main_profil = mapper.find_by_id(main_person.get_profil())
@@ -657,8 +586,6 @@ class AppAdministration (object):
             for profil in match_profil_all:
                 if profil.get_gruppe() == 1:
                     match_profil_all.remove(profil)
-                    print('ha')
-                    print(profil.get_gruppe())
                 if profil.get_id() == main_profil.get_id():
                     match_profil_all.remove(profil)
         else:
@@ -710,7 +637,7 @@ class AppAdministration (object):
         return result
 
     """
-    Profil-spezifische Methoden
+    Lernfächer-spezifische Methoden
     """
 
     def get_all_lernfaecher(self):
@@ -727,3 +654,8 @@ class AppAdministration (object):
         """Gibt alle Lernfaecher nach ProfilID zurück."""
         with LernfachMapper() as mapper:
             return mapper.find_lernfaecher_by_profil_id(profilid)
+
+    def delete_lernfaecher_by_profil_id(self, profilid):
+        """Eine Person löschen"""
+        with LernfachMapper() as mapper:
+            return mapper.delete_lernfaecher_by_profil_id(profilid)

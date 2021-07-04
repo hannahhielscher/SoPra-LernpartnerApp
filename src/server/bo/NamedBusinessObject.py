@@ -1,9 +1,13 @@
 from server.bo.BusinessObject import BusinessObject
 
 class NamedBusinessObject(BusinessObject):
+    """Basisklasse für alle Businessobjekte, welche einen Namen besitzen
+    
+    Jedes NamedBusinessObject hat einen Namen
+    """
 
     def __init__(self):
-        self._name = None
+        self._name = None #Name des BOs als string
 
     def get_name(self):
         """Auslesen des Namens"""

@@ -11,10 +11,6 @@ class Mapper (AbstractContextManager, ABC):
         self._connection = None
 
     def __enter__(self):
-        """Was soll geschehen, wenn wir beginnen, mit dem Mapper zu arbeiten?"""
-
-        """Wir testen, ob der Code im Kontext der lokalen Entwicklungsumgebung oder in der Cloud ausgeführt wird.
-        Dies ist erforderlich, da die Modalitäten für den Verbindungsaufbau mit der Datenbank kontextabhängig sind."""
 
         if os.getenv('GAE_ENV', '').startswith('standard'):
             """Landen wir in diesem Zweig, so haben wir festgestellt, dass der Code in der Cloud abläuft.
@@ -39,7 +35,7 @@ class Mapper (AbstractContextManager, ABC):
         """Was soll geschehen, wenn wir (evtl. vorübergehend) aufhören, mit dem Mapper zu arbeiten?"""
         self._connection.close()
 
-    """Formuliere nachfolgend sämtliche Auflagen, die instanzierbare Mapper-Subklassen mind. erfüllen müssen."""
+    """Folgende Funktionen sollten in allen Mapper-Subklassen vorhanden sein"""
 
     @abstractmethod
     def find_all(self):

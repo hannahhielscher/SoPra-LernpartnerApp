@@ -49,8 +49,6 @@ nbo = api.inherit('NamedBusinessObject', bo, {
     'name': fields.String(attribute='_name', description='Name des BOs'),
 })
 
-
-
 person = api.inherit('Person', nbo, {
     'vorname': fields.String(attribute='_vorname', description='Vorname der Person'),
     'semester': fields.String(attribute='_semester', description='Semester der Person'),
@@ -62,7 +60,6 @@ person = api.inherit('Person', nbo, {
     'email': fields.String(attribute='_email', description='Email der Person'),
     'profil': fields.Integer(attribute='_profil', description='Profil ID der Person'),
 })
-
 
 profil = api.inherit('Profil', bo, {
     'gruppe': fields.Boolean(attribute='_gruppe', description='Teilnahme an einer Gruppe'),
@@ -123,6 +120,7 @@ lernfach = api.inherit('Lernfaecher', bo, {
     'bezeichnung': fields.String(attribute='_bezeichnung', description='Bezeichnung des Lernfachs'),
 })
 
+"""Personen-spezifisch"""
 @lernApp.route('/personen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonenOperationen(Resource):
@@ -139,7 +137,7 @@ class PersonenOperationen(Resource):
 
     @secured
     def put(self):
-        """Update des User-Objekts."""
+        """Update des Personen-Objekts."""
 
         personId = request.args.get("id")
         name = request.args.get("name")
@@ -163,9 +161,9 @@ class PersonenOperationen(Resource):
 @lernApp.route('/personen/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonOperationen(Resource):
+    
     @lernApp.marshal_list_with(person)
-   
-    #@secured
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -211,11 +209,11 @@ class PersonOperationen(Resource):
 @lernApp.route('/personen-by-profil/<int:profilid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByProfilOperationen(Resource):
+    
     @lernApp.marshal_list_with(person)
-   
-    #@secured
+    @secured
     def get(self, profilid):
-        """Auslesen eines bestimmten Person-Objekts.
+        """Auslesen eines bestimmten Person-Objekts nach Profil.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
@@ -229,13 +227,15 @@ class PersonByGoogleIDOperationen(Resource):
     
     @secured
     def get(self, google_user_id):
-        """Auslesen eines bestimmten User-Objekts.
+        """Auslesen eines bestimmten Person-Objekts.
         Das auszulesende Objekt wird durch die google_user_id in dem URI bestimmt.
         """
         adm = AppAdministration()
         person = adm.get_person_by_google_user_id(google_user_id)
         return person
 
+
+"""Profil-spezifisch"""
 @lernApp.route('/profile')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class ProfilListOperationen(Resource):
@@ -253,7 +253,7 @@ class ProfilListOperationen(Resource):
 
     @secured
     def put(self):
-        """Update des User-Objekts."""
+        """Update des Profil-Objekts."""
 
         profilid = request.args.get("id")
         gruppe = request.args.get("gruppe")
@@ -268,19 +268,10 @@ class ProfilListOperationen(Resource):
         profil.set_lernvorlieben_id(lernvorlieben_id)
         
         adm.update_profil_by_id(profil)
-    #@secured
-    #def post(self):
-     #   """Anlegen eines neuen Profil-Objekts."""
-      #  id = request.args.get("id")
-       # gruppe = request.args.get("gruppe")
-        #lernfaecher = request.args.get("lernfaecher")
-        #lernvorlieben_id = request.args.get("lernvorlieben")
-        #adm = AppAdministration()
-        #adm.create_profil(gruppe, lernfaecher, lernvorlieben_id)
 
     @lernApp.marshal_with(profil, code=200)
     @lernApp.expect(profil)
-    #@secured
+    @secured
     def post (self):
         """Anlegen eines neuen Profil-Objekts."""
         print(profil)
@@ -306,24 +297,6 @@ class ProfilListOperationen(Resource):
             """ Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und
             werfen einen Server-Fehler. """
             return '', 500
-
-    #@secured
-    #def put(self):
-     #   """Updaten eines Profil-Objekts."""
-
-      #  id = request.args.get("id")
-       # gruppe = request.args.get("gruppe")
-        #lernfaecher = request.args.get("lernfaecher")
-        #lernvorlieben_id = request.args.get("lernvorlieben_id")
-
-        #adm = AppAdministration()
-
-        #liste = adm.get_profil_by_id(id)
-        #for i in liste:
-         #   i.set_gruppe(gruppe)
-          #  i.set_lernfaecher(lernfaecher)
-           # i.set_lernvorlieben_id(lernvorlieben_id)
-            #adm.update(i)
 
 @lernApp.route('/profile-by-id/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -362,9 +335,10 @@ class ProfilByIDOperationen(Resource):
 class ProfilByIDTestOperationen(Resource):
     @lernApp.marshal_list_with(profil)
 
-    #secured
+    @secured
     def get(self, profilid):
-        """Auslesen eines bestimmten Profil-Objekts.
+        """Richtige Methode!
+        Auslesen eines bestimmten Profil-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
@@ -372,7 +346,8 @@ class ProfilByIDTestOperationen(Resource):
         
         return profil
 
-"""Lerngruppenspezifisch"""
+
+"""Lerngruppen-spezifisch"""
 @lernApp.route('/lerngruppen')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppeListOperationen(Resource):
@@ -409,11 +384,9 @@ class LerngruppeListOperationen(Resource):
 
     @lernApp.marshal_with(lerngruppe, code=200)
     @lernApp.expect(lerngruppe)
-
-
-    #@secured
+    @secured
     def post (self):
-        """Anlegen eines neuen Modul-Objekts."""
+        """Anlegen eines neuen Lerngruppen-Objekts."""
         print(lerngruppe)
 
         adm = AppAdministration()
@@ -422,7 +395,7 @@ class LerngruppeListOperationen(Resource):
 
         if proposal is not None:
             """ Wir verwenden modul des Proposals für
-             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             die Erzeugung eines Lerngruppen-Objekts. Das serverseitig erzeugte 
              Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
 
             name = proposal.get_name()
@@ -443,7 +416,7 @@ class LerngruppeListOperationen(Resource):
 class LerngruppeOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
    
-    #@secured
+    @secured
     def get(self, id):
         """Auslesen aller Lerngruppen-Objekte einer Person.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -453,9 +426,7 @@ class LerngruppeOperationen(Resource):
         
         return lerngruppe
         
-
-
-    #@secured
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten Lerngruppen-Objekts.
 
@@ -465,15 +436,14 @@ class LerngruppeOperationen(Resource):
         adm.delete_ById(id)
         return '', 200
 
-
 @lernApp.route('/lerngruppen-by-profil/<int:profilid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LerngruppByProfilOperationen(Resource):
     @lernApp.marshal_list_with(lerngruppe)
 
-    #@secured
+    @secured
     def get(self, profilid):
-        """Auslesen eines bestimmten Person-Objekts.
+        """Auslesen eines bestimmten Lerngruppen-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
@@ -481,7 +451,7 @@ class LerngruppByProfilOperationen(Resource):
         return lerngruppe
 
 
-"""Vorschlagspezifisch"""
+"""Vorschlag-spezifisch"""
 #notwendig?
 #@lernApp.route('/vorschlaege')
 #@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -532,8 +502,7 @@ class VorschlagByIDOperationen(Resource):
         return vorschlag
 
     def delete(self, id):
-        """Löschen eines bestimmten Nachrichtenobjekts."""
-        s
+        """Löschen eines bestimmten Vorschlagobjekts."""
         adm = AppAdministration()
         adm.delete_vorschlag_by_id(id)
 
@@ -541,7 +510,7 @@ class VorschlagByIDOperationen(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class VorschlaegeByPersonByLernfachOperations(Resource):
     @lernApp.marshal_list_with(vorschlag)
-    #@secured
+    @secured
     def get(self, mainpersonid, lernfachid):
         """Auslesen aller Vorschlag-Objekte nach Person und Lernfach.
         Sollten kein Vorschlag-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
@@ -550,12 +519,12 @@ class VorschlaegeByPersonByLernfachOperations(Resource):
         vorschlaege = adm.match_berechnen(mainpersonid, lernfachid)
         return vorschlaege
 
-"""Nachrichtspezifisch"""        
+
+"""Nachricht-spezifisch"""        
 @lernApp.route('/nachrichten')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class NachrichtenOperation(Resource):
 
-    #Brauchen wir das überhaupt? Komplett alle Nachrichten ist ja unnötig
     @lernApp.marshal_list_with(nachricht)
     def get(self):
         """Auslesen aller Nachrichten-Objekte.
@@ -567,7 +536,7 @@ class NachrichtenOperation(Resource):
     
     @lernApp.marshal_with(nachricht, code=200)
     @lernApp.expect(nachricht)
-    #@secured
+    @secured
     def post (self):
         """Anlegen eines neuen Nachricht-Objekts."""
         print(nachricht)
@@ -577,7 +546,7 @@ class NachrichtenOperation(Resource):
 
         if proposal is not None:
             """ Wir verwenden modul des Proposals für
-             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             die Erzeugung eines Nachrichten-Objekts. Das serverseitig erzeugte 
              Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
 
             nachricht_inhalt = proposal.get_nachricht_inhalt()
@@ -599,6 +568,7 @@ class NachrichtenOperation(Resource):
 class NachrichtByIDOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
+    @secured
     def get (self, id):
         """Auslesen einer bestimmten Nachricht."""
         adm = AppAdministration()
@@ -609,8 +579,8 @@ class NachrichtByIDOperation(Resource):
         else:
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
-    #Kann man Nachrichten später updaten?
     @lernApp.marshal_with(nachricht)
+    @secured
     def put(self, id):
         """Update eines bestimmten Nachrichtenenobjekts."""
         adm = AppAdministration()
@@ -625,6 +595,7 @@ class NachrichtByIDOperation(Resource):
             return '', 500 #Wenn es keine Nachricht mit der id gibt.
 
     @lernApp.marshal_with(nachricht)
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten Nachrichtenobjekts."""
         adm = AppAdministration()
@@ -638,6 +609,7 @@ class NachrichtByIDOperation(Resource):
 class NachrichtByInhaltOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
+    @secured
     def get (self, inhalt):
         """Auslesen einer bestimmten Nachricht anhand des Inhalts."""
         adm = AppAdministration()
@@ -653,6 +625,7 @@ class NachrichtByInhaltOperation(Resource):
 class NachrichtByPersonIdOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
+    @secured
     def get (self, person_id):
         """Auslesen einer bestimmten Nachricht anhand der Id der Person."""
         adm = AppAdministration()
@@ -696,7 +669,7 @@ class NachrichtByKonversationIdOperation(Resource):
 class NachrichtByKonversationByPersonOperation(Resource):
 
     @lernApp.marshal_with(nachricht)
-    #@secured
+    @secured
     def get (self, konversation_id, person_id):
         """Auslesen einer bestimmten Nachricht anhand der Id der Konversation."""
         adm = AppAdministration()
@@ -733,9 +706,10 @@ class KonversationenOperation(Resource):
         proposal = Konversation.from_dict(api.payload)
 
         if proposal is not None:
-            """ Wir verwenden modul des Proposals für
-             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
-             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
+            """ Wir verwenden konversation des Proposals für
+             die Erzeugung eines Konversation-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben.
+             """
 
             name = proposal.get_name()
             anfragestatus = proposal.get_anfragestatus()
@@ -750,7 +724,7 @@ class KonversationenOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
-    #@secured
+    @secured
     def put(self):
         """Update eines bestimmten Konversationobjekts."""
         konversationid = request.args.get("id")
@@ -770,9 +744,9 @@ class KonversationenOperation(Resource):
 class KonversationByIdOperation(Resource):
 
     @lernApp.marshal_with(konversation)
-    #@secured
+    @secured
     def get (self, id):
-        """Auslesen einer bestimmten Konversation."""
+        """Auslesen einer bestimmten Konversation nach Id."""
         adm = AppAdministration()
         konversation = adm.get_konversation_by_id(id)
 
@@ -782,7 +756,7 @@ class KonversationByIdOperation(Resource):
             return '', 500 #Wenn es keine Konversation mit der id gibt.
 
     @lernApp.marshal_with(konversation)
-    #@secured
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten Konversationobjekts."""
         adm = AppAdministration()
@@ -807,9 +781,9 @@ class KonversationByPersonOperation(Resource):
 class KonversationByPersonOperation(Resource):        
     
     @lernApp.marshal_with(konversation)
-    #@secured
+    @secured
     def get(self, personid):
-        """Auslesen aller Konversationen einer Person."""
+        """Auslesen aller angenommenen Konversationen einer Person."""
         adm = AppAdministration()
         konversation = adm.get_angenommeneKonversationen_by_personid(personid)
         
@@ -819,22 +793,23 @@ class KonversationByPersonOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByNameOperation(Resource):
     @lernApp.marshal_with(konversation)
-    #@secured
+    @secured
     def get (self, name):
-        """Auslesen einer bestimmten Konversation."""
+        """Auslesen einer bestimmten Konversation nach Name."""
         adm = AppAdministration()
         konversation = adm.get_konversation_by_name(name)
 
         return konversation
 
-
+"""TeilnahmeChat-spezifische"""
 @lernApp.route('/teilnahmeChat-by-id/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
+    @secured
     def get(self, id):
-        """Auslesen einer bestimmten Teilnahme anhand der Id."""
+        """Auslesen einer bestimmten TeilnahmeChat anhand der Id."""
         adm = AppAdministration()
         teilnahme = adm.get_teilnahmeChat_by_id(id)
 
@@ -848,9 +823,9 @@ class TeilnahmeChatByIdOperation(Resource):
 class TeilnahmeChatByIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
-    #@secured
+    @secured
     def get(self, person_id, status):
-        """Auslesen aller Teilnahme-Objekte des Chats.
+        """Auslesen aller Teilnahme-Objekte nach PersonId und Status.
         Sollten keine Teilnahme-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
 
         if status == 1:
@@ -867,10 +842,9 @@ class TeilnahmeChatByIdOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmenChatOperation(Resource):
     @lernApp.marshal_list_with(teilnahmechat)
-
+    @secured
     def get(self):
-        """Auslesen aller Teilnahme-Objekte des Chats.
-
+        """Auslesen aller TeilnahmeChat-Objekte.
         Sollten keine Teilnahme-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
         adm = AppAdministration()
         teilnahmen = adm.get_all_teilnahmenChat()
@@ -878,16 +852,16 @@ class TeilnahmenChatOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat, code=200)
     @lernApp.expect(teilnahmechat)
-    #@secured
+    @secured
     def post(self):
-        """Anlegen einer Teilnahme."""
+        """Anlegen einer TeilnahmeChat."""
         adm = AppAdministration()
 
         proposal = TeilnahmeChat.from_dict(api.payload)
 
         if proposal is not None:
             """ Wir verwenden modul des Proposals für
-             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
+             die Erzeugung eines TeilnahmeChat-Objekts. Das serverseitig erzeugte 
              Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
 
             teilnehmer = proposal.get_teilnehmer()
@@ -906,7 +880,7 @@ class TeilnahmenChatOperation(Resource):
             return '', 500
 
     @lernApp.marshal_list_with(teilnahmechat)
-    #@secured
+    @secured
     def put(self):
         """Update eines bestimmten Konversationobjekts."""
         teilnahmechatid = request.args.get("id")
@@ -938,7 +912,7 @@ class TeilnahmenChatOperation(Resource):
 class TeilnahmeChatOperation(Resource):
     @lernApp.marshal_with(teilnahmechat)
 
-    #@secured
+    @secured
     def get (self, id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
@@ -949,9 +923,9 @@ class TeilnahmeChatOperation(Resource):
     
     @lernApp.marshal_with(teilnahmechat)
     @lernApp.expect(teilnahmechat, validate=True)
-    #@secured
+    @secured
     def put(self, id):
-        """Update eines bestimmten Person-Objekts.
+        """Update eines bestimmten TeilnahmeChat-Objekts.
 
         **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
         verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
@@ -961,7 +935,7 @@ class TeilnahmeChatOperation(Resource):
         c = TeilnahmeChat.from_dict(api.payload)
 
         if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Person-Objekts gesetzt.
+            """Hierdurch wird die id des zu überschreibenden (vgl. Update) TeilnahmeChat-Objekts gesetzt.
             Siehe Hinweise oben.
             """
             c.set_id(id)
@@ -971,7 +945,7 @@ class TeilnahmeChatOperation(Resource):
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
 
-    #@secured
+    @secured
     def delete(self, id):
         """Löschen eines bestimmten TeilnahmeChat-objekts."""
         adm = AppAdministration()
@@ -984,6 +958,7 @@ class TeilnahmeChatOperation(Resource):
 class TeilnahmeChatByPersonIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
+    @secured
     def get(self, personid):
         """Auslesen einer bestimmten Teilnahme anhand der Personen-Id."""
         adm = AppAdministration()
@@ -998,9 +973,9 @@ class TeilnahmeChatByPersonIdOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByKonversationIdOperation(Resource):
     @lernApp.marshal_with(teilnahmechat)
-
+    @secured
     def get(self, status, konversation_id):
-        """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
+        """Auslesen einer bestimmten Teilnahme anhand des Status und der Konversations-Id."""
         adm = AppAdministration()
 
         if status == 1:
@@ -1031,9 +1006,9 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
 class TeilnahmeChatByKonversationIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
-    #@secured
+    @secured
     def get(self, anfrage_sender):
-        """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
+        """Auslesen einer bestimmten Teilnahme anhand des Anfragesenders."""
         adm = AppAdministration()
 
         teilnahme = adm.get_teilnahmeChat_anfrage_sender(anfrage_sender)
@@ -1047,9 +1022,9 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
 class TeilnahmeChatByKonversationByPersonOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
-    #@secured
+    @secured
     def get (self, konversation_id, person_id):
-        """Auslesen einer bestimmten Teilnahme."""
+        """Auslesen einer bestimmten Teilnahme anhand der KonversationId und PersonId."""
         adm = AppAdministration()
         teilnahme = adm.get_teilnahmeChat_by_konversation_and_person(konversation_id, person_id)
 
@@ -1058,11 +1033,13 @@ class TeilnahmeChatByKonversationByPersonOperation(Resource):
         else:
             return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
+"""TeilnahmeGruppe-spezifisch"""
 @lernApp.route('/teilnahmenGruppe')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeListOperation(Resource):
 
     @lernApp.marshal_list_with(teilnahmegruppe)
+    @secured
     def get(self):
         """Auslesen aller TeilnahmeGruppe-Objekte.
 
@@ -1073,9 +1050,9 @@ class TeilnahmeGruppeListOperation(Resource):
 
     @lernApp.marshal_with(teilnahmegruppe, code=200)
     @lernApp.expect(teilnahmegruppe)
-    #@secured
+    @secured
     def post (self):
-        """Anlegen eines neuen Modul-Objekts."""
+        """Anlegen eines neuen TeilnahmeGruppe-Objekts."""
 
         adm = AppAdministration()
 
@@ -1099,16 +1076,16 @@ class TeilnahmeGruppeListOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
-@lernApp.route('/teilnahmenGruppe/<int:id>')
+@lernApp.route('/teilnahmenGruppe/<int:person_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeOperation(Resource):
 
     @lernApp.marshal_with(teilnahmegruppe)
     @secured
-    def get (self, id):
-        """Auslesen einer bestimmten Teilnahme."""
+    def get (self, person_id):
+        """Auslesen einer bestimmten Teilnahme anhand der PersonId."""
         adm = AppAdministration()
-        teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
+        teilnahme = adm.get_teilnahmegruppe_by_person_id(person_id)
 
         if teilnahme is not None:
             return teilnahme
@@ -1116,14 +1093,14 @@ class TeilnahmeGruppeOperation(Resource):
             return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
     @secured
-    def delete(self, id):
+    def delete(self, person_id):
         """Löschen eines bestimmten TeilnahmeGruppe-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        #teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
-        adm.delete_teilnahmegruppe(id)
+        teilnahme = adm.get_teilnahmegruppe_by_person_id(person_id)
+        adm.delete_teilnahmegruppe(person_id)
         return '', 200
 
 @lernApp.route('/teilnahmenGruppe-by-gruppe/<int:lerngruppe_id>')
@@ -1133,7 +1110,7 @@ class TeilnahmeGruppeByLerngruppeOperation(Resource):
     @lernApp.marshal_with(teilnahmegruppe)
     @secured
     def get (self, lerngruppe_id):
-        """Auslesen einer bestimmten Teilnahme."""
+        """Auslesen einer bestimmten Teilnahme anhand der Lerngruppe."""
         adm = AppAdministration()
         teilnahme = adm.get_teilnahmegruppe_by_lerngruppen_id(lerngruppe_id)
 
@@ -1155,13 +1132,14 @@ class TeilnahmeGruppeByPersonByGruppeOperation(Resource):
         if teilnahme is not None:
             return teilnahme
         else:
-            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.  
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
+"""Lernvorlieben-spezifisch"""
 @lernApp.route('/lernvorlieben/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LernvorliebenByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
-    #@secured
+    @secured
     def get(self, id):
         """Auslesen eines bestimmten Lernvorlieben-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
@@ -1219,7 +1197,7 @@ class LernvorliebenListeOperationen(Resource):
     @lernApp.marshal_list_with(lernvorlieben)
     @secured
     def put(self):
-        """Update des User-Objekts."""
+        """Update des Lernvorlieben-Objekts."""
 
         lernvorliebenId = request.args.get("id")
         tageszeiten = request.args.get("tageszeiten")
@@ -1258,16 +1236,16 @@ class LernvorliebenListOperationen(Resource):
 
     @lernApp.marshal_with(lernvorlieben, code=200)
     @lernApp.expect(lernvorlieben)
-    #@secured
+    @secured
     def post (self):
-        """Anlegen eines neuen Modul-Objekts."""
+        """Anlegen eines neuen Lernvorlieben-Objekts."""
         adm = AppAdministration()
         proposal = Lernvorlieben.from_dict(api.payload)
 
         if proposal is not None:
-            """ Wir verwenden modul des Proposals für
-             die Erzeugung eines Modul-Objekts. Das serverseitig erzeugte 
-             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben. """
+            """ Wir verwenden Lernvorlieben des Proposals für
+             die Erzeugung eines Lernvorlieben-Objekts. Das serverseitig erzeugte 
+             Objekt ist das maßgebliche und  wird auch dem Client zurückgegeben."""
 
             tageszeiten_id = proposal.get_tageszeiten_id()
             tageszeiten_bez = proposal.get_tageszeiten_bez()
@@ -1308,15 +1286,15 @@ class LernvorliebenListOperationen(Resource):
             return '', 500
 
 
-"""Lernfachspezifische Methoden"""
+"""Lernfach-spezifisch"""
 @lernApp.route('/lernfaecher')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class LernfaecherOperationen(Resource):
     @lernApp.marshal_list_with(lernfach)
     @secured
     def get(self):
-        """Auslesen eines bestimmten Lernvorlieben-Objekts.
-        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """Auslesen aller Lernfaecher-Objekte.
+        
         """
         adm = AppAdministration()
         lernfaecher = adm.get_all_lernfaecher()
@@ -1328,7 +1306,7 @@ class LernfaecherByIDOperationen(Resource):
     @lernApp.marshal_list_with(lernfach)
     @secured
     def get(self, id):
-        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        """Auslesen eines bestimmten Lernfaecher-Objekts.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
@@ -1341,12 +1319,24 @@ class LernfaecherByProfilIDOperationen(Resource):
     @lernApp.marshal_list_with(lernfach)
     @secured
     def get(self, profilid):
-        """Auslesen eines bestimmten Lernvorlieben-Objekts.
+        """Auslesen eines bestimmten Lernfaecher-Objekts anhand der ProfilId.
         Das auszulesende Objekt wird durch die id in dem URI bestimmt.
         """
         adm = AppAdministration()
         lernfaecher = adm.get_lernfaecher_by_profil_id(profilid)
         return lernfaecher
+
+    @secured
+    def delete(self, profilid):
+        """Löschen eines bestimmten Personen-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernfaecher = adm.get_lernfaecher_by_profil_id
+        adm.delete_lernfaecher_by_profil_id(profilid)
+        return '', 200
+
 
 
 """Test-Methoden START"""

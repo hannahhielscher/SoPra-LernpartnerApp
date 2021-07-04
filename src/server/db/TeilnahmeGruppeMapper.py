@@ -3,11 +3,16 @@ from server.bo.TeilnahmeGruppe import TeilnahmeGruppe
 
 
 class TeilnahmeGruppeMapper(Mapper):
+    """Mapper-Klasse, die TeilnahmeGruppe-Objekte auf eine relationale Datenbank abbildet. 
+
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
         """Auslesen aller Teilnahmen der Lerngruppen.
+        :return Alle TeilnahmeGruppe-Objekte im System
         """
         result = []
         cursor = self._connection.cursor()
@@ -27,7 +32,10 @@ class TeilnahmeGruppeMapper(Mapper):
         return result
 
     def find_by_person_id(self, person_id):
-        """ Findet alle Gruppenteilnahmen einer bestimmten person mittels User Id"""
+        """ Findet alle Gruppenteilnahmen einer bestimmten person mittels PersonId
+         :param person_id PersonID der TeilnahmeGruppe
+        :return TeilnahmeGruppe-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT teilnahmen_gruppe.id, teilnahmen_gruppe.person_id, teilnahmen_gruppe.lerngruppe_id FROM teilnahmen_gruppe WHERE teilnahmen_gruppe.person_id = {}".format(person_id)
@@ -49,7 +57,10 @@ class TeilnahmeGruppeMapper(Mapper):
         return result
 
     def find_by_lerngruppe_id(self, lerngruppe_id):
-        """ Findet alle Teilnahmen/Teilnehmer einer bestimmten Gruppen ID"""
+        """ Findet alle Teilnahmen/Teilnehmer einer bestimmten Gruppen ID
+
+        :param lerngruppe_id LerngruppeID der TeilnahmeGruppe
+        :return TeilnahmeGruppe-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel."""
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, lerngruppe_id FROM teilnahmen_gruppe WHERE lerngruppe_id={}".format(lerngruppe_id)
@@ -69,7 +80,11 @@ class TeilnahmeGruppeMapper(Mapper):
         return result
     
     def find_by_person_and_lerngruppe(self, person_id, lerngruppe_id):
-        """ Findet bestimmte Teilnahme nach Person und Lerngruppe """
+        """ Findet bestimmte Teilnahme nach Person und Lerngruppe 
+
+        :param person_id PersonID der TeilnahmeGruppe
+        :param lerngruppe_id LerngruppeID der TeilnahmeGruppe
+        :return TeilnahmeGruppe-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel."""
         result = None
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, lerngruppe_id FROM teilnahmen_gruppe WHERE person_id = {} AND lerngruppe_id={} ".format(person_id, lerngruppe_id)
@@ -93,9 +108,12 @@ class TeilnahmeGruppeMapper(Mapper):
         pass
 
     def insert(self, teilnahme):
-        '''
+        """
 		Einfugen eines Teilnahme BO's in die DB
-		'''
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft 
+        :param teilnahme das zu speichernde TeilnahmeGruppe Objekt
+        :return das bereits übergebene TeilnahmeGruppe Objekt mit aktualisierten Daten (id)
+		"""
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen_gruppe ")
         tuples = cursor.fetchall()
@@ -134,13 +152,15 @@ class TeilnahmeGruppeMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, id):
-        """Löschen der Daten eines teilnahme-Objekts der Lerngruppe aus der Datenbank.
+    def delete(self, person_id):
+        """Löschen der Daten eines Teilnahme-Objekts der Lerngruppe aus der Datenbank.
+        
+        :param id ID der TeilnahmeGruppe
         """
 
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM teilnahmen_gruppe WHERE id={}".format(id)
+        command = "DELETE FROM teilnahmen_gruppe WHERE person_id = {}".format(person_id)
         cursor.execute(command)
 
         self._connection.commit()

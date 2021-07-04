@@ -3,11 +3,8 @@ from server.bo.Profil import Profil
 
 
 class ProfilMapper(Mapper):
-    """Mapper-Klasse, die Profil-Objekte auf eine relationale
-    Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-    gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-    gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    """Mapper-Klasse, die Profil-Objekte auf eine relationale Datenbank abbildet. 
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
     """
 
     def __init__(self):
@@ -15,6 +12,7 @@ class ProfilMapper(Mapper):
 
     def find_all(self):
         """Auslesen aller Profile.
+
         :return Alle Profil-Objekten im System
         """
         result = []
@@ -50,17 +48,16 @@ class ProfilMapper(Mapper):
 
         return result
 
-    def find_by_id(self, profil_id):
+    def find_by_id(self, id):
         """Suchen eines Profils nach ID. Da diese eindeutig ist,
         wird genau ein Objekt zurückgegeben.
 
         :param id Primärschlüsselattribut (->DB)
-        :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-            nicht vorhandenem DB-Tupel.
+        :return Profil-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
         """
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, gruppe, lernvorlieben_id FROM profile WHERE id ='{}'".format(profil_id)
+        command = "SELECT id, gruppe, lernvorlieben_id FROM profile WHERE id ='{}'".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -68,7 +65,7 @@ class ProfilMapper(Mapper):
             profil = Profil()
             profil.set_id(id)
             profil.set_gruppe(gruppe)
-            profil.set_lernfaecher(self.find_lernfaecher_id_by_profil_id(profil_id))
+            profil.set_lernfaecher(self.find_lernfaecher_id_by_profil_id(id))
             profil.set_lernvorlieben_id(lernvorlieben_id)
 
             result = profil
@@ -79,7 +76,12 @@ class ProfilMapper(Mapper):
         return result
 
     def find_profil_test(self, profil_id):
+        """Suchen eines Profils nach ID.
+        Hier werden die Lernfächer als einfache Liste im Profil eingefügt
 
+        :param id Primärschlüsselattribut (->DB)
+        :return Profil-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         result = None
         cursor = self._connection.cursor()
         command = "SELECT id, gruppe, lernvorlieben_id FROM profile WHERE id ='{}'".format(profil_id)
@@ -101,42 +103,13 @@ class ProfilMapper(Mapper):
 
         return result  
 
-    def find_lernfaecher_by_profil_id(self, profil_id):
-        """Gibt ein Lernfacher + Bezeichnung eines Profiles zurück"""
-
-        result_key = []
-        result_value = []
-        result = []
-
-        
-
-        cursor = self._connection.cursor()
-        command = "SELECT profile_has_lernfaecher.lernfaecher_id, lernfaecher.bezeichnung FROM profile_has_lernfaecher INNER JOIN lernfaecher ON profile_has_lernfaecher.lernfaecher_id = lernfaecher.id WHERE profile_has_lernfaecher.profil_id ='{}'".format(profil_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        for(lernfaecher_id, bezeichnung) in tuples:
-            #result_key.append(str(lernfaecher_id))
-            #result_value.append(bezeichnung)
-            value = str(lernfaecher_id) + " " + bezeichnung
-            result.append(value)
-
-        #result = dict.fromkeys(result_key, 0)
-        #buff = 0
-        #for i in result:
-            #for j in range(buff, len(result_value)):
-                #result[i] = result_value[j]
-                #buff += 1
-                #break
-        
-        
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
     def find_lernfaecher_id_by_profil_id(self, profil_id):
-        """Gibt Lernfächer-ID eines Profiles zurück"""
+        """Suchen der Lernfaecher nach profilID. 
+        Hier werden die Lernfächer als einfache Liste zusammengestellt
+
+        :param profil_id ProfilID von profile_has_lernfaecher (DB)
+        :return Liste aller Lernfaecher des Profils
+        """
 
         result = []
 
@@ -155,7 +128,12 @@ class ProfilMapper(Mapper):
         return result
     
     def find_by_lernfach_id(self, lernfach_id):
-        """Suche eines Profiles nach einem bestimmten Lernfach"""
+        """Suchen eines Profils nach lernfachID. 
+        Hier werden die Lernfächer als einfache Liste im Profil eingefügt
+
+        :param lernfach_id Lernfach ID von profile_has_lernfaecher (DB)
+        :return Profil-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
 
         result = []
 
@@ -269,6 +247,10 @@ class ProfilMapper(Mapper):
         cursor.close()
 
     def delete_profil_has_lernfaecher(self, profil_id):
+        """Löschen der Lernfaecher eines Profil-Objekts aus der Datenbank.
+
+        :param profil_id ProfilID von profile_has_lernfaecher (DB)
+        """
         
         cursor = self._connection.cursor()
 
