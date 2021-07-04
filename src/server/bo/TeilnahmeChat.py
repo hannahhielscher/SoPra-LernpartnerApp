@@ -2,13 +2,17 @@ from server.bo import BusinessObject as bo
 
 
 class TeilnahmeChat(bo.BusinessObject):
-    
+    """Realisierung einer TeilnahmeChat.
+
+    Eine TeilnahmeChat besitzt einen Teilnehmer, einen Anfrage Sender, einen Status der aussagt, ob
+    die Teilnahme angenommen wurde oder nicht, und eine zugehörige Konversation.
+    """
     def __init__(self):
         super().__init__()
-        self._teilnehmer = None
-        self._anfrage_sender = None
-        self._status = False
-        self._konversation = None
+        self._teilnehmer = None #Teilnehmer der TeilnahmeChat
+        self._anfrage_sender = None #Anfrage Sender der TeilnahmeChat
+        self._status = False #Status der TeilnahmeChat
+        self._konversation = None #Konversation der TeilnahmeChat
 
     def get_teilnehmer(self):
         """Auslesen des Teilnehmers"""
@@ -19,11 +23,11 @@ class TeilnahmeChat(bo.BusinessObject):
         self._teilnehmer= value
 
     def get_anfrage_sender(self):
-        """Auslesen des Teilnehmers"""
-        return self._teilnehmer
+        """Auslesen des Anfragesenders"""
+        return self._anfrage_sender
 
     def set_anfrage_sender(self, value):
-        """setzten des Teilnehmers"""
+        """Setzten des Anfragesenders"""
         self._anfrage_sender = value
 
     def get_status(self):
@@ -31,7 +35,7 @@ class TeilnahmeChat(bo.BusinessObject):
         return self._status
 
     def set_status(self, value):
-        """setzten der neuen Lerngruppe"""
+        """Setzten der neuen Lerngruppe"""
         self._status = value
 
     def get_konversation(self):
@@ -39,7 +43,7 @@ class TeilnahmeChat(bo.BusinessObject):
         return self._konversation
     
     def set_konversation(self, value):
-        """setzten der neuen Lerngruppe"""
+        """Setzten der neuen Lerngruppe"""
         self._konversation = value
 
     def __str__(self):
@@ -48,7 +52,7 @@ class TeilnahmeChat(bo.BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in einen User()."""
+        """Umwandeln eines Python dict() in eine TeilnahmeChat()."""
         obj = TeilnahmeChat()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
         obj.set_teilnehmer(dictionary['teilnehmer'])

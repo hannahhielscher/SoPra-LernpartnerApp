@@ -94,7 +94,7 @@ konversation = api.inherit('Konversation', nbo, {
 
 teilnahmechat = api.inherit('TeilnahmeChat', bo, {
     'teilnehmer': fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
-    'anfrage_sender':  fields.Integer(attribute='_teilnehmer', description='ID des Teilnehmers'),
+    'anfrage_sender':  fields.Integer(attribute='_anfrage_sender', description='Anfrage-Sender des Teilnehmers'),
     'status': fields.Integer(attribute='_status', description='Status der Konversation'),
     'konversation': fields.Integer(attribute='_konversation', description='ID der Konversation'),
 })
@@ -758,11 +758,6 @@ class KonversationenOperation(Resource):
         anfragestatus = request.args.get("anfragestatus")
         adm = AppAdministration()
 
-        if anfragestatus == 1:
-            anfragestatus = True
-        else:
-            anfragestatus = False
-
         konversation = adm.get_konversation_by_id(konversationid)
         konversation.set_name(name)
         konversation.set_anfragestatus(anfragestatus)
@@ -824,7 +819,7 @@ class KonversationByPersonOperation(Resource):
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class KonversationByNameOperation(Resource):
     @lernApp.marshal_with(konversation)
-    @secured
+    #@secured
     def get (self, name):
         """Auslesen einer bestimmten Konversation."""
         adm = AppAdministration()
@@ -901,7 +896,7 @@ class TeilnahmenChatOperation(Resource):
             konversation = proposal.get_konversation()
 
             result = adm.create_teilnahmeChat(teilnehmer, anfrage_sender, status, konversation)
-            #print(result)
+            print(result)
 
             return result, 200
 
@@ -976,7 +971,7 @@ class TeilnahmeChatOperation(Resource):
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
 
-    @secured
+    #@secured
     def delete(self, id):
         """Löschen eines bestimmten TeilnahmeChat-objekts."""
         adm = AppAdministration()
@@ -1036,6 +1031,7 @@ class TeilnahmeChatByKonversationIdOperation(Resource):
 class TeilnahmeChatByKonversationIdOperation(Resource):
 
     @lernApp.marshal_with(teilnahmechat)
+    #@secured
     def get(self, anfrage_sender):
         """Auslesen einer bestimmten Teilnahme anhand der Konversations-Id."""
         adm = AppAdministration()
@@ -1129,6 +1125,22 @@ class TeilnahmeGruppeOperation(Resource):
         teilnahme = adm.get_teilnahmegruppe_by_person_id(person_id)
         adm.delete_teilnahmegruppe(person_id)
         return '', 200
+
+@lernApp.route('/teilnahmenGruppe-by-gruppe/<int:lerngruppe_id>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class TeilnahmeGruppeByLerngruppeOperation(Resource):
+
+    @lernApp.marshal_with(teilnahmegruppe)
+    @secured
+    def get (self, lerngruppe_id):
+        """Auslesen einer bestimmten Teilnahme."""
+        adm = AppAdministration()
+        teilnahme = adm.get_teilnahmegruppe_by_lerngruppen_id(lerngruppe_id)
+
+        if teilnahme is not None:
+            return teilnahme
+        else:
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
 @lernApp.route('/teilnahmenGruppe/<int:person_id>/<int:lerngruppe_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')

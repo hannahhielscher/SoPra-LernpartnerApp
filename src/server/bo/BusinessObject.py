@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 import datetime
 
 class BusinessObject(ABC):
-    """Gemeinsame Basisklasse aller in diesem Projekt für die Umsetzung des Fachkonzepts relevanten Klassen.
+    """Gemeinsame Basisklasse aller in diesem Projekt für die Umsetzung der App relevanten Klassen.
 
-    Zentrales Merkmal ist, dass jedes BusinessObject eine Nummer besitzt, die man in
+    Zentrales Merkmal ist, dass jedes BusinessObject eine Nummer(ID) besitzt, die man in
     einer relationalen Datenbank auch als Primärschlüssel bezeichnen würde.
     """
     def __init__(self):

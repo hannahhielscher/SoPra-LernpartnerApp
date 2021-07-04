@@ -2,17 +2,23 @@ from server.bo.BusinessObject import BusinessObject
 
 
 class Profil (BusinessObject):
+    """Realisierung eines Profils.
 
+    Ein Profil besitzt die Info, ob es zu einer Gruppe gehört, die zugehörigen Lernfaecher und 
+    die Lernvorlieben ID, die zu dem Profil gehört.
+    """
     def __init__(self):
         super().__init__()
-        self._gruppe = False
-        self._lernfaecher = []
-        self._lernvorlieben_id = None
+        self._gruppe = False #Info, ob Profil zu einer Gruppe gehört
+        self._lernfaecher = [] #Liste aller Lernfaecher, die zum Profil gehören
+        self._lernvorlieben_id = None #Lernvorlieben ID des Profils
 
     def get_gruppe(self):
+        """Auslesen der Gruppen Info"""
         return self._gruppe
     
     def set_gruppe(self, gruppe_neu):
+        """Setzen der Gruppen Info"""
         self._gruppe = gruppe_neu
 
     def get_lernfaecher(self):

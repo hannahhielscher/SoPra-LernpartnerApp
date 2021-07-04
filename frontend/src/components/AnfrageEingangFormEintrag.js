@@ -40,6 +40,7 @@ class AnfrageEingangFormEintrag extends Component {
             teilnahmeChatID: props.teilnahmeChat.id,
 
             teilnahmen: [],
+            anfragenAnzahl: null,
 
             konversation: null,
             konversationID: null,
@@ -89,9 +90,8 @@ class AnfrageEingangFormEintrag extends Component {
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
-      })).then(() => {
-        this.filterTeilnahmeChat();
-    }).catch(e =>
+        anfragenAnzahl: teilnahmeChatBOs.length
+      })).catch(e =>
       this.setState({
         teilnahmePartner: null,
         updatingInProgress: false,    // disable loading indicator
@@ -124,7 +124,7 @@ class AnfrageEingangFormEintrag extends Component {
     //console.log(teilnahmePerson)
     //console.log(teilnahmeID)
     for (var teilnahme in this.state.teilnahmen){
-        LernpartnerAPI.getAPI().updateTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['teilnehmer'], 1, this.state.konversationID)
+        LernpartnerAPI.getAPI().updateTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'], this.state.teilnahmen[teilnahme]['anfrage_sender'], this.state.teilnahmen[teilnahme]['teilnehmer'], 1, this.state.konversationID)
         .then(teilnahmeChatBO => {
                 // Backend call sucessfull
                 // reinit the dialogs state for a new empty customer
@@ -152,6 +152,26 @@ class AnfrageEingangFormEintrag extends Component {
   }
 
   anfrageAblehnen = () => {
+    for (var teilnahme in this.state.teilnahmen){
+        LernpartnerAPI.getAPI().deleteTeilnahmeChat(this.state.teilnahmen[teilnahme]['id'])
+        .then(konversationBO => {
+                    this.anfrageAblehnenKonversation();
+                }).catch(e =>
+                this.setState({
+                    updatingInProgress: false,    // disable loading indicator
+                    updatingError: e              // show error message
+                })
+            );
+
+            // set loading to true
+            this.setState({
+                updatingInProgress: true,       // show loading indicator
+                updatingError: null             // disable error message
+          });
+      }
+    }
+
+  anfrageAblehnenKonversation = () => {
     LernpartnerAPI.getAPI().deleteKonversation(this.state.konversationID)
     .then(konversationBO => {
             // Backend call sucessfull
@@ -185,24 +205,15 @@ class AnfrageEingangFormEintrag extends Component {
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmeChat, teilnahmeChatID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
+          const { teilnahmeChat, teilnahmeChatID, teilnahmen, anfragenAnzahl, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
           console.log(konversation)
           console.log(konversationID)
           console.log(teilnahmen)
-          console.log(teilnahmeChatID)
-          var test = true
+          console.log(anfragenAnzahl)
 
           return (
-
-            test == true ?
-
-            <Card>
-            Du hast keine Anfragen
-            </Card>
-
-            :
-            konversationAnfragestatus === false ?
-            <Card>
+          show ?
+            <Card open={show} >
                <List>
                 <ListItem>
                   <ListItemText primary={nameNeu} className={classes.name}/>
@@ -220,8 +231,10 @@ class AnfrageEingangFormEintrag extends Component {
                 </ListItem>
                </List>
                </Card>
-            : null
-
+               :
+               <Card className={classes.text}>
+                    Du hast keine Anfragen
+                </Card>
           );
         }
 }
@@ -242,6 +255,10 @@ const styles = theme => ({
     margin: theme.spacing(1),
     backgroundColor: '#CC3333'
   },
+  text: {
+    padding: theme.spacing(2),
+    color: theme.palette.grey[500]
+  }
   });
 
 /** PropTypes */

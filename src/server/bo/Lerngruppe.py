@@ -1,10 +1,13 @@
 from .NamedBusinessObject import NamedBusinessObject
 
 class Lerngruppe(NamedBusinessObject):
+    """Realisierung einer Lerngruppe.
 
+    Eine Lerngruppe hat ein Profil, das über die ID gespeichert wird.
+    """
     def __init__(self):
         super().__init__()
-        self._profil = None
+        self._profil = None #Profil (ID) der Lerngruppe
 
     def get_profil(self):
         """Auslesen eines Gruppenprofils"""
@@ -20,8 +23,9 @@ class Lerngruppe(NamedBusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
+        """ Umwandeln eines Python dict() in ein Python Objekt Lerngruppe() """
         obj = Lerngruppe()
         obj.set_id(dictionary["id"])  # part of the Business object mother class
-        obj.set_name(dictionary["name"])
+        obj.set_name(dictionary["name"]) #NBO
         obj.set_profil(dictionary["profil"])
         return obj

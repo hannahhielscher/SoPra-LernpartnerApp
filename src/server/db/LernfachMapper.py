@@ -4,6 +4,7 @@ from server.bo.Lernfach import Lernfach
 
 class LernfachMapper(Mapper):
     """Mapper-Klasse, die Lernfach Objekte auf der relationalen Datenbank abbildet.
+
     Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
     """
 
@@ -12,6 +13,7 @@ class LernfachMapper(Mapper):
 
     def find_all(self):
         """Auslesen aller Lernfaecher aus der Datenbank
+
         :return Alle Lernfaecher-Objekte im System
         """
         result = []
@@ -63,7 +65,11 @@ class LernfachMapper(Mapper):
         return result
 
     def find_lernfaecher_by_profil_id(self, profilid):
-        """Gibt Lernfächer eines Profiles zurück"""
+        """Sucht die Lernfächer eines Profiles
+        
+        :param profilid Profil ID 
+        :return Lernfach-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
 
         result = []
         

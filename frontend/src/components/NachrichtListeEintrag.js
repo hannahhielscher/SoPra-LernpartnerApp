@@ -93,6 +93,7 @@ class NachrichtenListeEintrag extends Component {
               <Grid item
                 xs
                 className={classes.outerColumn}
+                className={classes.bubble}
                 style={{ display: "flex", alignItems: "center", position: "rigth" }}
               >
                 
@@ -128,6 +129,7 @@ class NachrichtenListeEintrag extends Component {
               <Grid
                 item
                 className={classes.outerColumn}
+                className={classes.bubble}
                 container
                 direction="row"
                 alignItems="center"
@@ -154,6 +156,16 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.background.paper,
     margin: 10,
   },
+  bubble: {
+    borderRadius: "15px",
+    backgroundColor: "#ffe4c4",
+    margin: "5px",
+    padding: "8px",
+    width: "300px"
+  },
+  right: {
+  justifyContent: "flex-end",
+}
 });
   
   /** PropTypes */

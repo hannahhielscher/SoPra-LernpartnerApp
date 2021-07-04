@@ -32,7 +32,12 @@ class AnfrageEintragForm extends Component {
         this.state = {
             teilnahmenChat: [],
             teilnahmenChatAusstehend: [],
-            teilnahmeChatGefiltert: [],
+            teilnahmenChatGefiltert: [],
+            teilnahmenChatAusstehendGefiltert: [],
+
+            anfragenAnzahl: null,
+
+            showAnfrageEintrag: false,
 
             addingInProgress: false,
             updatingInProgress: false,
@@ -51,9 +56,12 @@ class AnfrageEintragForm extends Component {
       .then(teilnahmenChatBOs =>
           this.setState({
               teilnahmenChat: teilnahmenChatBOs,
+              showAnfrageEintrag: true,
               error: null,
               loadingInProgress: false,
-          })).catch(e =>
+            })).then(() => {
+                  this.filterTeilnahmenChat();
+            }).catch(e =>
               this.setState({
                   teilnahmenChat: [],
                   error: e,
@@ -67,14 +75,23 @@ class AnfrageEintragForm extends Component {
       });
     }
 
-  filterTeilnahmeChat = () => {
-    for (var teilnahme in this.state.teilnahmen)
-        if (this.state.teilnahmen.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
-            this.state.teilnahmeChatGefiltert.push(this.state.teilnahmen.[teilnahme])
-        }
-    console.log(this.state.teilnahmen.[teilnahme])
-    console.log(this.state.teilnahmen.[teilnahme]['anfrage_sender'])
-    console.log(this.state.teilnahmeChatGefiltert)
+  filterTeilnahmenChat = () => {
+    for (var teilnahme in this.state.teilnahmenChat){
+        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+        if (this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
+            this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
+            console.log(this.state.teilnahmenChatGefiltert)
+         }
+    }
+  }
+
+  filterTeilnahmenChatAusstehend = () => {
+    for (var teilnahme in this.state.teilnahmenChatAusstehend)
+        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+        if (this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] !== this.props.currentPerson.id){
+            this.state.teilnahmenChatAusstehendGefiltert.push(this.state.teilnahmenChatAusstehend.[teilnahme])
+            console.log(this.state.teilnahmenChatAusstehendGefiltert)
+         }
   }
 
     // API Anbindung um Konversationen des Students vom Backend zu bekommen
@@ -85,7 +102,9 @@ class AnfrageEintragForm extends Component {
               teilnahmenChatAusstehend: teilnahmenChatBOs,
               error: null,
               loadingInProgress: false,
-          })).catch(e =>
+          })).then(() => {
+            this.filterTeilnahmenChatAusstehend();
+          }).catch(e =>
               this.setState({
                   teilnahmenChat: [],
                   error: e,
@@ -99,12 +118,24 @@ class AnfrageEintragForm extends Component {
       });
     }
 
+  //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
+  anfrageEintragClosed = () => {
+    this.setState({
+        showAnfrageEintrag: false,
+    });
+  }
 
   /** Handles the close / cancel button click event */
   handleClose = () => {
     // Reset the state
     this.setState(this.baseState);
     this.props.onClose(null);
+  }
+
+  getAnzahlAnfrageEingang = (newAnfragenAnzahl) => {
+    this.setState({
+        anfragenAnzahl: newAnfragenAnzahl
+    })
   }
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
@@ -116,25 +147,38 @@ class AnfrageEintragForm extends Component {
  /** Renders the component */
   render() {
     const { classes, show, currentPerson, konversationen } = this.props;
-    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmeChatGefiltert, addingInProgress, addingError, updatingInProgress, updatingError } = this.state;
+    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatAusstehendGefiltert, teilnahmenChatGefiltert, addingInProgress, showAnfrageEintrag, addingError, updatingInProgress, updatingError } = this.state;
     console.log(teilnahmenChat)
-    console.log(teilnahmenChatAusstehend)
+    console.log(teilnahmenChatGefiltert)
+    console.log(teilnahmenChatAusstehendGefiltert)
+    
 
     return (
       show ?
         <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
-          <DialogTitle> Deine Anfragen
+          <DialogTitle> Anfragen
             <IconButton className={classes.closeButton} onClick={this.handleClose}>
               <CloseIcon />
             </IconButton>
           </DialogTitle>
 
             <Card className={classes.liste}>
+
            {
-              teilnahmeChatGefiltert.map(teilnahmeChat =>
+            teilnahmenChatGefiltert.length > 0 ?
+
+
+              teilnahmenChatGefiltert.map(teilnahmeChat =>
                 <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
-                />)
+                show={showAnfrageEintrag} onClose={this.anfrageEintragClosed} anzahlAnfragen={this.getAnzahlAnfrageEingang} />)
+
+             :
+             <Card className={classes.text2}>
+                Du hast keine Anfragen
+             </Card>
             }
+
+
             </Card>
 
                <Card className={classes.cardText}>
@@ -147,7 +191,7 @@ class AnfrageEintragForm extends Component {
 
             <Card className={classes.liste}>
             {
-              teilnahmenChatAusstehend.map(teilnahmenChatAusstehend =>
+              teilnahmenChatAusstehendGefiltert.map(teilnahmenChatAusstehend =>
                 <AnfrageAusstehendEintrag key={teilnahmenChatAusstehend.getID()} teilnahmenChatAusstehend={teilnahmenChatAusstehend} currentPerson={currentPerson}
                 />)
             }
@@ -196,6 +240,10 @@ const styles = theme => ({
   card: {
     marginTop: theme.spacing(6),
     marginBottom: theme.spacing(6),
+  },
+  text2: {
+    padding: theme.spacing(2),
+    color: theme.palette.grey[500]
   }
 });
 

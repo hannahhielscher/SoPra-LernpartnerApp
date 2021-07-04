@@ -21,6 +21,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //import ContextErrorMessage from './dialogs/ContextErrorMessage';
 //import LoadingProgress from './dialogs/LoadingProgress';
 import AnfrageForm from './dialogs/AnfrageForm';
+import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
@@ -40,6 +41,7 @@ class AnfrageAusstehendEintrag extends Component {
             teilnahmenChatAusstehendID: props.teilnahmenChatAusstehend.id,
 
             teilnahmen: [],
+            chatPartner: null,
 
             konversation: null,
             konversationID: null,
@@ -51,7 +53,7 @@ class AnfrageAusstehendEintrag extends Component {
             currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
 
-            showProfil: false,
+            showProfilDialog: false,
             showAnfrageForm: false,
 
             loadingInProgress: false,
@@ -60,6 +62,23 @@ class AnfrageAusstehendEintrag extends Component {
         this.baseState = this.state;
     }
 
+
+    getPerson = () => {
+      LernpartnerAPI.getAPI().getPerson(this.state.teilnahmenChatAusstehend.teilnehmer)
+      .then(personBO =>
+        this.setState({
+          chatPartner: personBO,              // disable loading indicator                 // no error message
+          
+        })).catch(e =>
+        this.setState({
+          chatPartner: null,
+          updatingInProgress: false,    // disable loading indicator
+          updatingError: e              // show error message
+        })
+      );
+    }
+    
+  
   /** Konversation holen */
   getKonversation = () => {
     LernpartnerAPI.getAPI().getKonversation(this.state.teilnahmenChatAusstehend.konversation)
@@ -104,6 +123,28 @@ class AnfrageAusstehendEintrag extends Component {
     });
   }
 
+  //Handles the onClick event of the show profil button
+  showProfilButtonClicked = (event) => {
+    event.stopPropagation();
+    this.setState({
+      showProfilDialog: true
+    });
+  }
+
+  /** Handles the onClose event of the CustomerForm */
+  profilDialogClosed = (profil) => {
+    // customer is not null and therefor changed
+    if (profil) {
+      this.setState({
+        showProfilDialog: false
+      });
+    } else {
+      this.setState({
+        showProfilDialog: false
+      });
+    }
+  }
+
   //Setzen des Status, bei schließen des Dialogs
   handleClose = () => {
     this.setState(this.baseState);
@@ -113,32 +154,32 @@ class AnfrageAusstehendEintrag extends Component {
   // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
   componentDidMount() {
     this.getKonversation();
+    this.getPerson();
   }
 
     render(){
           const { classes, show, expandedState } = this.props;
-          const { teilnahmenChatAusstehend, teilnahmenChatAusstehendID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus } = this.state;
-          console.log(konversation)
+          const { teilnahmenChatAusstehend, teilnahmenChatAusstehendID, teilnahmen, nameNeu, konversation, konversationID, konversationAnfragestatus, chatPartner, showProfilDialog } = this.state;
+          console.log(chatPartner)
           console.log(konversationID)
-          console.log(teilnahmen)
+          console.log(teilnahmenChatAusstehend)
           console.log(teilnahmenChatAusstehendID)
+          console.log(konversationAnfragestatus)
 
           return (
-
-            konversationAnfragestatus === false ?
-
+            <div>
             <Card className={classes.card}>
                <List>
                 <ListItem>
                   <ListItemText primary={nameNeu} className={classes.name}/>
-                    <Button color='secondary'>
+                    <Button color='secondary' onClick={this.showProfilButtonClicked}>
                         Profil ansehen
                     </Button>
                   </ListItem>
                </List>
              </Card>
-            : null
-
+            <ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
+          </div>
           );
         }
 }

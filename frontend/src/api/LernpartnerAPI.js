@@ -120,7 +120,12 @@ export default class LernpartnerAPI {
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
+<<<<<<< HEAD
         #deleteTeilnahmeGruppeURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
+=======
+        #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
+        #deleteTeilnahmeGruppeURL = (id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${id}`;
+>>>>>>> bd0d12c2a8fedc1e3df6da11c322201d17c795ec
 
         //Lernfachbezogene
         #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
@@ -193,7 +198,7 @@ export default class LernpartnerAPI {
           return this.#fetchAdvanced(this.#getPersonByProfilURL(profilID)).then((responseJSON) => {
             // We always get an array of PersonBOs.fromJSON, but only need one object
             let personBO = PersonBO.fromJSON(responseJSON);
-            console.info(personBO);
+            console.log(personBO);
             return new Promise(function (resolve) {
               resolve(personBO);
             })
@@ -1088,6 +1093,21 @@ export default class LernpartnerAPI {
                   })
                 })
               }
+
+              /** 
+               * gibt die Teilnehmer mit der bestimmten LerngruppenID als BO zurück
+               * @param {Number} lerngruppeId to be retrieved
+               * @public
+              */
+             getTeilnahmeGruppeByGruppe(lerngruppeId){
+              return this.#fetchAdvanced(this.#getTeilnahmeGruppeByGruppeURL(lerngruppeId)).then((responseJSON) => {
+              let teilnahmegruppeBOs = TeilnahmeGruppeBO.fromJSON(responseJSON);
+              //console.info(teilnahmegruppeBOs)
+              return new Promise(function (resolve){
+               resolve(teilnahmegruppeBOs)
+                })
+              })
+            }
 
               /** 
                * gibt die Teilnehmer mit der bestimmten ID als BO zurück

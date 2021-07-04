@@ -36,6 +36,10 @@ class KonversationListe extends Component {
 
             anfrage: null,
 
+            teilnahmenChat: [],
+            teilnahmenChatGefiltert: [],
+            anfragenAnzahl: 0,
+
             showAnfrageEingangForm: false,
 
             error: null,
@@ -99,6 +103,7 @@ class KonversationListe extends Component {
 
   /** Handles the onClose event of the CustomerForm */
   anfrageEingangFormFormClosed = (anfrage) => {
+    this.getKonversation();
     // customer is not null and therefor changed
     if (anfrage) {
       this.setState({
@@ -122,21 +127,62 @@ class KonversationListe extends Component {
     });
 }
 
+    // API Anbindung um Konversationen des Students vom Backend zu bekommen
+    getTeilnahmenChat = () => {
+      LernpartnerAPI.getAPI().getTeilnahmeChatByPersonByStatus(this.props.currentPerson.id, 0)
+      .then(teilnahmenChatBOs =>
+          this.setState({
+              teilnahmenChat: teilnahmenChatBOs,
+              error: null,
+              loadingInProgress: false,
+            })).then(() => {
+                  this.filterTeilnahmenChat();
+            }).catch(e =>
+              this.setState({
+                  error: e,
+                  loadingInProgress: false,
+              }));
+
+      this.setState({
+          error: null,
+          loadingInProgress: true,
+          loadingKonversationenError: null
+      });
+    }
+
+  filterTeilnahmenChat = () => {
+    for (var teilnahme in this.state.teilnahmenChat){
+        if (this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
+            this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
+         }
+    }
+    if (this.state.teilnahmenChatGefiltert.length < 1) {
+        this.setState({
+            anfragenAnzahl: '0'
+        });
+    }else{
+        this.setState({
+            anfragenAnzahl: this.state.teilnahmenChatGefiltert.length
+        });
+    }
+  }
+
 
 // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
 componentDidMount() {
   this.getKonversation();
+  this.getTeilnahmenChat();
 }
 
 
 render() {
   const { classes, currentPerson } = this.props;
-        const { konversationen, showAnfrageEingangForm, expandedKonversationID, error, loadingInProgress}  = this.state;
+        const { konversationen, anfragenAnzahl, teilnahmenChatGefiltert, showAnfrageEingangForm, expandedKonversationID, error, loadingInProgress}  = this.state;
 
         return(
           <div className={classes.root}>
             <Button variant='contained' onClick={this.getAnfrageEingangForm} color='primary' className={classes.button}>
-            <Badge badgeContent={17} color="secondary" className={classes.badge}>
+            <Badge badgeContent={anfragenAnzahl} color="secondary" className={classes.badge}>
              </Badge>
                   Anfragen
              </Button>

@@ -4,14 +4,15 @@ from server.bo.Lernvorlieben import Lernvorlieben
 
 class LernvorliebenMapper(Mapper):
     """Mapper-Klasse, die Lernvorlieben Objekte auf der relationalen Datenbank abbildet.
+
     Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
     """
-
     def __init__(self):
         super().__init__()
 
     def find_all(self):
         """Auslesen aller Lernvorlieben aus der Datenbank
+
         :return Alle Lernvorlieben-Objekte im System
         """
         result = []
@@ -55,9 +56,9 @@ class LernvorliebenMapper(Mapper):
 
     def find_by_id(self, id): 
         """Suchen der Lernvorlieben nach der übergebenen ID. 
+
         :param id Primärschlüsselattribut der Lernvorlieben aus der Datenbank
-        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
+        :return Lernvorlieben-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         cursor = self._connection.cursor()
         #command = "SELECT lernvorlieben.id, lernvorlieben.tageszeiten_id, lernvorlieben.tage_id, lernvorlieben.frequenzen_id, lernvorlieben.lernarten_id, lernvorlieben.gruppengroessen_id, lernvorlieben.lernorte_id FROM lernvorlieben WHERE id='{}'".format(id)
@@ -140,6 +141,7 @@ class LernvorliebenMapper(Mapper):
     def insert(self, lernvorlieben):
         """Einfügen eines Lernvorlieben Objekts in die DB
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft 
+
         :param lernvorlieben das zu speichernde Lernvorlieben Objekt
         :return das bereits übergebene Lernvorlieben Objekt mit aktualisierten Daten (id)
         """
@@ -176,6 +178,7 @@ class LernvorliebenMapper(Mapper):
 
     def update_by_id(self, lernvorlieben):
         """Überschreiben / Aktualisieren eines Lernvorlieben-Objekts in der DB
+
         :param lernvorlieben -> Lernvorlieben-Objekt
         :return aktualisiertes Lernvorlieben-Objekt
         """
@@ -191,6 +194,7 @@ class LernvorliebenMapper(Mapper):
 
     def delete(self, lernvorlieben):
         """Löschen der Daten eines Lernvorlieben-Objekts aus der Datenbank
+        
         :param lernvorlieben -> Lernvorlieben-Objekt
         """
         cursor = self._connection.cursor()

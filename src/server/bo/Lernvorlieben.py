@@ -2,117 +2,124 @@ from server.bo.BusinessObject import BusinessObject
 
 
 class Lernvorlieben(BusinessObject):
+    """Realisierung einer Lernvorliebe.
 
+    Eine Lernvorliebe besitzt eine Tageszeit ID, Tageszeit Bezeichnung, Tage ID, Tage Bezeichnung,
+    Frequenz ID, Frequenz Bezeichnung, Lernart ID, Lernart Bezeichnung, Gruppengroesse ID, 
+    Gruppengroesse Bezeichnung, Lernort ID, Lernort Bezeichnung.
+    Für die Bezeichnungen gibt es DB Tabellen, die zugehörigen IDs werden jeweils in den ID 
+    Bereich gespeichert. Die Auswahlmöglichkeiten bei den Lernvorlieben sind vorgefertigt. 
+    """
     def __init__(self):
         super().__init__()
-        self._tageszeiten_id = None #{"Morgens:": False, "Mittags:": False, "Abends:": False}
-        self._tageszeiten_bez = None
-        self._tage_id = None #{"Unter der Woche": False, "Am Wochenende": False}
-        self._tage_bez = None
-        self._frequenz_id = None #{"Wöchentlich:": False, "Mehrmals die Woche:": False,  "Alle zwei Wochen:": False}
-        self._frequenz_bez = None
-        self._lernart_id = None #{"Visuell:": False, "Auditiv:": False, "Motorisch:": False, "Kommunikativ:": False}
-        self._lernart_bez = None
-        self._gruppengroesse_id = None #{"Bis zu 3 Personen:": False, "3-5 Personen:": False, "Über 5 Personen:": False}
-        self._gruppengroesse_bez = None
-        self._lernort_id = None #{"Remote:": False, "Hochschule:": False, "Bibliothek:": False, "Cafe:": False}
-        self._lernort_bez = None
+        self._tageszeiten_id = None #ID der zugehörigen präferierten Tageszeiten
+        self._tageszeiten_bez = None #Bezeichnung der präferierten Tageszeiten 
+        self._tage_id = None #ID der zugehörigen präferierten Tage
+        self._tage_bez = None #Bezeichnung der präferierten Tage
+        self._frequenz_id = None #ID der zugehörigen präferierten Frequenz
+        self._frequenz_bez = None #Bezeichnung der präferierten Frequenz
+        self._lernart_id = None #ID der zugehörigen präferierten Lernart
+        self._lernart_bez = None #Bezeichnung der präferierten Lernart
+        self._gruppengroesse_id = None #ID der zugehörigen präferierten Gruppengroesse
+        self._gruppengroesse_bez = None #Bezeichnung der präferierten Gruppengroesse
+        self._lernort_id = None #ID des zugehörigen präferierten Lernorts
+        self._lernort_bez = None #Bezeichnung des präferierten Lernorts
 
 
     def get_tageszeiten_id(self):
-        """Auslesen der präferierten Uhrzeit"""
+        """Auslesen der ID der präferierten Uhrzeit"""
         return int(self._tageszeiten_id)
     
     def set_tageszeiten_id(self, value):
-        """Setzen der präferierten Tageszeit"""
+        """Setzen der ID der präferierten Tageszeit"""
         self._tageszeiten_id = value
 
     def get_tageszeiten_bez(self):
-        """Auslesen der präferierten Uhrzeit"""
+        """Auslesen der Bezeichnung der präferierten Uhrzeit"""
         return self._tageszeiten_bez
 
     def set_tageszeiten_bez(self, value):
-        """Setzen der präferierten Tageszeit"""
+        """Setzen der Bezeichnung der präferierten Tageszeit"""
         self._tageszeiten_bez = value
 
     def get_tage_id(self):
-        """Auslesen der präferierten Tage"""
+        """Auslesen der ID der präferierten Tage"""
         return int(self._tage_id)
 
     def set_tage_id(self, value):
-        """Setzen der präferierten Tage"""
+        """Setzen der ID der präferierten Tage"""
         self._tage_id = value
 
     def get_tage_bez(self):
-        """Auslesen der präferierten Tage"""
+        """Auslesen der Bezeichnung der präferierten Tage"""
         return self._tage_bez
 
     def set_tage_bez(self, value):
-        """Setzen der präferierten Tage"""
+        """Setzen der Bezeichnung der präferierten Tage"""
         self._tage_bez = value
 
     def get_frequenz_id(self):
-        """Auslesen der Frequenz/Häufigkeit der Treffen"""
+        """Auslesen der ID der Frequenz/Häufigkeit der Treffen"""
         return int(self._frequenz_id)
 
     def set_frequenz_id(self, value):
-        """Setzen der Frequenz/Häufigkeit der Treffen"""
+        """Setzen der ID der Frequenz/Häufigkeit der Treffen"""
         self._frequenz_id = value
 
     def get_frequenz_bez(self):
-        """Auslesen der Frequenz/Häufigkeit der Treffen"""
+        """Auslesen der Bezeichnung der Frequenz/Häufigkeit der Treffen"""
         return self._frequenz_bez
 
     def set_frequenz_bez(self, value):
-        """Setzen der Frequenz/Häufigkeit der Treffen"""
+        """Setzen der Bezeichnung der Frequenz/Häufigkeit der Treffen"""
         self._frequenz_bez = value
 
     def get_lernart_id(self):
-        """Setzen der präferierten Lernart"""
+        """Setzen der ID der präferierten Lernart"""
         return int(self._lernart_id)
 
     def set_lernart_id(self, value):
-        """Setzen der präferierten Lernart"""
+        """Setzen der ID der präferierten Lernart"""
         self._lernart_id = value
 
     def get_lernart_bez(self):
-        """Auslesen der präferierten Lernart"""
+        """Auslesen der Bezeichnung der präferierten Lernart"""
         return self._lernart_bez
 
     def set_lernart_bez(self, value):
-        """Setzen der präferierten Lernart"""
+        """Setzen der Bezeichnung der präferierten Lernart"""
         self._lernart_bez = value
 
     def get_gruppengroesse_id(self):
-        """Auslesen der präferierten Gruppengroesse"""
+        """Auslesen der ID der präferierten Gruppengroesse"""
         return int(self._gruppengroesse_id)
 
     def set_gruppengroesse_id(self, value):
-        """Setzen der präferierten Gruppengroesse"""
+        """Setzen der ID der präferierten Gruppengroesse"""
         self._gruppengroesse_id = value
 
     def get_gruppengroesse_bez(self):
-        """Auslesen der präferierten Gruppengroesse"""
+        """Auslesen der Bezeichnung der präferierten Gruppengroesse"""
         return self._gruppengroesse_bez
 
     def set_gruppengroesse_bez(self, value):
-        """Setzen der präferierten Gruppengroesse"""
+        """Setzen der Bezeichnung der präferierten Gruppengroesse"""
         self._gruppengroesse_bez = value
 
     def get_lernort_id(self):
-        """Auslesen des präferierten Lernorts"""
+        """Auslesen der ID des präferierten Lernorts"""
         return int(self._lernort_id)
 
     def set_lernort_id(self, value):
-        """Setzen des präferierten Lernorts"""
+        """Setzen der ID des präferierten Lernorts"""
         self._lernort_id = value
 
     def get_lernort_bez(self):
-        """Auslesen des präferierten Lernorts"""
+        """Auslesen der Bezeichnung des präferierten Lernorts"""
         return self._lernort_bez
 
     def set_lernort_bez(self, value):
-        """Setzen des präferierten Lernorts"""
+        """Setzen der Bezeichnung des präferierten Lernorts"""
         self._lernort_bez = value
 
     #def get_all(self):

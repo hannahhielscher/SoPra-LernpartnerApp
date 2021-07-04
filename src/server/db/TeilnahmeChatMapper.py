@@ -3,21 +3,28 @@ from server.bo.TeilnahmeChat import TeilnahmeChat
 
 
 class TeilnahmeChatMapper(Mapper):
+    """Mapper-Klasse, die TeilnahmeChat-Objekte auf eine relationale Datenbank abbildet. 
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
-        """ Findet alle Teilnahmen an Chats"""
+        """ Findet alle Teilnahmen an Chats
+
+        :return Alle TeilnahmeChat-Objekte im System
+        """
         result = []
         cursor = self._connection.cursor()
         cursor.execute("SELECT * from teilnahmen_chat")
         tuples = cursor.fetchall()
 
-        for (id, teilnehmer, konversation) in tuples:
+        for (id, teilnehmer, anfrage_sender, status, konversation) in tuples:
             teilnahme = TeilnahmeChat()
             teilnahme.set_id(id)
             teilnahme.set_teilnehmer(teilnehmer)
             teilnahme.set_anfrage_sender(anfrage_sender)
+            teilnahme.set_status(status)
             teilnahme.set_konversation(konversation)
             result.append(teilnahme)
 
@@ -27,7 +34,11 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_person_id(self, person_id):
-        """ Findet alle Teilnahmen für eine bestimmte user_id"""
+        """ Findet alle Teilnahmen für eine bestimmte user_id
+
+        :param person_id PersonID der TeilnahmeChat
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE person_id={}".format(person_id)
@@ -50,7 +61,12 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_konversation_id_und_status(self, status, konversation_id):
-        """ Findet alle Teilnahmen von einer ProjektID"""
+        """ Findet alle Teilnahmen von einer ProjektID
+
+        :param status Status der TeilnahmeChat
+        :param konversation_id Konversation ID der TeilnahmeChat
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE status={} AND konversation_id={} ".format(status, konversation_id)
@@ -72,7 +88,12 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_person_id_und_status(self, person_id, status):
-        """ Findet alle Teilnahmen von einer ProjektID"""
+        """ Findet alle Teilnahmen von einer ProjektID
+
+        :param person_id PersonID der TeilnahmeChat
+        :param status Status der TeilnahmeChat
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
 
         result = []
         cursor = self._connection.cursor()
@@ -91,6 +112,7 @@ class TeilnahmeChatMapper(Mapper):
             teilnahme.set_konversation(konversation_id)
 
             result.append(teilnahme)
+            print('test CHat')
             print(teilnahme)
 
         self._connection.commit()
@@ -99,10 +121,14 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_konversation_id(self, konversation_id):
-        """ Findet alle Teilnahmen von einer ProjektID"""
+        """ Findet alle Teilnahmen von einer ProjektID
+
+        :param konversation_id KonversationID der TeilnahmeChat
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND status={}".format(konversation_id)
+        command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={}".format(konversation_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -121,7 +147,12 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_konversation_and_person(self, konversation_id, person_id):
-        """ Findet alle Teilnahmen von einer ProjektID"""
+        """ Findet alle Teilnahmen von einer ProjektID
+        
+        :param konversation_id KonversationID der TeilnahmeChat
+        :param person_id PersonID der TeilnahmeChat
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         result = None
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE konversation_id={} AND person_id={}".format(konversation_id, person_id)
@@ -144,7 +175,12 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_anfrage_sender(self, anfrage_sender):
-        """ Findet alle Teilnahmen von einer ProjektID"""
+        """ Findet alle Teilnahmen von einer ProjektID
+
+        :param anfrage_sender Anfragesender der TeilnahmeChat
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE anfrage_sender={}".format(anfrage_sender)
@@ -167,7 +203,12 @@ class TeilnahmeChatMapper(Mapper):
         return result
 
     def find_by_id(self, id):
-        """Reads a tuple with a given ID"""
+        """Suchen eines TeilnahmeChat nach ID. Da diese eindeutig ist,
+        wird genau ein Objekt zurückgegeben.
+
+        :param id Primärschlüsselattribut (->DB)
+        :return TeilnahmeChat-Objekt, das dem übergebenen Schlüssel entspricht, None bei nicht vorhandenem DB-Tupel.
+        """
         cursor = self._connection.cursor()
         command = "SELECT id, person_id, anfrage_sender, status, konversation_id FROM teilnahmen_chat WHERE id={}".format(id)
         cursor.execute(command)
@@ -196,13 +237,12 @@ class TeilnahmeChatMapper(Mapper):
 
         return result
 
-
     def insert(self, teilnahme):
-        '''
-		Einfugen eines Teilnahme BO's in die DB
-		:param teilnahme 
+        """
+		Einfugen eines TeilnahmeBOs in die DB
+		:param teilnahme das zu speichernde TeilnahmeBO Objekt
         :return das bereits übergebene Teilnahme-Objekt mit aktualisierten Daten
-		'''
+		"""
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM teilnahmen_chat")
         tuples = cursor.fetchall()
@@ -245,7 +285,10 @@ class TeilnahmeChatMapper(Mapper):
         cursor.close()
 
     def delete(self, konversationId, personId):
-        """Delete an object from the DB"""
+        """Delete an object from the DB
+        :param konversationId KonversationID der TeilnahmeChat
+        :param personId PersonID der TeilnahmeChat
+        """
         
         cursor = self._connection.cursor()
 
@@ -256,7 +299,10 @@ class TeilnahmeChatMapper(Mapper):
         cursor.close()
     
     def delete_by_id(self, id):
-        """Delete an object from the DB"""
+        """Delete an object from the DB
+        
+        :param id ID der TeilnahmeChat
+        """
         
         cursor = self._connection.cursor()
 

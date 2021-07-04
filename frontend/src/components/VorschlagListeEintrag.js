@@ -47,6 +47,7 @@ class VorschlagListeEintrag extends Component {
 
             lerngruppe: null,
 
+            chatPartner: null,
             chatPartnerProfil: props.vorschlag.match_profil_id,
 
             teilnahmeChat: null,
@@ -120,7 +121,7 @@ class VorschlagListeEintrag extends Component {
       LernpartnerAPI.getAPI().getPersonByProfil(this.state.vorschlag.match_profil_id)
       .then(personBO =>
           this.setState({
-            chatPartnerProfil: personBO,
+            chatPartner: personBO,
             namePerson: personBO.vorname+ " " + personBO.name,
             nameGes: personBO.vorname+ " " + personBO.name + " und " + this.props.currentPerson.vorname+ " " + this.props.currentPerson.name,
             loadingInProgress: false,
@@ -129,7 +130,7 @@ class VorschlagListeEintrag extends Component {
             this.getKonversation();
         }).catch(e =>
               this.setState({
-                chatPartnerProfil: null,
+                chatPartner: null,
                 nameGes: null,
                 loadingInProgress: false,
                 error: e,
@@ -145,7 +146,7 @@ class VorschlagListeEintrag extends Component {
       LernpartnerAPI.getAPI().getLerngruppeByProfil(this.state.vorschlag.match_profil_id)
       .then(lerngruppeBO =>
           this.setState({
-            chatPartnerProfil: lerngruppeBO,
+            chatPartner: lerngruppeBO,
             nameGes: lerngruppeBO.name,
             loadingInProgress: false,
             error: null,
@@ -153,7 +154,7 @@ class VorschlagListeEintrag extends Component {
             this.getKonversation();
         }).catch(e =>
               this.setState({
-                chatPartnerProfil: null,
+                chatPartner: null,
                 nameGes: null,
                 loadingInProgress: false,
                 error: e,
@@ -219,18 +220,12 @@ class VorschlagListeEintrag extends Component {
   }
 
   /** Handles the onClose event of the CustomerForm */
-  anfrageFormClosed = (chatPartnerProfil) => {
+  anfrageFormClosed = () => {
     // customer is not null and therefor changed
-    if (chatPartnerProfil) {
-      this.setState({
-        chatPartnerProfil: chatPartnerProfil,
-        showAnfrageForm: false
-      });
-    } else {
       this.setState({
         showAnfrageForm: false
       });
-    }
+
   }
 
   /** Handles the onClose event of the CustomerForm */
@@ -255,8 +250,9 @@ class VorschlagListeEintrag extends Component {
 
     render(){
           const { classes, expandedState } = this.props;
-          const { nameNeu, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showProfilDialog, showAnfrageForm } = this.state;
+          const { nameNeu, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, lerngruppe, chatPartner, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showProfilDialog, showAnfrageForm } = this.state;
           console.log(nameNeu)
+          console.log(chatPartner)
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>
@@ -309,8 +305,8 @@ class VorschlagListeEintrag extends Component {
                        }
                     </AccordionDetails>
               </Accordion>
-              <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
-              <ProfilDialog show={showProfilDialog} currentProfil={profil} chatPartner={chatPartnerProfil} onClose={this.profilDialogClosed}/>
+              <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartner={chatPartner} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
+              <ProfilDialog show={showProfilDialog} chatPartner={chatPartnerProfil} onClose={this.profilDialogClosed}/>
             </div>
           );
         }
