@@ -16,6 +16,8 @@ import LerngruppeBO from '../../api/LerngruppeBO';
 import LernvorliebenBO from '../../api/LernvorliebenBO';
 import TeilnahmeGruppeBO from '../../api/TeilnahmeGruppeBO';
 import ProfilBO from '../../api/ProfilBO';
+import KonversationBO from '../../api/KonversationBO';
+import TeilnahmeChatBO from '../../api/TeilnahmeChatBO';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
 import GruppenListeEintrag from '../GruppenListeEintrag';
 
@@ -29,6 +31,8 @@ class GruppenForm extends Component {
             lernvorlieben: null,
             profil: null,
             lerngruppe: null,
+            konversation: null,
+            teilnahmeChat: null,
 
             gruppenName: null,
             gruppenNameValidationFailed: null,
@@ -215,8 +219,52 @@ class GruppenForm extends Component {
     .then(teilnahmeGruppeBO => {
       // Backend call sucessfull
       // reinit the dialogs state for a new empty customer
-      this.setState(this.baseState);
-      this.props.onClose(teilnahmeGruppeBO); // call the parent with the lerngruppe object from backend
+      this.addKonversationGruppe(); // call the parent with the lerngruppe object from backend
+    }).catch(e =>
+      this.setState({
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
+  }
+
+  /** Add Konversation der Lerngruppe */
+  addKonversationGruppe = () => {
+    let newTeilnahmeGruppe = new KonversationBO();
+    newTeilnahmeGruppe.id = 0
+    newTeilnahmeGruppe.name = this.state.lerngruppe.name
+    newTeilnahmeGruppe.anfragestatus = true
+    LernpartnerAPI.getAPI().addKonversation(newTeilnahmeGruppe)
+    .then(konversationBO =>
+      this.setState({
+        konversation: konversationBO,
+      })).then(() => {
+        this.addTeilnahmeChatPartner();
+        //console.log(this.state.profil.id)
+    }).catch(e =>
+      this.setState({
+        konversation: null,
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
+   }
+
+   /** Add TeilnahmeChat */
+  addTeilnahmeChatPartner = () => {
+    let newTeilnahmeChat = new TeilnahmeChatBO()
+    newTeilnahmeChat.id = 0
+    newTeilnahmeChat.teilnehmer = this.state.person.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+    newTeilnahmeChat.status = true
+    newTeilnahmeChat.konversation = this.state.konversation.id
+    LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
+    .then(teilnahmeChatBO =>
+      this.setState({
+        teilnahmeChat: teilnahmeChatBO
+      })).then(() => {
+        this.addTeilnahmeChat();
+        //console.log(this.state.profil.id)
     }).catch(e =>
       this.setState({
         updatingInProgress: false,    // disable loading indicator
@@ -224,6 +272,31 @@ class GruppenForm extends Component {
       })
     );
 
+    // set loading to true
+    this.setState({
+      updatingInProgress: true,       // show loading indicator
+      updatingError: null             // disable error message
+    });
+  }
+
+  /** Add TeilnahmeChatPartner */
+  addTeilnahmeChat = () => {
+    let newTeilnahmeChat = new TeilnahmeChatBO()
+    newTeilnahmeChat.id = 0
+    newTeilnahmeChat.teilnehmer = this.props.currentPerson.id
+    newTeilnahmeChat.anfrage_sender = this.props.currentPerson.id
+    newTeilnahmeChat.status = true
+    newTeilnahmeChat.konversation = this.state.konversation.id
+    LernpartnerAPI.getAPI().addTeilnahmeChat(newTeilnahmeChat)
+    .then(teilnahmeChatBO => {
+      this.setState(this.baseState);
+      this.props.onClose(teilnahmeChatBO); // call the parent with the lerngruppe object from backend
+    }).catch(e =>
+      this.setState({
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
     // set loading to true
     this.setState({
       updatingInProgress: true,       // show loading indicator

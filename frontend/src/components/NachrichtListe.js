@@ -179,6 +179,7 @@ nachrichtFormClosed = nachrichten => {
         });
     }else{
         this.setState({
+            nameNeu: this.state.konversationName,
             gruppe: true,
         });
     }
