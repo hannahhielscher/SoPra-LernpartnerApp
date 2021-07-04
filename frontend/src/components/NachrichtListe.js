@@ -44,7 +44,8 @@ class Nachricht extends Component {
      nachricht_inhalt: null,
      neueNachricht: null,
      konversation_id: null,
-     personid: null, 
+     personid: null,
+     gruppe: null,
      currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name, 
      error: null,
      loadingInProgress: false,
@@ -171,9 +172,16 @@ nachrichtFormClosed = nachrichten => {
   };
 
   nameAnpassen = () => {
-    this.setState({
-        nameNeu: this.state.konversationName.replace(this.state.currentPersonName,''),
-    });
+    if (this.state.konversationName.includes(this.state.currentPersonName) == true){
+        this.setState({
+            nameNeu: this.state.konversationName.replace(this.state.currentPersonName,''),
+            gruppe: false,
+        });
+    }else{
+        this.setState({
+            gruppe: true,
+        });
+    }
   }
 
   /** Handles the onClick event of the edit customer button */
@@ -226,7 +234,7 @@ nachrichtFormClosed = nachrichten => {
     render() {
       const { classes, currentPerson, konversation } = this.props;
     
-      const { konversationName, showLerngruppeForm, neueNachricht, nachrichten, nachricht_inhalt, nameNeu, loadingInProgress, error } = this.state;
+      const { konversationName, showLerngruppeForm, neueNachricht, nachrichten, nachricht_inhalt, nameNeu, gruppe, loadingInProgress, error } = this.state;
       
       return (
         <div>
@@ -270,13 +278,18 @@ nachrichtFormClosed = nachrichten => {
             senden 
           </Button>
 
+        {
+        gruppe ?
+        null
+        :
           <Button className={classes.button_style} variant='contained' color='secondary' onClick={this.showGruppeFormButtonClicked}>
-              Gruppe erstellen 
+              Gruppe erstellen
           </Button>
+        }
 
       <LoadingProgress show={loadingInProgress} />
       <ContextErrorMessage error={error} contextErrorMsg={`Leider konnten deine Nachrichten nicht geladen werden!`} onReload={this.getNachrichten} />
-      <GruppenForm show={showLerngruppeForm} currentPerson={currentPerson} onClose={this.lerngruppeFormClosed} />
+      <GruppenForm show={showLerngruppeForm} currentPerson={currentPerson} name={nameNeu} onClose={this.lerngruppeFormClosed} />
       
       </div>
       

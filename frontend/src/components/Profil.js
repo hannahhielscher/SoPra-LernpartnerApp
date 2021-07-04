@@ -185,6 +185,8 @@ class Profil extends Component {
     // Use the states customer
     const { user, teilnahmenGruppen, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
     console.log(user)
+    console.log(gruppe)
+    console.log(teilnahmenGruppen)
     console.log(teilnahmenGruppen.length)
     // console.log(this.props);
     return (
