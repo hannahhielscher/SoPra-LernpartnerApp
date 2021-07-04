@@ -46,7 +46,7 @@ class Nachricht extends Component {
      konversation_id: null,
      personid: null,
      gruppe: null,
-     currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name, 
+     currentPersonName: props.currentPerson.vorname + " " + props.currentPerson.name,
      error: null,
      loadingInProgress: false,
      konversationID: konversationsID,
@@ -171,10 +171,10 @@ nachrichtFormClosed = nachrichten => {
     this.setState({neueNachricht: event.target.value});
   };
 
-  nameAnpassen = () => {
+ /* nameAnpassen = () => {
     if (this.state.konversationName.includes(this.state.currentPersonName) == true){
         this.setState({
-            nameNeu: this.state.konversationName.replace(this.state.currentPersonName,''),
+            nameNeu: this.state.konversationName
             gruppe: false,
         });
     }else{
@@ -183,6 +183,14 @@ nachrichtFormClosed = nachrichten => {
             gruppe: true,
         });
     }
+  }*/
+
+  nameAnpassen = () => {
+     var buff = this.state.konversationName.replace(this.state.currentPersonName,'');
+    this.setState({
+        nameNeu: buff.replace(' und ',''),
+    });
+    console.log(this.state.nameNeu)
   }
 
   /** Handles the onClick event of the edit customer button */

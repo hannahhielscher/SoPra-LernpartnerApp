@@ -39,7 +39,7 @@ class AnfrageEingangFormEintrag extends Component {
 
             teilnahmen: [],
 
-            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
+            currentPersonName: props.currentPerson.vorname + " " + props.currentPerson.name,
             chatPartner: null,
 
             konversation: null,
@@ -49,7 +49,6 @@ class AnfrageEingangFormEintrag extends Component {
 
             testVar: false,
 
-            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
 
             showProfilDialog: false,
@@ -71,7 +70,6 @@ class AnfrageEingangFormEintrag extends Component {
         konversationName: konversationBO.name,
         konversationAnfragestatus: konversationBO.anfragestatus
       })).then(() => {
-        this.nameAnpassen();
         this.getTeilnahmeChats();
     }).catch(e =>
       this.setState({
@@ -90,7 +88,9 @@ class AnfrageEingangFormEintrag extends Component {
     .then(teilnahmeChatBOs =>
       this.setState({
         teilnahmen: teilnahmeChatBOs,              // disable loading indicator                 // no error message
-      })).catch(e =>
+      })).then(() => {
+        this.getPerson();
+    }).catch(e =>
       this.setState({
         teilnahmePartner: null,
         updatingInProgress: false,    // disable loading indicator
@@ -150,8 +150,10 @@ class AnfrageEingangFormEintrag extends Component {
       .then(personBO =>
         this.setState({
           chatPartner: personBO,              // disable loading indicator                 // no error message
-          nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,'')
-        })).catch(e =>
+          nameNeu: this.state.konversation.name
+      })).then(() => {
+        this.nameAnpassen();
+    }).catch(e =>
         this.setState({
           chatPartner: null,
           updatingInProgress: false,    // disable loading indicator
@@ -161,10 +163,11 @@ class AnfrageEingangFormEintrag extends Component {
     }
 
   nameAnpassen = () => {
+     var buff = this.state.konversation.name.replace(this.state.currentPersonName,'');
     this.setState({
-        nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
+        nameNeu: buff.replace(' und ',''),
     });
-    this.getPerson();
+    console.log(this.state.nameNeu)
   }
 
   anfrageAblehnen = () => {
@@ -248,7 +251,7 @@ class AnfrageEingangFormEintrag extends Component {
           const { teilnahmeChat, teilnahmeChatID, teilnahmen, chatPartner, nameNeu, konversation, konversationID, konversationAnfragestatus, showProfilDialog } = this.state;
           console.log(konversation)
           console.log(konversationID)
-          console.log(teilnahmen)
+          console.log(nameNeu)
 
           return (
           show ?

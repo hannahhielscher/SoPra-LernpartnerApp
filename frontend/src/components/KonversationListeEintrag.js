@@ -30,7 +30,7 @@ class KonversationListeEintrag extends Component {
             konversation: props.konversation,
             konversationID: props.konversation.id,
 
-            currentPersonName: " und " + props.currentPerson.vorname + " " + props.currentPerson.name,
+            currentPersonName: props.currentPerson.vorname + " " + props.currentPerson.name,
             nameNeu: null,
             str: props.konversation.name,
             showKonversation: false,
@@ -80,11 +80,13 @@ verlassenButtonClicked = (event) => {
   });
 }
 
-nameAnpassen = () => {
+  nameAnpassen = () => {
+     var buff = this.state.konversation.name.replace(this.state.currentPersonName,'');
     this.setState({
-        nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
+        nameNeu: buff.replace(' und ',''),
     });
-}
+    console.log(this.state.nameNeu)
+  }
 
 /** Handles the onClose event of the CustomerDeleteDialog */
 verlasseChatFormClosed = (teilnahmeChat) => {
