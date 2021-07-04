@@ -504,7 +504,7 @@ class AppAdministration (object):
         
     def delete_teilnahmeChatByPerson(self, person_id):
         """Löscht die TeilnahmeChat nach PersonID."""
-        with TeilnahmeGruppeMapper() as mapper:
+        with TeilnahmeChatMapper() as mapper:
             mapper.delete_by_person(person_id)
 
     """

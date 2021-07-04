@@ -239,8 +239,9 @@ class ProfilMapper(Mapper):
         :param profil das aus der DB zu löschende "Objekt"
         """
         cursor = self._connection.cursor()
-
+        
         command = "DELETE FROM profile WHERE id={}".format(profil.get_id())
+        self.delete_profil_has_lernfaecher(profil.get_id())
         cursor.execute(command)
 
         self._connection.commit()

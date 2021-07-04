@@ -953,7 +953,7 @@ class TeilnahmeChatOperation(Resource):
         return '', 200
 
 
-@lernApp.route('/teilnahmeChat-by-person-id/<int:id>')
+@lernApp.route('/teilnahmeChat-by-person-id/<int:personid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeChatByPersonIdOperation(Resource):
 
@@ -970,14 +970,14 @@ class TeilnahmeChatByPersonIdOperation(Resource):
             return '', 500  # Wenn es keine Teilnahme mit der id gibt.
 
     @secured
-    def delete(self, person_id):
+    def delete(self, personid):
         """Löschen eines bestimmten TeilnahmeChat-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        teilnahme = adm.get_teilnahmeChat_by_person_id(person_id)
-        adm.delete_teilnahmeChatByPerson(person_id)
+        teilnahme = adm.get_teilnahmeChat_by_person_id(personid)
+        adm.delete_teilnahmeChatByPerson(personid)
         return '', 200
 
 @lernApp.route('/teilnehmer-by-konversation-id-status/<int:status>/<int:konversation_id>')

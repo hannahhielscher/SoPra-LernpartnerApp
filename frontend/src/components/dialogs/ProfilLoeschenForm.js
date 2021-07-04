@@ -4,7 +4,8 @@ import { withStyles, Button, IconButton, Dialog, DialogTitle, DialogContent, Dia
 import CloseIcon from '@material-ui/icons/Close';
 import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
-import LernpartnerAPI from '../../api/LernpartnerAPI'
+import LernpartnerAPI from '../../api/LernpartnerAPI';
+import firebase from 'firebase/app';
 
 class ProfilLoeschenForm extends Component{
     constructor(props){
@@ -25,6 +26,8 @@ class ProfilLoeschenForm extends Component{
                     loeschenError: null                     // no error message
                 });
                 this.props.onClose(this.props.currentPerson);  // call the parent with the deleted customer
+            }).then(() => {
+                firebase.auth().signOut();
             }).catch(e =>
             this.setState({
                 loeschenInProgress: false,              // disable loading indicator
@@ -87,13 +90,15 @@ class ProfilLoeschenForm extends Component{
 
     /** Profil einer Person löschen */
     loeschenProfil = () => {
-        LernpartnerAPI.getAPI().deleteTeilnahmeGruppe(this.props.teilnahmeGruppe.getID())
+        LernpartnerAPI.getAPI().deleteProfil(this.props.currentProfil.getID())
             .then(teilnahmeGruppe => {
                 this.setState({
                     verlassenInProgress: false,              // disable loading indicator
                     verlassenError: null                     // no error message
                 });
                 this.props.onClose(this.props.teilnahmeGruppe);  // call the parent with the deleted customer
+            }).then(() => {
+                this.loeschenLernvorlieben();
             }).catch(e =>
             this.setState({
                 verlassenInProgress: false,              // disable loading indicator
@@ -141,6 +146,8 @@ class ProfilLoeschenForm extends Component{
                     verlassenError: null                     // no error message
                 });
                 this.props.onClose(this.props.teilnahmeGruppe);  // call the parent with the deleted customer
+            }).then(() => {
+                this.loeschenTeilnahmeChat();
             }).catch(e =>
             this.setState({
                 verlassenInProgress: false,              // disable loading indicator
@@ -164,6 +171,8 @@ class ProfilLoeschenForm extends Component{
                     verlassenError: null                     // no error message
                 });
                 this.props.onClose(this.props.teilnahmeGruppe);  // call the parent with the deleted customer
+            }).then(() => {
+                this.loeschenPerson();
             }).catch(e =>
             this.setState({
                 verlassenInProgress: false,              // disable loading indicator
@@ -182,6 +191,13 @@ class ProfilLoeschenForm extends Component{
     handleClose = () => {
         // console.log(event);
         this.props.onClose(null);
+    }
+
+    profilloeschen = () => {
+        this.loeschenTeilnahmeChat();
+        this.loeschenTeilnahmeGruppe();
+        this.loeschenPerson();
+        this.loeschenProfil();
     }
 
 
@@ -212,7 +228,7 @@ class ProfilLoeschenForm extends Component{
                         <Button onClick={ () => {this.handleClose()}} color='secondary'>
                             Abbrechen
                         </Button>
-                        <Button variant='contained' onClick={ () => {this.loeschenTeilnahmeGruppe(); this.loeschenTeilnahmeChat();}} color='primary'>
+                        <Button variant='contained' onClick={this.loeschenTeilnahmeGruppe} color='primary'>
                             Profil löschen
                         </Button>
                     </DialogActions>
