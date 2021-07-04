@@ -272,9 +272,7 @@ class AnfrageEingangFormEintrag extends Component {
                 <ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
                </Card>
                :
-               <Card className={classes.text}>
-                    Du hast keine Anfragen.
-                </Card>
+               null
           );
         }
 }
