@@ -98,6 +98,16 @@ class LernfachMapper(Mapper):
     def delete(self):
         pass
 
+    def delete_lernfaecher_by_profil_id(self, profilid):
+        """Löschen der Lernfächer einer Person aus der Datenbank
+        """
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM profile_has_lernfaecher WHERE profile_has_lernfaecher.profil_id ='{}'".format(profilid)
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
 
 """Zu Testzwecken können wir diese Datei bei Bedarf auch ausführen, 
 um die grundsätzliche Funktion zu überprüfen.

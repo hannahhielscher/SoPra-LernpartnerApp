@@ -4,6 +4,7 @@ import { withStyles, Typography, TableContainer, Table, TableHead, TableCell, Pa
 import { withRouter } from 'react-router-dom';
 import RegistrierungForm from './dialogs/RegistrierungForm';
 import MeinProfilForm from './dialogs/MeinProfilForm';
+import ProfilLoeschenForm from './dialogs/ProfilLoeschenForm';
 import { LernpartnerAPI } from '../api';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
@@ -38,6 +39,7 @@ class MeinProfil extends Component {
 
             personLernvorliebenID: null,
             profil: null,
+            teilnahmeGruppe: null,
             lernvorlieben: null,
 
             lernvorliebentageszeiten: null,
@@ -49,6 +51,7 @@ class MeinProfil extends Component {
 
             gruppe: false,
             showMeinProfilForm: false,
+            showProfilLoeschenForm: false,
             showRegistrierungForm: false,
             loadingInProgress: false,
             loadingError: null,
@@ -202,6 +205,30 @@ class MeinProfil extends Component {
       loadingError: null
     });
   }
+
+    // API Anbindung um die Lernvorlieben der Person vom Backend zu bekommen
+    getTeilnahmeGruppen = () => {
+        LernpartnerAPI.getAPI().getTeilnahmeGruppeById(this.state.currentPerson.getID())
+            .then(teilnahmeGruppeBO =>
+                this.setState({
+                    teilnahmeGruppe: teilnahmeGruppeBO,
+                    loadingInProgress: false,
+                    error: null
+                }))
+            .catch(e =>
+                this.setState({ // Reset state with error from catch
+                    teilnahmeGruppe: null,
+                    loadingInProgress: false,
+                    error: e,
+                })
+            );
+
+        // set loading to true
+        this.setState({
+            loadingInProgress: true,
+            loadingError: null
+        });
+    }
   
   
   //Wird aufgerufen, wenn der Mein Profil bearbeiten Button gedrückt wird
@@ -210,6 +237,13 @@ class MeinProfil extends Component {
     this.setState({
       showMeinProfilForm: true
     });
+  }
+
+  loeschenButtonClicked = (event) => {
+        event.stopPropagation();
+      this.setState({
+          showProfilLoeschenForm: true
+      });
   }
 
   //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
@@ -245,6 +279,24 @@ class MeinProfil extends Component {
     }
   }
 
+    loeschenFormClosed = (person) => {
+        this.getPerson();
+        if (person) {
+            this.setState({
+                person: person,
+                showProfilLoeschenForm: false,
+            });
+        } else {
+            this.setState({
+                showProfilLoeschenForm: false
+            })
+
+        }
+    }
+
+
+
+
   lernfaecherOptions = (arr1, arr2, sep) => {
     arr1.map(function (num, idx) {
       return num.toString().concat(sep, (arr2[idx]).toString())
@@ -257,7 +309,6 @@ class MeinProfil extends Component {
     this.getProfil();
     this.getLernfaecher();
     this.getalleLernfaecher();
-    
   }
 
 
@@ -267,8 +318,8 @@ class MeinProfil extends Component {
       // Use the states customer
       console.log(currentPerson)
 
-      const { test, lernfaecher_id, lernfaecher_bez, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, loadingInProgress, error} = this.state;
-      
+      const { test, lernfaecher_id, lernfaecher_bez, lernfaechernamen, profil, personProfil, personName, personVorname, personSemester, personAlter, personStudiengang, personLernfaecher, lernfach, lernfaechergesamt, personLernvorliebenID, lernvorlieben, lernvorliebentageszeiten, lernvorliebentage, lernvorliebenfrequenz, lernvorliebenlernart, lernvorliebengruppengroesse, lernvorliebenlernort, showRegistrierungForm, showMeinProfilForm, showProfilLoeschenForm, teilnahmeGruppe, loadingInProgress, error} = this.state;
+      console.log(teilnahmeGruppe)
       return (
         <div className={classes.root}>
         <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
@@ -316,7 +367,10 @@ class MeinProfil extends Component {
         
         </Typography>
         </Paper>
+        <Button variant="outlined" color="primary" onClick= {this.loeschenButtonClicked}>Mein Profil löschen</Button>
         <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
+        <ProfilLoeschenForm show={showProfilLoeschenForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} teilnahmeGruppe={teilnahmeGruppe} onClose={this.loeschenFormClosed}/>
+
         </div>
       );
     }
