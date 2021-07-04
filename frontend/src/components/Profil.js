@@ -87,7 +87,8 @@ class Profil extends Component {
 
     // API Anbindung um die Person vom Backend zu bekommen
     getProfil = () => {
-    LernpartnerAPI.getAPI().getProfil(this.props.user.id).then(profilBO =>
+    LernpartnerAPI.getAPI().getProfil(this.props.user.profil)
+    .then(profilBO =>
       this.setState({
             profil: profilBO,
             gruppe: profilBO.gruppe,
@@ -214,6 +215,7 @@ class Profil extends Component {
     // Use the states customer
     const { user, teilnahmenGruppen, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, gruppenLernfaecher, lernfaechernamen, loadingInProgress, error} = this.state;
     console.log(user)
+    console.log(profil)
     console.log(gruppe)
     console.log(teilnahmenGruppen)
     console.log(teilnahmenGruppen.length)
@@ -224,23 +226,13 @@ class Profil extends Component {
             {
             gruppe ?
                 <>
-                    <b> {user.vorname} {user.name} </b> <br />
-                    <b>Semester: </b> {user.semester} <br />
-                    <b>Studiengang: </b> {user.studiengang} <br />
-                    <b>Alter: </b> {user.alter} <br />
-                    <b>Geschlecht: </b> {user.geschlecht} <br />
-
-                </>
-
-                :
-                <>
                     <b> Profilinformationen: </b> <br /><br />
                     Tageszeiten: {tageszeiten}<br />
                     Tage: {tage}<br />
                     Frequenz: {frequenz}<br />
                     Lernart: {lernart}<br />
                     Lernort: {lernort}<br/> <br/>
-                    Lernfächer: 
+                    Lernfächer:
 
                               {
                                 lernfaechernamen.map(lernfach =>
@@ -248,9 +240,17 @@ class Profil extends Component {
                                   )
 
                               }
-                    <br/>          
+                    <br/>
 
-                    <b>Mitgliederzahl: </b>{teilnahmenGruppen.length} <br/>
+                </>
+
+                :
+                <>
+                    <b> {user.vorname} {user.name} </b> <br />
+                    <b>Semester: </b> {user.semester} <br />
+                    <b>Studiengang: </b> {user.studiengang} <br />
+                    <b>Alter: </b> {user.alter} <br />
+                    <b>Geschlecht: </b> {user.geschlecht} <br />
                 </>
            }
 
