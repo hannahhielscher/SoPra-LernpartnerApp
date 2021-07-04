@@ -321,7 +321,8 @@ class MeinProfil extends Component {
         <div className={classes.root}>
         <RegistrierungForm show={showRegistrierungForm} currentPerson = {currentPerson} onClose={this.userFormClosed}/>
 
-        <Button variant="contained" color="primary" className={classes.button} onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
+        <Button variant="contained" color="primary"  onClick= {this.bearbeitenButtonClicked}>Mein Profil bearbeiten</Button>
+        <Button variant="contained" style={{backgroundColor: "#cd5b45"}} color="secondary" className={classes.button} onClick= {this.loeschenButtonClicked}>Mein Profil löschen</Button>
         <br/>
         <Paper className={classes.inhalt}>
         <h2>Meine Daten:</h2>
@@ -364,7 +365,6 @@ class MeinProfil extends Component {
 
         </Typography>
         </Paper>
-        <Button variant="outlined" color="primary" onClick= {this.loeschenButtonClicked}>Mein Profil löschen</Button>
         <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
         <ProfilLoeschenForm show={showProfilLoeschenForm} currentPerson={currentPerson} currentProfil={profil} lernvorlieben={lernvorlieben} onClose={this.loeschenFormClosed}/>
 
@@ -394,8 +394,9 @@ class MeinProfil extends Component {
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(2),
   },
-
-
+  button: {
+      marginLeft: 473,
+  }
   });
 
 
