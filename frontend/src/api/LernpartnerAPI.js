@@ -45,6 +45,7 @@ export default class LernpartnerAPI {
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
         #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
+        #getPersonByNameURL = (name) => `${this.#lernappServerBaseURL}/personen-by-name/${name}`;
         #getPersonByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/personen-by-profil/${profilid}`;
         #updatePersonURL = (id, name, vorname, semester, studiengang, alter, geschlecht, lerngruppe) => `${this.#lernappServerBaseURL}/personen?id=${id}&name=${name}&vorname=${vorname}&semester=${semester}&studiengang=${studiengang}&alter=${alter}&geschlecht=${geschlecht}&lerngruppe=${lerngruppe}`;
         #deletePersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
@@ -176,6 +177,23 @@ export default class LernpartnerAPI {
             // We always get an array of PersonBOs.fromJSON, but only need one object
             let personBO = PersonBO.fromJSON(responseJSON);
             console.info(personBO);
+            return new Promise(function (resolve) {
+              resolve(personBO);
+            })
+          })
+        }
+
+        /**
+         * Gibt eine Person mit einem bestimmten Namen als BO zurück
+         *
+         * @param {string} name to be retrieved
+         * @public
+         */
+        getPersonByName(name) {
+          return this.#fetchAdvanced(this.#getPersonByNameURL(name)).then((responseJSON) => {
+            // We always get an array of PersonBOs.fromJSON, but only need one object
+            let personBO = PersonBO.fromJSON(responseJSON);
+            console.log(personBO);
             return new Promise(function (resolve) {
               resolve(personBO);
             })

@@ -206,6 +206,21 @@ class PersonOperationen(Resource):
         adm.delete_person(pers)
         return '', 200
 
+
+@lernApp.route('/personen-by-name/<string:name>')
+@lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class PersonByProfilOperationen(Resource):
+
+    @lernApp.marshal_list_with(person)
+    @secured
+    def get(self, name):
+        """Auslesen eines bestimmten Person-Objekts nach Profil.
+        Das auszulesende Objekt wird durch die id in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        person = adm.get_person_by_name(name)
+        return person
+
 @lernApp.route('/personen-by-profil/<int:profilid>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class PersonByProfilOperationen(Resource):

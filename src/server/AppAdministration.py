@@ -60,6 +60,11 @@ class AppAdministration (object):
         with PersonMapper() as mapper:
             return mapper.find_by_id(id)
 
+    def get_person_by_name(self, name):
+        """Eine Person mit einer bestimmten ID auslesen"""
+        with PersonMapper() as mapper:
+            return mapper.find_by_name(name)
+
     def get_person_by_profilid(self, profilid):
         """Eine Person mit einer bestimmten ProfilID auslesen"""
         with PersonMapper() as mapper:
