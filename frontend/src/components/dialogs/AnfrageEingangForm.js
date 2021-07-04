@@ -90,6 +90,7 @@ class AnfrageEintragForm extends Component {
         }
     }
 
+<<<<<<< HEAD
     filterTeilnahmenChatAusstehend = () => {
         for (var teilnahme in this.state.teilnahmenChatAusstehend)
             //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
@@ -98,6 +99,16 @@ class AnfrageEintragForm extends Component {
                 console.log(this.state.teilnahmenChatAusstehendGefiltert)
             }
     }
+=======
+  filterTeilnahmenChatAusstehend = () => {
+    for (var teilnahme in this.state.teilnahmenChatAusstehend)
+        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+        if (this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] !== this.props.currentPerson.id){
+            this.state.teilnahmenChatAusstehendGefiltert.push(this.state.teilnahmenChatAusstehend.[teilnahme])
+            console.log(this.state.teilnahmenChatAusstehendGefiltert)
+         }
+  }
+>>>>>>> da16aa888a39f36912ebec9825c7ae752610cc71
 
     // API Anbindung um Konversationen des Students vom Backend zu bekommen
     getTeilnahmenChatAusstehend = () => {
