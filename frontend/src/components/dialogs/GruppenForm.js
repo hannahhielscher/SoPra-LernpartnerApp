@@ -342,6 +342,18 @@ class GruppenForm extends Component {
                 <MenuItem value={6}>Web-Technologie</MenuItem>
                 <MenuItem value={7}>Datenbanken</MenuItem>
                 <MenuItem value={8}>IT-Security</MenuItem>
+                <MenuItem value={10}>Naturwissenschaften 1</MenuItem>
+                <MenuItem value={11}>Usability Engineering</MenuItem>
+                <MenuItem value={12}>User Interface Design</MenuItem>
+                <MenuItem value={13}>Informationspsychologie</MenuItem>
+                <MenuItem value={14}>Angewandte Mathematik</MenuItem>
+                <MenuItem value={15}>Data Literacy</MenuItem>
+                <MenuItem value={16}>Anwendungssicherheit</MenuItem>
+                <MenuItem value={17}>Organisation</MenuItem>
+                <MenuItem value={18}>Künstliche Intelligenz</MenuItem>
+                <MenuItem value={19}>Darstellungstechnik</MenuItem>
+                <MenuItem value={20}>Werkstoffprüfung</MenuItem>
+                <MenuItem value={21}>Grundlagen Logistik</MenuItem>
                 </Select>
               </FormControl>
               <br/>
