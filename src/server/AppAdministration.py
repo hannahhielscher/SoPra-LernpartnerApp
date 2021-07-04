@@ -382,10 +382,10 @@ class AppAdministration (object):
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
-    def delete_teilnahmegruppe(self, id):
+    def delete_teilnahmegruppe(self, person_id):
         """Löscht die Nachricht."""
         with TeilnahmeGruppeMapper() as mapper:
-            mapper.delete(id)
+            mapper.delete(person_id)
     
     
     """
@@ -695,7 +695,7 @@ class AppAdministration (object):
         return result
 
     """
-    Profil-spezifische Methoden
+    Lernfächer-spezifische Methoden
     """
 
     def get_all_lernfaecher(self):
@@ -712,3 +712,8 @@ class AppAdministration (object):
         """Gibt alle Lernfaecher nach ProfilID zurück."""
         with LernfachMapper() as mapper:
             return mapper.find_lernfaecher_by_profil_id(profilid)
+
+    def delete_lernfaecher_by_profil_id(self, profilid):
+        """Eine Person löschen"""
+        with LernfachMapper() as mapper:
+            return mapper.delete_lernfaecher_by_profil_id(profilid)

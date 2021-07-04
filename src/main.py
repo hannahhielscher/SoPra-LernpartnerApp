@@ -1103,31 +1103,31 @@ class TeilnahmeGruppeListOperation(Resource):
             werfen einen Server-Fehler. """
             return '', 500
 
-@lernApp.route('/teilnahmenGruppe/<int:id>')
+@lernApp.route('/teilnahmenGruppe/<int:person_id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class TeilnahmeGruppeOperation(Resource):
 
     @lernApp.marshal_with(teilnahmegruppe)
-    @secured
-    def get (self, id):
+    #@secured
+    def get (self, person_id):
         """Auslesen einer bestimmten Teilnahme."""
         adm = AppAdministration()
-        teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
+        teilnahme = adm.get_teilnahmegruppe_by_person_id(person_id)
 
         if teilnahme is not None:
             return teilnahme
         else:
             return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
-    @secured
-    def delete(self, id):
+    #'@secured
+    def delete(self, person_id):
         """Löschen eines bestimmten TeilnahmeGruppe-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = AppAdministration()
-        #teilnahme = adm.get_teilnahmegruppe_by_person_id(id)
-        adm.delete_teilnahmegruppe(id)
+        teilnahme = adm.get_teilnahmegruppe_by_person_id(person_id)
+        adm.delete_teilnahmegruppe(person_id)
         return '', 200
 
 @lernApp.route('/teilnahmenGruppe/<int:person_id>/<int:lerngruppe_id>')
@@ -1143,7 +1143,7 @@ class TeilnahmeGruppeByPersonByGruppeOperation(Resource):
         if teilnahme is not None:
             return teilnahme
         else:
-            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.  
+            return '', 500 #Wenn es keine Teilnahme im Chat mit der id gibt.
 
 @lernApp.route('/lernvorlieben/<int:id>')
 @lernApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -1335,6 +1335,18 @@ class LernfaecherByProfilIDOperationen(Resource):
         adm = AppAdministration()
         lernfaecher = adm.get_lernfaecher_by_profil_id(profilid)
         return lernfaecher
+
+    @secured
+    def delete(self, profilid):
+        """Löschen eines bestimmten Personen-Objekts.
+
+        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = AppAdministration()
+        lernfaecher = adm.get_lernfaecher_by_profil_id
+        adm.delete_lernfaecher_by_profil_id(profilid)
+        return '', 200
+
 
 
 """Test-Methoden START"""

@@ -135,13 +135,13 @@ class TeilnahmeGruppeMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, id):
+    def delete(self, person_id):
         """Löschen der Daten eines teilnahme-Objekts der Lerngruppe aus der Datenbank.
         """
 
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM teilnahmen_gruppe WHERE id={}".format(id)
+        command = "DELETE FROM teilnahmen_gruppe WHERE person_id = {}".format(person_id)
         cursor.execute(command)
 
         self._connection.commit()
