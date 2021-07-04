@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `lernapp_SWPra` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `lernapp_SWPra`;
 
+-- Host: 127.0.0.1    Database: lernapp_SWPra
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -28,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile` (
     REFERENCES `lernapp_SWPra`.`lernvorlieben` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `profile`
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`personen` (
     REFERENCES `lernapp_SWPra`.`profile` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `personen`
@@ -91,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernfaecher` (
   `id` INT NOT NULL,
   `bezeichnung` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lernfaecher`
@@ -122,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lerngruppen` (
     REFERENCES `lernapp_SWPra`.`profile` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lerngruppen`
@@ -155,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`profile_has_lernfaecher` (
     REFERENCES `lernapp_SWPra`.`lernfaecher` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `profile_has_lernfaecher`
@@ -191,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_gruppe` (
     REFERENCES `lernapp_SWPra`.`lerngruppen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `teilnahmen_gruppe`
@@ -214,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`konversationen` (
   `name` VARCHAR(45) NULL,
   `anfragestatus` TINYINT NULL, 
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `konversationen`
@@ -249,7 +250,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`nachrichten` (
     REFERENCES `lernapp_SWPra`.`konversationen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`tageszeiten`
@@ -260,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`tageszeiten` (
   `id` INT NOT NULL,
   `praeferenz` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tageszeiten`
@@ -282,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`tage` (
   `id` INT NOT NULL,
   `praeferenz` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `tage`
@@ -304,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`frequenzen` (
   `id` INT NOT NULL,
   `praeferenz` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `frequenzen`
@@ -326,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernarten` (
   `id` INT NOT NULL,
   `praeferenz` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lernarten`
@@ -348,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`gruppengroessen` (
   `id` INT NOT NULL,
   `praeferenz` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `gruppengroessen`
@@ -370,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernorte` (
   `id` INT NOT NULL,
   `praeferenz` VARCHAR(200) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lernorte`
@@ -433,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`lernvorlieben` (
     REFERENCES `lernapp_SWPra`.`lernorte` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lernvorlieben`
@@ -467,7 +468,7 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
     REFERENCES `lernapp_SWPra`.`profile` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`teilnahmen_chat`
@@ -493,9 +494,13 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`teilnahmen_chat` (
     REFERENCES `lernapp_SWPra`.`konversationen` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
