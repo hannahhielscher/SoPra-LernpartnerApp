@@ -20,10 +20,7 @@ import VorschlagListeEintrag from './VorschlagListeEintrag';
 /**
  * Es werden alle Vorschläge des aktuell eingeloggten Studenten angezeigt
  * 
- * @see See [VorschlagListeEintrag](#vorschaglisteeintrag)
- * 
- * Hierfür werden alle Vorschläge des aktuell eingeloggten Student geladen und in die Componente VorschlagListeEintrag gemappt
- * 
+ * @see See [VorschlagListe](#vorschagliste)
  */
 
 

@@ -19,6 +19,12 @@ import ProfilBO from '../../api/ProfilBO';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
 import GruppenListeEintrag from '../GruppenListeEintrag';
 
+/**
+ * Dieses Form zeigt ein Dialog zum Anlegen einer neuen Lerngruppe an.
+ * Dafuer wird auf die API zugegriffen (Backend zugriff)
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ */
 
 class GruppenForm extends Component {
 
@@ -80,7 +86,7 @@ class GruppenForm extends Component {
         this.lernortSelectionChange = this.lernortSelectionChange.bind(this);
     }
 
-  /** Add Lerngruppe */
+    // API Anbindung um die Lernvorliebne der Gruppe ihm Backend hinzuzufügen
   addLernvorlieben = () => {
     let newLernvorlieben = new LernvorliebenBO(this.state.tageszeiten, 'null', this.state.tage, 'null', this.state.frequenz, 'null', this.state.lernart, 'null', this.state.gruppengroesse, 'null', this.state.lernort, 'null');
     LernpartnerAPI.getAPI().addLernvorlieben(newLernvorlieben)
@@ -106,7 +112,7 @@ class GruppenForm extends Component {
     });
   }
 
-  /** Add Lerngruppe */
+    // API Anbindung um das Profil der Gruppe ihm Backend hinzuzufügen
   addProfil = () => {
     let newProfil = new ProfilBO(this.state.gruppe, this.state.lernfachListe, this.state.lernvorlieben.id)
     console.log(this.state.gruppe)
@@ -138,7 +144,7 @@ class GruppenForm extends Component {
     });
   }
 
-  /** Add Lerngruppe */
+    // API Anbindung um die Lerngruppe ihm Backend hinzuzufügen
   addLerngruppe = () => {
     let newLerngruppe = new LerngruppeBO();
     newLerngruppe.setID(0)
@@ -168,7 +174,7 @@ class GruppenForm extends Component {
   }
 
 
-  /** Add Teilnahme an Lerngruppe */
+    // API Anbindung um die Teilnahme an der Gruppe des Students ihm Backend hinzuzufügen
   addTeilnahmeGruppe = () => {
     let newTeilnahmeGruppe = new TeilnahmeGruppeBO(this.props.currentPerson.id, this.state.lerngruppe.id);
     LernpartnerAPI.getAPI().addTeilnahmeGruppe(newTeilnahmeGruppe)

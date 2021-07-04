@@ -23,7 +23,12 @@ import LernpartnerAPI from '../../api/LernpartnerAPI';
 import AnfrageEingangFormEintrag from '../AnfrageEingangFormEintrag';
 import AnfrageAusstehendEintrag from '../AnfrageAusstehendEintrag';
 
-
+/**
+ * Dieses Form zeigt ein Dialog zum Eingang einer Anfrage an.
+ * Dafuer wird auf die API zugegriffen (Backend zugriff)
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ */
 class AnfrageEintragForm extends Component {
 
     constructor(props) {
@@ -50,7 +55,7 @@ class AnfrageEintragForm extends Component {
         this.baseState = this.state;
     }
 
-    // API Anbindung um Konversationen des Students vom Backend zu bekommen
+    // API Anbindung um die Teilnahme an einem Chat des Students vom Backend zu bekommen
     getTeilnahmenChat = () => {
       LernpartnerAPI.getAPI().getTeilnahmeChatByPersonByStatus(this.props.currentPerson.id, 0)
       .then(teilnahmenChatBOs =>
@@ -75,68 +80,69 @@ class AnfrageEintragForm extends Component {
       });
     }
 
-  filterTeilnahmenChat = () => {
-    for (var teilnahme in this.state.teilnahmenChat){
-        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
-        if (this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
-            this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
-            console.log(this.state.teilnahmenChatGefiltert)
-         }
+    filterTeilnahmenChat = () => {
+        for (var teilnahme in this.state.teilnahmenChat){
+            //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+            if (this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id){
+                this.state.teilnahmenChatGefiltert.push(this.state.teilnahmenChat.[teilnahme])
+                console.log(this.state.teilnahmenChatGefiltert)
+            }
+        }
     }
-  }
 
-  filterTeilnahmenChatAusstehend = () => {
-    for (var teilnahme in this.state.teilnahmenChatAusstehend)
-        //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
-        if (this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] === this.props.currentPerson.id){
-            this.state.teilnahmenChatAusstehendGefiltert.push(this.state.teilnahmenChatAusstehend.[teilnahme])
-            console.log(this.state.teilnahmenChatAusstehendGefiltert)
-         }
-  }
+    filterTeilnahmenChatAusstehend = () => {
+        for (var teilnahme in this.state.teilnahmenChatAusstehend)
+            //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
+            if (this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] === this.props.currentPerson.id){
+                this.state.teilnahmenChatAusstehendGefiltert.push(this.state.teilnahmenChatAusstehend.[teilnahme])
+                console.log(this.state.teilnahmenChatAusstehendGefiltert)
+            }
+    }
 
     // API Anbindung um Konversationen des Students vom Backend zu bekommen
     getTeilnahmenChatAusstehend = () => {
-      LernpartnerAPI.getAPI().getTeilnahmeChatByAnfrageSender(this.props.currentPerson.id)
-      .then(teilnahmenChatBOs =>
-          this.setState({
-              teilnahmenChatAusstehend: teilnahmenChatBOs,
-              error: null,
-              loadingInProgress: false,
-          })).then(() => {
-            this.filterTeilnahmenChatAusstehend();
-          }).catch(e =>
+        LernpartnerAPI.getAPI().getTeilnahmeChatByAnfrageSender(this.props.currentPerson.id)
+          .then(teilnahmenChatBOs =>
               this.setState({
-                  teilnahmenChat: [],
-                  error: e,
+                  teilnahmenChatAusstehend: teilnahmenChatBOs,
+                  error: null,
                   loadingInProgress: false,
-              }));
+              })).then(() => {
+                this.filterTeilnahmenChatAusstehend();
+              }).catch(e =>
+                  this.setState({
+                      teilnahmenChat: [],
+                      error: e,
+                      loadingInProgress: false,
+                  }));
 
-      this.setState({
-          error: null,
-          loadingInProgress: true,
-          loadingKonversationenError: null
-      });
+          this.setState({
+              error: null,
+              loadingInProgress: true,
+              loadingKonversationenError: null
+          });
     }
 
-  //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
-  anfrageEintragClosed = () => {
-    this.setState({
-        showAnfrageEintrag: false,
-    });
-  }
+    //Wird aufgerufen, wenn Speichern oder Abbrechen im Dialog gedrückt wird
+    anfrageEintragClosed = () => {
+        this.setState({
+            showAnfrageEintrag: false,
+        });
+    }
 
-  /** Handles the close / cancel button click event */
-  handleClose = () => {
-    // Reset the state
-    this.setState(this.baseState);
-    this.props.onClose(null);
-  }
+    /** Handles the close / cancel button click event */
+    handleClose = () => {
+        // Reset the state
+        this.setState(this.baseState);
+        this.props.onClose(null);
+    }
 
-  getAnzahlAnfrageEingang = (newAnfragenAnzahl) => {
-    this.setState({
-        anfragenAnzahl: newAnfragenAnzahl
-    })
-  }
+    //Anzahl der Anfragen wird geholt
+    getAnzahlAnfrageEingang = (newAnfragenAnzahl) => {
+        this.setState({
+            anfragenAnzahl: newAnfragenAnzahl
+        })
+    }
 
     // Lifecycle methode, wird aufgerufen wenn componente in den DOM eingesetzt wird
     componentDidMount() {
@@ -145,76 +151,76 @@ class AnfrageEintragForm extends Component {
     }
 
  /** Renders the component */
-  render() {
-    const { classes, show, currentPerson, konversationen } = this.props;
-    const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatAusstehendGefiltert, teilnahmenChatGefiltert, addingInProgress, showAnfrageEintrag, addingError, updatingInProgress, updatingError } = this.state;
-    console.log(teilnahmenChat)
-    console.log(teilnahmenChatGefiltert)
-    console.log(teilnahmenChatAusstehendGefiltert)
-    
-
-    return (
-      show ?
-        <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
-          <DialogTitle> Anfragen
-            <IconButton className={classes.closeButton} onClick={this.handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-
-            <Card className={classes.liste}>
-
-           {
-            teilnahmenChatGefiltert.length > 0 ?
+    render() {
+        const { classes, show, currentPerson, konversationen } = this.props;
+        const { teilnahmenChat, teilnahmenChatAusstehend, teilnahmenChatAusstehendGefiltert, teilnahmenChatGefiltert, addingInProgress, showAnfrageEintrag, addingError, updatingInProgress, updatingError } = this.state;
+        console.log(teilnahmenChat)
+        console.log(teilnahmenChatGefiltert)
+        console.log(teilnahmenChatAusstehendGefiltert)
 
 
-              teilnahmenChatGefiltert.map(teilnahmeChat =>
-                <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
-                show={showAnfrageEintrag} onClose={this.anfrageEintragClosed} anzahlAnfragen={this.getAnzahlAnfrageEingang} />)
+        return (
+          show ?
+            <Dialog open={show} onClose={this.handleClose} maxWidth='xs'>
+              <DialogTitle> Anfragen
+                <IconButton className={classes.closeButton} onClick={this.handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </DialogTitle>
 
-             :
-             <Card className={classes.text2}>
-                Du hast keine Anfragen.
-             </Card>
-            }
+                <Card className={classes.liste}>
 
-
-            </Card>
-
-               <Card className={classes.cardText}>
-               <List>
-                <ListItem>
-                  <ListItemText primary="Deine ausstehende Anfragen:" className={classes.text}/>
-                </ListItem>
-               </List>
-               </Card>
-
-            <Card className={classes.liste}>
-
-            {
-            teilnahmenChatAusstehendGefiltert.length > 0 ?
+               {
+                teilnahmenChatGefiltert.length > 0 ?
 
 
-              teilnahmenChatAusstehendGefiltert.map(teilnahmenChatAusstehend =>
-                <AnfrageAusstehendEintrag key={teilnahmenChatAusstehend.getID()} teilnahmenChatAusstehend={teilnahmenChatAusstehend} currentPerson={currentPerson}
-                />)
+                  teilnahmenChatGefiltert.map(teilnahmeChat =>
+                    <AnfrageEingangFormEintrag key={teilnahmeChat.getID()} teilnahmeChat={teilnahmeChat} currentPerson={currentPerson}
+                    show={showAnfrageEintrag} onClose={this.anfrageEintragClosed} anzahlAnfragen={this.getAnzahlAnfrageEingang} />)
 
-             :
-             <Card className={classes.text2}>
-                Du hast keine Anfragen versendet.
-             </Card>
-            }
+                 :
+                 <Card className={classes.text2}>
+                    Du hast keine Anfragen.
+                 </Card>
+                }
 
-            </Card>
 
-            <LoadingProgress show={addingInProgress} />
-                <ContextErrorMessage error={addingError} contextErrorMsg={`Die Anfrage konnte nicht gesendet werden.`} onReload={this.getChatPartnerStatus} />
-            <DialogContent>
-          </DialogContent>
-        </Dialog>
-        : null
-    );
-  }
+                </Card>
+
+                   <Card className={classes.cardText}>
+                   <List>
+                    <ListItem>
+                      <ListItemText primary="Deine ausstehende Anfragen:" className={classes.text}/>
+                    </ListItem>
+                   </List>
+                   </Card>
+
+                <Card className={classes.liste}>
+
+                {
+                teilnahmenChatAusstehendGefiltert.length > 0 ?
+
+
+                  teilnahmenChatAusstehendGefiltert.map(teilnahmenChatAusstehend =>
+                    <AnfrageAusstehendEintrag key={teilnahmenChatAusstehend.getID()} teilnahmenChatAusstehend={teilnahmenChatAusstehend} currentPerson={currentPerson}
+                    />)
+
+                 :
+                 <Card className={classes.text2}>
+                    Du hast keine Anfragen versendet.
+                 </Card>
+                }
+
+                </Card>
+
+                <LoadingProgress show={addingInProgress} />
+                    <ContextErrorMessage error={addingError} contextErrorMsg={`Die Anfrage konnte nicht gesendet werden.`} onReload={this.getChatPartnerStatus} />
+                <DialogContent>
+              </DialogContent>
+            </Dialog>
+            : null
+        );
+    }
 }
 
 /** Component specific styles */

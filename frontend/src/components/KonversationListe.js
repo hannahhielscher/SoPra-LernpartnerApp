@@ -127,7 +127,7 @@ class KonversationListe extends Component {
     });
 }
 
-    // API Anbindung um Konversationen des Students vom Backend zu bekommen
+    // API Anbindung um die Teilnahme des Chats des Students vom Backend zu bekommen
     getTeilnahmenChat = () => {
       LernpartnerAPI.getAPI().getTeilnahmeChatByPersonByStatus(this.props.currentPerson.id, 0)
       .then(teilnahmenChatBOs =>

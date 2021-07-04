@@ -18,9 +18,6 @@ import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
  * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
- * 
- * Hierfür werden Profilname, Alter, Geschlecht, Semester, Lernfach und der Prozentsatz des Matches angezeigt
- * 
  */
 
 class VorschlagListeEintrag extends Component {

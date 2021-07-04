@@ -23,10 +23,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AnfrageForm from './dialogs/AnfrageForm';
 
 /**
- * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
- *
- * Hierfür werden Profilname, Alter, Geschlecht, Semester, Lernfach und der Prozentsatz des Matches angezeigt
- *
+ * Es wird der Eintrag einer eingehenden Anfrage für eine Konversation erstellt.
  */
 
 class AnfrageEingangFormEintrag extends Component {

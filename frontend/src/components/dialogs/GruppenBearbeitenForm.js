@@ -87,7 +87,7 @@ class GruppenBearbeitenForm extends Component {
 
 
 
-    /** Updates the person */
+    // API Anbindung um die Lerngruppe des Students ihm Backend zu aktualisieren
     updatenGruppe = () => {
         let lerngruppe = this.props.lerngruppe;
         lerngruppe.id = this.state.lerngruppe.id
@@ -113,31 +113,31 @@ class GruppenBearbeitenForm extends Component {
       });
     }
 
-/** Updates the profil */
-updatenProfil = () => {
-  let profil = this.props.currentProfil;
-  LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
-  ).then(profil => {
-      // Backend call sucessfull
-      // reinit the dialogs state for a new empty customer
-      this.setState(this.baseState);
-      this.props.onClose(profil); // call the parent with the customer object from backend
-  }).catch(e =>
+    // API Anbindung um das Profil ihm Backend zu aktualisieren
+    updatenProfil = () => {
+      let profil = this.props.currentProfil;
+      LernpartnerAPI.getAPI().updateProfil(profil.id, this.state.gruppe, this.state.lernfaecher, profil.lernvorlieben_id
+      ).then(profil => {
+          // Backend call sucessfull
+          // reinit the dialogs state for a new empty customer
+          this.setState(this.baseState);
+          this.props.onClose(profil); // call the parent with the customer object from backend
+      }).catch(e =>
+          this.setState({
+              updatingInProgress: false,    // disable loading indicator
+              updatingError: e              // show error message
+          })
+      );
+
+      // set loading to true
       this.setState({
-          updatingInProgress: false,    // disable loading indicator
-          updatingError: e              // show error message
-      })
-  );
-
-  // set loading to true
-  this.setState({
-      updatingInProgress: true,       // show loading indicator
-      updatingError: null             // disable error message
-});
-}
+          updatingInProgress: true,       // show loading indicator
+          updatingError: null             // disable error message
+    });
+    }
 
 
-  /** Updates the person */
+    // API Anbindung um die Lernvorlieben der Lerngruppe ihm Backend zu aktualisieren
     updatenLernvorlieben = () => {
         let lernvorlieben = this.props.lernvorlieben;
         lernvorlieben.tageszeiten_id = this.state.tageszeiten

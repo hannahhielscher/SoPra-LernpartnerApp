@@ -7,6 +7,13 @@ import LoadingProgress from './LoadingProgress';
 import LernpartnerAPI from '../../api/LernpartnerAPI';
 import firebase from 'firebase/app';
 
+/**
+ * Dieses Form zeigt ein Dialog zum Löschen des eigenen Profils an.
+ * Dafuer wird auf die API zugegriffen (Backend zugriff)
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ */
+
 class ProfilLoeschenForm extends Component{
     constructor(props){
         super(props);
@@ -17,7 +24,7 @@ class ProfilLoeschenForm extends Component{
         };
     }
 
-    /**Person löschen */
+    // API Anbindung um eine Person ihm Backend zu löschen
     loeschenPerson = () => {
         LernpartnerAPI.getAPI().deletePerson(this.props.currentPerson.getID())
             .then(person => {
@@ -42,7 +49,7 @@ class ProfilLoeschenForm extends Component{
         });
     }
 
-    /** Lernvorlieben einer Person löschen */
+    // API Anbindung um ein Lernvorlieben ihm Backend zu löschen
     loeschenLernvorlieben = () => {
         LernpartnerAPI.getAPI().deleteLernvorlieben(this.props.lernvorlieben.getID())
             .then(lernvorlieben => {
@@ -65,7 +72,7 @@ class ProfilLoeschenForm extends Component{
         });
     }
 
-    /** Gruppe verlassen */
+    // API Anbindung um die Teilnahme in Gruppen ihm Backend zu löschen
     loeschenTeilnahmeGruppe = () => {
         LernpartnerAPI.getAPI().deleteTeilnahmeGruppe(this.props.currentPerson.getID())
             .then(teilnahmeGruppe => {
@@ -90,7 +97,7 @@ class ProfilLoeschenForm extends Component{
         });
     }
 
-    /** Chat verlassen */
+    // API Anbindung um die Teilnahme in einem Chat ihm Backend zu löschen
     loeschenTeilnahmeChat = () => {
         LernpartnerAPI.getAPI().deleteTeilnahmeChatByPerson(this.props.currentPerson.getID())
             .then(teilnahmeGruppe => {
