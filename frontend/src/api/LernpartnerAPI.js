@@ -31,7 +31,7 @@ export default class LernpartnerAPI {
           return this.#api;
         }
 
-        #fetchAdvanced = (url, init) => fetch(url, init)
+        #fetchAdvanced = (url, init) => fetch(url, init, {credential: 'include'})
           .then(res => {
             // Das von fetch() zurückgegebene Promise wird bei einem HTTP-Fehlerstatus nicht zurückgewiesen, auch wenn die Antwort ein HTTP 404 oder 500 ist.
             if (!res.ok) {

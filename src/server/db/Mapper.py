@@ -18,8 +18,8 @@ class Mapper (AbstractContextManager, ABC):
             Hierbei handelt es sich also um die Verbindung zwischen Google App Engine und Cloud SQL."""
 
             self._connection = connector.connect(user='root', password='sw-praktikum21',
-                                          unix_socket='',
-                                          database='lernapp')
+                                          unix_socket='/cloudsql/sopra-lernpartnerapp:europe-west3:lernapp-swpra',
+                                          database='lernapp_SWPra')
         else:
             """Wenn wir hier ankommen, dann handelt sich offenbar um die Ausführung des Codes in einer lokalen Umgebung,
             also auf einem Local Development Server. Hierbei stellen wir eine einfache Verbindung zu einer lokal
