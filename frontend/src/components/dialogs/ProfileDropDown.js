@@ -46,6 +46,14 @@ class ProfileDropDown extends Component {
     firebase.auth().signOut();
   }
 
+  /** 
+	 * Handles the click event of the sign in button and uses the firebase.auth() component to sign in.
+	 */
+  handleLöschenButtonClicked = () => {
+    
+  }
+
+
   /** Renders the profile drop down if a loggin user is given as a prop */
   render() {
     const { classes, user } = this.props;
@@ -77,6 +85,7 @@ class ProfileDropDown extends Component {
                 <Grid container justify='center'>
                   <Grid item>
                     <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+                    <Button color='primary' onClick={this.handleLöschenButtonClicked}>Test</Button>
                   </Grid>
                 </Grid>
               </Paper>
