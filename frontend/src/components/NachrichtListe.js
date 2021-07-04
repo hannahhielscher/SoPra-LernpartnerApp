@@ -186,10 +186,18 @@ nachrichtFormClosed = nachrichten => {
   }*/
 
   nameAnpassen = () => {
+    if (this.state.konversationName.includes(this.state.currentPersonName) == true){
      var buff = this.state.konversationName.replace(this.state.currentPersonName,'');
     this.setState({
         nameNeu: buff.replace(' und ',''),
+        gruppe: false
     });
+    }else{
+    this.setState({
+        nameNeu: this.state.true,
+        gruppe: true
+    });
+    }
     console.log(this.state.nameNeu)
   }
 
