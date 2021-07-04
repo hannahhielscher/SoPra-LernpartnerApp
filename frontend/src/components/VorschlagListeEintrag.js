@@ -289,7 +289,7 @@ class VorschlagListeEintrag extends Component {
                        {
                        status === 0?
                         <>
-                            <Button variant="contained" color='secondary' className={classes.button} size="small" onClick={this.showProfilButtonClicked}>
+                            <Button variant="contained" color='secondary' size="small" className={classes.button} onClick={this.showProfilButtonClicked}>
                               Profil ansehen
                             </Button>
                             <h4 style={{ marginLeft : 25, color: "#bfbfbf"}}>
@@ -297,19 +297,19 @@ class VorschlagListeEintrag extends Component {
                             </h4>
                         </>
                         :
-                        <ButtonGroup variant='text' size='small'>
-                            <Button color='primary' onClick={this.showProfilButtonClicked}>
+                        <>
+                            <Button  variant="contained" color='secondary' size="small" className={classes.button} onClick={this.showProfilButtonClicked}>
                               Profil ansehen
                             </Button>
-                            <Button color='secondary' onClick={this.sendAnfrageButtonClicked}>
+                            <Button  variant="contained" color='secondary' size="small" className={classes.button} onClick={this.sendAnfrageButtonClicked}>
                               Kontaktanfrage
                             </Button>
-                        </ButtonGroup>
+                        </>
                        }
                     </AccordionDetails>
               </Accordion>
               <AnfrageForm show={showAnfrageForm} currentPerson={currentPerson} chatPartner={chatPartner} chatPartnerProfil={chatPartnerProfil} onClose={this.anfrageFormClosed} />
-              <ProfilDialog show={showProfilDialog} chatPartner={chatPartnerProfil} onClose={this.profilDialogClosed}/>
+              <ProfilDialog show={showProfilDialog} chatPartner={chatPartner} onClose={this.profilDialogClosed}/>
             </div>
           );
         }
@@ -335,7 +335,7 @@ const styles = theme => ({
       textAlign: "left"
   },
   button: {
-      margin: 2,
+      margin: theme.spacing(1),
       },
   laden: {
     padding: 0

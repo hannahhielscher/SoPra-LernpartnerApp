@@ -478,6 +478,12 @@ const styles = theme => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  }
 });
 
 /** PropTypes */
