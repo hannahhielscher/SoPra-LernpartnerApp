@@ -153,7 +153,7 @@ class TeilnahmeGruppeMapper(Mapper):
         cursor.close()
 
     def delete(self, person_id):
-        """Löschen der Daten eines teilnahme-Objekts der Lerngruppe aus der Datenbank.
+        """Löschen der Daten eines Teilnahme-Objekts der Lerngruppe aus der Datenbank.
         
         :param id ID der TeilnahmeGruppe
         """

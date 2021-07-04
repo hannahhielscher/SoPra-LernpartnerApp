@@ -109,6 +109,7 @@ export default class LernpartnerAPI {
         #setTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
         #addTeilnahmeChatURL = () => `${this.#lernappServerBaseURL}/teilnahmenChat`;
         #deleteTeilnahmeChatURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat/${id}`;
+        #deleteTeilnahmeChatByPersonURL = (id) => `${this.#lernappServerBaseURL}/teilnahmeChat-by-person-id/${id}`;
         #getTeilnahmeChatByStudentIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-student-id/${id}`;
         #getTeilnahmeChatByKonversationByStatusURL = (status, konversation_id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id-status/${status}/${konversation_id}`;
         #getTeilnahmeChatByKonversationIdURL = (id) => `${this.#lernappServerBaseURL}/teilnehmer-by-konversation-id/${id}`;
@@ -120,8 +121,13 @@ export default class LernpartnerAPI {
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
+<<<<<<< HEAD
         #deleteTeilnahmeGruppeURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
+=======
+        #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
+        #deleteTeilnahmeGruppeURL = (personid) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personid}`;
+>>>>>>> 068bfea57cb5b91a93f472a82624f95fe4aa1a0f
 
         //Lernfachbezogene
         #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
@@ -970,6 +976,25 @@ export default class LernpartnerAPI {
               })
             }
 
+            /** 
+             * löscht Nachrichten einer konversation
+             * @param {Number} personid to be retrieved
+             * @public
+             */
+    
+            deleteTeilnahmeChatByPerson(personid) {
+              return this.#fetchAdvanced(this.#deleteTeilnahmeChatByPersonURL(personid), {
+                method: 'DELETE'
+                }).then((responseJSON) => {
+                // We always get an array of TeilnahmeChatBOs.fromJSON
+                let responseTeilnahmeChatBO = TeilnahmeChatBO.fromJSON(responseJSON)[0];
+                // console.info(KonversationBOs);
+                return new Promise(function (resolve) {
+                  resolve(responseTeilnahmeChatBO);
+                })
+              })
+            }
+
              /** 
               * Gibt alle TeilnahmenChat einer Person zurück
               * @param {Number} personid to be retrieved
@@ -1121,18 +1146,18 @@ export default class LernpartnerAPI {
             }
 
 
-       deleteTeilnahmeGruppe(person_id) {
-          return this.#fetchAdvanced(this.#deleteTeilnahmeGruppeURL(person_id), {
-              method: 'DELETE'
-          }).then((responseJSON) => {
-              // We always get an array of KonversationBOs.fromJSON
-              let responseTeilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
-              // console.info(KonversationBOs);
-              return new Promise(function (resolve) {
-                  resolve(responseTeilnahmeGruppeBO);
-              })
-          })
-        }
+            deleteTeilnahmeGruppe(personid) {
+                return this.#fetchAdvanced(this.#deleteTeilnahmeGruppeURL(personid), {
+                    method: 'DELETE'
+                }).then((responseJSON) => {
+                    // We always get an array of KonversationBOs.fromJSON
+                    let responseTeilnahmeGruppeBO = TeilnahmeGruppeBO.fromJSON(responseJSON)[0];
+                    // console.info(KonversationBOs);
+                    return new Promise(function (resolve) {
+                        resolve(responseTeilnahmeGruppeBO);
+                    })
+                })
+              }
 
 
         //Lernfachspezifische Methoden
