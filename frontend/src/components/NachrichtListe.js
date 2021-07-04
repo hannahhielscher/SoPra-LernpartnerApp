@@ -187,18 +187,17 @@ nachrichtFormClosed = nachrichten => {
 
   nameAnpassen = () => {
     if (this.state.konversationName.includes(this.state.currentPersonName) == true){
-     var buff = this.state.konversationName.replace(this.state.currentPersonName,'');
+    var buff = this.state.konversationName.replace(this.state.currentPersonName,'');
     this.setState({
         nameNeu: buff.replace(' und ',''),
         gruppe: false
     });
     }else{
     this.setState({
-        nameNeu: this.state.true,
+        nameNeu: this.state.konversationName,
         gruppe: true
     });
     }
-    console.log(this.state.nameNeu)
   }
 
   /** Handles the onClick event of the edit customer button */
