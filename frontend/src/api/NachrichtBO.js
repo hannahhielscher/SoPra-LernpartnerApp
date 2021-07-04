@@ -9,45 +9,48 @@ export default class NachrichtBO extends BusinessObject{
         this.konversation_id = akonversation_id;
     }
     /*
-	erhalte 
+	erhalte Nachrichteninhalt
 	*/
     getnachricht_inhalt(){
         return this.nachricht_inhalt;
     }
     /*
-	setze 
+	setze Nachrichteninhalt
 	*/
     setnachricht_inhalt(anachricht_inhalt){
         this.nachricht_inhalt = anachricht_inhalt;
     }
 
       /*
-	erhalte 
+	erhalte Personen ID
 	*/
     getperson_id(){
         return this.person_id;
     }
 
     /*
-	setze 
+	setze Personen ID
 	*/
     setperson_id(aperson_id){
         this.person_id = aperson_id;
     }
     
     /*
-	erhalte 
+	erhalte Konversations ID
 	*/
     getkonversation_id(){
         return this.konversation_id;
     }
     /*
-	setze 
+	setze Konversations ID
 	*/
     setkonversation_id(akonversation_id){
         this.konversation_id = akonversation_id;
     }
 
+    /**
+     * Gibt ein Array von NachrichtenBO aus einer gegebenen JSON-Struktur zurück
+     */
     static fromJSON(nachrichten) {
 		let results = null;
 		if (Array.isArray(nachrichten)) {
