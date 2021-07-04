@@ -6,16 +6,6 @@ import { withRouter } from 'react-router-dom';
 import ContextErrorMessage from './dialogs/ContextErrorMessage';
 import LoadingProgress from './dialogs/LoadingProgress';
 import VorschlagListeEintrag from './VorschlagListeEintrag';
-//import SaveIcon from '@material-ui/icons/Save';
-//import Table from '@material-ui/core/Table';
-//import TableBody from '@material-ui/core/TableBody';
-//import TableCell from '@material-ui/core/TableCell';
-//import TableContainer from '@material-ui/core/TableContainer';
-//import TableHead from '@material-ui/core/TableHead';
-//import TableRow from '@material-ui/core/TableRow';
-//import Paper from '@material-ui/core/Paper';
-
-
 
 /**
  * Es werden alle Vorschläge des aktuell eingeloggten Studenten angezeigt

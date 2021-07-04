@@ -84,6 +84,7 @@ class VorschlagListeEintrag extends Component {
       });
     }
 
+    //API Call für Profil aus dem Backend
     getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.vorschlag.match_profil_id)
     .then(profilBO =>
@@ -164,6 +165,7 @@ class VorschlagListeEintrag extends Component {
       });
     }
 
+    //Überprüfen, ob Person oder Gruppe
     getPartner = () => {
         if (this.state.gruppe === true){
             this.getLerngruppe();
@@ -172,7 +174,7 @@ class VorschlagListeEintrag extends Component {
         }
     }
 
-  /** Add TeilnahmeChatPartner */
+  /** API Call Konversation aus Backend */
   getKonversation = () => {
     LernpartnerAPI.getAPI().getKonversationByName(this.state.nameGes)
     .then(konversationBO =>
@@ -192,7 +194,7 @@ class VorschlagListeEintrag extends Component {
     );
   }
 
-  /** Add TeilnahmeChatPartner */
+  /** API Call TeilnahmeChat aus Backend */
   getTeilnahme = () => {
     LernpartnerAPI.getAPI().getTeilnahmeChatByKonversationAndPerson(this.state.konversation.id, this.state.currentPerson.id)
     .then(teilnahmeChatBO =>
@@ -208,6 +210,7 @@ class VorschlagListeEintrag extends Component {
     );
   }
 
+  //Namen anpassen, in dem Name currentPerson rausgeworfen wird
   nameAnpassen = () => {
     this.setState({
         nameNeu: this.state.konversation.name.replace(this.state.currentPersonName,''),
@@ -239,20 +242,14 @@ class VorschlagListeEintrag extends Component {
   }
 
     componentDidMount() {
-      // load initial balance
+      // load Profil
       this.getProfil();
     }
 
     render(){
           const { classes, expandedState } = this.props;
           const { nameNeu, teilnahmeChat, vorschlag, profil, currentPerson, gruppe, person, nameGes, namePerson, status, lerngruppe, chatPartner, chatPartnerProfil, iskonversation, konversation, konversationStatus, showProfil, showProfilDialog, showAnfrageForm } = this.state;
-          console.log(konversation)
-          console.log(nameNeu)
-          console.log(chatPartner)
-          console.log(teilnahmeChat)
-          console.log(status)
-          console.log(nameGes)
-
+          
           return (
             <div>
               <Accordion defaultExpanded={false} expanded={expandedState} onChange={this.expansionPanelStateChanged}>

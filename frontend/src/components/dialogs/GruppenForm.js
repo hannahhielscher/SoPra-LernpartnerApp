@@ -42,6 +42,8 @@ class GruppenForm extends Component {
 
             gruppe: 1,
 
+            person: null,
+
             lernfaecher: null,
             lernfachListe: [],
             lernfaecherValidationFailed: null,
@@ -157,7 +159,7 @@ class GruppenForm extends Component {
       this.setState({
         lerngruppe: lerngruppeBO
       })).then(() => {
-            this.addTeilnahmeGruppe();
+            this.getPerson();
             //console.log(this.state.profil.id)
     }).catch(e =>
       this.setState({
@@ -173,6 +175,44 @@ class GruppenForm extends Component {
     });
   }
 
+    // API Anbindung um Person vom Backend zu bekommen
+    getPerson = () => {
+      LernpartnerAPI.getAPI().getPersonByName(this.props.name)
+      .then(personBO =>
+          this.setState({
+            person: personBO,
+            loadingInProgress: false,
+            error: null,
+      })).then(() => {
+            this.addTeilnahmeGruppePartner();
+            //console.log(this.state.profil.id)
+    }).catch(e =>
+              this.setState({
+                person: null,
+                loadingInProgress: false,
+                error: e,
+              }));
+      this.setState({
+        loadingInProgress: true,
+        error: null
+      });
+    }
+
+  /** Add Teilnahme Partner an Lerngruppe */
+  addTeilnahmeGruppePartner = () => {
+    let newTeilnahmeGruppe = new TeilnahmeGruppeBO(this.state.person.id, this.state.lerngruppe.id);
+    LernpartnerAPI.getAPI().addTeilnahmeGruppe(newTeilnahmeGruppe)
+    .then(teilnahmeGruppeBO => {
+      // Backend call sucessfull
+      // reinit the dialogs state for a new empty customer
+      this.addTeilnahmeGruppe(); // call the parent with the lerngruppe object from backend
+    }).catch(e =>
+      this.setState({
+        updatingInProgress: false,    // disable loading indicator
+        updatingError: e              // show error message
+      })
+    );
+   }
 
     // API Anbindung um die Teilnahme an der Gruppe des Students ihm Backend hinzuzufügen
   addTeilnahmeGruppe = () => {
@@ -262,8 +302,8 @@ class GruppenForm extends Component {
 
   /** Renders the component */
   render() {
-    const { classes, show } = this.props;
-    const { lernvorlieben, profil, lerngruppe, gruppenName, gruppenNameValidationFailed, gruppenNameEdited, lernfaecher, lernfachListe, lernfaecherValidationFailed, lernfaecherNameEdited, tageszeiten, tageszeitenValidationFailed, tageszeitenEdited, tage, tageValidationFailed, tageEdited,
+    const { classes, show, name } = this.props;
+    const { lernvorlieben, profil, lerngruppe, gruppenName, gruppenNameValidationFailed, gruppenNameEdited, person, lernfaecher, lernfachListe, lernfaecherValidationFailed, lernfaecherNameEdited, tageszeiten, tageszeitenValidationFailed, tageszeitenEdited, tage, tageValidationFailed, tageEdited,
     frequenz, frequenzValidationFailed, frequenzEdited, lernart, lernartValidationFailed, lernartEdited, lernort, lernortValidationFailed, lernortEdited, addingInProgress, addingError,
     updatingInProgress, updatingError } = this.state;
     //console.log(lernfaecher)
@@ -274,6 +314,8 @@ class GruppenForm extends Component {
     //console.log(profil)
     //console.log(lernvorlieben.getID())
     console.log(lernfachListe)
+    console.log(person)
+    console.log(name)
 
     return (
       show ?
@@ -306,6 +348,18 @@ class GruppenForm extends Component {
                 <MenuItem value={6}>Web-Technologie</MenuItem>
                 <MenuItem value={7}>Datenbanken</MenuItem>
                 <MenuItem value={8}>IT-Security</MenuItem>
+                <MenuItem value={10}>Naturwissenschaften 1</MenuItem>
+                <MenuItem value={11}>Usability Engineering</MenuItem>
+                <MenuItem value={12}>User Interface Design</MenuItem>
+                <MenuItem value={13}>Informationspsychologie</MenuItem>
+                <MenuItem value={14}>Angewandte Mathematik</MenuItem>
+                <MenuItem value={15}>Data Literacy</MenuItem>
+                <MenuItem value={16}>Anwendungssicherheit</MenuItem>
+                <MenuItem value={17}>Organisation</MenuItem>
+                <MenuItem value={18}>Künstliche Intelligenz</MenuItem>
+                <MenuItem value={19}>Darstellungstechnik</MenuItem>
+                <MenuItem value={20}>Werkstoffprüfung</MenuItem>
+                <MenuItem value={21}>Grundlagen Logistik</MenuItem>
                 </Select>
               </FormControl>
               <br/>
