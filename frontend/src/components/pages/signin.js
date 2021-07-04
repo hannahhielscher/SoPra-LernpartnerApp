@@ -26,7 +26,7 @@ class SignIn extends Component {
 		const { classes } = this.props;
 
 		return (
-			<div>
+			<div className={classes.page}>
 				<Typography className={classes.root} align='center' variant='h6'>Willkommen bei der HdM Lernpartner-App</Typography>
 				<Typography className={classes.root} align='center'>Du bist scheinbar nicht angemeldet.</Typography>
 				<Typography className={classes.root} align='center'>Um deinen passenden Lernpartner zu finden: </Typography>
@@ -45,7 +45,10 @@ class SignIn extends Component {
 /** Component specific styles */
 const styles = theme => ({
 	root: {
-		margin: theme.spacing(2)
+		margin: theme.spacing(2),
+	},
+	page: {
+	    marginTop:'40px'
 	}
 });
 
