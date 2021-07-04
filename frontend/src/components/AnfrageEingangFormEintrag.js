@@ -215,10 +215,7 @@ class AnfrageEingangFormEintrag extends Component {
             <Card open={show} >
                <List>
                 <ListItem>
-                  <ListItemText primary={nameNeu} className={classes.name}/>
-                    <Button color='secondary'>
-                        Profil ansehen
-                    </Button>
+                  
                   </ListItem>
                   <ListItem>
                     <Button style={{ width : 170}} size="small" className={classes.buttonAnnehmen} variant="contained" color="primary" onClick={this.anfrageAnnehmen}>

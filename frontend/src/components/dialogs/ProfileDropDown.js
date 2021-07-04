@@ -85,7 +85,6 @@ class ProfileDropDown extends Component {
                 <Grid container justify='center'>
                   <Grid item>
                     <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
-                    <Button color='primary' onClick={this.handleLöschenButtonClicked}>Test</Button>
                   </Grid>
                 </Grid>
               </Paper>

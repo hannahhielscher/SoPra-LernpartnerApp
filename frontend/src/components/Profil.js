@@ -31,7 +31,8 @@ class Profil extends Component {
             personStudiengang: null,
             lerngruppe: false,
             personProfilID: null,
-            personLernfaecher: null,
+            gruppenLernfaecher: null,
+            lernfaechernamen: [],
             personLernvorliebenID: null,
             teilnahmenGruppen: [],
             teilnehmerAnzahl: null, 
@@ -99,7 +100,9 @@ class Profil extends Component {
           this.getTeilnahmen();
         }
       }
-      ).catch(e =>
+      ).then(() => {
+        this.getLernfaecher();
+      }).catch(e =>
         this.setState({ // Reset state with error from catch
           profil: null,
           gruppe: null,
@@ -116,6 +119,32 @@ class Profil extends Component {
       loadingError: null
     });
   }
+
+  // API Anbindung um die Lernfächer der Person vom Backend zu bekommen
+  getLernfaecher = () => {
+    LernpartnerAPI.getAPI().getLernfaecherByProfil(this.state.profil.id)
+    .then(lernfaecherBOs =>
+      this.setState({
+            gruppenLernfaecher: lernfaecherBOs,
+            lernfaechernamen: lernfaecherBOs.map(lernfach=> lernfach.bezeichnung + "  "),
+            loadingInProgress: false,
+            error: null
+      }))
+      .catch(e =>
+        this.setState({ // Reset state with error from catch
+          personLernfaecher: null,
+          loadingInProgress: false,
+          error: e,
+        })
+      );
+
+    // set loading to true
+    this.setState({
+      loadingInProgress: true,
+      loadingError: null
+    });
+  }
+  
 
     // API Anbindung um die Lernvorlieben der Person vom Backend zu bekommen
     getLernvorlieben = () => {
@@ -183,9 +212,10 @@ class Profil extends Component {
   render() {
     const { classes, show } = this.props;
     // Use the states customer
-    const { user, teilnahmenGruppen, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, loadingInProgress, error} = this.state;
+    const { user, teilnahmenGruppen, profil, lernvorlieben, tageszeiten, tage, frequenz, lernart, lernort, gruppengroesse, gruppe, personLernvorliebenID, gruppenLernfaecher, lernfaechernamen, loadingInProgress, error} = this.state;
     console.log(user)
     console.log(teilnahmenGruppen.length)
+    console.log(lernfaechernamen)
     // console.log(this.props);
     return (
       <div className={classes.root}>
@@ -208,6 +238,15 @@ class Profil extends Component {
                     Frequenz: {frequenz}<br />
                     Lernart: {lernart}<br />
                     Lernort: {lernort}<br/> <br/>
+                    Lernfächer: 
+
+                              {
+                                lernfaechernamen.map(lernfach =>
+                                  <li>{lernfach}</li>
+                                  )
+
+                              }
+                    <br/>          
 
                     <b>Mitgliederzahl: </b>{teilnahmenGruppen.length} <br/>
                 </>

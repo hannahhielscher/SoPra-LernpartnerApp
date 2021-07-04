@@ -35,7 +35,57 @@ function MultiSelectLernfaecher( { lernfaecher, onChangeLernfaecher }) {
     {
       value: 8,
       label: "IT-Security"
+    },
+    {
+      value: 10,
+      label: "Naturwissenschaften 1"
+    },
+    {
+      value: 11,
+      label: "Usability Engineering"
+    },
+    {
+      value: 12,
+      label: "User Interface Design"
+    },
+    {
+      value: 13,
+      label: "Informationspsychologie"
+    },
+    {
+      value: 14,
+      label: "Angewandte Mathematik"
+    },
+    {
+      value: 15,
+      label: "Data Literacy"
+    },
+    {
+      value: 16,
+      label: "Anwendungssicherheit"
+    },
+    {
+      value: 17,
+      label: "Organisation"
+    },
+    {
+      value: 18,
+      label: "Künstliche Intelligenz"
+    },
+    {
+      value: 19,
+      label: "Darstellungstechnik"
+    },
+    {
+      value: 20,
+      label: "Werkstoffprüfung"
+    },
+    {
+      value: 21,
+      label: "Grundlagen Logistik"
     }
+
+
   ];
 
   // set value for default selection
