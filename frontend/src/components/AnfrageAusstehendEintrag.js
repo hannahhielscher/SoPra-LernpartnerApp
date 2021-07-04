@@ -24,10 +24,7 @@ import AnfrageForm from './dialogs/AnfrageForm';
 import ProfilDialog from './dialogs/ProfilDialog';
 
 /**
- * Es wird ein einzelner Vorschlag für einen passenden Lernpartner oder /-gruppe mit allen not wendigen Informationen dargestellt
- *
- * Hierfür werden Profilname, Alter, Geschlecht, Semester, Lernfach und der Prozentsatz des Matches angezeigt
- *
+ * Es wird der Eintrag einer ausstehende Anfrage für eine Konversation erstellt.
  */
 
 class AnfrageAusstehendEintrag extends Component {

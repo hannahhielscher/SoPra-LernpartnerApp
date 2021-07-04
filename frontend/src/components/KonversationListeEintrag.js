@@ -14,7 +14,7 @@ import ChatVerlassenForm from './dialogs/ChatVerlassenForm';
 
 /** 
  * 
- * Es wird ein einzelne Konversationen von einer Person dargestellt
+ * Es wird ein einzelne Konversationen von einer Person dargestellt.
  * 
  * Hierfür wird der Name der Konversation angezeigt
  * 

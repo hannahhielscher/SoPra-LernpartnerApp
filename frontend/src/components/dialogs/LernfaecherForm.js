@@ -12,6 +12,13 @@ import ContextErrorMessage from './ContextErrorMessage';
 import LoadingProgress from './LoadingProgress';
 import Button from '@material-ui/core/Button';
 
+/**
+ * Dieses Form zeigt ein Dialog zur Auswahl eines Lernfachs an. Es werden danach die Matches generiert.
+ * Dafuer wird auf die API zugegriffen (Backend zugriff)
+ *
+ * @see See Matieral-UIs [Dialog] (https://material-ui.com/components/dialogs)
+ */
+
 class LernfaecherForm extends Component {
   
   constructor(props){
@@ -33,7 +40,8 @@ class LernfaecherForm extends Component {
     
   }
 
-  getProfil = () => {
+    // API Anbindung um das Profil ihm Backend zu bekommen
+    getProfil = () => {
     LernpartnerAPI.getAPI().getProfil(this.props.currentPerson.getprofil())
     .then(profilBO =>
         this.setState({
@@ -55,7 +63,8 @@ class LernfaecherForm extends Component {
         });
   }
 
-  getLernfaecher = () => {
+    // API Anbindung um die Lernfaecher ihm Backend zu bekommen
+    getLernfaecher = () => {
     LernpartnerAPI.getAPI().getLernfaecherByProfil(this.props.currentPerson.getprofil())
     .then(lernfaecherBOs =>
       this.setState({
@@ -86,7 +95,8 @@ class LernfaecherForm extends Component {
     });
   }
 
-  componentDidMount() {
+    /** Lifecycle method, which is called when the component gets inserted into the browsers DOM */
+    componentDidMount() {
     this.getLernfaecher();
   }
 
