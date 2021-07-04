@@ -19,152 +19,152 @@ export default class LernvorliebenBO extends BusinessObject{
     }
 
     /*
-	erhalte 
+	erhalten der Tageszeiten ID
 	*/
     gettageszeiten_id(){
         return this.tageszeiten_id;
     }
     /*
-	setze 
+	setzen der Tageszeiten ID
 	*/
     settageszeiten_id(atageszeiten_id){
         this.tageszeiten_id = atageszeiten_id;
     }
         /*
-	erhalte
+	erhalten der Tageszeiten Bezeichnung
 	*/
     gettageszeiten_bez(){
         return this.tageszeiten_bez;
     }
     /*
-	setze
+	setzen der Tageszeiten Bezeichnung
 	*/
     settageszeiten_bez(atageszeiten_bez){
         this.tageszeiten_bez = atageszeiten_bez;
     }
     /*
-	erhalte 
+	erhalten der Tage ID
 	*/
     gettage_id(){
         return this.tage_id;
     }
     /*
-	setze 
+	setzen der Tage ID
 	*/
     settage_id(atage_id ){
         this.tage_id  = atage_id;
     }
         /*
-	erhalte
+	erhalten der Tage Bezeichnung
 	*/
     gettage_bez(){
         return this.tage_bez;
     }
     /*
-	setze
+	setzen der Tage Bezeichnung
 	*/
     settage_bez(atage_bez){
         this.tage_bez = atage_bez;
     }
     /*
-	erhalte 
+	erhalten der Frequenz ID
 	*/
     getfrequenz_id(){
         return this.frequenz_id;
     }
     /*
-	setze 
+	setzen der Frequenz ID
 	*/
     setfrequenz_id(afrequenz_id){
         this.frequenz_id = afrequenz_id;
     }
         /*
-	erhalte
+	erhalten der Frequenz Bezeichnung
 	*/
     getfrequenz_bez(){
         return this.frequenz_bez;
     }
     /*
-	setze
+	setzen der Frequenz Bezeichnung
 	*/
     setfrequenz_bez(afrequenz_bez){
         this.frequenz_bez = afrequenz_bez;
     }
      /*
-	erhalte 
+	erhalten der Lernart ID
 	*/
     getlernart_id(){
         return this.lernart_id;
     }
     /*
-	setze 
+	setzen der Lernart ID
 	*/
     setlernart_id(alernart_id){
         this.lernart_id = alernart_id;
     }
          /*
-	erhalte
+	erhalten der Lernart Bezeichnung
 	*/
     getlernart_bez(){
         return this.lernart_bez;
     }
     /*
-	setze
+	setzen der Lernart Bezeichnung
 	*/
     setlernart_bez(alernart_bez){
         this.lernart_bez = alernart_bez;
     }
     /*
-	erhalte 
+	erhalten der Gruppengroesse ID
 	*/
     getgruppengroesse_id(){
         return this.gruppengroesse_id;
     }
     /*
-	setze 
+	setzen der Gruppengroesse ID
 	*/
     setgruppengroesse_id(agruppengroesse_id){
         this.gruppengroesse_id = agruppengroesse_id;
     }
         /*
-	erhalte
+	erhalten der Gruppengroesse Bezeichnung
 	*/
     getgruppengroesse_bez(){
         return this.gruppengroesse_bez;
     }
     /*
-	setze
+	setzen der Gruppengroesse Bezeichnung
 	*/
     setgruppengroesse_bez(agruppengroesse_bez){
         this.gruppengroesse_bez = agruppengroesse_bez;
     }
     /*
-	erhalte 
+	erhalten der Lernort ID
 	*/
 	getlernort_id(){
         return this.lernort_id;
     }
     /*
-	setze 
+	setzen der Lernort ID
 	*/
     setlernort_id(alernort_id){
         this.lernort_id = alernort_id;
     }
         /*
-	erhalte
+	erhalten der Lernort Bezeichnung
 	*/
 	getlernort_bez(){
         return this.lernort_bez;
     }
     /*
-	setze
+	setzen der Lernort Bezeichnung
 	*/
     setlernort_bez(alernort_bez){
         this.lernort_bez = alernort_bez;
     }
     
-    /** 
-   * Returns an Array of LernvorliebenBOs from a given JSON structure
+    /**
+     * Gibt ein Array von LernvorliebenBO aus einer gegebenen JSON-Struktur zurück
    */
     static fromJSON(lernvorlieben) {
 		let results = null;

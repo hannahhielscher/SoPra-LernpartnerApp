@@ -9,33 +9,35 @@ export default class TeilnahmeGruppeBO extends BusinessObject{
     }
 
     /*
-	erhalte 
+	erhalte Teilnehmer
 	*/
     getteilnehmer(){
         return this.teilnehmer;
     }
     /*
-	setze 
+	setze Teilnehmer
 	*/
     setteilnehmer(ateilnehmer){
         this.teilnehmer = ateilnehmer;
     }
 
       /*
-	erhalte 
+	erhalte Lerngruppe
 	*/
     getlerngruppe(){
         return this.lerngruppe;
     }
 
     /*
-	setze 
+	setze Lerngruppe
 	*/
     setlerngruppe(alerngruppe){
         this.lerngruppe = alerngruppe;
     }
-    
 
+    /**
+     * Gibt ein Array von TeilnahmeGruppeBO aus einer gegebenen JSON-Struktur zurück
+     */
     static fromJSON(teilnahmeGruppen) {
 		let results = null;
 		if (Array.isArray(teilnahmeGruppen)) {

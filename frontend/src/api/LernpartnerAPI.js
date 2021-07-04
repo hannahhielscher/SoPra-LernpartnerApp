@@ -65,23 +65,20 @@ export default class LernpartnerAPI {
         #addProfileURL = () => `${this.#lernappServerBaseURL}/profile`;
         #getProfilURL = (id) => `${this.#lernappServerBaseURL}/profile-by-id/${id}`;
         #updateProfilURL = (id, gruppe, lernfaecher, lernvorlieben) => `${this.#lernappServerBaseURL}/profile?id=${id}&gruppe=${gruppe}&lernfaecher=${lernfaecher}&lernvorlieben=${lernvorlieben}`;
-        //#getLernfaecherByProfilURL = (profilID) => `${this.#lernappServerBaseURL}/profil/${profilID}`;
         #deleteProfilURL = (id) => `${this.#lernappServerBaseURL}/profile/${id}`;
 
         //Lernvorliebenbezogen
         #getLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
-        //#getLernvorliebenByProfilURL = () => `${this.#lernappServerBaseURL}/lervorlieben/${profilid}`;
-        //#getLernvorliebenPraeferenzURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben-praeferenz/${id}`;
         #addLernvorliebenURL = () => `${this.#lernappServerBaseURL}/lernvorlieben`;
         #updateLernvorliebenURL = (id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) => `${this.#lernappServerBaseURL}/lernvorlieben?id=${id}&tageszeiten=${tageszeiten}&tage=${tage}&frequenz=${frequenz}&lernart=${lernart}&gruppengroesse=${gruppengroesse}&lernort=${lernort}`;
         #deleteLernvorliebenURL = (id) => `${this.#lernappServerBaseURL}/lernvorlieben/${id}`;
+
         //Vorschlagbezogen
-        #getVorschlaegeURL = (mainpersonID) => `${this.#lernappServerBaseURL}/vorschlaege/${mainpersonID}`;
-        //#getSelectedLernfach = () => `${this.#lernappServerBaseURL}`
         #getVorschlaegeByPersonByLernfachURL = (mainpersonID, lernfachID) => `${this.#lernappServerBaseURL}/vorschlaege-by-person-by-lernfach/${mainpersonID}/${lernfachID}`;
 
         //Nachrichtenbezogen
         #getNachrichtenURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
+        #getNachrichtenURL = (personID) => `${this.#lernappServerBaseURL}/nachrichten/${personID}`;
         #getNachrichtenByKonversationURL = (id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation/${id}`;
         #addNachrichtURL = () => `${this.#lernappServerBaseURL}/nachrichten`;
         #getNachrichtenByKonversationByPersonURL = (konversationID, person_id) => `${this.#lernappServerBaseURL}/nachricht-by-konversation-by-person/${konversationID}/${person_id}`;
@@ -97,7 +94,6 @@ export default class LernpartnerAPI {
         #getangenommeneKonversationenByPersonURL = (personid) => `${this.#lernappServerBaseURL}/angenommenekonversationbyperson/${personid}`;
         #getKonversationByNameURL = (name) => `${this.#lernappServerBaseURL}/konversationen/${name}`;
         #updateKonversationURL = (id, name, anfragestatus) => `${this.#lernappServerBaseURL}/konversationen?id=${id}&name=${name}&anfragestatus=${anfragestatus}`;
-        #setKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
         #addKonversationURL = () => `${this.#lernappServerBaseURL}/konversationen`;
         #deleteKonversationURL = (id) => `${this.#lernappServerBaseURL}/konversationen/${id}`;
 
@@ -121,19 +117,16 @@ export default class LernpartnerAPI {
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
-<<<<<<< HEAD
         #deleteTeilnahmeGruppeURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
-=======
-        #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
-        #deleteTeilnahmeGruppeURL = (personid) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personid}`;
->>>>>>> 068bfea57cb5b91a93f472a82624f95fe4aa1a0f
 
         //Lernfachbezogene
         #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
         #getLernfachByIDURL = (id) => `${this.#lernappServerBaseURL}/lernfaecher-by-id/${id}`;
         #getLernfaecherByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lernfaecher-by-profil/${profilid}`;
         #deleteLernfaecherByProfilURL = (profilid) => `${this.#lernappServerBaseURL}/lernfaecher-by-profil/${profilid}`;
+
+
         //Personenbezogene
         /**
            * Gibt alle Personen als BO zurück
@@ -150,8 +143,8 @@ export default class LernpartnerAPI {
           })
         }
         /**
-         * Adds a person and returns a Promise, which resolves to a new PersonBO object
-         *  
+         * Person wird hinzugefügt und Promise wird zurückgegeben, das in ein neues PersonBO-Objekt aufgelöst wird
+         *
          * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
          * @public
          */
@@ -239,8 +232,9 @@ export default class LernpartnerAPI {
         }
  
         /**
+         * Löschen eines PersonBOs
          * Gibt Promise zurück
-         * 
+         *
          * @param {Number} personID to be deleted
          * @public
          */
@@ -258,6 +252,7 @@ export default class LernpartnerAPI {
         }
 
         /**
+         * Suchen eines PersonBOs nach dem Namen
          * Gibt Promise zurück
          * 
          * @param {Number} personID to be deleted
@@ -306,7 +301,7 @@ export default class LernpartnerAPI {
         }
 
           /**
-           * Adds a lerngruppe and returns a Promise, which resolves to a new LerngruppeBO object
+           * Lerngruppe wird hinzugefügt und Promise wird zurückgegeben, das in ein neues LerngruppeBO-Objekt aufgelöst wird
            *  
            * @param {LerngruppeBO} lerngruppeBO to be added. The ID of the new lerngruppe is set by the backend
            * @public
@@ -363,6 +358,7 @@ export default class LernpartnerAPI {
         }
    
           /**
+           * Löschen einer Lerngruppe nach der ID
            * Gibt Promise zurück
            * 
            * @param {Number} lerngruppeID to be deleted
@@ -414,9 +410,9 @@ export default class LernpartnerAPI {
         }
 
         /**
-         * Adds a person and returns a Promise, which resolves to a new PersonBO object
+         * Profil wird hinzugefügt und Promise wird zurückgegeben, das in ein neues ProfilBO-Objekt aufgelöst wird
          *  
-         * @param {PersonBO} personBO to be added. The ID of the new customer is set by the backend
+         * @param {ProfilBO} profilBO to be added. The ID of the new customer is set by the backend
          * @public
          */
         addProfil(profilBO) {
@@ -470,6 +466,7 @@ export default class LernpartnerAPI {
           })
         }
 
+
         //Lernvorliebenbezogene
 
         /**
@@ -490,21 +487,8 @@ export default class LernpartnerAPI {
         }
 
 
-        //getLernvorliebenPraeferenz(lernvorliebenID) {
-          //return this.#fetchAdvanced(this.#getLernvorliebenPraeferenzURL(lernvorliebenID)).then((responseJSON) => {
-            // We always get an array of LernvorliebenBOs.fromJSON, but only need one object
-            //let lernvorliebenBO = LernvorliebenBO.fromJSON(responseJSON);
-            //console.info(lernvorliebenBO);
-            //return new Promise(function (resolve) {
-              //resolve(lernvorliebenBO);
-            //})
-          //})
-        //}
-
-
-
         /**
-         * Adds a lernvorlieben and returns a Promise, which resolves to a new LernvorliebenBO object
+         * Lernvorlieben werden hinzugefügt und Promise wird zurückgegeben, das in ein neues LervorliebenBO-Objekt aufgelöst wird
          *  
          * @param {LernvorliebenBO} lernvorliebenBO to be added. The ID of the new lernvorliebe is set by the backend
          * @public
@@ -527,6 +511,7 @@ export default class LernpartnerAPI {
          }
 
         /**
+         * Löschen eines Lernvorlieben BOs nach der ID
          * Gibt Promise zurück
          * 
          * @param {Number} lernvorliebenID to be deleted
@@ -545,6 +530,12 @@ export default class LernpartnerAPI {
           })
         }
 
+    /**
+     * Updated  Lernvorlieben und gibt Promise zurück, resolves as LernvorliebenBO.
+     *
+     * @public
+     */
+
         updateLernvorlieben(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort) {
             return this.#fetchAdvanced(this.#updateLernvorliebenURL(id, tageszeiten, tage, frequenz, lernart, gruppengroesse, lernort), {
               method: 'PUT',
@@ -554,6 +545,7 @@ export default class LernpartnerAPI {
               }
             })
           }
+
 
         //Vorschlagbezogene
         /**
@@ -575,7 +567,7 @@ export default class LernpartnerAPI {
       
         //Nachrichtbezogene
         /** 
-        * Gibt alle Nachrichten einer Person zurück
+        * Gibt alle Nachrichten einer Person nach der ID zurück
          * @param {Number} personID to be retrieved
          * @public
           */
@@ -591,7 +583,7 @@ export default class LernpartnerAPI {
         }
 
        /**
-         * Adds a Nachricht and returns a Promise, which resolves to a new NachrichtenBO object
+        * Nachricht werden hinzugefügt und Promise wird zurückgegeben, das in ein neues NachrichtBO-Objekt aufgelöst wird
          *  
          * @param {NachrichtBO} nachrichtBO to be added. The ID of the new nachricht is set by the backend
          * @public
@@ -718,6 +710,7 @@ export default class LernpartnerAPI {
            })
           }
 
+
           //Konversations bezogen
 
            /**
@@ -799,8 +792,8 @@ export default class LernpartnerAPI {
             })
           }
 
-          /** 
-          * Adds a Konversation and returns a Promise, which resolves to a new KonversationBO object
+          /**
+           * Konversation werden hinzugefügt und Promise wird zurückgegeben, das in ein neues KonversationBO-Objekt aufgelöst wird
           *  
           * @param {KonversationBO} konversationBO to be added. The ID of the new nachricht is set by the backend
           * @public
@@ -843,6 +836,11 @@ export default class LernpartnerAPI {
           })
         }
 
+    /**
+     * Updated  Konversation und gibt Promise zurück, resolves as KonversationBO.
+     *
+     * @public
+     */
         updateKonversation(id, name, anfragestatus) {
             return this.#fetchAdvanced(this.#updateKonversationURL(id, name, anfragestatus), {
               method: 'PUT',
@@ -902,6 +900,13 @@ export default class LernpartnerAPI {
              })
             }
 
+            /**
+             * setzt den Zustand einer Konversation mit dem Status auf einen neuen Zustand
+             *
+             * @param {Number} id to be deleted
+             * @public
+             */
+
           getTeilnahmeChatByStatusByKonversation(status, konversation_id){
             return this.#fetchAdvanced(this.#getTeilnahmeChatByStatusByKonversationURL(status, konversation_id, {method: 'GET'})).then((responseJSON) => {
             let teilnahmechatBOs = TeilnahmeChatBO.fromJSON(responseJSON);
@@ -912,6 +917,12 @@ export default class LernpartnerAPI {
              })
             }
 
+
+    /**
+     * Updated  TeilnahmeChat und gibt Promise zurück, resolves as TeilnahmeChatBO.
+     *
+     * @public
+     */
         updateTeilnahmeChat(id, teilnehmer, anfrage_sender, status, konversation) {
             return this.#fetchAdvanced(this.#updateTeilnahmeChatURL(id, teilnehmer, anfrage_sender, status, konversation), {
               method: 'PUT',
@@ -932,8 +943,8 @@ export default class LernpartnerAPI {
             })
           }
 
-            /** 
-             * Adds a Teilnahme and returns a Promise, which resolves to a new TeilnahmeChatBO object
+            /**
+             * Teinahme an einem Chat wird hinzugefügt und Promise wird zurückgegeben, das in ein neues TeilnahmeChatBO-Objekt aufgelöst wird
              *  
              * @param {TeilnahmeChatBO} teilnahmechatBO to be added. The ID of the new teilnahemChat is set by the backend
              * @public
@@ -958,7 +969,7 @@ export default class LernpartnerAPI {
                }
 
              /** 
-             * löscht Nachrichten einer konversation
+             * löscht Teilnahme an einem Chat
              * @param {Number} id to be retrieved
              * @public
              */
@@ -977,7 +988,7 @@ export default class LernpartnerAPI {
             }
 
             /** 
-             * löscht Nachrichten einer konversation
+             * löscht Teilnahme an einem Chat
              * @param {Number} personid to be retrieved
              * @public
              */
@@ -1012,7 +1023,7 @@ export default class LernpartnerAPI {
               }
               
              /** 
-              * gibt die Nachrichten mit der bestimmten konversationsID als BO zurück
+              * gibt die Teilnahme an einem CHat mit der bestimmten konversationsID als BO zurück
               * @param {Number} id to be retrieved
               * @public
              */
@@ -1029,7 +1040,7 @@ export default class LernpartnerAPI {
 
 
              /**
-              * gibt die Nachrichten mit der bestimmten konversationsID als BO zurück
+              * gibt die Teilnahme an einem Chat mit der bestimmten Anfrage Sender ID als BO zurück
               * @param {Number} id to be retrieved
               * @public
              */
@@ -1075,8 +1086,8 @@ export default class LernpartnerAPI {
               })
             }
 
-            /** 
-             * Adds a Teilnahme and returns a Promise, which resolves to a new TeilnahmeGruppeBO object
+            /**
+             * Teilnahme an einer Gruppe werden hinzugefügt und Promise wird zurückgegeben, das in ein neues TeilnahmeGruppeBO-Objekt aufgelöst wird
              *  
              * @param {TeilnahmeGruppeBO} teilnahmegruppeBO to be added. The ID of the new teilnahemgruppe is set by the backend
              * @public
@@ -1102,7 +1113,7 @@ export default class LernpartnerAPI {
 
               /** 
                * gibt die Teilnehmer mit der bestimmten ID als BO zurück
-               * @param {Number} id to be retrieved
+               * @param {Number} person_id to be retrieved
                * @public
               */
               getTeilnahmeGruppeById(person_id){
@@ -1145,6 +1156,11 @@ export default class LernpartnerAPI {
               })
             }
 
+            /**
+             * löscht Teilnahme an einer Gruppe nach der ID
+             * @param {Number} personid to be retrieved
+             * @public
+             */
 
             deleteTeilnahmeGruppe(personid) {
                 return this.#fetchAdvanced(this.#deleteTeilnahmeGruppeURL(personid), {
@@ -1177,7 +1193,7 @@ export default class LernpartnerAPI {
           }
           
           /**
-           * Gibt eine Person mit einer bestimmten ID als BO zurück
+           * Gibt eine Lernfaecher mit einer bestimmten ID als BO zurück
            * 
            * @param {Number} id to be retrieved
            * @public
@@ -1194,7 +1210,7 @@ export default class LernpartnerAPI {
           }
 
           /**
-           * Gibt eine Person mit einer bestimmten ID als BO zurück
+           * Gibt  Lernfaecher mit einer bestimmten ProfilID als BO zurück
            * 
            * @param {Number} profilid to be retrieved
            * @public
@@ -1210,7 +1226,13 @@ export default class LernpartnerAPI {
             })
           }
 
-          deleteLernfaecherByProfil(profil_id) {
+            /**
+             * löscht Teilnahme an einem Chat
+             * @param {Number} personid to be retrieved
+             * @public
+             */
+
+        deleteLernfaecherByProfil(profil_id) {
               return this.#fetchAdvanced(this.#deleteLernfaecherByProfilURL(profil_id), {
                   method: 'DELETE'
               }).then ((responseJSON) => {

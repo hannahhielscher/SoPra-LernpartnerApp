@@ -37,9 +37,9 @@ export default class ProfilBO extends BusinessObject {
         this.lernvorlieben_id = lernvorlieben_id_neu;
     }
 
-   /**
-   * Returns an Array of ProfilBO from a given JSON structure
-   */
+    /**
+     * Gibt ein Array von ProfilBO aus einer gegebenen JSON-Struktur zurück
+     */
     static fromJSON(profile) {
 		let results = null;
 		if (Array.isArray(profile)) {

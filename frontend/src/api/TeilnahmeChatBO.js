@@ -11,60 +11,62 @@ export default class TeilnahmeChatBO extends BusinessObject{
     }
 
     /*
-	erhalte 
+	erhalte Teilnehmer
 	*/
     getteilnehmer(){
         return this.teilnehmer;
     }
     /*
-	setze 
+	setze Teilnehmer
 	*/
     setteilnehmer(ateilnehmer){
         this.teilnehmer = ateilnehmer;
     }
 
     /*
-	erhalte
+	erhalte Sender
 	*/
     getanfrage_sender(){
         return this.teilnehmer;
     }
     /*
-	setze
+	setze Sender
 	*/
     setanfrage_sender(aanfrage_sender){
         this.anfrage_sender = aanfrage_sender;
     }
 
     /*
-	erhalte
+	erhalte Anfragestatus
 	*/
     getstatus(){
         return this.status;
     }
 
     /*
-	setze
+	setze Anfragestatus
 	*/
     setstatus(astatus){
         this.status = astatus;
     }
 
     /*
-	erhalte 
+	erhalte Konversation
 	*/
     getkonversation(){
         return this.konversation;
     }
 
     /*
-	setze 
+	setze Konversation
 	*/
     setkonversation(akonversation){
         this.konversation = akonversation;
     }
-    
 
+    /**
+     * Gibt ein Array von TeilnahmeChatsBO aus einer gegebenen JSON-Struktur zurück
+     */
     static fromJSON(teilnahmeChats) {
 		let results = null;
 		if (Array.isArray(teilnahmeChats)) {

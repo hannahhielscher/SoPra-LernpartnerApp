@@ -17,117 +17,117 @@ export default class PersonBO extends NamedBusinessObject{
     }
 
     /*
-	erhalte 
+	erhalte Vorname
 	*/
     getvorname(){
         return this.vorname;
     }
     /*
-	setze 
+	setze Vorname
 	*/
     setvorname(avorname){
         this.vorname = avorname;
     }
     /*
-	erhalte 
+	erhalte Semester
 	*/
     getsemester(){
         return this.semester;
     }
     /*
-	setze 
+	setze Semester
 	*/
     setsemester(asemester){
         this.semester = asemester;
     }
     /*
-	erhalte
+	erhalte Studiengang
 	*/
     getstudiengang(){
         return this.studiengang;
     }
     /*
-	setze
+	setze Studiengang
 	*/
     setstudiengang(astudiengang){
         this.studiengang = astudiengang;
     }
     /*
-	erhalte 
+	erhalte Alter
 	*/
     getalter(){
         return this.alter;
     }
     /*
-	setze 
+	setze Alter
 	*/
     setalter(aalter){
         this.alter = aalter;
     }
     /*
-	erhalte 
+	erhalte Geschlecht
 	*/
     getgeschlecht(){
         return this.geschlecht;
     }
     /*
-	setze 
+	setze Geschlecht
 	*/
     setgeschlecht(ageschlecht){
         this.geschlecht = ageschlecht;
     }
      /*
-	erhalte 
+	erhalte Lerngruppe
 	*/
     getlerngruppe(){
         return this.lerngruppe;
     }
     /*
-	setze 
+	setze Lerngruppe
 	*/
     setlerngruppe(alerngruppe){
         this.lerngruppe = alerngruppe;
     }
     /*
-	erhalte 
+	erhalte Google User ID
 	*/
     getgoogle_user_id(){
         return this.google_user_id;
     }
     /*
-	setze 
+	setze Google User ID
 	*/
     setgoogle_user_id(agoogle_user_id){
         this.google_user_id = agoogle_user_id;
     }
     /*
-	erhalte 
+	erhalte Email
 	*/
 	getemail(){
         return this.email;
     }
     /*
-	setze 
+	setze Email
 	*/
     setemail(aemail){
         this.email = aemail;
     }
     /*
-	erhalte 
+	erhalte Profil
 	*/
     getprofil(){
         return this.profil;
     }
     /*
-	setze 
+	setze Profil
 	*/
     setprofil(aprofil){
         this.profil = aprofil;
     }
-    
-    /** 
-   * Returns an Array of PersonBOs from a given JSON structure
-   */
+
+    /**
+     * Gibt ein Array von PersonBO aus einer gegebenen JSON-Struktur zurück
+     */
     static fromJSON(personen) {
 		let results = null;
 		if (Array.isArray(personen)) {
