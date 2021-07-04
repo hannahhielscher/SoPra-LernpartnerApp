@@ -294,7 +294,7 @@ class AnfrageForm extends Component {
     //console.log(konversation)
     //console.log(teilnahmeChat)
     console.log(chatPartnerProfil)
-    //console.log(currentPersonID)
+    console.log(currentPerson)
 
     return (
       show ?
