@@ -134,7 +134,30 @@ class ProfilLoeschenForm extends Component{
 
     /** Gruppe verlassen */
     loeschenTeilnahmeGruppe = () => {
-        LernpartnerAPI.getAPI().deleteTeilnahmeGruppe(this.props.teilnahmeGruppe.getID())
+        LernpartnerAPI.getAPI().deleteTeilnahmeGruppe(this.props.currentPerson.getID())
+            .then(teilnahmeGruppe => {
+                this.setState({
+                    verlassenInProgress: false,              // disable loading indicator
+                    verlassenError: null                     // no error message
+                });
+                this.props.onClose(this.props.teilnahmeGruppe);  // call the parent with the deleted customer
+            }).catch(e =>
+            this.setState({
+                verlassenInProgress: false,              // disable loading indicator
+                verlassenError: e                        // show error message
+            })
+        );
+
+        // set loading to true
+        this.setState({
+            verlassenInProgress: true,                 // show loading indicator
+            verlassenError: null                       // disable error message
+        });
+    }
+
+    /** Gruppe verlassen */
+    loeschenTeilnahmeChat = () => {
+        LernpartnerAPI.getAPI().deleteTeilnahmeChatByPerson(this.props.currentPerson.getID())
             .then(teilnahmeGruppe => {
                 this.setState({
                     verlassenInProgress: false,              // disable loading indicator
@@ -189,7 +212,7 @@ class ProfilLoeschenForm extends Component{
                         <Button onClick={ () => {this.handleClose()}} color='secondary'>
                             Abbrechen
                         </Button>
-                        <Button variant='contained' onClick={ () => {this.loeschenTeilnahmeGruppe(); this.loeschenPerson(); this.loeschenProfil(); this.loeschenLernvorlieben();}} color='primary'>
+                        <Button variant='contained' onClick={ () => {this.loeschenTeilnahmeGruppe(); this.loeschenTeilnahmeChat();}} color='primary'>
                             Profil löschen
                         </Button>
                     </DialogActions>

@@ -65,7 +65,7 @@ class ProfilMapper(Mapper):
             profil = Profil()
             profil.set_id(id)
             profil.set_gruppe(gruppe)
-            profil.set_lernfaecher(self.find_lernfaecher_id_by_profil_id(profil_id))
+            profil.set_lernfaecher(self.find_lernfaecher_id_by_profil_id(id))
             profil.set_lernvorlieben_id(lernvorlieben_id)
 
             result = profil

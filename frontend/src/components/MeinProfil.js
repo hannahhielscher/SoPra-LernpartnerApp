@@ -294,9 +294,6 @@ class MeinProfil extends Component {
         }
     }
 
-
-
-
   lernfaecherOptions = (arr1, arr2, sep) => {
     arr1.map(function (num, idx) {
       return num.toString().concat(sep, (arr2[idx]).toString())
@@ -369,7 +366,7 @@ class MeinProfil extends Component {
         </Paper>
         <Button variant="outlined" color="primary" onClick= {this.loeschenButtonClicked}>Mein Profil löschen</Button>
         <MeinProfilForm show={showMeinProfilForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} onClose={this.bearbeitenFormClosed}/>
-        <ProfilLoeschenForm show={showProfilLoeschenForm} currentPerson={currentPerson} currentProfil={profil} lernfaechergesamt = {lernfaechergesamt} lernvorlieben={lernvorlieben} teilnahmeGruppe={teilnahmeGruppe} onClose={this.loeschenFormClosed}/>
+        <ProfilLoeschenForm show={showProfilLoeschenForm} currentPerson={currentPerson} currentProfil={profil} lernvorlieben={lernvorlieben} onClose={this.loeschenFormClosed}/>
 
         </div>
       );

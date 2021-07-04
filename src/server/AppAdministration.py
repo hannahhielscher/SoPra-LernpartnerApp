@@ -302,12 +302,12 @@ class AppAdministration (object):
             return mapper.find_by_person_and_lerngruppe(person_id, lerngruppe_id)
 
     def update_teilnahmegruppe(self,teilnahme):
-        """Speichert die Nachricht."""
+        """Speichert die Teilnahme."""
         with TeilnahmeGruppeMapper() as mapper:
             return mapper.update(teilnahme)
 
     def delete_teilnahmegruppe(self, person_id):
-        """Löscht die Nachricht."""
+        """Löscht die TeilnahmeGruppe nach Person."""
         with TeilnahmeGruppeMapper() as mapper:
             mapper.delete(person_id)
     
@@ -501,6 +501,11 @@ class AppAdministration (object):
         """Löscht die Teilnahme anhand der Id."""
         with TeilnahmeChatMapper() as mapper:
             mapper.delete_by_id(id)
+        
+    def delete_teilnahmeChatByPerson(self, person_id):
+        """Löscht die TeilnahmeChat nach PersonID."""
+        with TeilnahmeGruppeMapper() as mapper:
+            mapper.delete_by_person(person_id)
 
     """
     Vorschlag-spezifische Methoden

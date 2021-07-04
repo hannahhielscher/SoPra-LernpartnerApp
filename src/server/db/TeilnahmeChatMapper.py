@@ -310,3 +310,17 @@ class TeilnahmeChatMapper(Mapper):
         cursor.execute(command)
         self._connection.commit()
         cursor.close()
+
+    def delete_by_person(self, person_id):
+        """Löschen der Daten eines Teilnahme-Objekts der Konversation aus der Datenbank.
+        
+        :param id ID der TeilnahmeChat
+        """
+
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM teilnahmen_chat WHERE person_id = {}".format(person_id)
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
