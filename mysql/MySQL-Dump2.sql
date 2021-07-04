@@ -37,7 +37,8 @@ ENGINE = InnoDB;
 LOCK TABLES `lernapp_SWPra`.`profile` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`profile` VALUES (1, false, 1), (2, false, 2), (3, false, 3),
-(4, false, 4), (5, false, 5), (6, false, 6), (7, false, 7), (8, true, 8), (9, true, 9), (10, true, 10);
+(4, false, 4), (5, false, 5), (6, false, 6), (7, false, 7), (8, false, 8), (9, false, 9), (10, false, 10), (11, false, 11), (12, true, 12),
+(13, true, 13), (14, true, 14), (15, true, 15), (16, true, 16), (17, true, 17);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,7 +77,8 @@ LOCK TABLES `lernapp_SWPra`.`personen` WRITE;
 INSERT INTO `lernapp_SWPra`.`personen` VALUES (1, 'Müller', 'Tim', 3, 'Wirtschaftsinformatik und digitale Medien', 20, 'männlich', false, 1, 'timmueller@gmail.com', 1), (2, 'Maier', 'Lisa', 2, 'CR/PR', 19, 'weiblich', true, 2, 'lischen2002@gmx.de', 2),
 (3, 'Baum', 'Manuela', 2, 'Wirtschaftsinformatik und digitale Medien', 22, 'weiblich', true,  3, 'manni99@gmail.com', 3), (4, 'Possible', 'Kim', 3, 'Wirtschaftsinformatik und digitale Medien', 20, 'weiblich', true, 4, 'kimpossible@hotmail.de', 4), 
 (5, 'Smith', 'John', 4, 'CR/PR', 24, 'männlich', true, 5, 'jonny@hotmail.com', 5), (6, 'Jones', 'Alex', 5, 'Medieninformatik', 23, 'männlich', false, 6, 'alexjones@gmail.com', 6),  
-(7, 'Becker', 'Klaus', 3, 'Medieninformatik', 19, 'männlich', true, 7, 'becker77@gmx.de', 7);
+(7, 'Becker', 'Klaus', 3, 'Medieninformatik', 19, 'männlich', true, 7, 'becker77@gmx.com', 7), (8, 'Hafner', 'Sandra',  1, 'Informationsdesign', 17, 'weiblich', true, 8, 'sandra.hafner@gmail.com', 8), (9, 'Probulic', 'Benjamin',  3, 'Online-Medien-Management', 23, 'männlich', true, 9, 'benjamin.probulic@gmail.de', 9), 
+(10, 'Müslier', 'Joanna',  2, 'Verpackungstechnik', 21, 'weiblich', true, 10, 'joanna.muslier@gmail.com', 10), (11, 'Walter', 'Frank',  3, 'Mobile Medien', 18, 'männlich', true, 11, 'frank.walter@gmail.com', 11);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`personen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,7 +100,9 @@ ENGINE = InnoDB;
 LOCK TABLES `lernapp_SWPra`.`lernfaecher` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernfaecher` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`lernfaecher` VALUES (1, 'Software Entwicklung'), (2, 'Data Science'), (3, 'Führungsorientiertes Rechnungswesen'), (4, 'Medienrecht'),
-(5, 'Crossmedia-Konzeption'), (6, 'Web-Technologie'), (7, 'Datenbanken'), (8, 'IT-Security'), (9, 'Kein Lernfach ausgewählt');
+(5, 'Crossmedia-Konzeption'), (6, 'Web-Technologie'), (7, 'Datenbanken'), (8, 'IT-Security'), (9, 'Kein Lernfach ausgewählt'), (10, 'Naturwissenschaften 1'), (11, 'Usability Engineering'),(12, 'User Interface Design'), 
+(13, 'Informationspsychologie'), (14, 'Angewandte Mathematik'), (15, 'Data Literacy'), (16, 'Anwendungssicherheit'), (17, 'Organisation'), (18, 'Künstliche Intelligenz'), (19, 'Darstellungstechnik'), 
+(20, 'Werkstoffprüfung'), (21, 'Grundlagen Logistik');
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernfaecher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,7 +130,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`lerngruppen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lerngruppen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`lerngruppen` VALUES (1, 'Lern Buddys', 8), (2, 'Girl Power', 9), (3, 'Programmier-Pros', 10);
+INSERT INTO `lernapp_SWPra`.`lerngruppen` VALUES (1, 'Lern Buddys', 12), (2, 'Girl Power', 13), (3, 'Programmier-Pros', 14),(4, 'MediaNigth', 15), (5, 'SW-Praktikum', 16), (6, 'HdM', 17);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lerngruppen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +164,8 @@ ENGINE = InnoDB;
 LOCK TABLES `lernapp_SWPra`.`profile_has_lernfaecher` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`profile_has_lernfaecher` VALUES (1, 1), (1, 2), (2, 4), (2, 5), (3, 1), (3, 2), 
-(4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (7, 7), (7, 8), (8, 2), (9, 3), (10, 2);
+(4, 1), (4, 2), (5, 4), (5, 5), (6, 7), (6, 8), (6, 13), (7, 7), (7, 8), (8, 9), (8, 6), (9, 15), (9, 18), (10, 20), (10, 21), (10, 22),
+(11, 14), (11, 13), (12, 17), (12, 2), (13, 14), (13, 7), (13, 1), (14, 16), (14, 21), (15, 12), (16, 11), (17, 19), (17, 18); 
 /*!40000 ALTER TABLE `lernapp_SWPra`.`profile_has_lernfaecher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +199,8 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`teilnahmen_gruppe` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`teilnahmen_gruppe` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`teilnahmen_gruppe` VALUES (1, 2, 1), (2, 3, 1), (3, 4, 1), (4, 2, 2), (5, 3, 2), (6, 4, 2), (7, 3, 3), (8, 4, 3), (9, 7, 3);
+INSERT INTO `lernapp_SWPra`.`teilnahmen_gruppe` VALUES (1, 2, 1), (2, 3, 1), (3, 4, 1), (4, 2, 2), (5, 3, 2), (6, 4, 2), (7, 3, 3), (8, 4, 3), (9, 7, 3), (10, 11, 4), (11, 7, 6), (12, 8, 5),
+ (13, 3, 4), (14, 9, 6), (13, 3, 5);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`teilnahmen_gruppe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +222,7 @@ ENGINE = InnoDB;
 
 LOCK TABLES `lernapp_SWPra`.`konversationen` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys', true), (2, 'Girl Power', true), (3, 'Programmier-Pros', true);
+INSERT INTO `lernapp_SWPra`.`konversationen` VALUES (1, 'Lern Buddys', true), (2, 'Girl Power', true), (3, 'Programmier-Pros', true), (4, 'MediaNight', true), (5, 'SW-Praktikum', true), (6, 'HdM', true);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`konversationen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,16 +250,6 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`nachrichten` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
---
--- Dumping data for table `nachrichten`
---
-
-LOCK TABLES `lernapp_SWPra`.`nachrichten` WRITE;
-/*!40000 ALTER TABLE `lernapp_SWPra`.`nachrichten` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`nachrichten` VALUES (1, 'Hi', 1, 1), (2, 'Ho', 2, 1), (3, 'Ha', 1, 1);
-/*!40000 ALTER TABLE `lernapp_SWPra`.`nachrichten` ENABLE KEYS */;
-UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`tageszeiten`
@@ -447,7 +443,8 @@ LOCK TABLES `lernapp_SWPra`.`lernvorlieben` WRITE;
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernvorlieben` DISABLE KEYS */;
 INSERT INTO `lernapp_SWPra`.`lernvorlieben` VALUES (1, 2, 1, 3, 2, 1, 1), (2, 2, 2, 2, 1, 1, 3), (3, 1, 1, 2, 3, 3, 4), 
 (4, 3, 1, 3, 4, 3, 4), (5, 1, 2, 1, 1, 3, 3), (6, 2, 2, 2, 2, 1, 4), (7, 3, 2, 2, 1, 2, 2), (8, 1, 2, 3, 2, 1, 1),
-(9, 3, 1, 3, 3, 2, 1), (10, 2, 2, 1, 1, 1, 2);
+(9, 2, 1, 2, 3, 2, 1), (10, 2, 2, 1, 2, 1, 4), (11, 3, 1, 3, 3, 3, 3), (12, 3, 2, 3, 3, 3, 4), (13, 1, 1, 3, 3, 4, 1),
+(14, 3, 2, 3, 3, 3, 2), (15, 2, 1, 3, 3, 3, 3), (16, 2, 1, 3, 3, 3, 4), (17, 1, 1, 3, 3, 3, 1);
 /*!40000 ALTER TABLE `lernapp_SWPra`.`lernvorlieben` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -471,16 +468,6 @@ CREATE TABLE IF NOT EXISTS `lernapp_SWPra`.`vorschlaege` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
---
--- Dumping data for table `vorschlaege`
---
-
-LOCK TABLES `lernapp_SWPra`.`vorschlaege` WRITE;
-/*!40000 ALTER TABLE `lernapp_SWPra`.`vorschlaege` DISABLE KEYS */;
-INSERT INTO `lernapp_SWPra`.`vorschlaege` VALUES (1, 1, 60.6, 3, 2),(2, 1, 100, 3, 3),(3, 1, 10, 3, 4),(4, 2, 0, 2, 3);
-/*!40000 ALTER TABLE `lernapp_SWPra`.`vorschlaege` ENABLE KEYS */;
-UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `lernapp_SWPra`.`teilnahmen_chat`
