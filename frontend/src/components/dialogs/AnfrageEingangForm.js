@@ -93,9 +93,10 @@ class AnfrageEintragForm extends Component {
   filterTeilnahmenChatAusstehend = () => {
     for (var teilnahme in this.state.teilnahmenChatAusstehend)
         //this.state.teilnahmeChatGefiltert = this.state.teilnahmenChat.filter(this.state.teilnahmenChat.[teilnahme] => this.state.teilnahmenChat.[teilnahme]['anfrage_sender'] !== this.props.currentPerson.id)
-        if (this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] !== this.props.currentPerson.id){
+        if ((this.state.teilnahmenChatAusstehend.[teilnahme]['teilnehmer'] === this.props.currentPerson.id) && (this.state.teilnahmenChatAusstehend.[teilnahme]['anfrage_sender'] === this.props.currentPerson.id)){
+
+         }else{
             this.state.teilnahmenChatAusstehendGefiltert.push(this.state.teilnahmenChatAusstehend.[teilnahme])
-            console.log(this.state.teilnahmenChatAusstehendGefiltert)
          }
   }
 
