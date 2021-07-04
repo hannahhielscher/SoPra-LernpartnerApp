@@ -11,8 +11,8 @@ class VorschlagMapper(Mapper):
         super().__init__()
 
     def find_all(self):
-        """Auslesen aller Personen aus der Datenbank
-        :return Alle Person-Objekte im System
+        """Auslesen aller Vorschlag aus der Datenbank
+        :return Alle Vorschlag-Objekte im System
         """
         result = []
 
@@ -73,9 +73,8 @@ class VorschlagMapper(Mapper):
 
     def find_by_main_person_id(self, main_person_id):
         """Suchen eines Vorschlages nach der übergebenen ID.
-        :param id Primärschlüsselattribut eines Vorschlages aus der Datenbank
-        :return Vorschlag-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
+        :param main_person_id Main_person_id eines Vorschlages aus der Datenbank
+        :return Vorschlag-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         result = []
         cursor = self._connection.cursor()
@@ -100,7 +99,7 @@ class VorschlagMapper(Mapper):
     def insert(self, vorschlag):
         """Einfügen eines Vorschlag Objekts in die DB
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft
-        :param person das zu speichernde Vorschlag Objekt
+        :param vorschlag das zu speichernde Vorschlag Objekt
         :return das bereits übergebene Vorschlag Objekt mit aktualisierten Daten (id)
         """
         cursor = self._connection.cursor()

@@ -6,12 +6,12 @@ class PersonMapper(Mapper):
     """Mapper-Klasse, die Person Objekte auf der relationalen Datenbank abbildet.
     Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt
     """
-
     def __init__(self):
         super().__init__()
 
     def find_all(self):
         """Auslesen aller Personen aus der Datenbank
+
         :return Alle Person-Objekte im System
         """
         result = []
@@ -53,8 +53,7 @@ class PersonMapper(Mapper):
     def find_by_id(self, id):
         """Suchen einer Person nach der übergebenen ID. 
         :param id Primärschlüsselattribut einer Person aus der Datenbank
-        :return Person-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
+        :return Person-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         
         cursor = self._connection.cursor()
@@ -93,10 +92,10 @@ class PersonMapper(Mapper):
         return result
 
     def find_by_profilid(self, profilid):
-        """Suchen einer Person nach der übergebenen ID. 
-        :param id Primärschlüsselattribut einer Person aus der Datenbank
-        :return Person-Objekt, welche mit der ID übereinstimmt,
-                None wenn kein Eintrag gefunden wurde
+        """Suchen einer Person nach der übergebenen profilID. 
+
+        :param profilid ProfilID einer Person aus der Datenbank
+        :return Person-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         
         cursor = self._connection.cursor()
@@ -136,6 +135,7 @@ class PersonMapper(Mapper):
 
     def find_by_google_user_id(self, google_user_id):
         """Suchen einer Person nach der übergebenen Google User ID. 
+        
         :param google_user_id Google User ID einer Person aus der Datenbank
         :return Person-Objekt, welche mit der Google User ID übereinstimmt,
                 None wenn kein Eintrag gefunden wurde

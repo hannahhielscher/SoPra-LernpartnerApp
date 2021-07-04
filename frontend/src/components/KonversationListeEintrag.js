@@ -4,6 +4,7 @@ import { Button, ButtonGroup } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles, Typography, Accordion, AccordionSummary, AccordionDetails, Grid, Link } from '@material-ui/core';
 import Nachricht from './NachrichtListe';
+import EditIcon from '@material-ui/icons/Edit';
 import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 //import KonversationListe from './KonversationListe';
@@ -130,17 +131,19 @@ render() {
                   {nameNeu}
               </Typography>
             </Grid>
+            
               <Typography variant='body1'>
                   Optionen
               </Typography>
               </AccordionSummary>
                 <AccordionDetails>
+                <EditIcon></EditIcon>
                 <ButtonGroup variant='text' size='small'>
                 <Link component={RouterLink} to={{
                 pathname: '/chat',
                 konversation: konversation
                 }} >
-                  
+                
                 <Button color='primary' onClick={this.showKonversationButtonClicked}>
                           Chat ansehen
                 </Button>

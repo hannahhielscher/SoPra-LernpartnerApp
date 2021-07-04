@@ -2,21 +2,20 @@ from server.bo.Konversation import Konversation
 from server.db.Mapper import Mapper
 
 
-class KonversationMapper (Mapper):
-    """Mapper-Klasse, die Konversation-Objekte auf eine relationale
-    Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-    gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-    gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
-    """
+class KonversationMapper(Mapper):
+    """Mapper-Klasse, die Konversation-Objekte auf eine relationale Datenbank abbildet. 
 
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt.
+    """
     def __init__(self):
         super().__init__()
 
 
     def find_all(self):
-        """Findet alle Konversationen """
+        """Auslesen aller Konversationen aus der Datenbank
 
+        :return Eine Sammlung aller Konversation-Objekten
+        """
         result = []
         cursor = self._connection.cursor()
         cursor.execute("SELECT id, name, anfragestatus FROM konversationen")
@@ -35,7 +34,11 @@ class KonversationMapper (Mapper):
         return result
 
     def find_by_id(self, id):
-        """Auslesen aller Tuples mit einer gegebenen ID"""
+        """Suchen einer Konversation mit einer gegebenen ID
+
+        :param id Primärschlüsselattribut einer Konversation aus der Datenbank
+        :return Konversation-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
 
         result = []
         cursor = self._connection.cursor()
@@ -63,7 +66,11 @@ class KonversationMapper (Mapper):
         return result
 
     def find_by_personid(self, personid):
-        """Auslesen aller Konversationen einer Person"""
+        """Suchen aller Konversationen einer Person nach deren ID
+
+        :param personid Person ID einer Konversation aus der Datenbank
+        :return Konversation-Objekt, welche mit der Person ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         
         result = []
         cursor = self._connection.cursor()
@@ -85,8 +92,11 @@ class KonversationMapper (Mapper):
         return result
 
     def find_angenommene_by_personid(self, personid):
-        """Auslesen aller Konversationen einer Person"""
+        """Suchen aller Konversationen einer Person ID, die Anfragestatus und TeilnahmeChat Status true haben
         
+        :param personid Person ID einer Konversation aus der Datenbank
+        :return Konversation-Objekt, welche mit der Person ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         result = []
         cursor = self._connection.cursor()
         command = "SELECT konversationen.id, konversationen.name, konversationen.anfragestatus FROM konversationen INNER JOIN teilnahmen_chat ON konversationen.id = teilnahmen_chat.konversation_id WHERE teilnahmen_chat.person_id = {} AND konversationen.anfragestatus =1 AND teilnahmen_chat.status = 1".format(personid)
@@ -107,6 +117,11 @@ class KonversationMapper (Mapper):
         return result
 
     def find_by_name(self, name):
+        """Suchen einer Konversation nach ihrem Namen
+        
+        :param name Name einer Konversation aus der Datenbank
+        :return Konversation-Objekt, welche mit dem Namen übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         cursor = self._connection.cursor()
         command = "SELECT id, name, anfragestatus FROM konversationen WHERE name='{}'".format(name)
         cursor.execute(command)
@@ -164,9 +179,10 @@ class KonversationMapper (Mapper):
         return konversation
 
     def update_status(self, konversation):
-        """Aktualisierung eines Konversations-Objekts in der DB
+        """Überschreiben eines Konversations-Objekts in der DB
 
         :param Konversation -> Konversations-Objekt
+        :return aktualisiertes Konversation-Objekt
         """
         cursor = self._connection.cursor()
 
@@ -182,6 +198,8 @@ class KonversationMapper (Mapper):
 
     def delete(self, id):
         """Löschen der Daten eines Konversation-Objekts aus der Datenbank.
+
+        :param id -> Primärschlüssel der Konversation
         """
         cursor = self._connection.cursor()
 

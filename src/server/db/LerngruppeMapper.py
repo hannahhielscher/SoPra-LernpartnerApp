@@ -2,11 +2,9 @@ from server.db.Mapper import Mapper
 from server.bo.Lerngruppe import Lerngruppe
 
 class LerngruppeMapper(Mapper):
-    """Mapper-Klasse, die Profil-Objekte auf eine relationale
-        Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-        gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-        gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-        in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    """Mapper-Klasse, die Lerngruppe-Objekte auf eine relationale Datenbank abbildet.
+    
+    Die Klasse ermöglicht die Umwandlung von Objekten in Datenbankstrukturen und umgekehrt.
     """
 
     def __init__(self):
@@ -15,8 +13,7 @@ class LerngruppeMapper(Mapper):
     def find_all(self):
         """Auslesen aller Lerngruppen.
 
-        :return Eine Sammlung mit Lerngruppen-Objekten, die sämtliche Lerngruppen
-                repräsentieren.
+        :return Eine Sammlung mit Lerngruppen-Objekten, die sämtliche Lerngruppen repräsentieren.
         """
         result = []
         cursor = self._connection.cursor()
@@ -37,6 +34,9 @@ class LerngruppeMapper(Mapper):
 
     def find_by_id(self, id):
         """Auslesen der Lerngruppen anhand der ID
+
+        :param id Primärschlüsselattribut einer Lerngruppe aus der Datenbank
+        :return Lerngruppe-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         result = None
         cursor = self._connection.cursor()
@@ -57,7 +57,11 @@ class LerngruppeMapper(Mapper):
         return result
 
     def find_by_profil_id(self, id):
+        """Auslesen der Lerngruppen anhand der profilID
 
+        :param id profilID einer Lerngruppe aus der Datenbank
+        :return Lerngruppe-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
         cursor = self._connection.cursor()
         command = "SELECT id, name, profil_id FROM lerngruppen WHERE profil_id={}".format(id)
         cursor.execute(command)
@@ -84,9 +88,11 @@ class LerngruppeMapper(Mapper):
 
         return result
 
-    #notwendig?
     def find_by_name(self, name):
         """Auslesen der Lerngruppe anhand des Namens
+
+        :param name Name einer Lerngruppe aus der Datenbank
+        :return Lerngruppe-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         result = []
         cursor = self._connection.cursor()
@@ -108,6 +114,9 @@ class LerngruppeMapper(Mapper):
 
     def find_by_person_id(self, person_id):
         """Auslesen der Lerngruppen anhand der ID eines Teilnehmers
+
+        :param person_id PersonID einer Lerngruppe aus der Datenbank
+        :return Lerngruppe-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
         """
         result = []
         cursor = self._connection.cursor()
@@ -131,7 +140,11 @@ class LerngruppeMapper(Mapper):
         
 
     def find_by_lernfach_id(self, lernfach_id):
-        """Suche eines Profiles nach einem bestimmten Lernfach"""
+        """Suche eines Profiles nach einem bestimmten Lernfach
+
+        :param lernfach_id LernfachID einer Lerngruppe aus der Datenbank, Verbindung über profile_has_lernfaecher
+        :return Lerngruppe-Objekt, welche mit der ID übereinstimmt, None wenn kein Eintrag gefunden wurde
+        """
 
         result = []
 
@@ -198,7 +211,9 @@ class LerngruppeMapper(Mapper):
         cursor.close()
 
     def delete(self,lerngruppe):
-        """Löschen der Daten eines lerngruppen-Objekts aus der Datenbank.
+        """Löschen der Daten eines Lerngruppen-Objekts aus der Datenbank.
+
+        :param lerngruppe -> Lerngruppe-Objekt
         """
         cursor = self._connection.cursor()
 
@@ -207,5 +222,3 @@ class LerngruppeMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
-
-
