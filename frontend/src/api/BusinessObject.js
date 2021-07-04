@@ -1,33 +1,34 @@
 /**
- * Base class for all BusinessObjects, which has an ID field by default.
+ *
+ * Base class für alle BusinessObjects, welche standardmäßig ein ID-Feld haben
  */
 export default class BusinessObject {
 
     /**
-     * The null constructor.
+     * null constructor.
      */
     constructor() {
       this.id = 0;
     }
   
     /**
-     * Sets the ID of this BusinessObject.
-     * 
-     * @param {*} aId - the new ID of this BusinessObject
+     * Setzt die ID des BusinessObject
+     *
+     * @param {*} aId - die neue ID des BusinessObject
      */
     setID(aId) {
       this.id = aId;
     }
   
     /**
-     * Returns the ID of this BusinessObject.
+     * Gibt die ID des Business Object wieder.
      */
     getID() {
       return this.id;
     }
   
     /**
-     * Returns a string representation of this Object. This is useful for debugging purposes.
+     * Gibt eine String-Repräsentation dieses Objekts zurück. Dies ist nützlich für Debugging-Zwecke.
      */
     toString() {
       let result = '';

@@ -1,5 +1,5 @@
 /**
- * Reexports the Bussines Objects for a well-encaspulated Api module. 
+ * Reexportiert die Bussines-Objekte für ein gut enkodiertes Api-Modul.
  * Hier kommen später die exports für alle BOs rein in dem Ordner (außer Superklasse)
  */
 export {default as LernpartnerAPI} from './LernpartnerAPI';

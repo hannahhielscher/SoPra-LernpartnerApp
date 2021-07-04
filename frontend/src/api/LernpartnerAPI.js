@@ -10,8 +10,8 @@ import TeilnahmeGruppeBO from './TeilnahmeGruppeBO';
 import LernfachBO from './LernfachBO';
 
 /**
- * Abstracts the REST interface of the Python backend with convenient access methods.
- * The class is implemented as a singleton. 
+ * Abstrahiert die REST-Schnittstelle des Python-Backends mit komfortablen Zugriffsmethoden.
+ * Die Klasse ist als Singleton implementiert.
  */
 export default class LernpartnerAPI {
 
@@ -19,8 +19,8 @@ export default class LernpartnerAPI {
         static #api = null;
 
         #lernappServerBaseURL = '/lernApp'
-        /** 
-         * Get the Singelton instance 
+        /**
+         * Singleton Instanz erhalten
          * 
          * @public
          */
@@ -33,7 +33,7 @@ export default class LernpartnerAPI {
 
         #fetchAdvanced = (url, init) => fetch(url, init)
           .then(res => {
-            // The Promise returned from fetch() won’t reject on HTTP error status even if the response is an HTTP 404 or 500. 
+            // Das von fetch() zurückgegebene Promise wird bei einem HTTP-Fehlerstatus nicht zurückgewiesen, auch wenn die Antwort ein HTTP 404 oder 500 ist.
             if (!res.ok) {
               throw Error(`${res.status} ${res.statusText}`);
             }
@@ -41,7 +41,7 @@ export default class LernpartnerAPI {
           }
           )
 
-        //Person related
+        //Personbezogen
         #getPersonenURL = () => `${this.#lernappServerBaseURL}/personen`;
         #addPersonURL = () => `${this.#lernappServerBaseURL}/personen`;
         #getPersonURL = (id) => `${this.#lernappServerBaseURL}/personen/${id}`;
@@ -121,8 +121,13 @@ export default class LernpartnerAPI {
         #addTeilnahmeGruppeURL = () => `${this.#lernappServerBaseURL}/teilnahmenGruppe`;
         #getTeilnahmeGruppeByIdURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
         #getTeilnahmeGruppeByPersonByGruppeURL = (personId, lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personId}/${lerngruppeId}`;
+<<<<<<< HEAD
+        #deleteTeilnahmeGruppeURL = (person_id) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${person_id}`;
+        #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
+=======
         #getTeilnahmeGruppeByGruppeURL = (lerngruppeId) => `${this.#lernappServerBaseURL}/teilnahmenGruppe-by-gruppe/${lerngruppeId}`;
         #deleteTeilnahmeGruppeURL = (personid) => `${this.#lernappServerBaseURL}/teilnahmenGruppe/${personid}`;
+>>>>>>> 068bfea57cb5b91a93f472a82624f95fe4aa1a0f
 
         //Lernfachbezogene
         #getLernfaecherURL = () => `${this.#lernappServerBaseURL}/lernfaecher`;
